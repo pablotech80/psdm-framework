@@ -89,8 +89,8 @@ Every final response after implementation must include:
 - what validation ran;
 - whether `ROADMAP.md` and `TODO.md` were updated;
 - commit or push status when applicable;
-- `Siguiente accion`, with the next concrete recommended step.
+- `Siguiente accion`, with the next concrete recommended step and the reason that step should come next.
 
 ## Final Rule
 
-Prefer small, explicit, testable increments. Always name the next action.
+Prefer small, explicit, testable increments. Always name the next action and explain why it is the right next step.

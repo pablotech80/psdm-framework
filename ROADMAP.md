@@ -30,6 +30,7 @@ Completed:
 - Validation profiles added for common repository types.
 - Unsupported profile values now fail validation as invalid local policy.
 - Config schema stability contract documented in `docs/CONFIG_SCHEMA.md`.
+- Agent final-response protocol now requires the rationale for the next action.
 - Fresh-template review warnings restored for unresolved draft markers.
 
 ## Active Milestone
@@ -53,6 +54,7 @@ Planned outcomes:
 - Validation profiles for standard, framework, backend API, AI agent, SaaS, and monorepo repositories.
 - Formal validation for unsupported profile values.
 - Stable config schema documentation.
+- Final-response rule requiring next-action rationale.
 - Validation policy that distinguishes framework source docs from generated project artifacts.
 - PR/checklist workflow for risky backend/platform changes.
 
@@ -102,6 +104,7 @@ Planned outcomes:
 
 - [x] Add formal validation for unsupported profiles.
 - [x] Document config schema stability rules.
+- [x] Require rationale for every final `Siguiente accion`.
 
 ### `1.0.0-beta`
 

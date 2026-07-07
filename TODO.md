@@ -47,6 +47,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Restored fresh-template review warning for unresolved draft markers.
 - [x] Added formal validation for unsupported profiles.
 - [x] Added config schema stability documentation.
+- [x] Required rationale for every final `Siguiente accion`.
 - [x] Filled `docs/PROJECT_BRIEF.md` with framework-specific context.
 - [x] Filled `docs/SPEC.md` with CLI/config behavior scope.
 - [x] Filled `docs/ARCHITECTURE.md` with current module boundaries.
