@@ -8,16 +8,24 @@ import { fileURLToPath } from 'node:url'
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const cli = resolve(repoRoot, 'bin/psdm.mjs')
 
-function run(args) {
-  return execFileSync(process.execPath, [cli, ...args], {
-    cwd: repoRoot,
-    encoding: 'utf8',
-    stdio: ['ignore', 'pipe', 'pipe'],
-  })
+function run(args, options = {}) {
+  try {
+    return execFileSync(process.execPath, [cli, ...args], {
+      cwd: repoRoot,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'pipe'],
+    })
+  } catch (error) {
+    if (options.allowFailure && typeof error.stdout === 'string') {
+      return error.stdout
+    }
+
+    throw error
+  }
 }
 
-function runJson(args) {
-  return JSON.parse(run(args))
+function runJson(args, options = {}) {
+  return JSON.parse(run(args, options))
 }
 
 function existingProject() {
@@ -164,6 +172,42 @@ function testCustomConfigArtifact() {
   assert.equal(classified.pathMatches[0].pattern, 'secure/**')
 }
 
+function testValidationProfileFramework() {
+  const root = mkdtempSync(resolve(tmpdir(), 'psdm-profile-'))
+  const target = resolve(root, 'project')
+  const configPath = resolve(root, 'framework.psdm.json')
+  writeFileSync(configPath, JSON.stringify({
+    version: 1,
+    profile: 'framework',
+    requiredArtifacts: ['AGENTS.md'],
+    git: {
+      warnOnDirty: false,
+    },
+  }))
+
+  const validation = runJson(['validate', target, '--config', configPath, '--json'], {
+    allowFailure: true,
+  })
+  const classified = runJson([
+    'classify',
+    'small cleanup',
+    '--target',
+    target,
+    '--config',
+    configPath,
+    '--file',
+    'src/index.mjs',
+    '--json',
+  ])
+
+  assert.equal(validation.config.profile.name, 'framework')
+  assert.equal(validation.config.profile.recognized, true)
+  assert.ok(validation.results.some((item) => item.artifact === 'ROADMAP.md' && item.status === 'FAIL'))
+  assert.ok(validation.results.some((item) => item.artifact === 'TODO.md' && item.status === 'FAIL'))
+  assert.equal(classified.estimatedLevel, 'Level 2')
+  assert.equal(classified.pathMatches[0].pattern, 'src/**')
+}
+
 function testFeatureArtifacts() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-feature-'))
   run(['init', target])
@@ -186,6 +230,7 @@ const tests = [
   testPrChecklistMarkdownLevel4,
   testValidateInitializedProject,
   testCustomConfigArtifact,
+  testValidationProfileFramework,
   testFeatureArtifacts,
 ]
 

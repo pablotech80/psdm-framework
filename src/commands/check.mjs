@@ -58,6 +58,7 @@ export async function checkCommand(args) {
     config: {
       path: configState.path,
       exists: configState.exists,
+      profile: configState.profile,
     },
     feature: options.feature || null,
     status: failures === 0 ? 'complete' : 'incomplete',

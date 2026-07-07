@@ -16,6 +16,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/classifier.mjs` owns reusable change classification.
 - `src/lib/pr-checklist.mjs` generates pull request checklist content from classification output.
 - `src/lib/config.mjs` loads PSDM configuration.
+- `src/lib/config.mjs` also applies validation profile presets.
 - `src/lib/artifacts.mjs` defines baseline artifact contracts.
 - `src/lib/risk-paths.mjs` evaluates file path risk rules.
 - `src/lib/git.mjs` inspects repository state.
@@ -40,6 +41,7 @@ Changes require architecture review when they affect:
 - change classification and PR checklist semantics;
 - JSON output shape;
 - config schema or defaults;
+- validation profile behavior;
 - validator decisions;
 - risk path matching;
 - package distribution;

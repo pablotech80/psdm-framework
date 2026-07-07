@@ -1,5 +1,6 @@
 {
   "version": 1,
+  "profile": "standard",
   "requiredArtifacts": [
     "AGENTS.md",
     "docs/PROJECT_BRIEF.md",

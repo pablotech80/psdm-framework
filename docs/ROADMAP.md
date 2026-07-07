@@ -59,10 +59,16 @@
 
 ## Alpha - 0.8
 
-- [ ] Validation profile support.
+- [x] Validation profile support.
 - [ ] Config schema stability docs.
 
-## Beta - 0.9
+## Alpha - 0.9
+
+- [x] Validation profiles.
+- [ ] Unsupported profile validation.
+- [ ] Config schema stability docs.
+
+## Beta - 1.0
 
 - [ ] Change-level enforcement in CI.
 - [ ] Security-sensitive file path rule validation.

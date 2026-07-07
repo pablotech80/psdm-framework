@@ -97,6 +97,7 @@ export function validateMethod(targetDir, options = {}) {
     config: {
       path: configState.path,
       exists: configState.exists,
+      profile: configState.profile,
     },
     feature: options.feature || null,
     git,

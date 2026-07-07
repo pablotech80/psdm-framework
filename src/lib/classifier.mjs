@@ -124,6 +124,7 @@ export function classifyChange({ description, files = [], target, configPath = n
     config: {
       path: configState.path,
       exists: configState.exists,
+      profile: configState.profile,
     },
     files,
     estimatedLevel,

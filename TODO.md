@@ -12,11 +12,11 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Add a validation profile that fits framework repositories.
+- [ ] Document config schema stability rules.
 
 ## Next
 
-- [ ] Document config schema stability rules.
+- [ ] Add formal validation for unsupported profiles.
 
 ## Later
 
@@ -46,6 +46,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added `psdm pr-checklist`.
 - [x] Added CLI fixtures for audit, classify, and checklist behavior.
 - [x] Added CLI fixtures for validate, custom config, and feature artifacts.
+- [x] Added validation profiles.
 - [x] Restored fresh-template review warning for unresolved draft markers.
 - [x] Filled `docs/PROJECT_BRIEF.md` with framework-specific context.
 - [x] Filled `docs/SPEC.md` with CLI/config behavior scope.
@@ -54,7 +55,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Filled `docs/SECURITY.md` with secret/data/tooling assumptions.
 - [x] Filled `docs/DEPLOYMENT.md` with npm/GitHub release assumptions.
 - [x] Filled `docs/OPERATIONS.md` with maintenance and CI expectations.
-- [x] Bumped package status to `0.8.0-alpha`.
+- [x] Bumped package status to `0.9.0-alpha`.
 
 ## Update Rule
 

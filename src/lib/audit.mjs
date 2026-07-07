@@ -138,6 +138,7 @@ export function buildAudit(target, options = {}) {
     config: {
       path: configState.path,
       exists: configState.exists,
+      profile: configState.profile,
     },
     projectSignals: detectProjectSignals(target),
     git,

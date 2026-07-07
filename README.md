@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.8.0-alpha`
+`0.9.0-alpha`
 
 This repository currently provides:
 
@@ -16,6 +16,7 @@ This repository currently provides:
 - Pull request checklist generation.
 - CLI regression fixtures.
 - Validator, custom config, and feature artifact fixtures.
+- Validation profiles.
 - Baseline artifact checks.
 - Baseline structure validation.
 - Change-level classification.
@@ -122,6 +123,7 @@ Example:
 ```json
 {
   "version": 1,
+  "profile": "standard",
   "requiredArtifacts": [
     "AGENTS.md",
     "docs/PROJECT_BRIEF.md",
@@ -165,6 +167,19 @@ Example:
   ]
 }
 ```
+
+Supported profiles:
+
+```text
+standard
+framework
+backend-api
+ai-agent
+saas
+monorepo
+```
+
+Profiles add sensible default artifacts and risk paths for common repository types. Explicit config still wins for project-specific policy.
 
 Use a non-default config path:
 

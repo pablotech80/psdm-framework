@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is at `0.8.0-alpha`.
+PSDM is at `0.9.0-alpha`.
 
 Completed:
 
@@ -27,11 +27,12 @@ Completed:
 - PR checklist generation added from classification and risk paths.
 - CLI fixtures added for audit, classify, and PR checklist behavior.
 - CLI fixtures added for validate, custom config, and feature artifact behavior.
+- Validation profiles added for common repository types.
 - Fresh-template review warnings restored for unresolved draft markers.
 
 ## Active Milestone
 
-`0.8.0-alpha`: validation fixtures and profile design.
+`0.9.0-alpha`: validation profiles and schema hardening.
 
 Goal:
 
@@ -47,6 +48,7 @@ Planned outcomes:
 - Pull request checklist generation from change level and risk paths.
 - Dependency-free CLI fixtures for high-value workflows.
 - Fixture coverage for initialized projects, custom config, and feature artifacts.
+- Validation profiles for standard, framework, backend API, AI agent, SaaS, and monorepo repositories.
 - Validation policy that distinguishes framework source docs from generated project artifacts.
 - PR/checklist workflow for risky backend/platform changes.
 
@@ -84,10 +86,15 @@ Planned outcomes:
 
 ### `0.8.0-alpha`
 
-- [ ] Add a validation profile that fits framework repositories.
+- [x] Add a validation profile that fits framework repositories.
 - [ ] Document config schema stability rules.
 
-### `0.9.0-beta`
+### `0.9.0-alpha`
+
+- [x] Add validation profiles.
+- [ ] Document config schema stability rules.
+
+### `1.0.0-beta`
 
 - [ ] Change-level enforcement in CI.
 - [ ] Security-sensitive path rule validation.
