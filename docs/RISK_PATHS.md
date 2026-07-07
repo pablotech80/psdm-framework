@@ -1,0 +1,59 @@
+# Risk Paths
+
+Risk paths let PSDM classify a change by the files it touches, not only by the words in the change description.
+
+This is the main backend and platform governance mechanism. Small frontend copy edits can stay lightweight, while changes under authentication, payments, migrations, infrastructure, AI agents, RAG, and CI/CD receive stronger controls.
+
+## Configuration
+
+Define rules in `psdm.config.json`:
+
+```json
+{
+  "riskPaths": [
+    {
+      "pattern": "backend/auth/**",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Authentication and authorization changes can expose private data or bypass access control."
+    },
+    {
+      "pattern": "backend/migrations/**",
+      "minimumLevel": "Level 4",
+      "requiredArtifacts": ["docs/DEPLOYMENT.md", "docs/OPERATIONS.md"],
+      "reason": "Database migrations can require rollback and production operations planning."
+    }
+  ]
+}
+```
+
+Patterns support `*` for one path segment and `**` for any nested path.
+
+## CLI
+
+Classify a change with touched files:
+
+```bash
+psdm classify "small cleanup" --file backend/auth/session.py
+```
+
+Multiple files:
+
+```bash
+psdm classify "refactor service layer" --files backend/auth/session.py,backend/migrations/001_add_index.sql
+```
+
+JSON output:
+
+```bash
+psdm classify "refactor service layer" --files backend/auth/session.py,backend/migrations/001_add_index.sql --json
+```
+
+## Decision Model
+
+PSDM calculates the highest level from:
+
+- description keyword signals;
+- configured risk path matches.
+
+The final classification still requires human confirmation because file paths do not capture full business impact.

@@ -13,6 +13,50 @@ export const DEFAULT_CONFIG = {
   git: {
     warnOnDirty: true,
   },
+  riskPaths: [
+    {
+      pattern: 'backend/auth/**',
+      minimumLevel: 'Level 3',
+      requiredArtifacts: ['docs/SECURITY.md', 'docs/TESTING.md'],
+      reason: 'Authentication and authorization changes can expose private data or bypass access control.',
+    },
+    {
+      pattern: 'backend/payments/**',
+      minimumLevel: 'Level 3',
+      requiredArtifacts: ['docs/SPEC.md', 'docs/SECURITY.md', 'docs/TESTING.md'],
+      reason: 'Payment changes affect money movement and customer billing state.',
+    },
+    {
+      pattern: 'backend/migrations/**',
+      minimumLevel: 'Level 4',
+      requiredArtifacts: ['docs/DEPLOYMENT.md', 'docs/OPERATIONS.md'],
+      reason: 'Database migrations can require rollback and production operations planning.',
+    },
+    {
+      pattern: 'infra/**',
+      minimumLevel: 'Level 4',
+      requiredArtifacts: ['docs/DEPLOYMENT.md', 'docs/OPERATIONS.md'],
+      reason: 'Infrastructure changes can affect deployment, availability, and runtime security.',
+    },
+    {
+      pattern: 'agents/**',
+      minimumLevel: 'Level 3',
+      requiredArtifacts: ['docs/SPEC.md', 'docs/ARCHITECTURE.md', 'docs/SECURITY.md'],
+      reason: 'AI agent changes can affect tool use, data exposure, and autonomous behavior.',
+    },
+    {
+      pattern: 'rag/**',
+      minimumLevel: 'Level 3',
+      requiredArtifacts: ['docs/SPEC.md', 'docs/ARCHITECTURE.md', 'docs/SECURITY.md'],
+      reason: 'RAG changes can affect private data retrieval, context construction, and output trust.',
+    },
+    {
+      pattern: '.github/workflows/**',
+      minimumLevel: 'Level 4',
+      requiredArtifacts: ['docs/DEPLOYMENT.md', 'docs/OPERATIONS.md', 'docs/SECURITY.md'],
+      reason: 'CI workflow changes can alter release, secret, and deployment behavior.',
+    },
+  ],
 }
 
 function arrayOrDefault(value, fallback) {
@@ -54,6 +98,7 @@ export function loadConfig(targetDir, configPath = null) {
     git: {
       warnOnDirty: rawConfig.git?.warnOnDirty ?? DEFAULT_CONFIG.git.warnOnDirty,
     },
+    riskPaths: arrayOrDefault(rawConfig.riskPaths, DEFAULT_CONFIG.riskPaths),
   }
 
   return { path, exists, config }

@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.2.0-alpha`
+`0.3.0-alpha`
 
 This repository currently provides:
 
@@ -21,6 +21,7 @@ This repository currently provides:
 - Feature-specific PSDM artifacts.
 - Dirty git working-tree awareness.
 - GitHub Action MVP.
+- Backend/platform risk path rules.
 
 ## Install Locally
 
@@ -41,7 +42,7 @@ psdm init [target]
 psdm init [target] --feature <name>
 psdm check [target] [--json] [--feature <name>] [--config <path>]
 psdm validate [target] [--json] [--feature <name>] [--config <path>]
-psdm classify "<change description>" [--json]
+psdm classify "<change description>" [--json] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
 psdm report [target] [--json] [--feature <name>] [--config <path>]
 ```
 
@@ -74,6 +75,18 @@ Machine-readable output:
 ```bash
 psdm validate --json
 psdm classify "change Stripe webhook ownership validation" --json
+```
+
+Classify by description and touched files:
+
+```bash
+psdm classify "small cleanup" --file backend/auth/session.py
+```
+
+Configured risk paths can raise the level even when the description is vague:
+
+```text
+Estimated level: Level 3
 ```
 
 ## Configuration
@@ -111,7 +124,21 @@ Example:
   },
   "git": {
     "warnOnDirty": true
-  }
+  },
+  "riskPaths": [
+    {
+      "pattern": "backend/auth/**",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Authentication and authorization changes can expose private data or bypass access control."
+    },
+    {
+      "pattern": "backend/migrations/**",
+      "minimumLevel": "Level 4",
+      "requiredArtifacts": ["docs/DEPLOYMENT.md", "docs/OPERATIONS.md"],
+      "reason": "Database migrations can require rollback and production operations planning."
+    }
+  ]
 }
 ```
 
@@ -139,6 +166,19 @@ docs/features/<feature>/ARCHITECTURE.md
 docs/features/<feature>/SECURITY.md
 docs/features/<feature>/TESTING.md
 ```
+
+## Backend And Platform Governance
+
+PSDM governs the whole repository, but its strongest controls usually apply to backend and platform surfaces:
+
+- authentication and authorization;
+- payments and billing;
+- database migrations;
+- infrastructure and deployment;
+- AI agents and RAG pipelines;
+- CI/CD workflows.
+
+These controls live in `riskPaths`. A matching path raises the minimum change level even when the textual change description looks low risk.
 
 ## Change Levels
 

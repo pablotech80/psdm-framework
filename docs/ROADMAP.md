@@ -21,11 +21,19 @@
 - [x] GitHub Action MVP.
 - [x] Tool registry design draft.
 
+## Alpha - 0.3
+
+- [x] Backend/platform risk path rules.
+- [x] File-aware classification with `--file` and `--files`.
+- [ ] Pull request checklist generator.
+- [ ] Change-level enforcement in CI.
+- [ ] Security-sensitive file path rule validation.
+
 ## Beta - 0.5
 
 - [ ] Pull request checklist generator.
 - [ ] Change-level enforcement in CI.
-- [ ] Security-sensitive file path rules.
+- [ ] Security-sensitive file path rule validation.
 - [ ] ADR generator.
 
 ## v1.0

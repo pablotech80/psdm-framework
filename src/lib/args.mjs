@@ -3,6 +3,8 @@ export function parseArgs(args) {
     json: false,
     configPath: null,
     feature: null,
+    target: null,
+    files: [],
   }
   const positional = []
 
@@ -22,6 +24,28 @@ export function parseArgs(args) {
 
     if (arg === '--feature') {
       options.feature = args[index + 1] || null
+      index += 1
+      continue
+    }
+
+    if (arg === '--target') {
+      options.target = args[index + 1] || null
+      index += 1
+      continue
+    }
+
+    if (arg === '--file') {
+      if (args[index + 1]) {
+        options.files.push(args[index + 1])
+      }
+      index += 1
+      continue
+    }
+
+    if (arg === '--files') {
+      if (args[index + 1]) {
+        options.files.push(...args[index + 1].split(',').map((file) => file.trim()).filter(Boolean))
+      }
       index += 1
       continue
     }

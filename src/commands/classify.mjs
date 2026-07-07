@@ -1,4 +1,7 @@
 import { parseArgs, printJson } from '../lib/args.mjs'
+import { loadConfig } from '../lib/config.mjs'
+import { resolveTarget } from '../lib/paths.mjs'
+import { highestLevel, levelPriority, matchRiskPaths } from '../lib/risk-paths.mjs'
 
 const LEVEL_RULES = [
   {
@@ -99,6 +102,9 @@ export async function classifyCommand(args) {
   }
 
   const normalized = description.toLowerCase()
+  const target = options.target ? resolveTarget([options.target]) : process.cwd()
+  const configState = loadConfig(target, options.configPath)
+  const pathMatches = matchRiskPaths(options.files, configState.config.riskPaths)
   const matches = LEVEL_RULES.map((rule) => ({
     ...rule,
     matchedKeywords: rule.keywords.filter((keyword) => normalized.includes(keyword)),
@@ -112,13 +118,30 @@ export async function classifyCommand(args) {
     matchedKeywords: [],
     required: 'Clear scope, diff review, no source-critical/security/data/deployment impact.',
   }
+  const pathLevel = highestLevel(pathMatches.map((item) => item.minimumLevel))
+  const estimatedLevel = highestLevel([match.level, pathLevel])
+  const levelRule = LEVEL_RULES.find((rule) => rule.level === estimatedLevel)
+  const requiredArtifacts = Array.from(new Set(pathMatches.flatMap((item) => item.requiredArtifacts)))
+  const minimumRequiredGovernance = levelRule?.required || match.required
+  const classificationReason = levelPriority(pathLevel) > levelPriority(match.level)
+    ? 'Configured risk path raised the estimated level.'
+    : 'Description keywords determined the estimated level.'
 
   const payload = {
     command: 'classify',
     description,
-    estimatedLevel: match.level,
-    minimumRequiredGovernance: match.required,
+    target,
+    config: {
+      path: configState.path,
+      exists: configState.exists,
+    },
+    files: options.files,
+    estimatedLevel,
+    minimumRequiredGovernance,
+    requiredArtifacts,
+    classificationReason,
     matchedKeywords: match.matchedKeywords,
+    pathMatches,
     matches: matches.map((item) => ({
       level: item.level,
       matchedKeywords: item.matchedKeywords,
@@ -132,11 +155,18 @@ export async function classifyCommand(args) {
   }
 
   console.log(`Change description: ${description}`)
-  console.log(`Estimated level: ${match.level}`)
-  console.log(`Minimum required governance: ${match.required}`)
+  console.log(`Estimated level: ${estimatedLevel}`)
+  console.log(`Minimum required governance: ${minimumRequiredGovernance}`)
   if (match.matchedKeywords.length > 0) {
     console.log(`Matched signals: ${match.matchedKeywords.join(', ')}`)
   }
+  if (pathMatches.length > 0) {
+    console.log(`Matched risk paths: ${pathMatches.map((item) => `${item.file} -> ${item.minimumLevel}`).join(', ')}`)
+  }
+  if (requiredArtifacts.length > 0) {
+    console.log(`Required path artifacts: ${requiredArtifacts.join(', ')}`)
+  }
+  console.log(`Reason: ${classificationReason}`)
   console.log('Note: final classification must be confirmed by repository context and actual impact.')
 
   return { exitCode: 0 }

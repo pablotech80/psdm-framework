@@ -2,6 +2,8 @@
 
 PSDM is a spec-driven governance framework for real software delivery with AI assistance.
 
+Although the CLI can run in any repository, PSDM's strongest controls are aimed at backend and platform boundaries: auth, data, payments, AI agents, deployment, infrastructure, and operations.
+
 It exists to prevent two common failures:
 
 - AI agents shipping changes without enough context.

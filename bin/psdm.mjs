@@ -23,7 +23,7 @@ Usage:
   psdm init [target] [--feature name]
   psdm check [target] [--json] [--feature name] [--config path]
   psdm validate [target] [--json] [--feature name] [--config path]
-  psdm classify "<change description>" [--json]
+  psdm classify "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
   psdm report [target] [--json] [--feature name] [--config path]
 
 Commands:
