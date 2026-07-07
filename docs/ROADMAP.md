@@ -98,7 +98,7 @@
 ## v1.0
 
 - [ ] Stable CLI API.
-- [ ] Full documentation site.
+- [x] Full documentation index.
 - [ ] Tested fixtures.
 - [ ] Public npm package.
 - [ ] Example projects.

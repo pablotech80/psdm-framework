@@ -136,6 +136,8 @@ npm test
 
 Beta release scope and exit criteria are tracked in `docs/BETA_RELEASE_NOTES.md`.
 
+The public documentation index is `docs/INDEX.md`.
+
 ## Configuration
 
 `psdm.config.json` is optional. When it is absent, PSDM uses the default baseline artifacts.

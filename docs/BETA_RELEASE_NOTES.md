@@ -89,4 +89,4 @@ The beta is ready for `1.0.0` when:
 
 ## Release Recommendation
 
-Proceed to beta only after creating a docs index and validating the Action in at least one downstream repository workflow.
+Proceed to beta only after validating the Action in at least one downstream repository workflow.

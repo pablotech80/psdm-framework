@@ -12,15 +12,15 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Create docs index for public readiness.
+- [ ] Add example project coverage.
 
 ## Next
 
-- [ ] Add example project coverage.
+- [ ] Validate GitHub Action in a downstream repository.
 
 ## Later
 
-- [ ] Validate GitHub Action in a downstream repository.
+- [ ] Prepare public package release checklist.
 
 ## Done
 
@@ -52,6 +52,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added risk path schema validation.
 - [x] Added ADR generation.
 - [x] Prepared beta release notes.
+- [x] Created public docs index.
 - [x] Filled `docs/PROJECT_BRIEF.md` with framework-specific context.
 - [x] Filled `docs/SPEC.md` with CLI/config behavior scope.
 - [x] Filled `docs/ARCHITECTURE.md` with current module boundaries.

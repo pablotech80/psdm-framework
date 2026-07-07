@@ -35,6 +35,7 @@ Completed:
 - Risk path schema validation added for local policy correctness.
 - ADR generation added through `psdm adr`.
 - Beta release notes prepared in `docs/BETA_RELEASE_NOTES.md`.
+- Public documentation index added in `docs/INDEX.md`.
 - Fresh-template review warnings restored for unresolved draft markers.
 
 ## Active Milestone
@@ -63,6 +64,7 @@ Planned outcomes:
 - Risk path validation before classification-driven automation relies on local policy.
 - ADR scaffold generation for durable decisions.
 - Beta release notes with scope, compatibility notes, validation, limitations, and exit criteria.
+- Public documentation index for adoption, CLI, config, governance, CI, release, and maintainer workflows.
 - Validation policy that distinguishes framework source docs from generated project artifacts.
 - PR/checklist workflow for risky backend/platform changes.
 
@@ -145,7 +147,7 @@ Planned outcomes:
 - [ ] Stable CLI API.
 - [ ] Stable config schema.
 - [ ] Public npm package readiness.
-- [ ] Documentation site or complete docs index.
+- [x] Documentation site or complete docs index.
 
 ## Update Rule
 
