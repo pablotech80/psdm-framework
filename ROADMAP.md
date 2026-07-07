@@ -2,7 +2,7 @@
 
 Status: `Active`
 Repository: `psdm-framework`
-Last Updated: `2026-07-07`
+Last Updated: `2026-07-08`
 
 ## Purpose
 
@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is at `0.9.0-alpha`.
+PSDM is at `0.10.0-alpha`.
 
 Completed:
 
@@ -28,11 +28,13 @@ Completed:
 - CLI fixtures added for audit, classify, and PR checklist behavior.
 - CLI fixtures added for validate, custom config, and feature artifact behavior.
 - Validation profiles added for common repository types.
+- Unsupported profile values now fail validation as invalid local policy.
+- Config schema stability contract documented in `docs/CONFIG_SCHEMA.md`.
 - Fresh-template review warnings restored for unresolved draft markers.
 
 ## Active Milestone
 
-`0.9.0-alpha`: validation profiles and schema hardening.
+`0.10.0-alpha`: config schema hardening.
 
 Goal:
 
@@ -49,6 +51,8 @@ Planned outcomes:
 - Dependency-free CLI fixtures for high-value workflows.
 - Fixture coverage for initialized projects, custom config, and feature artifacts.
 - Validation profiles for standard, framework, backend API, AI agent, SaaS, and monorepo repositories.
+- Formal validation for unsupported profile values.
+- Stable config schema documentation.
 - Validation policy that distinguishes framework source docs from generated project artifacts.
 - PR/checklist workflow for risky backend/platform changes.
 
@@ -60,20 +64,20 @@ Planned outcomes:
 - [x] Fill framework-specific `PROJECT_BRIEF`, `SPEC`, `ARCHITECTURE`, `TESTING`, `SECURITY`, `OPERATIONS`, and `DEPLOYMENT` docs.
 - [x] Refine draft-marker detection for operational roadmap/task references.
 - [x] Add pre-init audit for existing projects.
-- [ ] Add a validation profile that fits framework repositories.
+- [x] Add a validation profile that fits framework repositories.
 - [x] Add PR checklist generation.
 
 ### `0.5.0-alpha`
 
 - [x] Add non-destructive `psdm audit`.
 - [x] Add `psdm init --dry-run`.
-- [ ] Add CLI fixtures for audit behavior.
+- [x] Add CLI fixtures for audit behavior.
 
 ### `0.6.0-alpha`
 
 - [x] Add `psdm pr-checklist`.
 - [x] Add CLI fixtures for checklist behavior.
-- [ ] Add a validation profile that fits framework repositories.
+- [x] Add a validation profile that fits framework repositories.
 
 ### `0.7.0-alpha`
 
@@ -87,12 +91,17 @@ Planned outcomes:
 ### `0.8.0-alpha`
 
 - [x] Add a validation profile that fits framework repositories.
-- [ ] Document config schema stability rules.
+- [x] Document config schema stability rules.
 
 ### `0.9.0-alpha`
 
 - [x] Add validation profiles.
-- [ ] Document config schema stability rules.
+- [x] Restore fresh-template review warnings for unresolved draft markers.
+
+### `0.10.0-alpha`
+
+- [x] Add formal validation for unsupported profiles.
+- [x] Document config schema stability rules.
 
 ### `1.0.0-beta`
 

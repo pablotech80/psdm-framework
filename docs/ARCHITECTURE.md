@@ -16,7 +16,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/classifier.mjs` owns reusable change classification.
 - `src/lib/pr-checklist.mjs` generates pull request checklist content from classification output.
 - `src/lib/config.mjs` loads PSDM configuration.
-- `src/lib/config.mjs` also applies validation profile presets.
+- `src/lib/config.mjs` also applies validation profile presets and exposes the supported profile list.
 - `src/lib/artifacts.mjs` defines baseline artifact contracts.
 - `src/lib/risk-paths.mjs` evaluates file path risk rules.
 - `src/lib/git.mjs` inspects repository state.
@@ -27,6 +27,7 @@ The architecture favors explicit modules over framework abstractions:
 - Use dependency-free JavaScript modules to keep installation and audit surface small.
 - Use JSON output as a stable automation contract while preserving human-readable output.
 - Keep configuration local to the target repository through `psdm.config.json`.
+- Treat unsupported profile values as invalid local policy rather than silently relying on default behavior.
 - Treat risk classification as advisory unless CI enforcement is explicitly configured.
 - Make adoption audit non-destructive so existing repositories can evaluate impact before initialization.
 - Keep templates plain Markdown so teams can adapt them without special tooling.

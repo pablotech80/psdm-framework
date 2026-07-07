@@ -2,7 +2,7 @@
 
 Status: `Active`
 Repository: `psdm-framework`
-Last Updated: `2026-07-07`
+Last Updated: `2026-07-08`
 
 ## Purpose
 
@@ -12,18 +12,15 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Document config schema stability rules.
+- [ ] Add CI change-level enforcement.
 
 ## Next
 
-- [ ] Add formal validation for unsupported profiles.
+- [ ] Add risk path validation.
 
 ## Later
 
-- [ ] Add CI change-level enforcement.
-- [ ] Add risk path validation.
 - [ ] Add ADR generation.
-- [ ] Add config schema documentation.
 
 ## Done
 
@@ -48,6 +45,8 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added CLI fixtures for validate, custom config, and feature artifacts.
 - [x] Added validation profiles.
 - [x] Restored fresh-template review warning for unresolved draft markers.
+- [x] Added formal validation for unsupported profiles.
+- [x] Added config schema stability documentation.
 - [x] Filled `docs/PROJECT_BRIEF.md` with framework-specific context.
 - [x] Filled `docs/SPEC.md` with CLI/config behavior scope.
 - [x] Filled `docs/ARCHITECTURE.md` with current module boundaries.
@@ -56,6 +55,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Filled `docs/DEPLOYMENT.md` with npm/GitHub release assumptions.
 - [x] Filled `docs/OPERATIONS.md` with maintenance and CI expectations.
 - [x] Bumped package status to `0.9.0-alpha`.
+- [x] Bumped package status to `0.10.0-alpha`.
 
 ## Update Rule
 

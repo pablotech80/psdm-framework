@@ -23,8 +23,8 @@ Near-term framework tasks:
 - Keep pre-init audit useful for existing projects adopting PSDM.
 - Keep PR checklist generation aligned with classifier and risk path behavior.
 - Add CI enforcement for change levels.
-- Add fixtures for CLI regression testing.
-- Clarify config schema stability before `1.0.0`.
+- Add risk path validation.
+- Keep fixtures current as CLI behavior changes.
 
 ## Completion Criteria
 

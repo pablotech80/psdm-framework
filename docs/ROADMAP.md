@@ -65,8 +65,12 @@
 ## Alpha - 0.9
 
 - [x] Validation profiles.
-- [ ] Unsupported profile validation.
-- [ ] Config schema stability docs.
+- [x] Fresh-template review warnings.
+
+## Alpha - 0.10
+
+- [x] Unsupported profile validation.
+- [x] Config schema stability docs.
 
 ## Beta - 1.0
 

@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.9.0-alpha`
+`0.10.0-alpha`
 
 This repository currently provides:
 
@@ -17,6 +17,8 @@ This repository currently provides:
 - CLI regression fixtures.
 - Validator, custom config, and feature artifact fixtures.
 - Validation profiles.
+- Unsupported profile validation.
+- Config schema stability documentation.
 - Baseline artifact checks.
 - Baseline structure validation.
 - Change-level classification.
@@ -180,6 +182,10 @@ monorepo
 ```
 
 Profiles add sensible default artifacts and risk paths for common repository types. Explicit config still wins for project-specific policy.
+
+Unsupported profile values fail validation instead of silently falling back to `standard`. The validation JSON still reports `config.profile.name` and `config.profile.recognized` so automation can surface the exact policy problem.
+
+Schema stability rules are documented in `docs/CONFIG_SCHEMA.md`.
 
 Use a non-default config path:
 

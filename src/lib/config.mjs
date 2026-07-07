@@ -100,6 +100,8 @@ export const PROFILE_PRESETS = {
   },
 }
 
+export const SUPPORTED_PROFILES = Object.keys(PROFILE_PRESETS)
+
 export const DEFAULT_CONFIG = {
   version: 1,
   profile: 'standard',

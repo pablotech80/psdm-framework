@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { requiredSectionsForArtifact } from '../lib/artifacts.mjs'
-import { loadConfig } from '../lib/config.mjs'
+import { loadConfig, SUPPORTED_PROFILES } from '../lib/config.mjs'
 import { inspectGit } from '../lib/git.mjs'
 
 function record(results, status, artifact, message, priority = 'Medium') {
@@ -66,6 +66,20 @@ function featureArtifacts(targetDir, config, feature) {
     .flatMap((entry) => required.map((artifact) => join(root, entry.name, artifact)))
 }
 
+function validateConfigProfile(configState, results) {
+  if (configState.profile.recognized) {
+    return
+  }
+
+  record(
+    results,
+    'FAIL',
+    'psdm.config.json',
+    `Unsupported profile: ${configState.profile.name}. Supported profiles: ${SUPPORTED_PROFILES.join(', ')}.`,
+    'High',
+  )
+}
+
 export function validateMethod(targetDir, options = {}) {
   const configState = options.configState || loadConfig(targetDir, options.configPath)
   const { config } = configState
@@ -74,6 +88,7 @@ export function validateMethod(targetDir, options = {}) {
   const scopedFeatureArtifacts = featureArtifacts(targetDir, config, options.feature)
   const git = inspectGit(targetDir)
 
+  validateConfigProfile(configState, results)
   validateArtifacts(targetDir, baselineArtifacts, results)
   validateArtifacts(targetDir, scopedFeatureArtifacts, results)
 

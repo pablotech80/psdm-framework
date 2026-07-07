@@ -208,6 +208,32 @@ function testValidationProfileFramework() {
   assert.equal(classified.pathMatches[0].pattern, 'src/**')
 }
 
+function testUnsupportedProfileFailsValidation() {
+  const root = mkdtempSync(resolve(tmpdir(), 'psdm-profile-invalid-'))
+  const target = resolve(root, 'project')
+  const configPath = resolve(root, 'bad.psdm.json')
+  writeFileSync(configPath, JSON.stringify({
+    version: 1,
+    profile: 'unknown-profile',
+    requiredArtifacts: ['AGENTS.md'],
+    git: {
+      warnOnDirty: false,
+    },
+  }))
+
+  const validation = runJson(['validate', target, '--config', configPath, '--json'], {
+    allowFailure: true,
+  })
+
+  assert.equal(validation.config.profile.name, 'unknown-profile')
+  assert.equal(validation.config.profile.recognized, false)
+  assert.ok(validation.results.some((item) => (
+    item.artifact === 'psdm.config.json'
+    && item.status === 'FAIL'
+    && item.message.includes('Unsupported profile: unknown-profile')
+  )))
+}
+
 function testFeatureArtifacts() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-feature-'))
   run(['init', target])
@@ -231,6 +257,7 @@ const tests = [
   testValidateInitializedProject,
   testCustomConfigArtifact,
   testValidationProfileFramework,
+  testUnsupportedProfileFailsValidation,
   testFeatureArtifacts,
 ]
 
