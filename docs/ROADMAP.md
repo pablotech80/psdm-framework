@@ -88,6 +88,11 @@
 - [x] ADR generator.
 - [x] ADR generation fixture coverage.
 
+## Alpha - 0.14
+
+- [x] Existing AI governance detection.
+- [x] PSDM adoption plan generation.
+
 ## Beta - 1.0
 
 - [x] Change-level enforcement in CI.

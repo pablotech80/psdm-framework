@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is at `0.13.0-alpha`.
+PSDM is at `0.14.0-alpha`.
 
 Completed:
 
@@ -36,11 +36,13 @@ Completed:
 - ADR generation added through `psdm adr`.
 - Beta release notes prepared in `docs/BETA_RELEASE_NOTES.md`.
 - Public documentation index added in `docs/INDEX.md`.
+- Existing AI governance detection added to `psdm audit`.
+- PSDM adoption plan generation added for repositories with existing AI governance.
 - Fresh-template review warnings restored for unresolved draft markers.
 
 ## Active Milestone
 
-`1.0.0-beta`: release readiness.
+`0.14.0-alpha`: existing AI governance adoption.
 
 Goal:
 
@@ -65,6 +67,8 @@ Planned outcomes:
 - ADR scaffold generation for durable decisions.
 - Beta release notes with scope, compatibility notes, validation, limitations, and exit criteria.
 - Public documentation index for adoption, CLI, config, governance, CI, release, and maintainer workflows.
+- Existing agent, assistant, skill, prompt, Copilot, Cursor, Claude, and Codex rules detected before adoption.
+- `docs/PSDM_ADOPTION.md` generated during init when existing AI governance requires integration.
 - Validation policy that distinguishes framework source docs from generated project artifacts.
 - PR/checklist workflow for risky backend/platform changes.
 
@@ -133,6 +137,12 @@ Planned outcomes:
 - [x] Add `psdm adr`.
 - [x] Add non-overwriting ADR scaffold generation.
 - [x] Add CLI fixture for ADR generation.
+
+### `0.14.0-alpha`
+
+- [x] Detect existing AI governance during audit.
+- [x] Create PSDM adoption plan when existing AI governance is detected.
+- [x] Add CLI fixtures for AI governance detection and adoption plan creation.
 
 ### `1.0.0-beta`
 

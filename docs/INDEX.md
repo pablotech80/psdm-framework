@@ -35,6 +35,8 @@ psdm validate
 
 Use `psdm audit` first for existing repositories because it previews files that would be created or skipped.
 
+When `psdm audit` detects existing AI governance files, `psdm init` creates `docs/PSDM_ADOPTION.md` from `templates/PSDM_ADOPTION.md` instead of overwriting existing instructions.
+
 ## CLI Reference
 
 - `README.md`: supported commands and examples.
@@ -98,6 +100,7 @@ psdm enforce "change description" --files "src/index.mjs" --max-level "Level 2" 
 
 - `templates/AGENTS.md`
 - `templates/PROJECT_BRIEF.md`
+- `templates/PSDM_ADOPTION.md`
 - `templates/SPEC.md`
 - `templates/ARCHITECTURE.md`
 - `templates/CHANGE_GOVERNANCE.md`

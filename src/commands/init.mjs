@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { TEMPLATE_MAP } from '../lib/artifacts.mjs'
 import { parseArgs } from '../lib/args.mjs'
-import { buildAudit, printAuditReport } from '../lib/audit.mjs'
+import { buildAudit, detectAiGovernance, printAuditReport } from '../lib/audit.mjs'
 import { loadConfig } from '../lib/config.mjs'
 import { resolveTarget, templateDir } from '../lib/paths.mjs'
 
@@ -20,6 +20,7 @@ export async function initCommand(args) {
 
   const templates = templateDir()
   const configState = loadConfig(target, options.configPath)
+  const aiGovernance = detectAiGovernance(target)
   const featureArtifacts = options.feature
     ? configState.config.features.requiredArtifacts.map((artifact) =>
       join(configState.config.features.root, options.feature, artifact),
@@ -60,6 +61,22 @@ export async function initCommand(args) {
     writeFileSync(destination, template)
     created += 1
     console.log(`CREATED ${artifact}`)
+  }
+
+  if (!options.feature && aiGovernance.adoptionMode === 'integrate') {
+    const adoptionArtifact = 'docs/PSDM_ADOPTION.md'
+    const adoptionDestination = join(target, adoptionArtifact)
+
+    if (!existsSync(adoptionDestination)) {
+      mkdirSync(dirname(adoptionDestination), { recursive: true })
+      const template = readFileSync(join(templates, 'PSDM_ADOPTION.md'), 'utf8')
+      writeFileSync(adoptionDestination, template)
+      created += 1
+      console.log(`CREATED ${adoptionArtifact}`)
+    } else {
+      skipped += 1
+      console.log(`SKIP    ${adoptionArtifact}`)
+    }
   }
 
   if (!options.feature && !options.configPath) {

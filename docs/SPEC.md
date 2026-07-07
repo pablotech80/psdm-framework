@@ -7,6 +7,8 @@ Project: `psdm-framework`
 
 - Provide a `psdm` CLI with `adr`, `init`, `audit`, `check`, `validate`, `classify`, `enforce`, `pr-checklist`, and `report` commands.
 - Provide a non-destructive `audit` command that previews repository state and `init` impact.
+- Detect existing AI governance files during audit and recommend integration without overwrite.
+- Create `docs/PSDM_ADOPTION.md` during init when existing AI governance files are detected.
 - Keep the CLI dependency-free and runnable on Node.js 20 or newer.
 - Support human-readable command output by default.
 - Support JSON output for automation where applicable.
@@ -28,6 +30,8 @@ Project: `psdm-framework`
 - `npm pack --dry-run` includes the CLI, source, templates, docs, and root governance files.
 - `node bin/psdm.mjs help` documents supported commands and options.
 - `node bin/psdm.mjs audit <target> --json` emits current artifact state, planned init actions, pros, cons, and recommendations.
+- Audit JSON includes existing AI governance detection and an adoption mode of `initialize` or `integrate`.
+- `node bin/psdm.mjs init <target>` creates `docs/PSDM_ADOPTION.md` when adopting into a repository with existing AI governance files.
 - `node bin/psdm.mjs adr "<title>" --target <target> --json` creates a non-overwriting ADR file under `ADRs/`.
 - `node bin/psdm.mjs init <target>` creates baseline artifacts without overwriting existing files.
 - `node bin/psdm.mjs init <target> --dry-run` previews the same planned actions without writing files.
@@ -38,7 +42,7 @@ Project: `psdm-framework`
 - `node bin/psdm.mjs classify "<description>" --file <path> --json` includes matched keywords, matched risk paths, required artifacts, and estimated level.
 - `node bin/psdm.mjs enforce "<description>" --file <path> --max-level "Level 2" --json` exits non-zero when the estimated level exceeds the allowed level.
 - `node bin/psdm.mjs pr-checklist "<description>" --file <path>` emits a Markdown checklist derived from change level and risk paths.
-- `npm test` runs dependency-free CLI fixtures for audit, ADR generation, init dry-run, classify, enforce, PR checklist, validate, custom config, validation profiles, invalid risk paths, and feature artifact behavior.
+- `npm test` runs dependency-free CLI fixtures for audit, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, enforce, PR checklist, validate, custom config, validation profiles, invalid risk paths, and feature artifact behavior.
 - A clean repository with filled PSDM artifacts can reach `METHOD_BASELINE_APPROVED`.
 
 ## Out of Scope

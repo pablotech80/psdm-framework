@@ -53,6 +53,9 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added ADR generation.
 - [x] Prepared beta release notes.
 - [x] Created public docs index.
+- [x] Added existing AI governance detection to audit.
+- [x] Added PSDM adoption plan generation for existing AI governance.
+- [x] Bumped package status to `0.14.0-alpha`.
 - [x] Filled `docs/PROJECT_BRIEF.md` with framework-specific context.
 - [x] Filled `docs/SPEC.md` with CLI/config behavior scope.
 - [x] Filled `docs/ARCHITECTURE.md` with current module boundaries.

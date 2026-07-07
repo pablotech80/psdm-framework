@@ -51,6 +51,44 @@ function testAuditExistingProject() {
   assert.ok(report.recommendations.some((item) => item.includes('psdm init')))
 }
 
+function testAuditDetectsExistingAiGovernance() {
+  const target = existingProject()
+  mkdirSync(resolve(target, '.github'), { recursive: true })
+  mkdirSync(resolve(target, '.cursor', 'rules'), { recursive: true })
+  mkdirSync(resolve(target, 'skills', 'deploy'), { recursive: true })
+  writeFileSync(resolve(target, 'AGENTS.md'), '# Existing agent rules\n')
+  writeFileSync(resolve(target, '.github', 'copilot-instructions.md'), '# Copilot rules\n')
+  writeFileSync(resolve(target, 'skills', 'deploy', 'SKILL.md'), '# Deploy skill\n')
+
+  const report = runJson(['audit', target, '--json'])
+  const output = run(['audit', target])
+
+  assert.equal(report.projectSignals.existingAiGovernance, true)
+  assert.equal(report.aiGovernance.adoptionMode, 'integrate')
+  assert.ok(report.aiGovernance.existing.includes('AGENTS.md'))
+  assert.ok(report.aiGovernance.existing.includes('.github/copilot-instructions.md'))
+  assert.ok(report.aiGovernance.existing.includes('.cursor/rules'))
+  assert.ok(report.aiGovernance.existing.includes('skills'))
+  assert.deepEqual(report.aiGovernance.wouldCreate, ['docs/PSDM_ADOPTION.md'])
+  assert.ok(report.cons.some((item) => item.includes('Existing AI instructions may conflict')))
+  assert.ok(report.recommendations.some((item) => item.includes('Do not overwrite existing agent')))
+  assert.match(output, /AI governance adoption: integrate/)
+  assert.match(output, /Existing AI governance/)
+}
+
+function testInitCreatesAdoptionPlanForExistingAiGovernance() {
+  const target = existingProject()
+  mkdirSync(resolve(target, '.github'), { recursive: true })
+  writeFileSync(resolve(target, 'AGENTS.md'), '# Existing agent rules\n')
+  writeFileSync(resolve(target, '.github', 'copilot-instructions.md'), '# Copilot rules\n')
+
+  const output = run(['init', target])
+
+  assert.match(output, /CREATED docs\/PSDM_ADOPTION\.md/)
+  assert.equal(existsSync(resolve(target, 'docs', 'PSDM_ADOPTION.md')), true)
+  assert.match(readFileSync(resolve(target, 'docs', 'PSDM_ADOPTION.md'), 'utf8'), /Existing AI Governance/)
+}
+
 function testInitDryRunDoesNotWrite() {
   const target = existingProject()
   const output = run(['init', target, '--dry-run'])
@@ -414,6 +452,8 @@ function testFeatureArtifacts() {
 
 const tests = [
   testAuditExistingProject,
+  testAuditDetectsExistingAiGovernance,
+  testInitCreatesAdoptionPlanForExistingAiGovernance,
   testInitDryRunDoesNotWrite,
   testAdrCreatesDecisionRecord,
   testAdrRejectsInvalidDate,

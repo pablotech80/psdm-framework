@@ -3,6 +3,19 @@ import { join } from 'node:path'
 import { loadConfig } from './config.mjs'
 import { inspectGit } from './git.mjs'
 
+const AI_GOVERNANCE_PATHS = [
+  'AGENTS.md',
+  '.github/copilot-instructions.md',
+  '.cursor/rules',
+  '.windsurfrules',
+  '.claude',
+  '.codex',
+  'skills',
+  'prompts',
+  'ai',
+  'docs/AI_AGENT_SECURITY.md',
+]
+
 function inspectPath(target, artifact) {
   const fullPath = join(target, artifact)
 
@@ -42,6 +55,35 @@ function inspectPath(target, artifact) {
   }
 }
 
+function existingPaths(target, paths) {
+  return paths.filter((path) => existsSync(join(target, path)))
+}
+
+export function detectAiGovernance(target) {
+  const existing = existingPaths(target, AI_GOVERNANCE_PATHS)
+  const hasExisting = existing.length > 0
+
+  return {
+    existing,
+    adoptionMode: hasExisting ? 'integrate' : 'initialize',
+    wouldSkip: existing.filter((path) => path === 'AGENTS.md'),
+    wouldCreate: hasExisting ? ['docs/PSDM_ADOPTION.md'] : [],
+    risks: hasExisting
+      ? [
+        'Existing AI instructions may conflict with PSDM governance rules.',
+        'Existing skill or prompt files may define tool behavior that needs security review.',
+      ]
+      : [],
+    recommendations: hasExisting
+      ? [
+        'Review existing AI governance files before running psdm init.',
+        'Document the integration plan before changing agent instructions.',
+        'Do not overwrite existing agent, Copilot, Cursor, Claude, Codex, skill, or prompt instructions.',
+      ]
+      : [],
+  }
+}
+
 function detectProjectSignals(target) {
   const entries = existsSync(target)
     ? readdirSync(target, { withFileTypes: true }).map((entry) => entry.name)
@@ -55,10 +97,11 @@ function detectProjectSignals(target) {
     githubActions: existsSync(join(target, '.github', 'workflows')),
     existingDocs: existsSync(join(target, 'docs')),
     existingAgents: existsSync(join(target, 'AGENTS.md')),
+    existingAiGovernance: detectAiGovernance(target).existing.length > 0,
   }
 }
 
-function summarizePros(results, configWillBeCreated) {
+function summarizePros(results, configWillBeCreated, aiGovernance) {
   const pros = [
     'Adds explicit governance artifacts without overwriting existing files.',
     'Creates a repeatable baseline for AI-assisted development.',
@@ -73,10 +116,14 @@ function summarizePros(results, configWillBeCreated) {
     pros.push('Adds AI-agent operating boundaries for the repository.')
   }
 
+  if (aiGovernance.adoptionMode === 'integrate') {
+    pros.push('Detects existing AI governance files so PSDM can be integrated without overwriting them.')
+  }
+
   return pros
 }
 
-function summarizeCons(results, git) {
+function summarizeCons(results, git, aiGovernance) {
   const cons = [
     'Adds governance files that the team must keep current.',
     'Freshly created templates require project-specific review before approval.',
@@ -90,10 +137,14 @@ function summarizeCons(results, git) {
     cons.push('The working tree is dirty; review unrelated changes before initializing.')
   }
 
+  for (const risk of aiGovernance.risks) {
+    cons.push(risk)
+  }
+
   return cons
 }
 
-function summarizeRecommendations(results, configState, git) {
+function summarizeRecommendations(results, configState, git, aiGovernance) {
   const recommendations = []
   const missing = results.filter((item) => item.currentState === 'missing').length
 
@@ -111,6 +162,7 @@ function summarizeRecommendations(results, configState, git) {
     recommendations.push('Commit, stash, or review existing changes before adding PSDM artifacts.')
   }
 
+  recommendations.push(...aiGovernance.recommendations)
   recommendations.push('Use psdm validate --json in CI after artifacts are filled.')
   return recommendations
 }
@@ -130,6 +182,7 @@ export function buildAudit(target, options = {}) {
   const git = inspectGit(target)
   const wouldCreate = results.filter((item) => item.installAction === 'create')
   const wouldSkip = results.filter((item) => item.installAction === 'skip')
+  const aiGovernance = detectAiGovernance(target)
 
   return {
     command: 'audit',
@@ -141,6 +194,7 @@ export function buildAudit(target, options = {}) {
       profile: configState.profile,
     },
     projectSignals: detectProjectSignals(target),
+    aiGovernance,
     git,
     summary: {
       total: results.length,
@@ -150,9 +204,9 @@ export function buildAudit(target, options = {}) {
     },
     before: results.map(({ artifact, currentState }) => ({ artifact, currentState })),
     after: results.map(({ artifact, installAction }) => ({ artifact, installAction })),
-    pros: summarizePros(results, Boolean(configResult && configResult.installAction === 'create')),
-    cons: summarizeCons(results, git),
-    recommendations: summarizeRecommendations(results, configState, git),
+    pros: summarizePros(results, Boolean(configResult && configResult.installAction === 'create'), aiGovernance),
+    cons: summarizeCons(results, git, aiGovernance),
+    recommendations: summarizeRecommendations(results, configState, git, aiGovernance),
     results,
   }
 }
@@ -162,6 +216,7 @@ export function printAuditReport(report) {
   console.log('')
   console.log(`Config: ${report.config.exists ? report.config.path : 'default policy; psdm.config.json would be created'}`)
   console.log(`Git: ${report.git.isRepository ? report.git.branch || 'repository' : 'not a git repository'}${report.git.isDirty ? `, dirty (${report.git.changes.length} change/s)` : ''}`)
+  console.log(`AI governance adoption: ${report.aiGovernance.adoptionMode}`)
   console.log('')
   console.log('Before')
   for (const item of report.before) {
@@ -172,6 +227,16 @@ export function printAuditReport(report) {
   console.log('After psdm init')
   for (const item of report.after) {
     console.log(`- ${item.artifact}: ${item.installAction}`)
+  }
+
+  console.log('')
+  console.log('Existing AI governance')
+  if (report.aiGovernance.existing.length === 0) {
+    console.log('- none detected')
+  } else {
+    for (const item of report.aiGovernance.existing) {
+      console.log(`- ${item}`)
+    }
   }
 
   console.log('')

@@ -13,7 +13,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/commands/*.mjs` owns user-facing command behavior.
 - `src/lib/args.mjs` parses CLI options.
 - `src/lib/adr.mjs` owns ADR filename generation and scaffold rendering.
-- `src/lib/audit.mjs` builds the non-destructive repository adoption preview.
+- `src/lib/audit.mjs` builds the non-destructive repository adoption preview and detects existing AI governance files.
 - `src/lib/classifier.mjs` owns reusable change classification.
 - `src/lib/enforcement.mjs` owns CI-oriented maximum change-level enforcement.
 - `src/lib/pr-checklist.mjs` generates pull request checklist content from classification output.
@@ -33,6 +33,7 @@ The architecture favors explicit modules over framework abstractions:
 - Treat malformed risk path rules as invalid local policy and ignore them during path matching.
 - Treat risk classification as advisory unless CI enforcement is explicitly configured through `psdm enforce` or the composite Action.
 - Make adoption audit non-destructive so existing repositories can evaluate impact before initialization.
+- Preserve existing agent, assistant, skill, prompt, and Copilot-style instructions during adoption, and create a separate PSDM adoption plan when integration is needed.
 - Keep templates plain Markdown so teams can adapt them without special tooling.
 - Keep generated artifacts separate from framework docs where possible.
 
@@ -42,6 +43,8 @@ Changes require architecture review when they affect:
 
 - command contracts or exit codes;
 - pre-init audit semantics;
+- existing AI governance detection;
+- adoption plan creation;
 - ADR scaffold semantics;
 - change classification and PR checklist semantics;
 - change-level enforcement semantics;
