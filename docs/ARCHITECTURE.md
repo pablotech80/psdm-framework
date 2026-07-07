@@ -12,6 +12,7 @@ The architecture favors explicit modules over framework abstractions:
 - `bin/psdm.mjs` dispatches commands.
 - `src/commands/*.mjs` owns user-facing command behavior.
 - `src/lib/args.mjs` parses CLI options.
+- `src/lib/audit.mjs` builds the non-destructive repository adoption preview.
 - `src/lib/config.mjs` loads PSDM configuration.
 - `src/lib/artifacts.mjs` defines baseline artifact contracts.
 - `src/lib/risk-paths.mjs` evaluates file path risk rules.
@@ -24,6 +25,7 @@ The architecture favors explicit modules over framework abstractions:
 - Use JSON output as a stable automation contract while preserving human-readable output.
 - Keep configuration local to the target repository through `psdm.config.json`.
 - Treat risk classification as advisory unless CI enforcement is explicitly configured.
+- Make adoption audit non-destructive so existing repositories can evaluate impact before initialization.
 - Keep templates plain Markdown so teams can adapt them without special tooling.
 - Keep generated artifacts separate from framework docs where possible.
 
@@ -32,6 +34,7 @@ The architecture favors explicit modules over framework abstractions:
 Changes require architecture review when they affect:
 
 - command contracts or exit codes;
+- pre-init audit semantics;
 - JSON output shape;
 - config schema or defaults;
 - validator decisions;

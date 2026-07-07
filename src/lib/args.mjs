@@ -5,6 +5,7 @@ export function parseArgs(args) {
     feature: null,
     target: null,
     files: [],
+    dryRun: false,
   }
   const positional = []
 
@@ -13,6 +14,11 @@ export function parseArgs(args) {
 
     if (arg === '--json') {
       options.json = true
+      continue
+    }
+
+    if (arg === '--dry-run') {
+      options.dryRun = true
       continue
     }
 

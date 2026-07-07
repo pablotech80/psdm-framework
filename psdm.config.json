@@ -55,6 +55,18 @@
       "reason": "Config loading changes affect policy interpretation."
     },
     {
+      "pattern": "src/lib/args.mjs",
+      "minimumLevel": "Level 2",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/TESTING.md"],
+      "reason": "Argument parsing changes affect command behavior and automation usage."
+    },
+    {
+      "pattern": "src/lib/audit.mjs",
+      "minimumLevel": "Level 2",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/TESTING.md"],
+      "reason": "Audit changes affect repository adoption previews."
+    },
+    {
       "pattern": "src/lib/risk-paths.mjs",
       "minimumLevel": "Level 3",
       "requiredArtifacts": ["docs/SPEC.md", "docs/SECURITY.md", "docs/TESTING.md"],

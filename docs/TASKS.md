@@ -20,6 +20,7 @@ For each meaningful change:
 Near-term framework tasks:
 
 - Keep this repository self-governing through PSDM artifacts.
+- Keep pre-init audit useful for existing projects adopting PSDM.
 - Add PR checklist generation.
 - Add CI enforcement for change levels.
 - Add fixtures for CLI regression testing.

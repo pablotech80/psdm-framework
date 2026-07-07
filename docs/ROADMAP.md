@@ -36,10 +36,18 @@
 - [x] Self-governance `psdm.config.json`.
 - [x] Framework-specific PSDM baseline artifacts.
 - [x] Cleaner draft-marker detection for operational task files.
+- [x] Pre-init audit for existing projects.
 - [ ] Validation profile support.
 - [ ] Pull request checklist generator.
 
-## Beta - 0.5
+## Alpha - 0.5
+
+- [x] Non-destructive `psdm audit`.
+- [x] `psdm init --dry-run`.
+- [ ] Audit fixtures.
+- [ ] Pull request checklist generator.
+
+## Beta - 0.6
 
 - [ ] Pull request checklist generator.
 - [ ] Change-level enforcement in CI.

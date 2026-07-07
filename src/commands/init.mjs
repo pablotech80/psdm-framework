@@ -2,12 +2,22 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { TEMPLATE_MAP } from '../lib/artifacts.mjs'
 import { parseArgs } from '../lib/args.mjs'
+import { buildAudit, printAuditReport } from '../lib/audit.mjs'
 import { loadConfig } from '../lib/config.mjs'
 import { resolveTarget, templateDir } from '../lib/paths.mjs'
 
 export async function initCommand(args) {
   const { options, positional } = parseArgs(args)
   const target = resolveTarget(positional)
+
+  if (options.dryRun) {
+    printAuditReport(buildAudit(target, {
+      configPath: options.configPath,
+      feature: options.feature,
+    }))
+    return { exitCode: 0 }
+  }
+
   const templates = templateDir()
   const configState = loadConfig(target, options.configPath)
   const featureArtifacts = options.feature

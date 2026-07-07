@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is at `0.4.0-alpha`.
+PSDM is at `0.5.0-alpha`.
 
 Completed:
 
@@ -23,10 +23,11 @@ Completed:
 - Root `ROADMAP.md` and `TODO.md` operational tracking.
 - Root `psdm.config.json` and baseline PSDM artifacts for this repository.
 - Validator draft-marker detection refined to avoid false positives on operational `TODO.md` references.
+- Pre-init audit added for existing project adoption.
 
 ## Active Milestone
 
-`0.4.0-alpha`: self-governing framework repository.
+`0.5.0-alpha`: adoption audit and checklist workflow.
 
 Goal:
 
@@ -38,6 +39,7 @@ Planned outcomes:
 - Root `psdm.config.json`.
 - Filled baseline PSDM artifacts for the framework itself.
 - Clean self-validation path for the framework baseline.
+- Non-destructive adoption audit for already-started projects.
 - Validation policy that distinguishes framework source docs from generated project artifacts.
 - PR/checklist workflow for risky backend/platform changes.
 
@@ -48,10 +50,18 @@ Planned outcomes:
 - [x] Initialize PSDM governance artifacts for this repository.
 - [x] Fill framework-specific `PROJECT_BRIEF`, `SPEC`, `ARCHITECTURE`, `TESTING`, `SECURITY`, `OPERATIONS`, and `DEPLOYMENT` docs.
 - [x] Refine draft-marker detection for operational roadmap/task references.
+- [x] Add pre-init audit for existing projects.
 - [ ] Add a validation profile that fits framework repositories.
 - [ ] Add PR checklist generation.
 
-### `0.5.0-beta`
+### `0.5.0-alpha`
+
+- [x] Add non-destructive `psdm audit`.
+- [x] Add `psdm init --dry-run`.
+- [ ] Add PR checklist generation.
+- [ ] Add CLI fixtures for audit behavior.
+
+### `0.6.0-beta`
 
 - [ ] Change-level enforcement in CI.
 - [ ] Security-sensitive path rule validation.

@@ -6,12 +6,13 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.4.0-alpha`
+`0.5.0-alpha`
 
 This repository currently provides:
 
 - PSDM project templates.
 - A local CLI.
+- Pre-init repository audit.
 - Baseline artifact checks.
 - Baseline structure validation.
 - Change-level classification.
@@ -39,7 +40,9 @@ psdm help
 ## CLI
 
 ```bash
+psdm audit [target] [--json] [--feature <name>] [--config <path>]
 psdm init [target]
+psdm init [target] --dry-run
 psdm init [target] --feature <name>
 psdm check [target] [--json] [--feature <name>] [--config <path>]
 psdm validate [target] [--json] [--feature <name>] [--config <path>]
@@ -52,10 +55,13 @@ psdm report [target] [--json] [--feature <name>] [--config <path>]
 Inside a project:
 
 ```bash
+psdm audit
 psdm init
 psdm check
 psdm validate
 ```
+
+Use `psdm audit` before initializing PSDM in an existing project. It does not modify files; it shows current state, what `psdm init` would create or skip, pros, cons, and recommendations.
 
 `psdm init` also creates `psdm.config.json`. Existing files are skipped.
 
@@ -74,6 +80,7 @@ Estimated level: Level 3
 Machine-readable output:
 
 ```bash
+psdm audit --json
 psdm validate --json
 psdm classify "change Stripe webhook ownership validation" --json
 ```

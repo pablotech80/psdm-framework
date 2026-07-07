@@ -44,6 +44,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Root `psdm.config.json` for this repository.
 - [x] Initialized missing PSDM baseline artifacts for the framework itself.
 - [x] Refined draft-marker detection for operational `TODO.md` references.
+- [x] Added pre-init audit for existing projects.
 - [x] Filled `docs/PROJECT_BRIEF.md` with framework-specific context.
 - [x] Filled `docs/SPEC.md` with CLI/config behavior scope.
 - [x] Filled `docs/ARCHITECTURE.md` with current module boundaries.
@@ -51,7 +52,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Filled `docs/SECURITY.md` with secret/data/tooling assumptions.
 - [x] Filled `docs/DEPLOYMENT.md` with npm/GitHub release assumptions.
 - [x] Filled `docs/OPERATIONS.md` with maintenance and CI expectations.
-- [x] Bumped package status to `0.4.0-alpha`.
+- [x] Bumped package status to `0.5.0-alpha`.
 
 ## Update Rule
 
