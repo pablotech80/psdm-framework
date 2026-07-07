@@ -1,0 +1,36 @@
+# DEPLOYMENT.md
+
+Status: `Active`
+Project: `psdm-framework`
+
+## Deployment Scope
+
+PSDM distribution currently means packaging and publishing a CLI package, plus maintaining a GitHub Action entrypoint.
+
+Deployment-sensitive surfaces:
+
+- `package.json`
+- `bin/psdm.mjs`
+- `action.yml`
+- `.github/workflows/**`
+- `templates/**`
+- public docs that describe install or automation behavior
+
+Current local release validation:
+
+```bash
+npm pack --dry-run
+```
+
+## Deployment Gate
+
+Before release or publication:
+
+- confirm version intent;
+- run syntax and CLI smoke validation;
+- run initialized project validation;
+- inspect `npm pack --dry-run` contents;
+- confirm GitHub Action behavior if action files changed;
+- confirm no secrets or local-only files are included.
+
+Production publishing is never implied by code changes. Publishing to a package registry requires explicit owner approval.

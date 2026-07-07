@@ -29,6 +29,16 @@
 - [ ] Change-level enforcement in CI.
 - [ ] Security-sensitive file path rule validation.
 
+## Alpha - 0.4
+
+- [x] Repository-level `AGENTS.md`.
+- [x] Root operational `ROADMAP.md` and `TODO.md`.
+- [x] Self-governance `psdm.config.json`.
+- [x] Framework-specific PSDM baseline artifacts.
+- [x] Cleaner draft-marker detection for operational task files.
+- [ ] Validation profile support.
+- [ ] Pull request checklist generator.
+
 ## Beta - 0.5
 
 - [ ] Pull request checklist generator.

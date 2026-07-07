@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is at `0.3.0-alpha`.
+PSDM is at `0.4.0-alpha`.
 
 Completed:
 
@@ -20,6 +20,9 @@ Completed:
 - `0.2.0-alpha` config, JSON output, feature artifacts, git awareness, GitHub Action MVP, and tool registry draft.
 - `0.3.0-alpha` backend/platform risk path classification.
 - Repository-level `AGENTS.md` with agent operating rules.
+- Root `ROADMAP.md` and `TODO.md` operational tracking.
+- Root `psdm.config.json` and baseline PSDM artifacts for this repository.
+- Validator draft-marker detection refined to avoid false positives on operational `TODO.md` references.
 
 ## Active Milestone
 
@@ -34,6 +37,7 @@ Planned outcomes:
 - Root `ROADMAP.md` and `TODO.md` kept current with every advance.
 - Root `psdm.config.json`.
 - Filled baseline PSDM artifacts for the framework itself.
+- Clean self-validation path for the framework baseline.
 - Validation policy that distinguishes framework source docs from generated project artifacts.
 - PR/checklist workflow for risky backend/platform changes.
 
@@ -41,8 +45,9 @@ Planned outcomes:
 
 ### `0.4.0-alpha`
 
-- [ ] Initialize PSDM governance artifacts for this repository.
-- [ ] Fill framework-specific `PROJECT_BRIEF`, `SPEC`, `ARCHITECTURE`, `TESTING`, `SECURITY`, `OPERATIONS`, and `DEPLOYMENT` docs.
+- [x] Initialize PSDM governance artifacts for this repository.
+- [x] Fill framework-specific `PROJECT_BRIEF`, `SPEC`, `ARCHITECTURE`, `TESTING`, `SECURITY`, `OPERATIONS`, and `DEPLOYMENT` docs.
+- [x] Refine draft-marker detection for operational roadmap/task references.
 - [ ] Add a validation profile that fits framework repositories.
 - [ ] Add PR checklist generation.
 

@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.3.0-alpha`
+`0.4.0-alpha`
 
 This repository currently provides:
 
@@ -22,6 +22,7 @@ This repository currently provides:
 - Dirty git working-tree awareness.
 - GitHub Action MVP.
 - Backend/platform risk path rules.
+- Self-governance baseline artifacts for this repository.
 
 ## Install Locally
 

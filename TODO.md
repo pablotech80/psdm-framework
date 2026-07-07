@@ -12,29 +12,19 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [x] Add repository-level `AGENTS.md`.
-- [x] Add root `ROADMAP.md`.
-- [x] Add root `TODO.md`.
-- [ ] Create root `psdm.config.json` for this repository.
-- [ ] Initialize missing PSDM baseline artifacts for the framework itself.
+- [ ] Add a validation profile that fits framework repositories.
 
 ## Next
 
-- [ ] Fill `docs/PROJECT_BRIEF.md` with framework-specific context.
-- [ ] Fill `docs/SPEC.md` with CLI/config behavior scope.
-- [ ] Fill `docs/ARCHITECTURE.md` with current module boundaries.
-- [ ] Fill `docs/TESTING.md` with validation commands and expected outcomes.
-- [ ] Fill `docs/SECURITY.md` with secret/data/tooling assumptions.
-- [ ] Fill `docs/DEPLOYMENT.md` with npm/GitHub release assumptions.
-- [ ] Fill `docs/OPERATIONS.md` with maintenance and CI expectations.
+- [ ] Add `psdm pr-checklist`.
+- [ ] Add CLI fixtures for validator, config, and classifier behavior.
+- [ ] Document config schema stability rules.
 
 ## Later
 
-- [ ] Add `psdm pr-checklist`.
 - [ ] Add CI change-level enforcement.
 - [ ] Add risk path validation.
 - [ ] Add ADR generation.
-- [ ] Add CLI fixtures.
 - [ ] Add config schema documentation.
 
 ## Done
@@ -48,6 +38,20 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] GitHub Action MVP.
 - [x] Tool registry draft.
 - [x] Backend/platform risk path classification.
+- [x] Repository-level `AGENTS.md`.
+- [x] Root `ROADMAP.md`.
+- [x] Root `TODO.md`.
+- [x] Root `psdm.config.json` for this repository.
+- [x] Initialized missing PSDM baseline artifacts for the framework itself.
+- [x] Refined draft-marker detection for operational `TODO.md` references.
+- [x] Filled `docs/PROJECT_BRIEF.md` with framework-specific context.
+- [x] Filled `docs/SPEC.md` with CLI/config behavior scope.
+- [x] Filled `docs/ARCHITECTURE.md` with current module boundaries.
+- [x] Filled `docs/TESTING.md` with validation commands and expected outcomes.
+- [x] Filled `docs/SECURITY.md` with secret/data/tooling assumptions.
+- [x] Filled `docs/DEPLOYMENT.md` with npm/GitHub release assumptions.
+- [x] Filled `docs/OPERATIONS.md` with maintenance and CI expectations.
+- [x] Bumped package status to `0.4.0-alpha`.
 
 ## Update Rule
 

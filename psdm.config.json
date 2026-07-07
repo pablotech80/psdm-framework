@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "requiredArtifacts": [
+    "AGENTS.md",
+    "ROADMAP.md",
+    "TODO.md",
+    "docs/PROJECT_BRIEF.md",
+    "docs/SPEC.md",
+    "docs/ARCHITECTURE.md",
+    "docs/CHANGE_GOVERNANCE.md",
+    "docs/TASKS.md",
+    "docs/TESTING.md",
+    "docs/DEPLOYMENT.md",
+    "docs/SECURITY.md",
+    "docs/OPERATIONS.md",
+    "ADRs"
+  ],
+  "extraRequiredArtifacts": [],
+  "features": {
+    "root": "docs/features",
+    "requiredArtifacts": [
+      "PROJECT_BRIEF.md",
+      "SPEC.md",
+      "ARCHITECTURE.md",
+      "SECURITY.md",
+      "TESTING.md"
+    ]
+  },
+  "git": {
+    "warnOnDirty": true
+  },
+  "riskPaths": [
+    {
+      "pattern": "bin/**",
+      "minimumLevel": "Level 2",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/TESTING.md"],
+      "reason": "CLI entrypoint changes alter user-facing command behavior."
+    },
+    {
+      "pattern": "src/commands/**",
+      "minimumLevel": "Level 2",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/TESTING.md"],
+      "reason": "Command changes alter PSDM behavior and automation output."
+    },
+    {
+      "pattern": "src/validator/**",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/ARCHITECTURE.md", "docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Validator changes affect governance decisions and repository policy enforcement."
+    },
+    {
+      "pattern": "src/lib/config.mjs",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/ARCHITECTURE.md", "docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Config loading changes affect policy interpretation."
+    },
+    {
+      "pattern": "src/lib/risk-paths.mjs",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Risk path logic affects change-level classification."
+    },
+    {
+      "pattern": "templates/**",
+      "minimumLevel": "Level 2",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/TESTING.md"],
+      "reason": "Template changes affect newly initialized PSDM projects."
+    },
+    {
+      "pattern": ".github/workflows/**",
+      "minimumLevel": "Level 4",
+      "requiredArtifacts": ["docs/DEPLOYMENT.md", "docs/OPERATIONS.md", "docs/SECURITY.md"],
+      "reason": "CI workflow changes can alter release, validation, and secret handling behavior."
+    },
+    {
+      "pattern": "action.yml",
+      "minimumLevel": "Level 4",
+      "requiredArtifacts": ["docs/DEPLOYMENT.md", "docs/OPERATIONS.md", "docs/SECURITY.md"],
+      "reason": "GitHub Action changes affect downstream repository automation."
+    },
+    {
+      "pattern": "package.json",
+      "minimumLevel": "Level 4",
+      "requiredArtifacts": ["docs/DEPLOYMENT.md", "docs/OPERATIONS.md", "docs/TESTING.md"],
+      "reason": "Package metadata changes affect distribution and install behavior."
+    }
+  ]
+}
