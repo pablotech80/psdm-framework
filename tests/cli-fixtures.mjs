@@ -93,6 +93,35 @@ function testAuditDetectsExistingAiGovernance() {
   assert.match(output, /Existing AI governance/)
 }
 
+function testAuditDetectsAiRuntimeSurfaces() {
+  const target = existingProject()
+  mkdirSync(resolve(target, 'rag'), { recursive: true })
+  mkdirSync(resolve(target, 'prompts'), { recursive: true })
+  mkdirSync(resolve(target, 'n8n'), { recursive: true })
+  writeFileSync(resolve(target, 'package.json'), JSON.stringify({
+    name: 'ai-runtime-app',
+    dependencies: {
+      openai: '^4.0.0',
+      langchain: '^0.3.0',
+      chromadb: '^1.0.0',
+    },
+  }))
+  writeFileSync(resolve(target, 'requirements.txt'), 'tiktoken==0.7.0\n')
+
+  const report = runJson(['audit', target, '--json'])
+  const surface = (kind) => report.aiReadiness.surfaces.find((item) => item.kind === kind)
+
+  assert.equal(report.aiReadiness.status, 'gaps_detected')
+  assert.ok(surface('agent-skills-and-prompts').detected.includes('prompts'))
+  assert.ok(surface('rag-code').detected.includes('rag'))
+  assert.ok(surface('rag-code').detected.includes('package.json:langchain'))
+  assert.ok(surface('embeddings').detected.includes('requirements.txt:tiktoken'))
+  assert.ok(surface('provider-sdks').detected.includes('package.json:openai'))
+  assert.ok(surface('vector-stores').detected.includes('package.json:chromadb'))
+  assert.ok(surface('automation-folders').detected.includes('n8n'))
+  assert.ok(report.aiReadiness.gaps.some((item) => item.key === 'guardrails'))
+}
+
 function testInitCreatesAdoptionPlanForExistingAiGovernance() {
   const target = existingProject()
   mkdirSync(resolve(target, '.github'), { recursive: true })
@@ -470,6 +499,7 @@ function testFeatureArtifacts() {
 const tests = [
   testAuditExistingProject,
   testAuditDetectsExistingAiGovernance,
+  testAuditDetectsAiRuntimeSurfaces,
   testInitCreatesAdoptionPlanForExistingAiGovernance,
   testInitDryRunDoesNotWrite,
   testAdrCreatesDecisionRecord,

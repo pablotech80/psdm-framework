@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { loadConfig } from './config.mjs'
 import { inspectGit } from './git.mjs'
@@ -23,7 +23,60 @@ const AI_READINESS_SURFACES = [
   },
   {
     kind: 'agent-skills-and-prompts',
-    paths: ['skills', 'prompts', 'ai'],
+    paths: ['agents', 'skills', 'prompts', 'ai'],
+  },
+  {
+    kind: 'rag-code',
+    paths: ['rag', 'retrieval', 'retrievers', 'vector', 'vectors', 'src/rag', 'backend/rag'],
+    manifestIndicators: ['langchain', 'llama-index', 'llamaindex', '@langchain/core', '@langchain/openai'],
+  },
+  {
+    kind: 'embeddings',
+    paths: ['embeddings', 'embedding', 'src/embeddings', 'backend/embeddings'],
+    manifestIndicators: ['tiktoken', '@dqbd/tiktoken', 'sentence-transformers'],
+  },
+  {
+    kind: 'ai-tools',
+    paths: ['tools', 'agent_tools', 'ai-tools', 'src/tools', 'backend/tools'],
+  },
+  {
+    kind: 'provider-sdks',
+    paths: [],
+    manifestIndicators: [
+      'openai',
+      '@openai/agents',
+      '@openai/realtime-api-beta',
+      'ai',
+      'anthropic',
+      '@anthropic-ai/sdk',
+      '@google/generative-ai',
+      'cohere',
+      'cohere-ai',
+      'mistralai',
+      '@mistralai/mistralai',
+      'groq',
+      'groq-sdk',
+    ],
+  },
+  {
+    kind: 'vector-stores',
+    paths: ['chroma', 'chromadb', 'vectorstore', 'vectorstores', 'qdrant', 'pinecone', 'weaviate'],
+    manifestIndicators: [
+      'chromadb',
+      'chroma',
+      '@pinecone-database/pinecone',
+      'pinecone-client',
+      'qdrant-client',
+      '@qdrant/js-client-rest',
+      'weaviate-client',
+      'faiss-cpu',
+      'pgvector',
+    ],
+  },
+  {
+    kind: 'automation-folders',
+    paths: ['n8n', '.n8n', 'automations', 'automation', 'workflows', 'zapier', 'make'],
+    manifestIndicators: ['n8n', '@n8n_io/n8n-workflow'],
   },
   {
     kind: 'ai-security-docs',
@@ -107,9 +160,78 @@ function existingPaths(target, paths) {
   return paths.filter((path) => existsSync(join(target, path)))
 }
 
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function readTextIfExists(target, path) {
+  const fullPath = join(target, path)
+  if (!existsSync(fullPath)) {
+    return null
+  }
+
+  const stat = statSync(fullPath)
+  if (stat.isDirectory()) {
+    return null
+  }
+
+  return readFileSync(fullPath, 'utf8')
+}
+
+function packageJsonDependencies(target) {
+  const content = readTextIfExists(target, 'package.json')
+  if (!content) {
+    return []
+  }
+
+  try {
+    const parsed = JSON.parse(content)
+    return Object.keys({
+      ...(parsed.dependencies || {}),
+      ...(parsed.devDependencies || {}),
+      ...(parsed.peerDependencies || {}),
+      ...(parsed.optionalDependencies || {}),
+    })
+  } catch {
+    return []
+  }
+}
+
+function manifestIndicatorMatches(target, indicators = []) {
+  if (indicators.length === 0) {
+    return []
+  }
+
+  const normalizedIndicators = indicators.map((indicator) => indicator.toLowerCase())
+  const packageMatches = packageJsonDependencies(target)
+    .filter((dependency) => normalizedIndicators.includes(dependency.toLowerCase()))
+    .map((dependency) => `package.json:${dependency}`)
+  const textManifests = ['requirements.txt', 'pyproject.toml', 'Pipfile']
+  const textIndicators = indicators.filter((indicator) => indicator.length >= 3)
+  const textMatches = textManifests.flatMap((manifest) => {
+    const content = readTextIfExists(target, manifest)
+    if (!content) {
+      return []
+    }
+
+    const normalizedContent = content.toLowerCase()
+    return textIndicators
+      .filter((indicator) => {
+        const packagePattern = new RegExp(`(^|[^A-Za-z0-9_@/.-])${escapeRegex(indicator.toLowerCase())}([^A-Za-z0-9_@/.-]|$)`)
+        return packagePattern.test(normalizedContent)
+      })
+      .map((indicator) => `${manifest}:${indicator}`)
+  })
+
+  return Array.from(new Set([...packageMatches, ...textMatches]))
+}
+
 function detectAiReadiness(target, aiGovernance) {
   const surfaces = AI_READINESS_SURFACES.map((surface) => {
-    const detected = existingPaths(target, surface.paths)
+    const detected = Array.from(new Set([
+      ...existingPaths(target, surface.paths || []),
+      ...manifestIndicatorMatches(target, surface.manifestIndicators || []),
+    ]))
 
     return {
       kind: surface.kind,
@@ -162,7 +284,7 @@ function detectAiReadiness(target, aiGovernance) {
         'Document guardrails, data classification, cost and latency budgets, prompt-injection tests, evals, and tool security.',
         ...aiGovernance.recommendations,
       ],
-    note: 'This is the stable AI readiness audit contract. Deep provider, vector store, and code-level detection will be added in later increments.',
+    note: 'This is the stable AI readiness audit contract. Deeper code-level semantic detection, eval discovery, and observability signals will be added in later increments.',
   }
 }
 

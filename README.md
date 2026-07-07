@@ -80,7 +80,7 @@ Use `psdm audit` before initializing PSDM in an existing project. It does not mo
 
 If the repository already has `AGENTS.md`, Copilot, Cursor, Claude, Codex, skills, prompts, or AI instruction files, `psdm audit` reports adoption mode `integrate` and recommends preserving those files. During `psdm init`, PSDM creates `docs/PSDM_ADOPTION.md` so the integration plan is explicit.
 
-`psdm audit --json` also emits `aiReadiness`, a stable contract for AI runtime readiness signals. It reports detected AI surfaces, governance artifact groups, gaps, and recommendations for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security. The contract is documented in `docs/AI_READINESS_AUDIT.md`.
+`psdm audit --json` also emits `aiReadiness`, a stable contract for AI runtime readiness signals. It reports detected AI surfaces, governance artifact groups, gaps, and recommendations for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security. Current detection covers common AI folders and manifest dependencies such as OpenAI, Anthropic, LangChain, LlamaIndex, vector stores, embeddings, and n8n. The contract is documented in `docs/AI_READINESS_AUDIT.md`.
 
 `psdm init` also creates `psdm.config.json`. Existing files are skipped.
 
@@ -320,7 +320,7 @@ This alpha does not yet provide:
 
 - Full AI agent security runtime guardrail enforcement.
 - Tool registry enforcement.
-- Deep AI provider, vector store, RAG, and code-level readiness detection.
+- Deep code-level semantic AI readiness detection.
 - SBOM or supply-chain scanning.
 - Deep semantic validation of specs.
 

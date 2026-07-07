@@ -62,9 +62,15 @@ Current surface kinds:
 
 - `agent-instructions`
 - `agent-skills-and-prompts`
+- `rag-code`
+- `embeddings`
+- `ai-tools`
+- `provider-sdks`
+- `vector-stores`
+- `automation-folders`
 - `ai-security-docs`
 
-Future increments may add provider SDKs, vector stores, RAG code, automation tools, eval suites, and observability signals.
+Surface detection currently uses known paths and package manifests. Future increments may add deeper code-level analysis, eval suites, and observability signals.
 
 ## Governance Artifact Object
 
@@ -117,3 +123,25 @@ Stable fields for version `1`:
 - `aiReadiness.note`
 
 New optional fields may be added without changing `version`.
+
+## Current Detection Scope
+
+Path-based detection covers common folders such as:
+
+- `agents`
+- `rag`
+- `prompts`
+- `embeddings`
+- `tools`
+- `vectorstore`
+- `n8n`
+- `automations`
+
+Manifest-based detection covers known JavaScript and Python package signals in:
+
+- `package.json`
+- `requirements.txt`
+- `pyproject.toml`
+- `Pipfile`
+
+Examples include OpenAI, Anthropic, LangChain, LlamaIndex, Chroma, Pinecone, Qdrant, Weaviate, tiktoken, and n8n packages.

@@ -9,6 +9,7 @@ Project: `psdm-framework`
 - Provide a non-destructive `audit` command that previews repository state and `init` impact.
 - Detect existing AI governance files during audit and recommend integration without overwrite.
 - Emit an `aiReadiness` contract from `psdm audit --json` for AI surface and governance gap reporting.
+- Detect AI readiness surfaces from common folders and manifests for agents, RAG, prompts, embeddings, tools, provider SDKs, vector stores, and automation.
 - Create `docs/PSDM_ADOPTION.md` during init when existing AI governance files are detected.
 - Keep the CLI dependency-free and runnable on Node.js 20 or newer.
 - Support human-readable command output by default.
@@ -33,6 +34,7 @@ Project: `psdm-framework`
 - `node bin/psdm.mjs audit <target> --json` emits current artifact state, planned init actions, pros, cons, and recommendations.
 - Audit JSON includes existing AI governance detection and an adoption mode of `initialize` or `integrate`.
 - Audit JSON includes `aiReadiness.version`, `status`, `surfaces`, `governanceArtifacts`, `gaps`, and `recommendations`.
+- AI readiness surfaces include path and manifest signals such as `rag`, `prompts`, `package.json:openai`, and `requirements.txt:tiktoken`.
 - `node bin/psdm.mjs init <target>` creates `docs/PSDM_ADOPTION.md` when adopting into a repository with existing AI governance files.
 - `node bin/psdm.mjs adr "<title>" --target <target> --json` creates a non-overwriting ADR file under `ADRs/`.
 - `node bin/psdm.mjs init <target>` creates baseline artifacts without overwriting existing files.
@@ -50,7 +52,7 @@ Project: `psdm-framework`
 ## Out of Scope
 
 - Runtime enforcement inside deployed applications.
-- Deep AI provider, vector store, RAG, and code-level readiness detection.
+- Deep code-level semantic AI readiness detection.
 - Secret scanning beyond simple local pattern detection.
 - Full policy-as-code semantics.
 - Remote service dependencies.

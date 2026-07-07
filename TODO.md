@@ -12,7 +12,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Implement AI surface detection in `src/lib/audit.mjs`.
+- [ ] Design optional AI policy fields for `psdm.config.json`.
 
 ## Next
 
@@ -21,7 +21,6 @@ This file must be updated with every meaningful project advance. Completed items
 ## Later
 
 - [ ] Add example project coverage.
-- [ ] Design optional AI policy fields for `psdm.config.json`.
 - [ ] Add AI guardrail templates for PII, prompt injection, cost, latency, evals, and tool security.
 - [ ] Prepare public package release checklist.
 
@@ -62,6 +61,8 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Defined the AI readiness audit contract for `psdm audit --json`.
 - [x] Added human-readable AI readiness output to `psdm audit`.
 - [x] Added AI readiness audit fixture coverage.
+- [x] Implemented AI surface detection in `src/lib/audit.mjs`.
+- [x] Added governance gap detection for AI readiness artifact groups.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.
 - [x] Filled `docs/PROJECT_BRIEF.md` with framework-specific context.

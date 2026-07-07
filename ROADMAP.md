@@ -41,6 +41,7 @@ Completed:
 - Fresh-template review warnings restored for unresolved draft markers.
 - AI readiness gap analysis completed for governance, guardrails, cost, latency, prompt injection, and PII coverage.
 - AI readiness audit JSON contract added to `psdm audit`.
+- AI surface detection added for paths and manifests.
 
 ## Active Milestone
 
@@ -134,8 +135,8 @@ Planned outcomes:
 ### `0.15.0-alpha`
 
 - [x] Define the AI readiness audit JSON contract.
-- [ ] Add AI surface detection for agents, RAG, prompts, embeddings, tools, provider SDKs, vector stores, and automation folders.
-- [ ] Add governance gap detection for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
+- [x] Add AI surface detection for agents, RAG, prompts, embeddings, tools, provider SDKs, vector stores, and automation folders.
+- [x] Add governance gap detection for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
 - [x] Add human-readable AI readiness output to `psdm audit`.
 - [x] Add CLI fixtures for AI readiness audit behavior.
 
