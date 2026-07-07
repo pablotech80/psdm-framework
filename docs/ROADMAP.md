@@ -47,10 +47,17 @@
 ## Alpha - 0.6
 
 - [x] Pull request checklist generator.
-- [ ] Checklist fixtures.
 - [ ] Validation profile support.
 
-## Beta - 0.7
+## Alpha - 0.7
+
+- [x] Audit fixtures.
+- [x] Classify fixtures.
+- [x] Checklist fixtures.
+- [ ] Validator/config fixtures.
+- [ ] Validation profile support.
+
+## Beta - 0.8
 
 - [ ] Change-level enforcement in CI.
 - [ ] Security-sensitive file path rule validation.

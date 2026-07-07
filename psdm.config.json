@@ -91,6 +91,12 @@
       "reason": "Template changes affect newly initialized PSDM projects."
     },
     {
+      "pattern": "tests/**",
+      "minimumLevel": "Level 2",
+      "requiredArtifacts": ["docs/TESTING.md"],
+      "reason": "Fixture changes affect regression coverage."
+    },
+    {
       "pattern": ".github/workflows/**",
       "minimumLevel": "Level 4",
       "requiredArtifacts": ["docs/DEPLOYMENT.md", "docs/OPERATIONS.md", "docs/SECURITY.md"],

@@ -20,6 +20,12 @@ node bin/psdm.mjs classify "small cleanup" --file src/validator/validate-method.
 node bin/psdm.mjs pr-checklist "small cleanup" --file src/validator/validate-method.mjs
 ```
 
+CLI fixture validation:
+
+```bash
+npm test
+```
+
 Initialized project validation:
 
 ```bash
@@ -47,6 +53,7 @@ node bin/psdm.mjs validate . --json
 - Run CLI smoke validation for command, parser, config, classifier, or validator changes.
 - Run audit validation for changes that affect init, config, or required artifacts.
 - Run PR checklist validation for changes that affect classification, risk paths, or PR workflow output.
+- Run `npm test` for CLI regression coverage around audit, classify, and PR checklist behavior.
 - Run initialized project validation for template, config, or artifact changes.
 - Run package validation before distribution-related changes.
 - Treat unexpected validation failures as blocking unless explicitly documented as pre-existing.

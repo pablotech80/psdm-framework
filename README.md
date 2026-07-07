@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.6.0-alpha`
+`0.7.0-alpha`
 
 This repository currently provides:
 
@@ -14,6 +14,7 @@ This repository currently provides:
 - A local CLI.
 - Pre-init repository audit.
 - Pull request checklist generation.
+- CLI regression fixtures.
 - Baseline artifact checks.
 - Baseline structure validation.
 - Change-level classification.
@@ -103,6 +104,12 @@ Generate a PR checklist:
 
 ```bash
 psdm pr-checklist "change auth session validation" --file backend/auth/session.py
+```
+
+Run local fixtures:
+
+```bash
+npm test
 ```
 
 ## Configuration

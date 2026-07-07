@@ -1,6 +1,6 @@
 {
   "name": "@ptech/psdm-framework",
-  "version": "0.6.0-alpha",
+  "version": "0.7.0-alpha",
   "description": "PTECH SPEC-DRIVEN METHOD framework for AI-assisted software project governance.",
   "type": "module",
   "bin": {
@@ -10,7 +10,8 @@
     "check": "node bin/psdm.mjs check",
     "validate": "node bin/psdm.mjs validate",
     "classify": "node bin/psdm.mjs classify \"change authentication rules\"",
-    "report": "node bin/psdm.mjs report"
+    "report": "node bin/psdm.mjs report",
+    "test": "node tests/cli-fixtures.mjs"
   },
   "keywords": [
     "ai",
