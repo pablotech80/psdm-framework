@@ -1,17 +1,27 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
-import { REQUIRED_ARTIFACTS, TEMPLATE_MAP } from '../lib/artifacts.mjs'
+import { TEMPLATE_MAP } from '../lib/artifacts.mjs'
+import { parseArgs } from '../lib/args.mjs'
+import { loadConfig } from '../lib/config.mjs'
 import { resolveTarget, templateDir } from '../lib/paths.mjs'
 
 export async function initCommand(args) {
-  const target = resolveTarget(args)
+  const { options, positional } = parseArgs(args)
+  const target = resolveTarget(positional)
   const templates = templateDir()
+  const configState = loadConfig(target, options.configPath)
+  const featureArtifacts = options.feature
+    ? configState.config.features.requiredArtifacts.map((artifact) =>
+      join(configState.config.features.root, options.feature, artifact),
+    )
+    : []
+  const artifacts = options.feature ? featureArtifacts : configState.config.requiredArtifacts
   let created = 0
   let skipped = 0
 
   mkdirSync(target, { recursive: true })
 
-  for (const artifact of REQUIRED_ARTIFACTS) {
+  for (const artifact of artifacts) {
     const destination = join(target, artifact)
 
     if (artifact === 'ADRs') {
@@ -33,11 +43,26 @@ export async function initCommand(args) {
     }
 
     mkdirSync(dirname(destination), { recursive: true })
-    const templateName = TEMPLATE_MAP[artifact]
-    const template = readFileSync(join(templates, templateName), 'utf8')
+    const templateName = TEMPLATE_MAP[artifact] || TEMPLATE_MAP[artifact.split('/').at(-1)]
+    const template = templateName
+      ? readFileSync(join(templates, templateName), 'utf8')
+      : `# ${artifact.split('/').at(-1)}\n\nTODO: Define project-specific PSDM content.\n`
     writeFileSync(destination, template)
     created += 1
     console.log(`CREATED ${artifact}`)
+  }
+
+  if (!options.feature && !options.configPath) {
+    const configDestination = join(target, 'psdm.config.json')
+    if (!existsSync(configDestination)) {
+      const template = readFileSync(join(templates, 'psdm.config.json'), 'utf8')
+      writeFileSync(configDestination, template)
+      created += 1
+      console.log('CREATED psdm.config.json')
+    } else {
+      skipped += 1
+      console.log('SKIP    psdm.config.json')
+    }
   }
 
   console.log('')

@@ -34,6 +34,8 @@ Each AI-accessible tool should document:
 | Audit logging | Yes |
 | Human approval required | When high-risk |
 
+See `docs/TOOL_REGISTRY.md` for the draft registry contract covering permissions, allowed parameters, forbidden operations, human approval, and audit logging.
+
 ## Default Policy
 
 AI tools should be deny-by-default. A tool is available only when the project explicitly grants it for the current change level and scope.

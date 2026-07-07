@@ -20,11 +20,11 @@ function printHelp() {
   console.log(`PSDM Framework
 
 Usage:
-  psdm init [target]
-  psdm check [target]
-  psdm validate [target]
-  psdm classify "<change description>"
-  psdm report [target]
+  psdm init [target] [--feature name]
+  psdm check [target] [--json] [--feature name] [--config path]
+  psdm validate [target] [--json] [--feature name] [--config path]
+  psdm classify "<change description>" [--json]
+  psdm report [target] [--json] [--feature name] [--config path]
 
 Commands:
   init       Create PSDM governance artifacts in a project.

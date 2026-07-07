@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.1.0` MVP
+`0.2.0-alpha`
 
 This repository currently provides:
 
@@ -16,6 +16,11 @@ This repository currently provides:
 - Baseline structure validation.
 - Change-level classification.
 - Markdown compliance reports.
+- Optional `psdm.config.json` policy.
+- JSON output for automation.
+- Feature-specific PSDM artifacts.
+- Dirty git working-tree awareness.
+- GitHub Action MVP.
 
 ## Install Locally
 
@@ -33,10 +38,11 @@ psdm help
 
 ```bash
 psdm init [target]
-psdm check [target]
-psdm validate [target]
-psdm classify "<change description>"
-psdm report [target]
+psdm init [target] --feature <name>
+psdm check [target] [--json] [--feature <name>] [--config <path>]
+psdm validate [target] [--json] [--feature <name>] [--config <path>]
+psdm classify "<change description>" [--json]
+psdm report [target] [--json] [--feature <name>] [--config <path>]
 ```
 
 ## Quick Start
@@ -49,6 +55,8 @@ psdm check
 psdm validate
 ```
 
+`psdm init` also creates `psdm.config.json`. Existing files are skipped.
+
 Classify a change:
 
 ```bash
@@ -59,6 +67,77 @@ Expected result:
 
 ```text
 Estimated level: Level 3
+```
+
+Machine-readable output:
+
+```bash
+psdm validate --json
+psdm classify "change Stripe webhook ownership validation" --json
+```
+
+## Configuration
+
+`psdm.config.json` is optional. When it is absent, PSDM uses the default baseline artifacts.
+
+Example:
+
+```json
+{
+  "version": 1,
+  "requiredArtifacts": [
+    "AGENTS.md",
+    "docs/PROJECT_BRIEF.md",
+    "docs/SPEC.md",
+    "docs/ARCHITECTURE.md",
+    "docs/CHANGE_GOVERNANCE.md",
+    "docs/TASKS.md",
+    "docs/TESTING.md",
+    "docs/DEPLOYMENT.md",
+    "docs/SECURITY.md",
+    "docs/OPERATIONS.md",
+    "ADRs"
+  ],
+  "extraRequiredArtifacts": [],
+  "features": {
+    "root": "docs/features",
+    "requiredArtifacts": [
+      "PROJECT_BRIEF.md",
+      "SPEC.md",
+      "ARCHITECTURE.md",
+      "SECURITY.md",
+      "TESTING.md"
+    ]
+  },
+  "git": {
+    "warnOnDirty": true
+  }
+}
+```
+
+Use a non-default config path:
+
+```bash
+psdm validate --config ./governance/psdm.config.json
+```
+
+## Feature Artifacts
+
+For product changes that should not require rewriting the whole project baseline, create scoped artifacts:
+
+```bash
+psdm init --feature billing
+psdm validate --feature billing
+```
+
+Default feature paths:
+
+```text
+docs/features/<feature>/PROJECT_BRIEF.md
+docs/features/<feature>/SPEC.md
+docs/features/<feature>/ARCHITECTURE.md
+docs/features/<feature>/SECURITY.md
+docs/features/<feature>/TESTING.md
 ```
 
 ## Change Levels
@@ -81,6 +160,20 @@ Commands that mutate production require exact owner confirmation:
 CONFIRM PRODUCTION DEPLOY
 ```
 
+## GitHub Action
+
+This repository includes a composite GitHub Action:
+
+```yaml
+steps:
+  - uses: actions/checkout@v4
+  - uses: ptech/psdm-framework@main
+    with:
+      target: .
+```
+
+The action writes `psdm-report.json` and fails when validation has blocking failures.
+
 ## Design Principles
 
 - Risk-scaled governance.
@@ -92,9 +185,8 @@ CONFIRM PRODUCTION DEPLOY
 
 ## Current Limitations
 
-This MVP does not yet provide:
+This alpha does not yet provide:
 
-- GitHub Action.
 - Full AI agent security runtime guardrail enforcement.
 - Tool registry enforcement.
 - SBOM or supply-chain scanning.

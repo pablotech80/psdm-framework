@@ -1,0 +1,28 @@
+name: PSDM Governance Check
+description: Validate PSDM governance artifacts for a repository or feature.
+
+inputs:
+  target:
+    description: Repository path to validate.
+    required: false
+    default: .
+  feature:
+    description: Optional feature name under docs/features.
+    required: false
+    default: ''
+
+runs:
+  using: composite
+  steps:
+    - name: Validate PSDM artifacts
+      shell: bash
+      run: |
+        set -euo pipefail
+        status=0
+        if [ -n "${{ inputs.feature }}" ]; then
+          node "$GITHUB_ACTION_PATH/bin/psdm.mjs" validate "${{ inputs.target }}" --feature "${{ inputs.feature }}" --json > psdm-report.json || status=$?
+        else
+          node "$GITHUB_ACTION_PATH/bin/psdm.mjs" validate "${{ inputs.target }}" --json > psdm-report.json || status=$?
+        fi
+        cat psdm-report.json
+        exit "$status"

@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "requiredArtifacts": [
+    "AGENTS.md",
+    "docs/PROJECT_BRIEF.md",
+    "docs/SPEC.md",
+    "docs/ARCHITECTURE.md",
+    "docs/CHANGE_GOVERNANCE.md",
+    "docs/TASKS.md",
+    "docs/TESTING.md",
+    "docs/DEPLOYMENT.md",
+    "docs/SECURITY.md",
+    "docs/OPERATIONS.md",
+    "ADRs"
+  ],
+  "extraRequiredArtifacts": [],
+  "features": {
+    "root": "docs/features",
+    "requiredArtifacts": [
+      "PROJECT_BRIEF.md",
+      "SPEC.md",
+      "ARCHITECTURE.md",
+      "SECURITY.md",
+      "TESTING.md"
+    ]
+  },
+  "git": {
+    "warnOnDirty": true
+  }
+}

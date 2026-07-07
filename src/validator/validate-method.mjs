@@ -1,15 +1,15 @@
-import { existsSync, readFileSync, statSync } from 'node:fs'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
-import { REQUIRED_ARTIFACTS, REQUIRED_SECTIONS } from '../lib/artifacts.mjs'
+import { requiredSectionsForArtifact } from '../lib/artifacts.mjs'
+import { loadConfig } from '../lib/config.mjs'
+import { inspectGit } from '../lib/git.mjs'
 
 function record(results, status, artifact, message, priority = 'Medium') {
   results.push({ status, artifact, message, priority })
 }
 
-export function validateMethod(targetDir) {
-  const results = []
-
-  for (const artifact of REQUIRED_ARTIFACTS) {
+function validateArtifacts(targetDir, artifacts, results) {
+  for (const artifact of artifacts) {
     const fullPath = join(targetDir, artifact)
 
     if (!existsSync(fullPath)) {
@@ -31,7 +31,7 @@ export function validateMethod(targetDir) {
     const content = readFileSync(fullPath, 'utf8')
     record(results, 'PASS', artifact, 'Artifact exists and is non-empty.', 'Low')
 
-    const requiredSections = REQUIRED_SECTIONS[artifact] || []
+    const requiredSections = requiredSectionsForArtifact(artifact)
     for (const section of requiredSections) {
       if (!content.includes(section)) {
         record(results, 'FAIL', artifact, `Missing required section or marker: ${section}`, 'Medium')
@@ -46,6 +46,40 @@ export function validateMethod(targetDir) {
       record(results, 'FAIL', artifact, 'Potential secret-like value detected.', 'Critical')
     }
   }
+}
+
+function featureArtifacts(targetDir, config, feature) {
+  const root = config.features.root
+  const required = config.features.requiredArtifacts
+
+  if (feature) {
+    return required.map((artifact) => join(root, feature, artifact))
+  }
+
+  const featureRoot = join(targetDir, root)
+  if (!existsSync(featureRoot)) {
+    return []
+  }
+
+  return readdirSync(featureRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .flatMap((entry) => required.map((artifact) => join(root, entry.name, artifact)))
+}
+
+export function validateMethod(targetDir, options = {}) {
+  const configState = options.configState || loadConfig(targetDir, options.configPath)
+  const { config } = configState
+  const results = []
+  const baselineArtifacts = config.requiredArtifacts
+  const scopedFeatureArtifacts = featureArtifacts(targetDir, config, options.feature)
+  const git = inspectGit(targetDir)
+
+  validateArtifacts(targetDir, baselineArtifacts, results)
+  validateArtifacts(targetDir, scopedFeatureArtifacts, results)
+
+  if (config.git.warnOnDirty && git.isDirty) {
+    record(results, 'WARN', 'git', `Working tree has ${git.changes.length} uncommitted change/s.`, 'Medium')
+  }
 
   const failures = results.filter((item) => item.status === 'FAIL')
   const warnings = results.filter((item) => item.status === 'WARN')
@@ -59,6 +93,13 @@ export function validateMethod(targetDir) {
     decision,
     failures: failures.length,
     warnings: warnings.length,
+    target: targetDir,
+    config: {
+      path: configState.path,
+      exists: configState.exists,
+    },
+    feature: options.feature || null,
+    git,
     results,
   }
 }

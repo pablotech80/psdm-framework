@@ -13,15 +13,16 @@
 ## Alpha - 0.2
 
 - [ ] Better section validation.
-- [ ] JSON output mode.
-- [ ] Config file support: `psdm.config.json`.
-- [ ] Git dirty-state awareness.
-- [ ] Feature-specific artifact support.
+- [x] JSON output mode.
+- [x] Config file support: `psdm.config.json`.
+- [x] Git dirty-state awareness.
+- [x] Feature-specific artifact support.
 - [ ] Prompt/template version metadata.
+- [x] GitHub Action MVP.
+- [x] Tool registry design draft.
 
 ## Beta - 0.5
 
-- [ ] GitHub Action.
 - [ ] Pull request checklist generator.
 - [ ] Change-level enforcement in CI.
 - [ ] Security-sensitive file path rules.

@@ -12,6 +12,14 @@ export const REQUIRED_ARTIFACTS = [
   'ADRs',
 ]
 
+export const FEATURE_REQUIRED_ARTIFACTS = [
+  'PROJECT_BRIEF.md',
+  'SPEC.md',
+  'ARCHITECTURE.md',
+  'SECURITY.md',
+  'TESTING.md',
+]
+
 export const TEMPLATE_MAP = {
   'AGENTS.md': 'AGENTS.md',
   'docs/PROJECT_BRIEF.md': 'PROJECT_BRIEF.md',
@@ -23,6 +31,11 @@ export const TEMPLATE_MAP = {
   'docs/DEPLOYMENT.md': 'DEPLOYMENT.md',
   'docs/SECURITY.md': 'SECURITY.md',
   'docs/OPERATIONS.md': 'OPERATIONS.md',
+  'PROJECT_BRIEF.md': 'PROJECT_BRIEF.md',
+  'SPEC.md': 'SPEC.md',
+  'ARCHITECTURE.md': 'ARCHITECTURE.md',
+  'SECURITY.md': 'SECURITY.md',
+  'TESTING.md': 'TESTING.md',
 }
 
 export const REQUIRED_SECTIONS = {
@@ -36,4 +49,13 @@ export const REQUIRED_SECTIONS = {
   'docs/DEPLOYMENT.md': ['# DEPLOYMENT.md', 'Deployment Scope', 'Deployment Gate'],
   'docs/SECURITY.md': ['# SECURITY.md', 'Threat Model', 'Security Gate'],
   'docs/OPERATIONS.md': ['# OPERATIONS.md', 'Monitoring Strategy', 'Operations Gate'],
+}
+
+export function requiredSectionsForArtifact(artifact) {
+  if (REQUIRED_SECTIONS[artifact]) {
+    return REQUIRED_SECTIONS[artifact]
+  }
+
+  const filename = artifact.split('/').at(-1)
+  return REQUIRED_SECTIONS[`docs/${filename}`] || []
 }
