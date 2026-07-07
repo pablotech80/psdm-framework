@@ -54,10 +54,15 @@
 - [x] Audit fixtures.
 - [x] Classify fixtures.
 - [x] Checklist fixtures.
-- [ ] Validator/config fixtures.
-- [ ] Validation profile support.
+- [x] Validator/config fixtures.
+- [x] Feature artifact fixtures.
 
-## Beta - 0.8
+## Alpha - 0.8
+
+- [ ] Validation profile support.
+- [ ] Config schema stability docs.
+
+## Beta - 0.9
 
 - [ ] Change-level enforcement in CI.
 - [ ] Security-sensitive file path rule validation.

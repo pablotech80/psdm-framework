@@ -38,7 +38,7 @@ function validateArtifacts(targetDir, artifacts, results) {
       }
     }
 
-    if (/\b(TODO|TBD)\s*:|\b(placeholder|lorem ipsum)\b/i.test(content)) {
+    if (/\bTODO\s*:|\bTBD\b|\b(placeholder|lorem ipsum)\b/i.test(content)) {
       record(results, 'WARN', artifact, 'Contains placeholder-like wording.', 'Medium')
     }
 

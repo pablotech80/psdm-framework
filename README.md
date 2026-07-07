@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.7.0-alpha`
+`0.8.0-alpha`
 
 This repository currently provides:
 
@@ -15,6 +15,7 @@ This repository currently provides:
 - Pre-init repository audit.
 - Pull request checklist generation.
 - CLI regression fixtures.
+- Validator, custom config, and feature artifact fixtures.
 - Baseline artifact checks.
 - Baseline structure validation.
 - Change-level classification.

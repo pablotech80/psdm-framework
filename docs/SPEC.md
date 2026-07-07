@@ -27,7 +27,7 @@ Project: `psdm-framework`
 - `node bin/psdm.mjs validate <target> --json` emits parseable JSON with decision, results, config, git, and target metadata.
 - `node bin/psdm.mjs classify "<description>" --file <path> --json` includes matched keywords, matched risk paths, required artifacts, and estimated level.
 - `node bin/psdm.mjs pr-checklist "<description>" --file <path>` emits a Markdown checklist derived from change level and risk paths.
-- `npm test` runs dependency-free CLI fixtures for audit, classify, and PR checklist behavior.
+- `npm test` runs dependency-free CLI fixtures for audit, init dry-run, classify, PR checklist, validate, custom config, and feature artifact behavior.
 - A clean repository with filled PSDM artifacts can reach `METHOD_BASELINE_APPROVED`.
 
 ## Out of Scope

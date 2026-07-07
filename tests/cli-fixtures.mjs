@@ -108,12 +108,85 @@ function testPrChecklistMarkdownLevel4() {
   assert.match(output, /\.github\/workflows\/deploy\.yml matches \.github\/workflows\/\*\*/)
 }
 
+function testValidateInitializedProject() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-validate-'))
+  run(['init', target])
+  const report = runJson(['validate', target, '--json'])
+
+  assert.equal(report.decision, 'METHOD_BASELINE_REVIEW_REQUIRED')
+  assert.equal(report.failures, 0)
+  assert.ok(report.warnings > 0)
+  assert.equal(report.config.exists, true)
+  assert.ok(report.results.some((item) => item.artifact === 'AGENTS.md' && item.status === 'PASS'))
+}
+
+function testCustomConfigArtifact() {
+  const root = mkdtempSync(resolve(tmpdir(), 'psdm-config-'))
+  const target = resolve(root, 'project')
+  const configPath = resolve(root, 'custom.psdm.json')
+  writeFileSync(configPath, JSON.stringify({
+    version: 1,
+    requiredArtifacts: ['docs/CUSTOM.md'],
+    features: {
+      root: 'features',
+      requiredArtifacts: ['SPEC.md'],
+    },
+    git: {
+      warnOnDirty: false,
+    },
+    riskPaths: [
+      {
+        pattern: 'secure/**',
+        minimumLevel: 'Level 3',
+        requiredArtifacts: ['docs/CUSTOM.md'],
+        reason: 'Custom secure path.',
+      },
+    ],
+  }))
+
+  run(['init', target, '--config', configPath])
+  const check = runJson(['check', target, '--config', configPath, '--json'])
+  const classified = runJson([
+    'classify',
+    'small cleanup',
+    '--target',
+    target,
+    '--config',
+    configPath,
+    '--file',
+    'secure/token.js',
+    '--json',
+  ])
+
+  assert.equal(check.status, 'complete')
+  assert.deepEqual(check.results.map((item) => item.artifact), ['docs/CUSTOM.md'])
+  assert.equal(classified.estimatedLevel, 'Level 3')
+  assert.equal(classified.pathMatches[0].pattern, 'secure/**')
+}
+
+function testFeatureArtifacts() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-feature-'))
+  run(['init', target])
+  run(['init', target, '--feature', 'billing'])
+
+  const check = runJson(['check', target, '--feature', 'billing', '--json'])
+  const validate = runJson(['validate', target, '--feature', 'billing', '--json'])
+
+  assert.equal(check.status, 'complete')
+  assert.ok(check.results.some((item) => item.artifact === 'docs/features/billing/SPEC.md'))
+  assert.equal(validate.failures, 0)
+  assert.ok(validate.results.some((item) => item.artifact === 'docs/features/billing/SECURITY.md'))
+}
+
 const tests = [
   testAuditExistingProject,
   testInitDryRunDoesNotWrite,
   testClassifyRiskPathJson,
   testPrChecklistJson,
   testPrChecklistMarkdownLevel4,
+  testValidateInitializedProject,
+  testCustomConfigArtifact,
+  testFeatureArtifacts,
 ]
 
 for (const test of tests) {
