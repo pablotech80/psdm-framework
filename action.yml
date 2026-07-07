@@ -10,19 +10,83 @@ inputs:
     description: Optional feature name under docs/features.
     required: false
     default: ''
+  config:
+    description: Optional PSDM config path.
+    required: false
+    default: ''
+  enforce-change-level:
+    description: Whether to fail when the classified change exceeds max-level.
+    required: false
+    default: 'false'
+  change-description:
+    description: Change description used for CI change-level classification.
+    required: false
+    default: ''
+  files:
+    description: Comma-separated changed files used for path-aware classification.
+    required: false
+    default: ''
+  max-level:
+    description: Maximum allowed PSDM change level for this CI check.
+    required: false
+    default: 'Level 2'
 
 runs:
   using: composite
   steps:
     - name: Validate PSDM artifacts
       shell: bash
+      env:
+        PSDM_TARGET: ${{ inputs.target }}
+        PSDM_FEATURE: ${{ inputs.feature }}
+        PSDM_CONFIG: ${{ inputs.config }}
       run: |
         set -euo pipefail
         status=0
-        if [ -n "${{ inputs.feature }}" ]; then
-          node "$GITHUB_ACTION_PATH/bin/psdm.mjs" validate "${{ inputs.target }}" --feature "${{ inputs.feature }}" --json > psdm-report.json || status=$?
+        config_args=()
+        if [ -n "$PSDM_CONFIG" ]; then
+          config_args=(--config "$PSDM_CONFIG")
+        fi
+
+        if [ -n "$PSDM_FEATURE" ]; then
+          node "$GITHUB_ACTION_PATH/bin/psdm.mjs" validate "$PSDM_TARGET" --feature "$PSDM_FEATURE" "${config_args[@]}" --json > psdm-report.json || status=$?
         else
-          node "$GITHUB_ACTION_PATH/bin/psdm.mjs" validate "${{ inputs.target }}" --json > psdm-report.json || status=$?
+          node "$GITHUB_ACTION_PATH/bin/psdm.mjs" validate "$PSDM_TARGET" "${config_args[@]}" --json > psdm-report.json || status=$?
         fi
         cat psdm-report.json
+        exit "$status"
+    - name: Enforce PSDM change level
+      if: ${{ inputs.enforce-change-level == 'true' }}
+      shell: bash
+      env:
+        PSDM_TARGET: ${{ inputs.target }}
+        PSDM_CONFIG: ${{ inputs.config }}
+        PSDM_CHANGE_DESCRIPTION: ${{ inputs.change-description }}
+        PSDM_FILES: ${{ inputs.files }}
+        PSDM_MAX_LEVEL: ${{ inputs.max-level }}
+      run: |
+        set -euo pipefail
+        if [ -z "$PSDM_CHANGE_DESCRIPTION" ]; then
+          echo "change-description is required when enforce-change-level is true."
+          exit 1
+        fi
+
+        config_args=()
+        if [ -n "$PSDM_CONFIG" ]; then
+          config_args=(--config "$PSDM_CONFIG")
+        fi
+
+        file_args=()
+        if [ -n "$PSDM_FILES" ]; then
+          file_args=(--files "$PSDM_FILES")
+        fi
+
+        status=0
+        node "$GITHUB_ACTION_PATH/bin/psdm.mjs" enforce "$PSDM_CHANGE_DESCRIPTION" \
+          --target "$PSDM_TARGET" \
+          --max-level "$PSDM_MAX_LEVEL" \
+          "${file_args[@]}" \
+          "${config_args[@]}" \
+          --json > psdm-enforcement.json || status=$?
+        cat psdm-enforcement.json
         exit "$status"

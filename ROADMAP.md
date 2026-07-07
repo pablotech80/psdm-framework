@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is at `0.10.0-alpha`.
+PSDM is at `0.11.0-alpha`.
 
 Completed:
 
@@ -31,11 +31,12 @@ Completed:
 - Unsupported profile values now fail validation as invalid local policy.
 - Config schema stability contract documented in `docs/CONFIG_SCHEMA.md`.
 - Agent final-response protocol now requires the rationale for the next action.
+- CI change-level enforcement added through `psdm enforce` and the composite Action.
 - Fresh-template review warnings restored for unresolved draft markers.
 
 ## Active Milestone
 
-`0.10.0-alpha`: config schema hardening.
+`0.11.0-alpha`: CI change-level enforcement.
 
 Goal:
 
@@ -55,6 +56,7 @@ Planned outcomes:
 - Formal validation for unsupported profile values.
 - Stable config schema documentation.
 - Final-response rule requiring next-action rationale.
+- CI gate that fails when a classified change exceeds the configured maximum level.
 - Validation policy that distinguishes framework source docs from generated project artifacts.
 - PR/checklist workflow for risky backend/platform changes.
 
@@ -106,9 +108,15 @@ Planned outcomes:
 - [x] Document config schema stability rules.
 - [x] Require rationale for every final `Siguiente accion`.
 
+### `0.11.0-alpha`
+
+- [x] Add `psdm enforce`.
+- [x] Add GitHub Action inputs for change-level enforcement.
+- [x] Add CLI fixtures for enforcement pass/fail behavior.
+
 ### `1.0.0-beta`
 
-- [ ] Change-level enforcement in CI.
+- [x] Change-level enforcement in CI.
 - [ ] Security-sensitive path rule validation.
 - [ ] ADR generator.
 - [ ] Tested fixtures for CLI behavior.

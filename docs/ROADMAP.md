@@ -72,9 +72,15 @@
 - [x] Unsupported profile validation.
 - [x] Config schema stability docs.
 
+## Alpha - 0.11
+
+- [x] `psdm enforce`.
+- [x] GitHub Action change-level enforcement.
+- [x] Enforcement fixtures.
+
 ## Beta - 1.0
 
-- [ ] Change-level enforcement in CI.
+- [x] Change-level enforcement in CI.
 - [ ] Security-sensitive file path rule validation.
 - [ ] ADR generator.
 

@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.10.0-alpha`
+`0.11.0-alpha`
 
 This repository currently provides:
 
@@ -22,6 +22,7 @@ This repository currently provides:
 - Baseline artifact checks.
 - Baseline structure validation.
 - Change-level classification.
+- CI change-level enforcement.
 - Markdown compliance reports.
 - Optional `psdm.config.json` policy.
 - JSON output for automation.
@@ -53,6 +54,7 @@ psdm init [target] --feature <name>
 psdm check [target] [--json] [--feature <name>] [--config <path>]
 psdm validate [target] [--json] [--feature <name>] [--config <path>]
 psdm classify "<change description>" [--json] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
+psdm enforce "<change description>" [--json] [--max-level "Level 2"] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
 psdm pr-checklist "<change description>" [--json] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
 psdm report [target] [--json] [--feature <name>] [--config <path>]
 ```
@@ -108,6 +110,12 @@ Generate a PR checklist:
 
 ```bash
 psdm pr-checklist "change auth session validation" --file backend/auth/session.py
+```
+
+Enforce a maximum level in CI:
+
+```bash
+psdm enforce "small cleanup" --file src/index.mjs --max-level "Level 2"
 ```
 
 Run local fixtures:
@@ -258,6 +266,22 @@ steps:
 ```
 
 The action writes `psdm-report.json` and fails when validation has blocking failures.
+
+Enable change-level enforcement:
+
+```yaml
+steps:
+  - uses: actions/checkout@v4
+  - uses: ptech/psdm-framework@main
+    with:
+      target: .
+      enforce-change-level: 'true'
+      change-description: ${{ github.event.pull_request.title }}
+      files: src/index.mjs,docs/SPEC.md
+      max-level: Level 2
+```
+
+The action writes `psdm-enforcement.json` and fails when the classified change exceeds `max-level`.
 
 ## Design Principles
 

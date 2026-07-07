@@ -5,7 +5,7 @@ Project: `psdm-framework`
 
 ## Functional Requirements
 
-- Provide a `psdm` CLI with `init`, `audit`, `check`, `validate`, `classify`, `pr-checklist`, and `report` commands.
+- Provide a `psdm` CLI with `init`, `audit`, `check`, `validate`, `classify`, `enforce`, `pr-checklist`, and `report` commands.
 - Provide a non-destructive `audit` command that previews repository state and `init` impact.
 - Keep the CLI dependency-free and runnable on Node.js 20 or newer.
 - Support human-readable command output by default.
@@ -16,6 +16,7 @@ Project: `psdm-framework`
 - Document the stable config schema contract in `docs/CONFIG_SCHEMA.md`.
 - Support feature-scoped artifacts under `docs/features/<feature>/`.
 - Classify changes using textual signals and configured risk paths.
+- Enforce maximum allowed change level for CI policy gates.
 - Validate required artifacts, required sections, non-empty files, draft-marker wording, and simple secret-like values.
 - Provide templates for newly initialized projects.
 - Provide a GitHub Action entrypoint for repository validation.
@@ -31,8 +32,9 @@ Project: `psdm-framework`
 - Validation JSON includes the active profile and whether it was recognized.
 - Unsupported profiles produce a validation failure on `psdm.config.json`.
 - `node bin/psdm.mjs classify "<description>" --file <path> --json` includes matched keywords, matched risk paths, required artifacts, and estimated level.
+- `node bin/psdm.mjs enforce "<description>" --file <path> --max-level "Level 2" --json` exits non-zero when the estimated level exceeds the allowed level.
 - `node bin/psdm.mjs pr-checklist "<description>" --file <path>` emits a Markdown checklist derived from change level and risk paths.
-- `npm test` runs dependency-free CLI fixtures for audit, init dry-run, classify, PR checklist, validate, custom config, and feature artifact behavior.
+- `npm test` runs dependency-free CLI fixtures for audit, init dry-run, classify, enforce, PR checklist, validate, custom config, and feature artifact behavior.
 - A clean repository with filled PSDM artifacts can reach `METHOD_BASELINE_APPROVED`.
 
 ## Out of Scope

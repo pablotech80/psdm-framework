@@ -5,6 +5,7 @@ export function parseArgs(args) {
     feature: null,
     target: null,
     files: [],
+    maxLevel: null,
     dryRun: false,
   }
   const positional = []
@@ -52,6 +53,12 @@ export function parseArgs(args) {
       if (args[index + 1]) {
         options.files.push(...args[index + 1].split(',').map((file) => file.trim()).filter(Boolean))
       }
+      index += 1
+      continue
+    }
+
+    if (arg === '--max-level') {
+      options.maxLevel = args[index + 1] || null
       index += 1
       continue
     }

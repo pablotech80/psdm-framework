@@ -31,6 +31,7 @@ Before release or publication:
 - run initialized project validation;
 - inspect `npm pack --dry-run` contents;
 - confirm GitHub Action behavior if action files changed;
+- confirm change-level enforcement behavior when Action inputs or `psdm enforce` change;
 - confirm no secrets or local-only files are included.
 
 Production publishing is never implied by code changes. Publishing to a package registry requires explicit owner approval.

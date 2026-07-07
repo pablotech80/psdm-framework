@@ -5,6 +5,7 @@ import { auditCommand } from '../src/commands/audit.mjs'
 import { checkCommand } from '../src/commands/check.mjs'
 import { validateCommand } from '../src/commands/validate.mjs'
 import { classifyCommand } from '../src/commands/classify.mjs'
+import { enforceCommand } from '../src/commands/enforce.mjs'
 import { prChecklistCommand } from '../src/commands/pr-checklist.mjs'
 import { reportCommand } from '../src/commands/report.mjs'
 
@@ -16,6 +17,7 @@ const commands = {
   check: checkCommand,
   validate: validateCommand,
   classify: classifyCommand,
+  enforce: enforceCommand,
   'pr-checklist': prChecklistCommand,
   report: reportCommand,
 }
@@ -29,6 +31,7 @@ Usage:
   psdm check [target] [--json] [--feature name] [--config path]
   psdm validate [target] [--json] [--feature name] [--config path]
   psdm classify "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
+  psdm enforce "<change description>" [--json] [--max-level "Level 2"] [--file path] [--files path,path] [--target path] [--config path]
   psdm pr-checklist "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
   psdm report [target] [--json] [--feature name] [--config path]
 
@@ -38,6 +41,7 @@ Commands:
   check      Check required artifacts exist and are non-empty.
   validate   Validate PSDM baseline structure and required sections.
   classify   Estimate change level from a short description.
+  enforce    Fail when a classified change exceeds the allowed maximum level.
   pr-checklist Generate a pull request checklist for a change.
   report     Print a markdown compliance report.
 `)

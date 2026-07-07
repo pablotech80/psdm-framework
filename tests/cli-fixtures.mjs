@@ -116,6 +116,47 @@ function testPrChecklistMarkdownLevel4() {
   assert.match(output, /\.github\/workflows\/deploy\.yml matches \.github\/workflows\/\*\*/)
 }
 
+function testEnforceAllowsConfiguredLevel() {
+  const report = runJson([
+    'enforce',
+    'small cleanup',
+    '--target',
+    repoRoot,
+    '--file',
+    'src/index.mjs',
+    '--max-level',
+    'Level 2',
+    '--json',
+  ])
+
+  assert.equal(report.command, 'enforce')
+  assert.equal(report.decision, 'CHANGE_LEVEL_APPROVED')
+  assert.equal(report.allowed, true)
+  assert.equal(report.classification.estimatedLevel, 'Level 2')
+}
+
+function testEnforceBlocksExceededLevel() {
+  const report = runJson([
+    'enforce',
+    'deployment pipeline change',
+    '--target',
+    repoRoot,
+    '--file',
+    '.github/workflows/deploy.yml',
+    '--max-level',
+    'Level 2',
+    '--json',
+  ], {
+    allowFailure: true,
+  })
+
+  assert.equal(report.command, 'enforce')
+  assert.equal(report.decision, 'CHANGE_LEVEL_BLOCKED')
+  assert.equal(report.allowed, false)
+  assert.equal(report.classification.estimatedLevel, 'Level 4')
+  assert.ok(report.violations.some((item) => item.includes('exceeds allowed Level 2')))
+}
+
 function testValidateInitializedProject() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-validate-'))
   run(['init', target])
@@ -254,6 +295,8 @@ const tests = [
   testClassifyRiskPathJson,
   testPrChecklistJson,
   testPrChecklistMarkdownLevel4,
+  testEnforceAllowsConfiguredLevel,
+  testEnforceBlocksExceededLevel,
   testValidateInitializedProject,
   testCustomConfigArtifact,
   testValidationProfileFramework,

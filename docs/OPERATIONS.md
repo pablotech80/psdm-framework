@@ -12,6 +12,7 @@ Operational signals:
 - GitHub Actions validation status;
 - package dry-run contents;
 - command exit codes;
+- enforcement decisions from CI change-level checks;
 - JSON output compatibility;
 - reported validator decisions;
 - issue reports from downstream users;
@@ -31,6 +32,7 @@ Operational review is required when changes affect:
 
 - CI workflows;
 - GitHub Action behavior;
+- change-level enforcement behavior;
 - package publishing;
 - command exit codes;
 - report or JSON output consumed by automation;

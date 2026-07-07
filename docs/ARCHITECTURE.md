@@ -14,6 +14,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/args.mjs` parses CLI options.
 - `src/lib/audit.mjs` builds the non-destructive repository adoption preview.
 - `src/lib/classifier.mjs` owns reusable change classification.
+- `src/lib/enforcement.mjs` owns CI-oriented maximum change-level enforcement.
 - `src/lib/pr-checklist.mjs` generates pull request checklist content from classification output.
 - `src/lib/config.mjs` loads PSDM configuration.
 - `src/lib/config.mjs` also applies validation profile presets and exposes the supported profile list.
@@ -28,7 +29,7 @@ The architecture favors explicit modules over framework abstractions:
 - Use JSON output as a stable automation contract while preserving human-readable output.
 - Keep configuration local to the target repository through `psdm.config.json`.
 - Treat unsupported profile values as invalid local policy rather than silently relying on default behavior.
-- Treat risk classification as advisory unless CI enforcement is explicitly configured.
+- Treat risk classification as advisory unless CI enforcement is explicitly configured through `psdm enforce` or the composite Action.
 - Make adoption audit non-destructive so existing repositories can evaluate impact before initialization.
 - Keep templates plain Markdown so teams can adapt them without special tooling.
 - Keep generated artifacts separate from framework docs where possible.
@@ -40,6 +41,7 @@ Changes require architecture review when they affect:
 - command contracts or exit codes;
 - pre-init audit semantics;
 - change classification and PR checklist semantics;
+- change-level enforcement semantics;
 - JSON output shape;
 - config schema or defaults;
 - validation profile behavior;

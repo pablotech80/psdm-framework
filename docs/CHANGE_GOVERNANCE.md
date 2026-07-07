@@ -25,6 +25,10 @@ PSDM uses five risk levels:
 
 Feature-scoped artifacts may be used when a change is isolated and does not alter framework-wide contracts.
 
+## CI Enforcement
+
+`psdm enforce` blocks a change when its classified level exceeds the configured maximum level. The GitHub Action can run this gate with `enforce-change-level: 'true'`, a change description, touched files, and a maximum allowed level.
+
 ## Stop Conditions
 
 Stop before implementation when:
