@@ -5,7 +5,7 @@ Project: `psdm-framework`
 
 ## Functional Requirements
 
-- Provide a `psdm` CLI with `init`, `check`, `validate`, `classify`, and `report` commands.
+- Provide a `psdm` CLI with `init`, `audit`, `check`, `validate`, `classify`, `pr-checklist`, and `report` commands.
 - Provide a non-destructive `audit` command that previews repository state and `init` impact.
 - Keep the CLI dependency-free and runnable on Node.js 20 or newer.
 - Support human-readable command output by default.
@@ -26,6 +26,7 @@ Project: `psdm-framework`
 - `node bin/psdm.mjs init <target> --dry-run` previews the same planned actions without writing files.
 - `node bin/psdm.mjs validate <target> --json` emits parseable JSON with decision, results, config, git, and target metadata.
 - `node bin/psdm.mjs classify "<description>" --file <path> --json` includes matched keywords, matched risk paths, required artifacts, and estimated level.
+- `node bin/psdm.mjs pr-checklist "<description>" --file <path>` emits a Markdown checklist derived from change level and risk paths.
 - A clean repository with filled PSDM artifacts can reach `METHOD_BASELINE_APPROVED`.
 
 ## Out of Scope

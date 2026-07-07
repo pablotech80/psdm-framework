@@ -13,6 +13,8 @@ The architecture favors explicit modules over framework abstractions:
 - `src/commands/*.mjs` owns user-facing command behavior.
 - `src/lib/args.mjs` parses CLI options.
 - `src/lib/audit.mjs` builds the non-destructive repository adoption preview.
+- `src/lib/classifier.mjs` owns reusable change classification.
+- `src/lib/pr-checklist.mjs` generates pull request checklist content from classification output.
 - `src/lib/config.mjs` loads PSDM configuration.
 - `src/lib/artifacts.mjs` defines baseline artifact contracts.
 - `src/lib/risk-paths.mjs` evaluates file path risk rules.
@@ -35,6 +37,7 @@ Changes require architecture review when they affect:
 
 - command contracts or exit codes;
 - pre-init audit semantics;
+- change classification and PR checklist semantics;
 - JSON output shape;
 - config schema or defaults;
 - validator decisions;

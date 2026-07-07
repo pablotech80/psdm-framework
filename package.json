@@ -1,6 +1,6 @@
 {
   "name": "@ptech/psdm-framework",
-  "version": "0.5.0-alpha",
+  "version": "0.6.0-alpha",
   "description": "PTECH SPEC-DRIVEN METHOD framework for AI-assisted software project governance.",
   "type": "module",
   "bin": {

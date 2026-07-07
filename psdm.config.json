@@ -67,6 +67,18 @@
       "reason": "Audit changes affect repository adoption previews."
     },
     {
+      "pattern": "src/lib/classifier.mjs",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/ARCHITECTURE.md", "docs/TESTING.md"],
+      "reason": "Classifier changes affect change-level decisions."
+    },
+    {
+      "pattern": "src/lib/pr-checklist.mjs",
+      "minimumLevel": "Level 2",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/TASKS.md", "docs/TESTING.md"],
+      "reason": "PR checklist changes affect review workflow guidance."
+    },
+    {
       "pattern": "src/lib/risk-paths.mjs",
       "minimumLevel": "Level 3",
       "requiredArtifacts": ["docs/SPEC.md", "docs/SECURITY.md", "docs/TESTING.md"],

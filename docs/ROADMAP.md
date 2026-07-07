@@ -25,7 +25,6 @@
 
 - [x] Backend/platform risk path rules.
 - [x] File-aware classification with `--file` and `--files`.
-- [ ] Pull request checklist generator.
 - [ ] Change-level enforcement in CI.
 - [ ] Security-sensitive file path rule validation.
 
@@ -38,18 +37,21 @@
 - [x] Cleaner draft-marker detection for operational task files.
 - [x] Pre-init audit for existing projects.
 - [ ] Validation profile support.
-- [ ] Pull request checklist generator.
 
 ## Alpha - 0.5
 
 - [x] Non-destructive `psdm audit`.
 - [x] `psdm init --dry-run`.
 - [ ] Audit fixtures.
-- [ ] Pull request checklist generator.
 
-## Beta - 0.6
+## Alpha - 0.6
 
-- [ ] Pull request checklist generator.
+- [x] Pull request checklist generator.
+- [ ] Checklist fixtures.
+- [ ] Validation profile support.
+
+## Beta - 0.7
+
 - [ ] Change-level enforcement in CI.
 - [ ] Security-sensitive file path rule validation.
 - [ ] ADR generator.

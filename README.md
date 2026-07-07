@@ -6,13 +6,14 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.5.0-alpha`
+`0.6.0-alpha`
 
 This repository currently provides:
 
 - PSDM project templates.
 - A local CLI.
 - Pre-init repository audit.
+- Pull request checklist generation.
 - Baseline artifact checks.
 - Baseline structure validation.
 - Change-level classification.
@@ -47,6 +48,7 @@ psdm init [target] --feature <name>
 psdm check [target] [--json] [--feature <name>] [--config <path>]
 psdm validate [target] [--json] [--feature <name>] [--config <path>]
 psdm classify "<change description>" [--json] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
+psdm pr-checklist "<change description>" [--json] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
 psdm report [target] [--json] [--feature <name>] [--config <path>]
 ```
 
@@ -95,6 +97,12 @@ Configured risk paths can raise the level even when the description is vague:
 
 ```text
 Estimated level: Level 3
+```
+
+Generate a PR checklist:
+
+```bash
+psdm pr-checklist "change auth session validation" --file backend/auth/session.py
 ```
 
 ## Configuration

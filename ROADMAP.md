@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is at `0.5.0-alpha`.
+PSDM is at `0.6.0-alpha`.
 
 Completed:
 
@@ -24,10 +24,11 @@ Completed:
 - Root `psdm.config.json` and baseline PSDM artifacts for this repository.
 - Validator draft-marker detection refined to avoid false positives on operational `TODO.md` references.
 - Pre-init audit added for existing project adoption.
+- PR checklist generation added from classification and risk paths.
 
 ## Active Milestone
 
-`0.5.0-alpha`: adoption audit and checklist workflow.
+`0.6.0-alpha`: checklist workflow and validation hardening.
 
 Goal:
 
@@ -40,6 +41,7 @@ Planned outcomes:
 - Filled baseline PSDM artifacts for the framework itself.
 - Clean self-validation path for the framework baseline.
 - Non-destructive adoption audit for already-started projects.
+- Pull request checklist generation from change level and risk paths.
 - Validation policy that distinguishes framework source docs from generated project artifacts.
 - PR/checklist workflow for risky backend/platform changes.
 
@@ -52,16 +54,21 @@ Planned outcomes:
 - [x] Refine draft-marker detection for operational roadmap/task references.
 - [x] Add pre-init audit for existing projects.
 - [ ] Add a validation profile that fits framework repositories.
-- [ ] Add PR checklist generation.
+- [x] Add PR checklist generation.
 
 ### `0.5.0-alpha`
 
 - [x] Add non-destructive `psdm audit`.
 - [x] Add `psdm init --dry-run`.
-- [ ] Add PR checklist generation.
 - [ ] Add CLI fixtures for audit behavior.
 
-### `0.6.0-beta`
+### `0.6.0-alpha`
+
+- [x] Add `psdm pr-checklist`.
+- [ ] Add CLI fixtures for checklist behavior.
+- [ ] Add a validation profile that fits framework repositories.
+
+### `0.7.0-beta`
 
 - [ ] Change-level enforcement in CI.
 - [ ] Security-sensitive path rule validation.
