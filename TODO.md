@@ -12,14 +12,19 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Add example project coverage.
+- [ ] Define the AI readiness audit contract for `psdm audit --json`.
 
 ## Next
 
+- [ ] Implement AI surface detection in `src/lib/audit.mjs`.
+- [ ] Add fixture coverage for repositories with AI surfaces and missing guardrail artifacts.
 - [ ] Validate GitHub Action in a downstream repository.
 
 ## Later
 
+- [ ] Add example project coverage.
+- [ ] Design optional AI policy fields for `psdm.config.json`.
+- [ ] Add AI guardrail templates for PII, prompt injection, cost, latency, evals, and tool security.
 - [ ] Prepare public package release checklist.
 
 ## Done
@@ -55,6 +60,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Created public docs index.
 - [x] Added existing AI governance detection to audit.
 - [x] Added PSDM adoption plan generation for existing AI governance.
+- [x] Completed AI readiness gap analysis for governance, guardrails, costs, latency, prompt injection, and PII.
 - [x] Bumped package status to `0.14.0-alpha`.
 - [x] Filled `docs/PROJECT_BRIEF.md` with framework-specific context.
 - [x] Filled `docs/SPEC.md` with CLI/config behavior scope.

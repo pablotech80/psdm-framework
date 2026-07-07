@@ -93,6 +93,26 @@
 - [x] Existing AI governance detection.
 - [x] PSDM adoption plan generation.
 
+## Alpha - 0.15
+
+- [ ] AI readiness audit contract.
+- [ ] AI surface detection for agents, RAG, prompts, embeddings, tools, provider SDKs, vector stores, and automation folders.
+- [ ] Governance gap detection for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
+- [ ] Human-readable and JSON AI readiness report output.
+- [ ] AI readiness audit fixtures.
+
+## Alpha - 0.16
+
+- [ ] Optional AI policy schema for PII, redaction, tool registry, cost budgets, latency SLOs, evals, and approval rules.
+
+## Alpha - 0.17
+
+- [ ] AI guardrail templates for data classification, cost/latency budgets, prompt injection tests, and AI evals.
+
+## Alpha - 0.18
+
+- [ ] Dependency-free AI security test harness fixtures for prompt injection, tool injection, context poisoning, memory poisoning, PII leakage, unsafe output, and tool escalation.
+
 ## Beta - 1.0
 
 - [x] Change-level enforcement in CI.
@@ -113,6 +133,8 @@
 - [ ] AI tool registry.
 - [ ] Runtime guardrail policy model.
 - [ ] Prompt injection test harness.
+- [ ] PII detection and redaction governance.
+- [ ] Cost and latency budget governance.
 - [ ] Security regression suite.
 - [ ] SBOM and supply-chain guidance.
 - [ ] Agent observability standard.

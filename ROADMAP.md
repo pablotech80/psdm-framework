@@ -39,38 +39,24 @@ Completed:
 - Existing AI governance detection added to `psdm audit`.
 - PSDM adoption plan generation added for repositories with existing AI governance.
 - Fresh-template review warnings restored for unresolved draft markers.
+- AI readiness gap analysis completed for governance, guardrails, cost, latency, prompt injection, and PII coverage.
 
 ## Active Milestone
 
-`0.14.0-alpha`: existing AI governance adoption.
+`0.15.0-alpha`: AI readiness audit.
 
 Goal:
 
-Make `psdm-framework` comply with its own governance model without turning development into heavy process.
+Make PSDM detect AI runtime governance gaps before enforcing deeper guardrails.
 
 Planned outcomes:
 
-- Root `ROADMAP.md` and `TODO.md` kept current with every advance.
-- Root `psdm.config.json`.
-- Filled baseline PSDM artifacts for the framework itself.
-- Clean self-validation path for the framework baseline.
-- Non-destructive adoption audit for already-started projects.
-- Pull request checklist generation from change level and risk paths.
-- Dependency-free CLI fixtures for high-value workflows.
-- Fixture coverage for initialized projects, custom config, and feature artifacts.
-- Validation profiles for standard, framework, backend API, AI agent, SaaS, and monorepo repositories.
-- Formal validation for unsupported profile values.
-- Stable config schema documentation.
-- Final-response rule requiring next-action rationale.
-- CI gate that fails when a classified change exceeds the configured maximum level.
-- Risk path validation before classification-driven automation relies on local policy.
-- ADR scaffold generation for durable decisions.
-- Beta release notes with scope, compatibility notes, validation, limitations, and exit criteria.
-- Public documentation index for adoption, CLI, config, governance, CI, release, and maintainer workflows.
-- Existing agent, assistant, skill, prompt, Copilot, Cursor, Claude, and Codex rules detected before adoption.
-- `docs/PSDM_ADOPTION.md` generated during init when existing AI governance requires integration.
-- Validation policy that distinguishes framework source docs from generated project artifacts.
-- PR/checklist workflow for risky backend/platform changes.
+- Define an AI readiness audit contract for repository signals, risks, and recommendations.
+- Detect AI surfaces such as agents, RAG, prompts, embeddings, tools, provider SDKs, vector stores, and automation folders.
+- Detect whether AI governance artifacts exist for guardrails, data classification, cost, latency, evals, prompt injection, and tool security.
+- Report gaps without failing normal baseline validation.
+- Keep the implementation dependency-free and compatible with existing `psdm audit --json` automation.
+- Add fixture coverage for repositories with and without AI surfaces.
 
 ## Next Milestones
 
@@ -143,6 +129,26 @@ Planned outcomes:
 - [x] Detect existing AI governance during audit.
 - [x] Create PSDM adoption plan when existing AI governance is detected.
 - [x] Add CLI fixtures for AI governance detection and adoption plan creation.
+
+### `0.15.0-alpha`
+
+- [ ] Define the AI readiness audit JSON contract.
+- [ ] Add AI surface detection for agents, RAG, prompts, embeddings, tools, provider SDKs, vector stores, and automation folders.
+- [ ] Add governance gap detection for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
+- [ ] Add human-readable AI readiness output to `psdm audit`.
+- [ ] Add CLI fixtures for AI readiness audit behavior.
+
+### `0.16.0-alpha`
+
+- [ ] Extend `psdm.config.json` with optional AI policy fields for PII, redaction, tool registry, cost budgets, latency SLOs, evals, and approval rules.
+
+### `0.17.0-alpha`
+
+- [ ] Add AI guardrail templates for data classification, cost/latency budgets, prompt injection tests, and AI evals.
+
+### `0.18.0-alpha`
+
+- [ ] Add dependency-free AI security test harness fixtures for prompt injection, tool injection, context poisoning, memory poisoning, PII leakage, unsafe output, and tool escalation.
 
 ### `1.0.0-beta`
 
