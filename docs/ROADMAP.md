@@ -95,11 +95,11 @@
 
 ## Alpha - 0.15
 
-- [ ] AI readiness audit contract.
+- [x] AI readiness audit contract.
 - [ ] AI surface detection for agents, RAG, prompts, embeddings, tools, provider SDKs, vector stores, and automation folders.
 - [ ] Governance gap detection for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
-- [ ] Human-readable and JSON AI readiness report output.
-- [ ] AI readiness audit fixtures.
+- [x] Human-readable and JSON AI readiness report output.
+- [x] AI readiness audit fixtures.
 
 ## Alpha - 0.16
 

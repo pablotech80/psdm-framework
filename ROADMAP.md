@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is at `0.14.0-alpha`.
+PSDM is at `0.15.0-alpha`.
 
 Completed:
 
@@ -40,6 +40,7 @@ Completed:
 - PSDM adoption plan generation added for repositories with existing AI governance.
 - Fresh-template review warnings restored for unresolved draft markers.
 - AI readiness gap analysis completed for governance, guardrails, cost, latency, prompt injection, and PII coverage.
+- AI readiness audit JSON contract added to `psdm audit`.
 
 ## Active Milestone
 
@@ -132,11 +133,11 @@ Planned outcomes:
 
 ### `0.15.0-alpha`
 
-- [ ] Define the AI readiness audit JSON contract.
+- [x] Define the AI readiness audit JSON contract.
 - [ ] Add AI surface detection for agents, RAG, prompts, embeddings, tools, provider SDKs, vector stores, and automation folders.
 - [ ] Add governance gap detection for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
-- [ ] Add human-readable AI readiness output to `psdm audit`.
-- [ ] Add CLI fixtures for AI readiness audit behavior.
+- [x] Add human-readable AI readiness output to `psdm audit`.
+- [x] Add CLI fixtures for AI readiness audit behavior.
 
 ### `0.16.0-alpha`
 

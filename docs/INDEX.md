@@ -77,6 +77,7 @@ Key policy concepts:
 - `docs/ARCHITECTURE.md`: module boundaries and architecture gate.
 - `docs/SECURITY.md`: threat model and security gate.
 - `docs/AI_AGENT_SECURITY.md`: AI-agent and tool-use security expectations.
+- `docs/AI_READINESS_AUDIT.md`: `psdm audit --json` contract for AI readiness signals and governance gaps.
 - `docs/TOOL_REGISTRY.md`: tool registry direction.
 - `ADRs/README.md`: ADR usage guidance.
 

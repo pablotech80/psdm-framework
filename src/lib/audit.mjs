@@ -16,6 +16,54 @@ const AI_GOVERNANCE_PATHS = [
   'docs/AI_AGENT_SECURITY.md',
 ]
 
+const AI_READINESS_SURFACES = [
+  {
+    kind: 'agent-instructions',
+    paths: ['AGENTS.md', '.github/copilot-instructions.md', '.cursor/rules', '.windsurfrules', '.claude', '.codex'],
+  },
+  {
+    kind: 'agent-skills-and-prompts',
+    paths: ['skills', 'prompts', 'ai'],
+  },
+  {
+    kind: 'ai-security-docs',
+    paths: ['docs/AI_AGENT_SECURITY.md'],
+  },
+]
+
+const AI_READINESS_GOVERNANCE_ARTIFACTS = [
+  {
+    key: 'guardrails',
+    artifacts: ['docs/AI_GUARDRAILS.md', 'docs/AI_AGENT_SECURITY.md'],
+    purpose: 'Prompt injection, tool injection, output validation, and stop conditions.',
+  },
+  {
+    key: 'data-classification',
+    artifacts: ['docs/DATA_CLASSIFICATION.md', 'docs/SECURITY.md'],
+    purpose: 'PII, private data, regulated data, and redaction policy.',
+  },
+  {
+    key: 'cost-latency',
+    artifacts: ['docs/COST_LATENCY_BUDGET.md', 'docs/OPERATIONS.md'],
+    purpose: 'Token budget, provider cost budget, latency SLOs, fallback, and throttling expectations.',
+  },
+  {
+    key: 'prompt-injection-tests',
+    artifacts: ['docs/PROMPT_INJECTION_TESTS.md', 'docs/TESTING.md'],
+    purpose: 'Adversarial prompts, indirect prompt injection, context poisoning, and regression coverage.',
+  },
+  {
+    key: 'ai-evals',
+    artifacts: ['docs/AI_EVALS.md', 'docs/TESTING.md'],
+    purpose: 'Quality, safety, groundedness, refusal, and regression evaluation expectations.',
+  },
+  {
+    key: 'tool-security',
+    artifacts: ['docs/TOOL_REGISTRY.md', 'docs/AI_AGENT_SECURITY.md'],
+    purpose: 'Tool authorization, allowed parameters, forbidden operations, approvals, and audit logging.',
+  },
+]
+
 function inspectPath(target, artifact) {
   const fullPath = join(target, artifact)
 
@@ -57,6 +105,65 @@ function inspectPath(target, artifact) {
 
 function existingPaths(target, paths) {
   return paths.filter((path) => existsSync(join(target, path)))
+}
+
+function detectAiReadiness(target, aiGovernance) {
+  const surfaces = AI_READINESS_SURFACES.map((surface) => {
+    const detected = existingPaths(target, surface.paths)
+
+    return {
+      kind: surface.kind,
+      detected,
+      status: detected.length > 0 ? 'detected' : 'not_detected',
+    }
+  })
+  const detectedSurfaceCount = surfaces.filter((surface) => surface.detected.length > 0).length
+  const governanceArtifacts = AI_READINESS_GOVERNANCE_ARTIFACTS.map((group) => {
+    const existing = existingPaths(target, group.artifacts)
+    const missing = group.artifacts.filter((artifact) => !existing.includes(artifact))
+
+    return {
+      key: group.key,
+      purpose: group.purpose,
+      existing,
+      missing,
+      status: existing.length > 0 ? 'present' : 'missing',
+    }
+  })
+  const gaps = detectedSurfaceCount === 0
+    ? []
+    : governanceArtifacts
+      .filter((group) => group.status === 'missing')
+      .map((group) => ({
+        key: group.key,
+        message: `Missing AI readiness governance for ${group.key}.`,
+        expectedArtifacts: group.missing,
+      }))
+  const status = detectedSurfaceCount === 0
+    ? 'not_detected'
+    : gaps.length > 0
+      ? 'gaps_detected'
+      : 'ready_for_review'
+
+  return {
+    version: 1,
+    status,
+    detectedSurfaceCount,
+    surfaces,
+    governanceArtifacts,
+    gaps,
+    recommendations: status === 'not_detected'
+      ? [
+        'No AI runtime surface was detected by the initial readiness contract.',
+        'Re-run psdm audit after adding agents, RAG, prompts, tools, provider SDKs, or vector stores.',
+      ]
+      : [
+        'Review AI readiness gaps before relying on runtime AI behavior.',
+        'Document guardrails, data classification, cost and latency budgets, prompt-injection tests, evals, and tool security.',
+        ...aiGovernance.recommendations,
+      ],
+    note: 'This is the stable AI readiness audit contract. Deep provider, vector store, and code-level detection will be added in later increments.',
+  }
 }
 
 export function detectAiGovernance(target) {
@@ -183,6 +290,7 @@ export function buildAudit(target, options = {}) {
   const wouldCreate = results.filter((item) => item.installAction === 'create')
   const wouldSkip = results.filter((item) => item.installAction === 'skip')
   const aiGovernance = detectAiGovernance(target)
+  const aiReadiness = detectAiReadiness(target, aiGovernance)
 
   return {
     command: 'audit',
@@ -195,6 +303,7 @@ export function buildAudit(target, options = {}) {
     },
     projectSignals: detectProjectSignals(target),
     aiGovernance,
+    aiReadiness,
     git,
     summary: {
       total: results.length,
@@ -217,6 +326,7 @@ export function printAuditReport(report) {
   console.log(`Config: ${report.config.exists ? report.config.path : 'default policy; psdm.config.json would be created'}`)
   console.log(`Git: ${report.git.isRepository ? report.git.branch || 'repository' : 'not a git repository'}${report.git.isDirty ? `, dirty (${report.git.changes.length} change/s)` : ''}`)
   console.log(`AI governance adoption: ${report.aiGovernance.adoptionMode}`)
+  console.log(`AI readiness: ${report.aiReadiness.status}`)
   console.log('')
   console.log('Before')
   for (const item of report.before) {
@@ -236,6 +346,16 @@ export function printAuditReport(report) {
   } else {
     for (const item of report.aiGovernance.existing) {
       console.log(`- ${item}`)
+    }
+  }
+
+  console.log('')
+  console.log('AI readiness gaps')
+  if (report.aiReadiness.gaps.length === 0) {
+    console.log('- none detected')
+  } else {
+    for (const gap of report.aiReadiness.gaps) {
+      console.log(`- ${gap.key}: ${gap.expectedArtifacts.join(', ')}`)
     }
   }
 

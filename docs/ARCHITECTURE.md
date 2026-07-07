@@ -13,7 +13,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/commands/*.mjs` owns user-facing command behavior.
 - `src/lib/args.mjs` parses CLI options.
 - `src/lib/adr.mjs` owns ADR filename generation and scaffold rendering.
-- `src/lib/audit.mjs` builds the non-destructive repository adoption preview and detects existing AI governance files.
+- `src/lib/audit.mjs` builds the non-destructive repository adoption preview, detects existing AI governance files, and emits the AI readiness audit contract.
 - `src/lib/classifier.mjs` owns reusable change classification.
 - `src/lib/enforcement.mjs` owns CI-oriented maximum change-level enforcement.
 - `src/lib/pr-checklist.mjs` generates pull request checklist content from classification output.
@@ -43,6 +43,7 @@ Changes require architecture review when they affect:
 
 - command contracts or exit codes;
 - pre-init audit semantics;
+- AI readiness JSON output shape;
 - existing AI governance detection;
 - adoption plan creation;
 - ADR scaffold semantics;

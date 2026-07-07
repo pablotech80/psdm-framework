@@ -44,6 +44,10 @@ function testAuditExistingProject() {
   assert.equal(report.config.exists, false)
   assert.equal(report.projectSignals.packageManager, true)
   assert.equal(report.projectSignals.existingDocs, true)
+  assert.equal(report.aiReadiness.version, 1)
+  assert.equal(report.aiReadiness.status, 'not_detected')
+  assert.equal(report.aiReadiness.detectedSurfaceCount, 0)
+  assert.deepEqual(report.aiReadiness.gaps, [])
   assert.equal(report.summary.wouldCreate, 12)
   assert.equal(report.summary.wouldSkip, 0)
   assert.ok(report.pros.some((item) => item.includes('without overwriting')))
@@ -70,9 +74,22 @@ function testAuditDetectsExistingAiGovernance() {
   assert.ok(report.aiGovernance.existing.includes('.cursor/rules'))
   assert.ok(report.aiGovernance.existing.includes('skills'))
   assert.deepEqual(report.aiGovernance.wouldCreate, ['docs/PSDM_ADOPTION.md'])
+  assert.equal(report.aiReadiness.status, 'gaps_detected')
+  assert.ok(report.aiReadiness.detectedSurfaceCount >= 2)
+  assert.ok(report.aiReadiness.surfaces.some((item) => (
+    item.kind === 'agent-instructions'
+    && item.detected.includes('AGENTS.md')
+  )))
+  assert.ok(report.aiReadiness.governanceArtifacts.some((item) => (
+    item.key === 'cost-latency'
+    && item.status === 'missing'
+  )))
+  assert.ok(report.aiReadiness.gaps.some((item) => item.key === 'cost-latency'))
   assert.ok(report.cons.some((item) => item.includes('Existing AI instructions may conflict')))
   assert.ok(report.recommendations.some((item) => item.includes('Do not overwrite existing agent')))
   assert.match(output, /AI governance adoption: integrate/)
+  assert.match(output, /AI readiness: gaps_detected/)
+  assert.match(output, /AI readiness gaps/)
   assert.match(output, /Existing AI governance/)
 }
 
