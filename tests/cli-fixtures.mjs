@@ -300,6 +300,8 @@ function testValidateInitializedProject() {
   assert.equal(report.failures, 0)
   assert.ok(report.warnings > 0)
   assert.equal(report.config.exists, true)
+  assert.equal(report.config.ai.pii.allowedInPrompts, false)
+  assert.equal(report.config.ai.tools.registryRequired, true)
   assert.ok(report.results.some((item) => item.artifact === 'AGENTS.md' && item.status === 'PASS'))
 }
 
@@ -317,6 +319,29 @@ function testCustomConfigArtifact() {
     git: {
       warnOnDirty: false,
     },
+    ai: {
+      pii: {
+        allowedInPrompts: false,
+        redactionRequired: true,
+      },
+      cost: {
+        maxUsdPerRequest: 0.05,
+        monthlyBudgetUsd: 100,
+      },
+      latency: {
+        p95Ms: 3000,
+      },
+      tools: {
+        registryRequired: true,
+        humanApprovalForExternalActions: true,
+      },
+      evals: {
+        required: true,
+      },
+      security: {
+        promptInjectionTestsRequired: true,
+      },
+    },
     riskPaths: [
       {
         pattern: 'secure/**',
@@ -329,6 +354,7 @@ function testCustomConfigArtifact() {
 
   run(['init', target, '--config', configPath])
   const check = runJson(['check', target, '--config', configPath, '--json'])
+  const validate = runJson(['validate', target, '--config', configPath, '--json'])
   const classified = runJson([
     'classify',
     'small cleanup',
@@ -343,8 +369,52 @@ function testCustomConfigArtifact() {
 
   assert.equal(check.status, 'complete')
   assert.deepEqual(check.results.map((item) => item.artifact), ['docs/CUSTOM.md'])
+  assert.equal(validate.config.ai.pii.allowedInPrompts, false)
+  assert.equal(validate.config.ai.cost.maxUsdPerRequest, 0.05)
+  assert.equal(validate.config.ai.latency.p95Ms, 3000)
+  assert.equal(validate.config.ai.tools.registryRequired, true)
   assert.equal(classified.estimatedLevel, 'Level 3')
   assert.equal(classified.pathMatches[0].pattern, 'secure/**')
+}
+
+function testInvalidAiPolicyFailsValidation() {
+  const root = mkdtempSync(resolve(tmpdir(), 'psdm-ai-policy-invalid-'))
+  const target = resolve(root, 'project')
+  const configPath = resolve(root, 'bad-ai.psdm.json')
+  writeFileSync(configPath, JSON.stringify({
+    version: 1,
+    requiredArtifacts: ['AGENTS.md'],
+    git: {
+      warnOnDirty: false,
+    },
+    ai: {
+      pii: {
+        allowedInPrompts: 'no',
+      },
+      cost: {
+        maxUsdPerRequest: -1,
+      },
+      latency: {
+        p95Ms: 'fast',
+      },
+      tools: {
+        registryRequired: 'yes',
+      },
+    },
+  }))
+
+  const validation = runJson(['validate', target, '--config', configPath, '--json'], {
+    allowFailure: true,
+  })
+
+  assert.ok(validation.results.some((item) => (
+    item.artifact === 'psdm.config.json'
+    && item.status === 'FAIL'
+    && item.message === 'ai.pii.allowedInPrompts must be a boolean or null.'
+  )))
+  assert.ok(validation.results.some((item) => item.message === 'ai.cost.maxUsdPerRequest must be a positive number or null.'))
+  assert.ok(validation.results.some((item) => item.message === 'ai.latency.p95Ms must be a positive number or null.'))
+  assert.ok(validation.results.some((item) => item.message === 'ai.tools.registryRequired must be a boolean or null.'))
 }
 
 function testValidationProfileFramework() {
@@ -511,6 +581,7 @@ const tests = [
   testEnforceBlocksExceededLevel,
   testValidateInitializedProject,
   testCustomConfigArtifact,
+  testInvalidAiPolicyFailsValidation,
   testValidationProfileFramework,
   testUnsupportedProfileFailsValidation,
   testInvalidRiskPathFailsValidation,

@@ -103,7 +103,8 @@
 
 ## Alpha - 0.16
 
-- [ ] Optional AI policy schema for PII, redaction, tool registry, cost budgets, latency SLOs, evals, and approval rules.
+- [x] Optional AI policy schema for PII, redaction, tool registry, cost budgets, latency SLOs, evals, and approval rules.
+- [x] AI policy validation fixtures.
 
 ## Alpha - 0.17
 

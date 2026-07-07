@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.15.0-alpha`
+`0.16.0-alpha`
 
 This repository currently provides:
 
@@ -15,6 +15,7 @@ This repository currently provides:
 - Pre-init repository audit.
 - Existing AI governance detection during audit.
 - AI readiness audit JSON contract.
+- Optional AI policy fields in `psdm.config.json`.
 - ADR generation.
 - Pull request checklist generation.
 - CLI regression fixtures.
@@ -181,6 +182,29 @@ Example:
   "git": {
     "warnOnDirty": true
   },
+  "ai": {
+    "pii": {
+      "allowedInPrompts": false,
+      "redactionRequired": true
+    },
+    "cost": {
+      "maxUsdPerRequest": null,
+      "monthlyBudgetUsd": null
+    },
+    "latency": {
+      "p95Ms": null
+    },
+    "tools": {
+      "registryRequired": true,
+      "humanApprovalForExternalActions": true
+    },
+    "evals": {
+      "required": true
+    },
+    "security": {
+      "promptInjectionTestsRequired": true
+    }
+  },
   "riskPaths": [
     {
       "pattern": "backend/auth/**",
@@ -214,6 +238,8 @@ Profiles add sensible default artifacts and risk paths for common repository typ
 Unsupported profile values fail validation instead of silently falling back to `standard`. The validation JSON still reports `config.profile.name` and `config.profile.recognized` so automation can surface the exact policy problem.
 
 Schema stability rules are documented in `docs/CONFIG_SCHEMA.md`.
+
+The optional `ai` block declares repository-level AI policy for PII, redaction, cost budgets, latency SLOs, tool registry expectations, eval requirements, prompt-injection testing, and human approval. `null` means the policy is intentionally not declared yet; invalid field types fail validation.
 
 Use a non-default config path:
 

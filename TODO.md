@@ -12,7 +12,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Design optional AI policy fields for `psdm.config.json`.
+- [ ] Add AI guardrail templates for PII, prompt injection, cost, latency, evals, and tool security.
 
 ## Next
 
@@ -21,7 +21,6 @@ This file must be updated with every meaningful project advance. Completed items
 ## Later
 
 - [ ] Add example project coverage.
-- [ ] Add AI guardrail templates for PII, prompt injection, cost, latency, evals, and tool security.
 - [ ] Prepare public package release checklist.
 
 ## Done
@@ -63,6 +62,9 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added AI readiness audit fixture coverage.
 - [x] Implemented AI surface detection in `src/lib/audit.mjs`.
 - [x] Added governance gap detection for AI readiness artifact groups.
+- [x] Designed optional AI policy fields for `psdm.config.json`.
+- [x] Added AI policy validation fixtures.
+- [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.
 - [x] Filled `docs/PROJECT_BRIEF.md` with framework-specific context.

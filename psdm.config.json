@@ -34,6 +34,29 @@
   "git": {
     "warnOnDirty": true
   },
+  "ai": {
+    "pii": {
+      "allowedInPrompts": false,
+      "redactionRequired": true
+    },
+    "cost": {
+      "maxUsdPerRequest": null,
+      "monthlyBudgetUsd": null
+    },
+    "latency": {
+      "p95Ms": null
+    },
+    "tools": {
+      "registryRequired": true,
+      "humanApprovalForExternalActions": true
+    },
+    "evals": {
+      "required": true
+    },
+    "security": {
+      "promptInjectionTestsRequired": true
+    }
+  },
   "riskPaths": [
     {
       "pattern": "bin/**",

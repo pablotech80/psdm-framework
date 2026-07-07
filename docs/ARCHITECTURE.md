@@ -17,7 +17,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/classifier.mjs` owns reusable change classification.
 - `src/lib/enforcement.mjs` owns CI-oriented maximum change-level enforcement.
 - `src/lib/pr-checklist.mjs` generates pull request checklist content from classification output.
-- `src/lib/config.mjs` loads PSDM configuration.
+- `src/lib/config.mjs` loads PSDM configuration and validates optional AI policy declarations.
 - `src/lib/config.mjs` also applies validation profile presets and exposes the supported profile list.
 - `src/lib/artifacts.mjs` defines baseline artifact contracts.
 - `src/lib/risk-paths.mjs` validates and evaluates file path risk rules.
@@ -52,6 +52,7 @@ Changes require architecture review when they affect:
 - change-level enforcement semantics;
 - JSON output shape;
 - config schema or defaults;
+- AI policy schema, defaults, or validation;
 - validation profile behavior;
 - validator decisions;
 - risk path schema validation;

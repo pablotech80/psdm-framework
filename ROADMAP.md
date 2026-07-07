@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is at `0.15.0-alpha`.
+PSDM is at `0.16.0-alpha`.
 
 Completed:
 
@@ -42,6 +42,7 @@ Completed:
 - AI readiness gap analysis completed for governance, guardrails, cost, latency, prompt injection, and PII coverage.
 - AI readiness audit JSON contract added to `psdm audit`.
 - AI surface detection added for paths and manifests.
+- Optional AI policy schema added to `psdm.config.json`.
 
 ## Active Milestone
 
@@ -142,7 +143,8 @@ Planned outcomes:
 
 ### `0.16.0-alpha`
 
-- [ ] Extend `psdm.config.json` with optional AI policy fields for PII, redaction, tool registry, cost budgets, latency SLOs, evals, and approval rules.
+- [x] Extend `psdm.config.json` with optional AI policy fields for PII, redaction, tool registry, cost budgets, latency SLOs, evals, and approval rules.
+- [x] Add validation fixtures for invalid AI policy fields.
 
 ### `0.17.0-alpha`
 

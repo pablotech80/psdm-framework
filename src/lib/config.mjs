@@ -102,6 +102,30 @@ export const PROFILE_PRESETS = {
 
 export const SUPPORTED_PROFILES = Object.keys(PROFILE_PRESETS)
 
+export const DEFAULT_AI_POLICY = {
+  pii: {
+    allowedInPrompts: null,
+    redactionRequired: null,
+  },
+  cost: {
+    maxUsdPerRequest: null,
+    monthlyBudgetUsd: null,
+  },
+  latency: {
+    p95Ms: null,
+  },
+  tools: {
+    registryRequired: null,
+    humanApprovalForExternalActions: null,
+  },
+  evals: {
+    required: null,
+  },
+  security: {
+    promptInjectionTestsRequired: null,
+  },
+}
+
 export const DEFAULT_CONFIG = {
   version: 1,
   profile: 'standard',
@@ -114,6 +138,7 @@ export const DEFAULT_CONFIG = {
   git: {
     warnOnDirty: true,
   },
+  ai: DEFAULT_AI_POLICY,
   riskPaths: [
     {
       pattern: 'backend/auth/**',
@@ -180,6 +205,113 @@ function uniqueRiskPaths(items) {
   })
 }
 
+function isPlainObject(value) {
+  return Boolean(value) && typeof value === 'object' && !Array.isArray(value)
+}
+
+function mergePlainObject(defaults, overrides) {
+  if (!isPlainObject(overrides)) {
+    return { ...defaults }
+  }
+
+  return {
+    ...defaults,
+    ...overrides,
+  }
+}
+
+function mergeAiPolicy(rawAi) {
+  if (!isPlainObject(rawAi)) {
+    return {
+      pii: { ...DEFAULT_AI_POLICY.pii },
+      cost: { ...DEFAULT_AI_POLICY.cost },
+      latency: { ...DEFAULT_AI_POLICY.latency },
+      tools: { ...DEFAULT_AI_POLICY.tools },
+      evals: { ...DEFAULT_AI_POLICY.evals },
+      security: { ...DEFAULT_AI_POLICY.security },
+    }
+  }
+
+  return {
+    pii: mergePlainObject(DEFAULT_AI_POLICY.pii, rawAi.pii),
+    cost: mergePlainObject(DEFAULT_AI_POLICY.cost, rawAi.cost),
+    latency: mergePlainObject(DEFAULT_AI_POLICY.latency, rawAi.latency),
+    tools: mergePlainObject(DEFAULT_AI_POLICY.tools, rawAi.tools),
+    evals: mergePlainObject(DEFAULT_AI_POLICY.evals, rawAi.evals),
+    security: mergePlainObject(DEFAULT_AI_POLICY.security, rawAi.security),
+  }
+}
+
+function validOptionalBoolean(value) {
+  return value === null || typeof value === 'boolean'
+}
+
+function validOptionalPositiveNumber(value) {
+  return value === null || (typeof value === 'number' && Number.isFinite(value) && value > 0)
+}
+
+export function validateAiPolicy(rawAi) {
+  if (rawAi === undefined) {
+    return []
+  }
+
+  if (!isPlainObject(rawAi)) {
+    return [
+      {
+        message: 'ai must be an object.',
+        priority: 'High',
+      },
+    ]
+  }
+
+  const issues = []
+  const objectGroups = ['pii', 'cost', 'latency', 'tools', 'evals', 'security']
+
+  for (const group of objectGroups) {
+    if (rawAi[group] !== undefined && !isPlainObject(rawAi[group])) {
+      issues.push({
+        message: `ai.${group} must be an object.`,
+        priority: 'High',
+      })
+    }
+  }
+
+  const ai = mergeAiPolicy(rawAi)
+  const booleanFields = [
+    ['pii.allowedInPrompts', ai.pii.allowedInPrompts],
+    ['pii.redactionRequired', ai.pii.redactionRequired],
+    ['tools.registryRequired', ai.tools.registryRequired],
+    ['tools.humanApprovalForExternalActions', ai.tools.humanApprovalForExternalActions],
+    ['evals.required', ai.evals.required],
+    ['security.promptInjectionTestsRequired', ai.security.promptInjectionTestsRequired],
+  ]
+  const numberFields = [
+    ['cost.maxUsdPerRequest', ai.cost.maxUsdPerRequest],
+    ['cost.monthlyBudgetUsd', ai.cost.monthlyBudgetUsd],
+    ['latency.p95Ms', ai.latency.p95Ms],
+  ]
+
+  for (const [field, value] of booleanFields) {
+    if (!validOptionalBoolean(value)) {
+      issues.push({
+        message: `ai.${field} must be a boolean or null.`,
+        priority: 'High',
+      })
+    }
+  }
+
+  for (const [field, value] of numberFields) {
+    if (!validOptionalPositiveNumber(value)) {
+      issues.push({
+        message: `ai.${field} must be a positive number or null.`,
+        priority: 'High',
+      })
+    }
+  }
+
+  return issues
+}
+
 function resolveConfigPath(targetDir, configPath) {
   if (!configPath) {
     return join(targetDir, 'psdm.config.json')
@@ -219,6 +351,7 @@ export function loadConfig(targetDir, configPath = null) {
     git: {
       warnOnDirty: rawConfig.git?.warnOnDirty ?? DEFAULT_CONFIG.git.warnOnDirty,
     },
+    ai: mergeAiPolicy(rawConfig.ai),
     riskPaths: uniqueRiskPaths([
       ...profile.riskPaths,
       ...arrayOrDefault(rawConfig.riskPaths, DEFAULT_CONFIG.riskPaths),

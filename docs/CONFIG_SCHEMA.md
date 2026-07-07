@@ -7,7 +7,7 @@ Project: `psdm-framework`
 
 This document defines the stability contract for `psdm.config.json`.
 
-The config file is the local policy surface for PSDM. It controls required governance artifacts, validation profiles, feature artifact layout, git dirty-state warnings, and risk path classification. The CLI must keep this schema predictable because users can depend on it from local scripts, GitHub Actions, and repository automation.
+The config file is the local policy surface for PSDM. It controls required governance artifacts, validation profiles, feature artifact layout, git dirty-state warnings, AI policy declarations, and risk path classification. The CLI must keep this schema predictable because users can depend on it from local scripts, GitHub Actions, and repository automation.
 
 ## Schema Version
 
@@ -66,6 +66,13 @@ The `version` field identifies the config format. Version `1` supports additive 
 - Stability: stable.
 - Meaning: controls whether validation warns on uncommitted changes.
 
+`ai`
+
+- Type: object.
+- Default: object with all AI policy values set to `null`.
+- Stability: stable object shape.
+- Meaning: declares repository-level AI policy for PII, redaction, cost, latency, tool registry, evals, prompt-injection testing, and approval rules.
+
 `riskPaths`
 
 - Type: object array.
@@ -97,6 +104,55 @@ The `version` field identifies the config format. Version `1` supports additive 
 - Meaning: human-readable rationale for the rule.
 
 Malformed risk path rules are validation failures. Classification ignores malformed rules so an invalid config does not crash path matching.
+
+## AI Policy Object
+
+All AI policy fields are optional. `null` means the project has not declared a policy for that field yet. Declaring a field with the wrong type is a validation failure on `psdm.config.json`.
+
+`ai.pii.allowedInPrompts`
+
+- Type: boolean or null.
+- Meaning: whether prompts may contain PII or private customer data.
+
+`ai.pii.redactionRequired`
+
+- Type: boolean or null.
+- Meaning: whether PII or private data must be redacted before prompt, log, doc, or eval use.
+
+`ai.cost.maxUsdPerRequest`
+
+- Type: positive number or null.
+- Meaning: maximum expected provider cost per AI request.
+
+`ai.cost.monthlyBudgetUsd`
+
+- Type: positive number or null.
+- Meaning: monthly AI provider budget for the project or service.
+
+`ai.latency.p95Ms`
+
+- Type: positive number or null.
+- Meaning: expected p95 latency SLO for AI requests in milliseconds.
+
+`ai.tools.registryRequired`
+
+- Type: boolean or null.
+- Meaning: whether AI-accessible tools must be documented in a tool registry.
+
+`ai.tools.humanApprovalForExternalActions`
+
+- Type: boolean or null.
+- Meaning: whether externally visible, mutating, production, payment, data, or communication actions require human approval.
+
+`ai.evals.required`
+
+- Type: boolean or null.
+- Meaning: whether AI behavior requires an eval suite before release.
+
+`ai.security.promptInjectionTestsRequired`
+
+- Type: boolean or null.
+- Meaning: whether prompt-injection and indirect prompt-injection tests are required.
 
 ## Supported Profiles
 
@@ -144,5 +200,6 @@ Validation JSON must keep the following config metadata:
 - `config.profile.recognized`
 - `config.profile.requiredArtifacts`
 - `config.profile.riskPaths`
+- `config.ai`
 
 Additional fields may be added when they do not alter existing field meaning.
