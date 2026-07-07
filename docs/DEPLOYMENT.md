@@ -27,6 +27,7 @@ npm pack --dry-run
 Before release or publication:
 
 - confirm version intent;
+- review `docs/BETA_RELEASE_NOTES.md`;
 - run syntax and CLI smoke validation;
 - run initialized project validation;
 - inspect `npm pack --dry-run` contents;

@@ -22,8 +22,9 @@ Near-term framework tasks:
 - Keep this repository self-governing through PSDM artifacts.
 - Keep pre-init audit useful for existing projects adopting PSDM.
 - Keep PR checklist generation aligned with classifier and risk path behavior.
-- Add CI enforcement for change levels.
-- Add risk path validation.
+- Create a docs index for public readiness.
+- Add example project coverage.
+- Validate the GitHub Action in a downstream repository workflow.
 - Keep fixtures current as CLI behavior changes.
 
 ## Completion Criteria

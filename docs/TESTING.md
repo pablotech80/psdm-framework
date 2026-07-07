@@ -19,6 +19,7 @@ node bin/psdm.mjs audit . --json
 node bin/psdm.mjs adr "Adopt CI change level enforcement" --target "$(mktemp -d)" --date 2026-07-08 --json
 node bin/psdm.mjs classify "small cleanup" --file src/validator/validate-method.mjs --json
 node bin/psdm.mjs enforce "small cleanup" --file src/validator/validate-method.mjs --max-level "Level 3" --json
+node bin/psdm.mjs adr "Validate beta release readiness" --target "$(mktemp -d)" --date 2026-07-08 --json
 node bin/psdm.mjs pr-checklist "small cleanup" --file src/validator/validate-method.mjs
 ```
 

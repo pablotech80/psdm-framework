@@ -20,6 +20,7 @@ This repository currently provides:
 - Validation profiles.
 - Unsupported profile validation.
 - Risk path schema validation.
+- Beta release notes.
 - Config schema stability documentation.
 - Baseline artifact checks.
 - Baseline structure validation.
@@ -132,6 +133,8 @@ Run local fixtures:
 ```bash
 npm test
 ```
+
+Beta release scope and exit criteria are tracked in `docs/BETA_RELEASE_NOTES.md`.
 
 ## Configuration
 

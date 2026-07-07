@@ -34,11 +34,12 @@ Completed:
 - CI change-level enforcement added through `psdm enforce` and the composite Action.
 - Risk path schema validation added for local policy correctness.
 - ADR generation added through `psdm adr`.
+- Beta release notes prepared in `docs/BETA_RELEASE_NOTES.md`.
 - Fresh-template review warnings restored for unresolved draft markers.
 
 ## Active Milestone
 
-`0.13.0-alpha`: ADR generation.
+`1.0.0-beta`: release readiness.
 
 Goal:
 
@@ -61,6 +62,7 @@ Planned outcomes:
 - CI gate that fails when a classified change exceeds the configured maximum level.
 - Risk path validation before classification-driven automation relies on local policy.
 - ADR scaffold generation for durable decisions.
+- Beta release notes with scope, compatibility notes, validation, limitations, and exit criteria.
 - Validation policy that distinguishes framework source docs from generated project artifacts.
 - PR/checklist workflow for risky backend/platform changes.
 
@@ -135,7 +137,8 @@ Planned outcomes:
 - [x] Change-level enforcement in CI.
 - [x] Security-sensitive path rule validation.
 - [x] ADR generator.
-- [ ] Tested fixtures for CLI behavior.
+- [x] Tested fixtures for CLI behavior.
+- [x] Prepare beta release notes.
 
 ### `1.0.0`
 

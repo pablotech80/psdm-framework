@@ -93,6 +93,7 @@
 - [x] Change-level enforcement in CI.
 - [x] Security-sensitive file path rule validation.
 - [x] ADR generator.
+- [x] Beta release notes.
 
 ## v1.0
 
