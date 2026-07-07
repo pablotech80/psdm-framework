@@ -29,6 +29,7 @@ The architecture favors explicit modules over framework abstractions:
 - Use dependency-free JavaScript modules to keep installation and audit surface small.
 - Use JSON output as a stable automation contract while preserving human-readable output.
 - Keep configuration local to the target repository through `psdm.config.json`.
+- Keep PSDM as a governance layer, not an AI observability platform; runtime traces, dashboards, hosted evals, token telemetry, cost reports, and latency measurements should come from external tools or project-owned scripts.
 - Treat unsupported profile values as invalid local policy rather than silently relying on default behavior.
 - Treat malformed risk path rules as invalid local policy and ignore them during path matching.
 - Treat risk classification as advisory unless CI enforcement is explicitly configured through `psdm enforce` or the composite Action.
@@ -60,3 +61,4 @@ Changes require architecture review when they affect:
 - package distribution;
 - GitHub Action behavior;
 - governance semantics for high-risk change levels.
+- the boundary between PSDM governance and external runtime observability.

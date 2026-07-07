@@ -56,6 +56,7 @@ Project: `psdm-framework`
 ## Out of Scope
 
 - Runtime enforcement inside deployed applications.
+- Native AI observability, tracing, dashboards, hosted eval execution, or LangSmith-style runtime telemetry.
 - Deep code-level semantic AI readiness detection.
 - Secret scanning beyond simple local pattern detection.
 - Full policy-as-code semantics.

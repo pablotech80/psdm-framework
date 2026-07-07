@@ -64,6 +64,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added governance gap detection for AI readiness artifact groups.
 - [x] Designed optional AI policy fields for `psdm.config.json`.
 - [x] Added AI policy validation fixtures.
+- [x] Accepted ADR keeping PSDM as governance layer, not AI observability platform.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

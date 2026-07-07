@@ -109,6 +109,7 @@
 ## Alpha - 0.17
 
 - [ ] AI guardrail templates for data classification, cost/latency budgets, prompt injection tests, and AI evals.
+- [x] ADR boundary: PSDM remains governance layer, not AI observability platform.
 
 ## Alpha - 0.18
 
@@ -133,6 +134,7 @@
 
 - [ ] AI tool registry.
 - [ ] Runtime guardrail policy model.
+- [x] Governance-layer boundary instead of native AI observability platform.
 - [ ] Prompt injection test harness.
 - [ ] PII detection and redaction governance.
 - [ ] Cost and latency budget governance.
