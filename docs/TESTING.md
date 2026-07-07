@@ -16,6 +16,7 @@ CLI smoke validation:
 ```bash
 node bin/psdm.mjs help
 node bin/psdm.mjs audit . --json
+node bin/psdm.mjs adr "Adopt CI change level enforcement" --target "$(mktemp -d)" --date 2026-07-08 --json
 node bin/psdm.mjs classify "small cleanup" --file src/validator/validate-method.mjs --json
 node bin/psdm.mjs enforce "small cleanup" --file src/validator/validate-method.mjs --max-level "Level 3" --json
 node bin/psdm.mjs pr-checklist "small cleanup" --file src/validator/validate-method.mjs
@@ -54,7 +55,7 @@ node bin/psdm.mjs validate . --json
 - Run CLI smoke validation for command, parser, config, classifier, or validator changes.
 - Run audit validation for changes that affect init, config, or required artifacts.
 - Run PR checklist validation for changes that affect classification, risk paths, or PR workflow output.
-- Run `npm test` for CLI regression coverage around audit, init dry-run, classify, enforce, PR checklist, validate, custom config, validation profiles, unsupported profile validation, invalid risk path validation, and feature artifact behavior.
+- Run `npm test` for CLI regression coverage around audit, ADR generation, init dry-run, classify, enforce, PR checklist, validate, custom config, validation profiles, unsupported profile validation, invalid risk path validation, and feature artifact behavior.
 - Run initialized project validation for template, config, or artifact changes.
 - Run package validation before distribution-related changes.
 - Treat unexpected validation failures as blocking unless explicitly documented as pre-existing.

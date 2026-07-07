@@ -12,6 +12,7 @@ The architecture favors explicit modules over framework abstractions:
 - `bin/psdm.mjs` dispatches commands.
 - `src/commands/*.mjs` owns user-facing command behavior.
 - `src/lib/args.mjs` parses CLI options.
+- `src/lib/adr.mjs` owns ADR filename generation and scaffold rendering.
 - `src/lib/audit.mjs` builds the non-destructive repository adoption preview.
 - `src/lib/classifier.mjs` owns reusable change classification.
 - `src/lib/enforcement.mjs` owns CI-oriented maximum change-level enforcement.
@@ -41,6 +42,7 @@ Changes require architecture review when they affect:
 
 - command contracts or exit codes;
 - pre-init audit semantics;
+- ADR scaffold semantics;
 - change classification and PR checklist semantics;
 - change-level enforcement semantics;
 - JSON output shape;

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
-import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
@@ -59,6 +59,56 @@ function testInitDryRunDoesNotWrite() {
   assert.match(output, /After psdm init/)
   assert.match(output, /AGENTS\.md: create/)
   assert.equal(existsSync(resolve(target, 'AGENTS.md')), false)
+}
+
+function testAdrCreatesDecisionRecord() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-adr-'))
+  const report = runJson([
+    'adr',
+    'Adopt CI change level enforcement',
+    '--target',
+    target,
+    '--date',
+    '2026-07-08',
+    '--json',
+  ])
+  const second = runJson([
+    'adr',
+    'Adopt CI change level enforcement',
+    '--target',
+    target,
+    '--date',
+    '2026-07-08',
+    '--json',
+  ])
+
+  assert.equal(report.command, 'adr')
+  assert.equal(report.status, 'created')
+  assert.equal(report.relativePath, 'ADRs/2026-07-08-adopt-ci-change-level-enforcement.md')
+  assert.equal(second.status, 'exists')
+  assert.equal(existsSync(resolve(target, report.relativePath)), true)
+  const content = readFileSync(resolve(target, report.relativePath), 'utf8')
+  assert.match(content, /# ADR-2026-07-08-adopt-ci-change-level-enforcement/)
+  assert.match(content, /Status: `Proposed`/)
+  assert.match(content, /## 1\. Decision/)
+}
+
+function testAdrRejectsInvalidDate() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-adr-invalid-date-'))
+  const output = run([
+    'adr',
+    'Invalid date path',
+    '--target',
+    target,
+    '--date',
+    '../bad',
+    '--json',
+  ], {
+    allowFailure: true,
+  })
+
+  assert.equal(output, '')
+  assert.equal(existsSync(resolve(target, 'ADRs')), false)
 }
 
 function testClassifyRiskPathJson() {
@@ -365,6 +415,8 @@ function testFeatureArtifacts() {
 const tests = [
   testAuditExistingProject,
   testInitDryRunDoesNotWrite,
+  testAdrCreatesDecisionRecord,
+  testAdrRejectsInvalidDate,
   testClassifyRiskPathJson,
   testPrChecklistJson,
   testPrChecklistMarkdownLevel4,

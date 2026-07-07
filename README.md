@@ -6,13 +6,14 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.12.0-alpha`
+`0.13.0-alpha`
 
 This repository currently provides:
 
 - PSDM project templates.
 - A local CLI.
 - Pre-init repository audit.
+- ADR generation.
 - Pull request checklist generation.
 - CLI regression fixtures.
 - Validator, custom config, and feature artifact fixtures.
@@ -49,6 +50,7 @@ psdm help
 
 ```bash
 psdm audit [target] [--json] [--feature <name>] [--config <path>]
+psdm adr "<decision title>" [--json] [--target <path>] [--date YYYY-MM-DD] [--status Proposed]
 psdm init [target]
 psdm init [target] --dry-run
 psdm init [target] --feature <name>
@@ -117,6 +119,12 @@ Enforce a maximum level in CI:
 
 ```bash
 psdm enforce "small cleanup" --file src/index.mjs --max-level "Level 2"
+```
+
+Create an ADR:
+
+```bash
+psdm adr "Adopt CI change level enforcement"
 ```
 
 Run local fixtures:

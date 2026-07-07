@@ -7,43 +7,43 @@ Artifact Type: `Architecture Decision Record`
 
 ## 1. Decision
 
-TBD
+Describe the decision in one or two precise sentences.
 
 ## 2. Context
 
-TBD
+Describe the forces, constraints, risks, and project state that make this decision necessary.
 
 ## 3. Options Considered
 
-1. TBD
-2. TBD
-3. TBD
+1. Describe the chosen option.
+2. Describe the strongest alternative.
+3. Describe the fallback or lowest-effort option.
 
 ## 4. Chosen Option
 
-TBD
+Name the option selected for this repository.
 
 ## 5. Rationale
 
-TBD
+Explain why this option best fits the current architecture, delivery risk, and maintenance model.
 
 ## 6. Consequences
 
 ### Positive
 
-- TBD
+- Describe the main benefit.
 
 ### Negative
 
-- TBD
+- Describe the main cost or limitation.
 
 ### Trade-offs
 
-- TBD
+- Describe what this decision optimizes for and what it intentionally does not optimize for.
 
 ## 7. Validation
 
-TBD
+List the commands, reviews, or evidence used to validate the decision.
 
 ## 8. Related Artifacts
 
@@ -52,4 +52,4 @@ TBD
 
 ## 9. Review Notes
 
-TBD
+Record owner review, approval notes, or follow-up conditions.

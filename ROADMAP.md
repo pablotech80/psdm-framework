@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is at `0.12.0-alpha`.
+PSDM is at `0.13.0-alpha`.
 
 Completed:
 
@@ -33,11 +33,12 @@ Completed:
 - Agent final-response protocol now requires the rationale for the next action.
 - CI change-level enforcement added through `psdm enforce` and the composite Action.
 - Risk path schema validation added for local policy correctness.
+- ADR generation added through `psdm adr`.
 - Fresh-template review warnings restored for unresolved draft markers.
 
 ## Active Milestone
 
-`0.12.0-alpha`: risk path validation.
+`0.13.0-alpha`: ADR generation.
 
 Goal:
 
@@ -59,6 +60,7 @@ Planned outcomes:
 - Final-response rule requiring next-action rationale.
 - CI gate that fails when a classified change exceeds the configured maximum level.
 - Risk path validation before classification-driven automation relies on local policy.
+- ADR scaffold generation for durable decisions.
 - Validation policy that distinguishes framework source docs from generated project artifacts.
 - PR/checklist workflow for risky backend/platform changes.
 
@@ -122,11 +124,17 @@ Planned outcomes:
 - [x] Ignore malformed risk path rules during path matching.
 - [x] Add CLI fixtures for invalid risk path behavior.
 
+### `0.13.0-alpha`
+
+- [x] Add `psdm adr`.
+- [x] Add non-overwriting ADR scaffold generation.
+- [x] Add CLI fixture for ADR generation.
+
 ### `1.0.0-beta`
 
 - [x] Change-level enforcement in CI.
 - [x] Security-sensitive path rule validation.
-- [ ] ADR generator.
+- [x] ADR generator.
 - [ ] Tested fixtures for CLI behavior.
 
 ### `1.0.0`

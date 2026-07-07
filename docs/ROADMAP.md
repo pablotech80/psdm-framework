@@ -83,11 +83,16 @@
 - [x] Risk path schema validation.
 - [x] Invalid risk path fixture coverage.
 
+## Alpha - 0.13
+
+- [x] ADR generator.
+- [x] ADR generation fixture coverage.
+
 ## Beta - 1.0
 
 - [x] Change-level enforcement in CI.
 - [x] Security-sensitive file path rule validation.
-- [ ] ADR generator.
+- [x] ADR generator.
 
 ## v1.0
 

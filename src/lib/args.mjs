@@ -6,6 +6,8 @@ export function parseArgs(args) {
     target: null,
     files: [],
     maxLevel: null,
+    status: null,
+    date: null,
     dryRun: false,
   }
   const positional = []
@@ -59,6 +61,18 @@ export function parseArgs(args) {
 
     if (arg === '--max-level') {
       options.maxLevel = args[index + 1] || null
+      index += 1
+      continue
+    }
+
+    if (arg === '--status') {
+      options.status = args[index + 1] || null
+      index += 1
+      continue
+    }
+
+    if (arg === '--date') {
+      options.date = args[index + 1] || null
       index += 1
       continue
     }

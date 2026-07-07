@@ -25,6 +25,8 @@ PSDM uses five risk levels:
 
 Feature-scoped artifacts may be used when a change is isolated and does not alter framework-wide contracts.
 
+Use `psdm adr "<decision title>"` when a Level 3 or Level 4 change creates or reverses a durable architecture, security, CI, deployment, config, or governance decision.
+
 ## CI Enforcement
 
 `psdm enforce` blocks a change when its classified level exceeds the configured maximum level. The GitHub Action can run this gate with `enforce-change-level: 'true'`, a change description, touched files, and a maximum allowed level.
