@@ -16,6 +16,8 @@ PSDM is a governance framework for AI-assisted software projects. The implementa
 Before changing behavior, read:
 
 - `README.md`
+- `ROADMAP.md`
+- `TODO.md`
 - `docs/PSDM_OVERVIEW.md`
 - `docs/CHANGE_LEVELS.md`
 - `docs/ROADMAP.md`
@@ -45,8 +47,9 @@ Agents must preserve these constraints:
 2. Read the relevant docs and source files.
 3. Make the smallest coherent change.
 4. Run focused validation.
-5. Update docs when the public CLI, config, templates, or governance model changes.
-6. Commit and push when the user asks to proceed with implementation.
+5. Update `ROADMAP.md` and `TODO.md` for every meaningful advance.
+6. Update docs when the public CLI, config, templates, or governance model changes.
+7. Commit and push when the user asks to proceed with implementation.
 
 ## Validation
 
@@ -84,6 +87,7 @@ Every final response after implementation must include:
 
 - what changed;
 - what validation ran;
+- whether `ROADMAP.md` and `TODO.md` were updated;
 - commit or push status when applicable;
 - `Siguiente accion`, with the next concrete recommended step.
 
