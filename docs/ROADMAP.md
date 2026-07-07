@@ -78,10 +78,15 @@
 - [x] GitHub Action change-level enforcement.
 - [x] Enforcement fixtures.
 
+## Alpha - 0.12
+
+- [x] Risk path schema validation.
+- [x] Invalid risk path fixture coverage.
+
 ## Beta - 1.0
 
 - [x] Change-level enforcement in CI.
-- [ ] Security-sensitive file path rule validation.
+- [x] Security-sensitive file path rule validation.
 - [ ] ADR generator.
 
 ## v1.0

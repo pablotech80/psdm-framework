@@ -275,6 +275,79 @@ function testUnsupportedProfileFailsValidation() {
   )))
 }
 
+function testInvalidRiskPathFailsValidation() {
+  const root = mkdtempSync(resolve(tmpdir(), 'psdm-riskpath-invalid-'))
+  const target = resolve(root, 'project')
+  const configPath = resolve(root, 'bad-risk.psdm.json')
+  writeFileSync(configPath, JSON.stringify({
+    version: 1,
+    requiredArtifacts: ['AGENTS.md'],
+    git: {
+      warnOnDirty: false,
+    },
+    riskPaths: [
+      {
+        pattern: 'secure/**',
+        minimumLevel: 'Level 5',
+        requiredArtifacts: 'docs/SECURITY.md',
+        reason: '',
+      },
+    ],
+  }))
+
+  const validation = runJson(['validate', target, '--config', configPath, '--json'], {
+    allowFailure: true,
+  })
+  const classified = runJson([
+    'classify',
+    'small cleanup',
+    '--target',
+    target,
+    '--config',
+    configPath,
+    '--file',
+    'secure/token.js',
+    '--json',
+  ])
+
+  assert.ok(validation.results.some((item) => (
+    item.artifact === 'psdm.config.json'
+    && item.status === 'FAIL'
+    && item.message.includes('riskPaths[0].minimumLevel')
+  )))
+  assert.ok(validation.results.some((item) => item.message.includes('riskPaths[0].requiredArtifacts')))
+  assert.ok(validation.results.some((item) => item.message.includes('riskPaths[0].reason')))
+  assert.equal(classified.estimatedLevel, 'Level 1')
+  assert.deepEqual(classified.pathMatches, [])
+}
+
+function testInvalidRiskPathCollectionFailsValidation() {
+  const root = mkdtempSync(resolve(tmpdir(), 'psdm-riskpath-type-invalid-'))
+  const target = resolve(root, 'project')
+  const configPath = resolve(root, 'bad-risk-type.psdm.json')
+  writeFileSync(configPath, JSON.stringify({
+    version: 1,
+    requiredArtifacts: ['AGENTS.md'],
+    git: {
+      warnOnDirty: false,
+    },
+    riskPaths: {
+      pattern: 'secure/**',
+      minimumLevel: 'Level 3',
+    },
+  }))
+
+  const validation = runJson(['validate', target, '--config', configPath, '--json'], {
+    allowFailure: true,
+  })
+
+  assert.ok(validation.results.some((item) => (
+    item.artifact === 'psdm.config.json'
+    && item.status === 'FAIL'
+    && item.message === 'riskPaths must be an array.'
+  )))
+}
+
 function testFeatureArtifacts() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-feature-'))
   run(['init', target])
@@ -301,6 +374,8 @@ const tests = [
   testCustomConfigArtifact,
   testValidationProfileFramework,
   testUnsupportedProfileFailsValidation,
+  testInvalidRiskPathFailsValidation,
+  testInvalidRiskPathCollectionFailsValidation,
   testFeatureArtifacts,
 ]
 

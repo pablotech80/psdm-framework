@@ -19,7 +19,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/config.mjs` loads PSDM configuration.
 - `src/lib/config.mjs` also applies validation profile presets and exposes the supported profile list.
 - `src/lib/artifacts.mjs` defines baseline artifact contracts.
-- `src/lib/risk-paths.mjs` evaluates file path risk rules.
+- `src/lib/risk-paths.mjs` validates and evaluates file path risk rules.
 - `src/lib/git.mjs` inspects repository state.
 - `src/validator/validate-method.mjs` evaluates method compliance.
 
@@ -29,6 +29,7 @@ The architecture favors explicit modules over framework abstractions:
 - Use JSON output as a stable automation contract while preserving human-readable output.
 - Keep configuration local to the target repository through `psdm.config.json`.
 - Treat unsupported profile values as invalid local policy rather than silently relying on default behavior.
+- Treat malformed risk path rules as invalid local policy and ignore them during path matching.
 - Treat risk classification as advisory unless CI enforcement is explicitly configured through `psdm enforce` or the composite Action.
 - Make adoption audit non-destructive so existing repositories can evaluate impact before initialization.
 - Keep templates plain Markdown so teams can adapt them without special tooling.
@@ -46,6 +47,7 @@ Changes require architecture review when they affect:
 - config schema or defaults;
 - validation profile behavior;
 - validator decisions;
+- risk path schema validation;
 - risk path matching;
 - package distribution;
 - GitHub Action behavior;

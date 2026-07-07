@@ -29,6 +29,15 @@ Define rules in `psdm.config.json`:
 
 Patterns support `*` for one path segment and `**` for any nested path.
 
+Validation requirements:
+
+- `pattern` must be a non-empty string.
+- `minimumLevel` must be `Level 1`, `Level 2`, `Level 3`, or `Level 4`.
+- `requiredArtifacts` must be an array of non-empty strings.
+- `reason` must be a non-empty string.
+
+Malformed rules fail `psdm validate` and are ignored by path matching.
+
 ## CLI
 
 Classify a change with touched files:

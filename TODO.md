@@ -12,15 +12,15 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Add risk path validation.
+- [ ] Add ADR generation.
 
 ## Next
 
-- [ ] Add ADR generation.
+- [ ] Prepare beta release notes.
 
 ## Later
 
-- [ ] Prepare beta release notes.
+- [ ] Create docs index for public readiness.
 
 ## Done
 
@@ -49,6 +49,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added config schema stability documentation.
 - [x] Required rationale for every final `Siguiente accion`.
 - [x] Added CI change-level enforcement.
+- [x] Added risk path schema validation.
 - [x] Filled `docs/PROJECT_BRIEF.md` with framework-specific context.
 - [x] Filled `docs/SPEC.md` with CLI/config behavior scope.
 - [x] Filled `docs/ARCHITECTURE.md` with current module boundaries.
@@ -59,6 +60,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Bumped package status to `0.9.0-alpha`.
 - [x] Bumped package status to `0.10.0-alpha`.
 - [x] Bumped package status to `0.11.0-alpha`.
+- [x] Bumped package status to `0.12.0-alpha`.
 
 ## Update Rule
 

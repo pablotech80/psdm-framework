@@ -96,6 +96,8 @@ The `version` field identifies the config format. Version `1` supports additive 
 - Type: string.
 - Meaning: human-readable rationale for the rule.
 
+Malformed risk path rules are validation failures. Classification ignores malformed rules so an invalid config does not crash path matching.
+
 ## Supported Profiles
 
 The supported profile values are:

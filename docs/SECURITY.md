@@ -39,6 +39,7 @@ Security review is required when a change:
 - changes validator pass/fail decisions;
 - changes secret detection;
 - changes risk path classification;
+- changes risk path validation;
 - changes config loading or defaults;
 - changes GitHub Action behavior;
 - changes package distribution contents;

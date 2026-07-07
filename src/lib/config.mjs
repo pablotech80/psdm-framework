@@ -171,7 +171,7 @@ function uniqueByValue(items) {
 function uniqueRiskPaths(items) {
   const seen = new Set()
   return items.filter((item) => {
-    const key = `${item.pattern}:${item.minimumLevel}`
+    const key = `${item?.pattern}:${item?.minimumLevel}`
     if (seen.has(key)) {
       return false
     }
@@ -228,6 +228,7 @@ export function loadConfig(targetDir, configPath = null) {
   return {
     path,
     exists,
+    rawConfig,
     config,
     profile: {
       name: profileName,

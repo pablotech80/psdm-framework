@@ -1,7 +1,5 @@
 import { classifyChange } from './classifier.mjs'
-import { levelPriority } from './risk-paths.mjs'
-
-const SUPPORTED_LEVELS = ['Level 0', 'Level 1', 'Level 2', 'Level 3', 'Level 4']
+import { levelPriority, SUPPORTED_LEVELS } from './risk-paths.mjs'
 
 export function normalizeLevel(value) {
   if (!value) {

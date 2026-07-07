@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.11.0-alpha`
+`0.12.0-alpha`
 
 This repository currently provides:
 
@@ -18,6 +18,7 @@ This repository currently provides:
 - Validator, custom config, and feature artifact fixtures.
 - Validation profiles.
 - Unsupported profile validation.
+- Risk path schema validation.
 - Config schema stability documentation.
 - Baseline artifact checks.
 - Baseline structure validation.
@@ -232,6 +233,8 @@ PSDM governs the whole repository, but its strongest controls usually apply to b
 - CI/CD workflows.
 
 These controls live in `riskPaths`. A matching path raises the minimum change level even when the textual change description looks low risk.
+
+`psdm validate` fails when `riskPaths` contains malformed rules. Invalid risk path rules are ignored by classification so a broken local policy does not crash the CLI.
 
 ## Change Levels
 
