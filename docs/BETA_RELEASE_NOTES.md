@@ -1,12 +1,12 @@
 # BETA_RELEASE_NOTES.md
 
 Status: `Draft`
-Target Release: `1.0.0-beta`
+Target Release: `1.0.0-beta.1`
 Project: `psdm-framework`
 
 ## Release Purpose
 
-`1.0.0-beta` is the first release candidate for using PSDM as a reusable governance CLI and GitHub Action in real repositories.
+`1.0.0-beta.1` is the first release candidate for using PSDM as a reusable governance CLI and GitHub Action in real repositories.
 
 The beta validates whether the framework can support existing projects without destructive setup, classify change risk from descriptions and paths, enforce change-level policy in CI, and generate governance artifacts for durable decisions.
 
@@ -43,6 +43,7 @@ Expected compatible behavior:
 - Malformed risk path rules fail validation and are ignored by classification.
 - JSON output is intended for automation and should remain stable across beta patch releases.
 - Public package metadata intentionally defers GitHub repository links until the repository or docs site is public.
+- First beta publication should use npm dist-tag `beta`, not `latest`.
 
 ## Operator Validation
 

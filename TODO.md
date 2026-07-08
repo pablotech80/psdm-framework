@@ -12,11 +12,11 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Decide final beta version string and dist-tag.
+- [ ] Run strict release check on clean tree.
 
 ## Next
 
-- [ ] Run strict release check on clean tree.
+- [ ] Confirm npm auth and owner approval for beta publish.
 
 ## Later
 
@@ -75,6 +75,8 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Prepared public package release checklist.
 - [x] Decided package metadata gaps before beta.
 - [x] Defined public npm release automation.
+- [x] Decided final beta version string and dist-tag.
+- [x] Bumped package status to `1.0.0-beta.1`.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

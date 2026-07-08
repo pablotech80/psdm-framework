@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.17.0-alpha`
+`1.0.0-beta.1`
 
 This repository currently provides:
 

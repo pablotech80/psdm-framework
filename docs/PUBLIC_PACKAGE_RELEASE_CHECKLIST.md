@@ -2,7 +2,7 @@
 
 Status: `Active`
 Project: `psdm-framework`
-Release Target: `1.0.0-beta`
+Release Target: `1.0.0-beta.1`
 
 ## Purpose
 
@@ -14,9 +14,9 @@ This checklist is intentionally operational. It does not publish anything by its
 
 Before release, confirm:
 
-- [ ] Target version is agreed and written in `package.json`.
-- [ ] Release type is agreed: `alpha`, `beta`, `rc`, or stable.
-- [ ] Release channel is agreed: npm public package, GitHub tag, or both.
+- [x] Target version is agreed and written in `package.json`: `1.0.0-beta.1`.
+- [x] Release type is agreed: `beta`.
+- [x] Release channel is agreed: npm public package and GitHub tag after approval.
 - [ ] Owner approval is recorded for public publication.
 - [ ] No production deployment is implied by this release.
 
@@ -66,7 +66,7 @@ Expected:
 Verify `package.json`:
 
 - [x] `name` is final for the intended public package: `@ptech/psdm-framework`.
-- [ ] `version` matches the release target.
+- [x] `version` matches the release target: `1.0.0-beta.1`.
 - [ ] `description` is clear and public-safe.
 - [ ] `license` is correct.
 - [ ] `bin.psdm` points to `./bin/psdm.mjs`.
@@ -163,7 +163,7 @@ If release validation fails after publication:
 - [x] Decide whether to add `repository`, `homepage`, and `bugs` metadata before beta: deferred while `pablotech80/psdm-framework` is private.
 - [x] Decide whether to introduce an npm `files` allowlist before beta: yes, keep one in `package.json`.
 - [x] Decide whether release validation should become an npm script or CI workflow: yes, use `npm run release:check` locally and in CI.
-- [ ] Decide final beta version string and dist-tag.
+- [x] Decide final beta version string and dist-tag: `1.0.0-beta.1` with npm dist-tag `beta`.
 
 ## Decision Record
 
@@ -175,3 +175,4 @@ Decision date: `2026-07-08`
 - Scoped publication: set `publishConfig.access` to `public` so an approved scoped npm publish uses the intended access mode.
 - Authentication: this machine is not logged into npm; `npm whoami` returned `ENEEDAUTH`, so publication remains blocked until owner login/automation is configured.
 - Release automation: use `npm run release:check` as the repeatable non-publishing gate. It supports `-- --allow-dirty` for local development validation, but CI and real release checks should run without that flag.
+- Beta versioning: use `1.0.0-beta.1` for the first public beta candidate and npm dist-tag `beta` to avoid promoting it as `latest`.

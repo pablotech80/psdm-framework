@@ -130,6 +130,7 @@
 - [x] Public package release checklist.
 - [x] Package metadata gap decisions before beta.
 - [x] Public npm release check automation.
+- [x] Final beta version string and npm dist-tag decision.
 
 ## v1.0
 
@@ -139,6 +140,7 @@
 - [x] Public package release checklist.
 - [x] Package metadata gap decisions before beta.
 - [x] Public npm release check automation.
+- [x] Final beta version string and npm dist-tag decision.
 - [ ] Public npm package.
 - [x] Example project fixture coverage.
 - [ ] Runnable example projects.
