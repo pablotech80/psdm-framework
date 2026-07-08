@@ -56,7 +56,12 @@ risk-management
 - [x] Set GitHub topics.
 - [ ] Set GitHub social preview image.
 - [x] Confirm public security reporting policy.
-- [ ] Verify GitHub private vulnerability reporting after public visibility.
+- [x] Verify GitHub private vulnerability reporting after public visibility.
+- [x] Enable GitHub secret scanning and push protection.
+- [x] Enable Dependabot security updates.
+- [x] Add CodeQL workflow.
+- [x] Add dependency review workflow.
+- [x] Add Dependabot update configuration.
 - [ ] Confirm npm scope ownership for `@ptech`.
 - [ ] Record explicit publication approval before `npm publish`.
 
@@ -80,6 +85,20 @@ Fallback channel:
 
 - `https://ptechsolution.net`
 
-Validation note:
+Validation notes:
 
-- A GitHub API PATCH was attempted on 2026-07-08 to enable private vulnerability reporting, but the repository API response did not expose a `private_vulnerability_reporting` status while the repository remained private. Verify this again after changing repository visibility to public.
+- A GitHub API PATCH was attempted on 2026-07-08 while the repository was private, but the repository API response did not expose a `private_vulnerability_reporting` status.
+- After the repository became public on 2026-07-08, `GET /repos/pablotech80/psdm-framework/private-vulnerability-reporting` returned `{"enabled":true}`.
+
+## Automated Security Checks
+
+2026-07-08:
+
+- GitHub repository visibility: `PUBLIC`
+- Secret scanning: `enabled`
+- Secret scanning push protection: `enabled`
+- Dependabot security updates: `enabled`
+- Private vulnerability reporting: `enabled`
+- CodeQL workflow: `.github/workflows/codeql.yml`
+- Dependency review workflow: `.github/workflows/dependency-review.yml`
+- Dependabot config: `.github/dependabot.yml`

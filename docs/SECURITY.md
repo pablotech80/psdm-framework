@@ -30,7 +30,11 @@ Security posture:
 - local file inspection only;
 - no production mutation commands;
 - simple secret-like pattern detection in validator;
-- explicit production confirmation policy in generated governance docs.
+- explicit production confirmation policy in generated governance docs;
+- GitHub secret scanning and push protection enabled on the public repository;
+- CodeQL workflow for JavaScript analysis;
+- dependency review workflow for pull requests;
+- Dependabot update configuration for npm and GitHub Actions.
 
 ## Public Vulnerability Reporting
 
@@ -59,3 +63,18 @@ Security review is required when a change:
 - changes package distribution contents;
 - introduces dependencies;
 - affects AI-agent tool governance.
+
+## Automated Security Checks
+
+Repository-level checks:
+
+- `.github/workflows/codeql.yml` runs CodeQL on pull requests, pushes to `main`, and a weekly schedule.
+- `.github/workflows/dependency-review.yml` reviews dependency changes in pull requests and fails on high-severity findings.
+- `.github/dependabot.yml` requests weekly updates for npm dependencies and GitHub Actions.
+
+GitHub repository settings:
+
+- secret scanning: enabled;
+- secret scanning push protection: enabled;
+- Dependabot security updates: enabled;
+- private vulnerability reporting: enabled.

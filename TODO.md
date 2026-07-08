@@ -12,11 +12,11 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Add GitHub CodeQL/dependency review configuration for public beta trust.
+- [ ] Add npm trusted publishing/provenance plan.
 
 ## Next
 
-- [ ] Add npm trusted publishing/provenance plan.
+- [ ] Decide release tag signing/provenance evidence policy.
 
 ## Later
 
@@ -98,6 +98,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Polished README density, CLI grouping, minimal config example, footer, and publication metadata checklist.
 - [x] Configured GitHub repository description, website, and topics for public beta.
 - [x] Documented public security reporting policy.
+- [x] Added CodeQL, dependency review, Dependabot config, GitHub security settings, and private vulnerability reporting.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

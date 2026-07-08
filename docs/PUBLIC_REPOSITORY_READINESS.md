@@ -36,7 +36,7 @@ Recommended public repository metadata:
 - [x] `SECURITY.md` is present.
 - [x] Public security reporting policy is documented.
 - [x] Pull request and issue templates are present.
-- [ ] Public issue settings and vulnerability reporting expectations are configured.
+- [x] Public issue settings and vulnerability reporting expectations are configured.
 
 ## Public Content Gate
 
@@ -78,11 +78,10 @@ Recommended public repository metadata:
 - Final README polish added: reduced density, grouped CLI reference, minimal config example, footer, and publication metadata checklist.
 - GitHub repository metadata applied: description, website, and topics.
 - Public security reporting policy documented with GitHub private vulnerability reporting as primary channel and `https://ptechsolution.net` as fallback.
+- Automated security checks added: CodeQL, dependency review, Dependabot config, secret scanning, push protection, Dependabot security updates, and private vulnerability reporting.
 
 ## Current Blockers
 
 - npm scope ownership for `@ptech` must be confirmed before publish.
-- Repository is still private at the time of this checklist.
 - GitHub social preview image still requires manual configuration.
-- GitHub private vulnerability reporting still requires verification after public visibility.
 - Explicit owner approval is still required before `npm publish`.
