@@ -12,7 +12,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Confirm npm trusted publisher configuration for `@ptechsolution/psdm-framework`.
+- [ ] Decide first beta bootstrap path after npm trusted publisher `E404`.
 
 ## Next
 

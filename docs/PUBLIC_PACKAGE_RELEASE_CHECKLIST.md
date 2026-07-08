@@ -260,7 +260,8 @@ Result:
 - Configured the workflow to use GitHub Actions OIDC through `permissions.id-token: write`.
 - Configured the workflow to run `npm run release:check` before `npm publish --provenance --access public --tag beta`.
 - `npm trust github @ptechsolution/psdm-framework --repo pablotech80/psdm-framework --file npm-publish.yml --env npm-publish --allow-publish --dry-run --json` returned the expected `createPackage` permission.
-- Real npm trusted publisher creation requires owner browser/OTP authentication before it can be marked complete.
+- Owner browser/OTP authentication was completed, but real npm trusted publisher creation returned `E404 Not Found` while the package does not yet exist.
+- `npm trust list @ptechsolution/psdm-framework --json` also returned `E404 Not Found` while the package does not yet exist.
 - Kept publication blocked on npm trusted publisher confirmation and explicit owner approval.
 
 ## Release Evidence Policy - 2026-07-08

@@ -24,7 +24,8 @@ Configuration status:
 
 - GitHub environment `npm-publish`: configured;
 - GitHub workflow `.github/workflows/npm-publish.yml`: configured;
-- npm trusted publisher record: pending owner browser/OTP authentication;
+- npm trusted publisher dry-run: accepted with `createPackage` permission;
+- npm trusted publisher record: blocked by npm registry `E404` while the package does not yet exist;
 - publication: blocked until the trusted publisher record is confirmed and owner approval is recorded.
 
 ## Why
@@ -136,6 +137,8 @@ Before publishing:
 - `npm run release:check` succeeds locally on a clean tree;
 - `npm publish --dry-run --access public --tag beta` succeeds locally;
 - `npm trust list @ptechsolution/psdm-framework` shows a GitHub Actions trusted publisher matching the exact GitHub owner, repository, workflow filename, and environment.
+
+If `npm trust list @ptechsolution/psdm-framework` returns `E404` because the package does not yet exist, do not run publication. Record the blocker and decide whether the first beta requires a one-time bootstrap exception or whether npm support/UI can enable trusted publishing before first publish.
 
 After publishing:
 
