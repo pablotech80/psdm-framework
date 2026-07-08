@@ -106,8 +106,8 @@ function assertPackageMetadata() {
     throw new Error(`Unexpected package name: ${packageJson.name}`)
   }
 
-  if (packageJson.bin?.psdm !== './bin/psdm.mjs') {
-    throw new Error('package.json bin.psdm must point to ./bin/psdm.mjs.')
+  if (packageJson.bin?.psdm !== 'bin/psdm.mjs') {
+    throw new Error('package.json bin.psdm must point to bin/psdm.mjs.')
   }
 
   if (packageJson.publishConfig?.access !== 'public') {

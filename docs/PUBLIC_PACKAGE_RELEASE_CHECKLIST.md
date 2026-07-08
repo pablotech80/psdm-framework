@@ -69,7 +69,7 @@ Verify `package.json`:
 - [x] `version` matches the release target: `1.0.0-beta.1`.
 - [ ] `description` is clear and public-safe.
 - [ ] `license` is correct.
-- [ ] `bin.psdm` points to `./bin/psdm.mjs`.
+- [x] `bin.psdm` points to `bin/psdm.mjs`.
 - [ ] `engines.node` matches supported runtime.
 - [ ] `keywords` are useful for discovery.
 - [x] `publishConfig.access` is set to `public` for scoped package publication.
@@ -187,3 +187,13 @@ Result:
 - `npm view @ptech/psdm-framework name version --json`: returned `E404`; no public package is visible under this name, or current credentials cannot access it.
 - `npm whoami`: returned `ENEEDAUTH`; this machine is not authenticated to npm.
 - Publish status: blocked until npm authentication and explicit owner approval are available.
+
+## Pre-Publish Check - 2026-07-08 After npm Login
+
+Result:
+
+- `npm whoami`: returned `ptech_`.
+- `npm view @ptech/psdm-framework name version --json`: returned `E404`; no public package is visible under this name.
+- `npm run release:check`: passed.
+- `npm publish --dry-run --access public --tag beta`: passed after normalizing `bin.psdm` to `bin/psdm.mjs` with `npm pkg fix`.
+- Publish status: blocked only on explicit owner approval with `CONFIRM NPM BETA PUBLISH`.

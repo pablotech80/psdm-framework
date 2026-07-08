@@ -11,6 +11,7 @@ Deployment-sensitive surfaces:
 
 - `package.json`
 - package metadata and `files` allowlist;
+- package executable mapping through `bin.psdm`;
 - `bin/psdm.mjs`
 - `action.yml`
 - `.github/workflows/**`

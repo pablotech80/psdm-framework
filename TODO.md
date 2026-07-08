@@ -12,11 +12,11 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Configure npm authentication for beta publish.
+- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
 
 ## Next
 
-- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
+- [ ] Publish `1.0.0-beta.1` with npm dist-tag `beta`.
 
 ## Later
 
@@ -79,6 +79,9 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Bumped package status to `1.0.0-beta.1`.
 - [x] Ran strict release check on clean tree.
 - [x] Checked npm publish readiness and found npm auth missing.
+- [x] Configured npm CLI authentication as `ptech_`.
+- [x] Ran npm publish dry-run for `1.0.0-beta.1`.
+- [x] Normalized `bin.psdm` package metadata before publish.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

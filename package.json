@@ -4,7 +4,7 @@
   "description": "PTECH SPEC-DRIVEN METHOD framework for AI-assisted software project governance.",
   "type": "module",
   "bin": {
-    "psdm": "./bin/psdm.mjs"
+    "psdm": "bin/psdm.mjs"
   },
   "files": [
     "ADRs",
