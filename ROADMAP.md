@@ -48,6 +48,7 @@ Completed:
 - Downstream GitHub Action validation protocol documented.
 - GitHub Action downstream smoke blocker fixed by making `ADRs/` versionable during `psdm init` and avoiding validation-time report dirtying.
 - `psdm init` idempotence fixed so PSDM-managed `AGENTS.md` does not trigger a false adoption plan.
+- Downstream GitHub Action validation executed with pass and expected-fail workflow evidence.
 
 ## Active Milestone
 
@@ -169,7 +170,7 @@ Planned outcomes:
 - [x] Document downstream GitHub Action validation protocol.
 - [x] Fix downstream Action smoke bootstrap issues found during first external run.
 - [x] Fix false existing-governance detection on already initialized PSDM repositories.
-- [ ] Execute downstream GitHub Action validation.
+- [x] Execute downstream GitHub Action validation.
 
 ### `1.0.0`
 

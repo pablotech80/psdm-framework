@@ -1,6 +1,6 @@
 # DOWNSTREAM_ACTION_VALIDATION.md
 
-Status: `Planned`
+Status: `Completed`
 Project: `psdm-framework`
 
 ## Purpose
@@ -116,13 +116,13 @@ After execution, record:
 
 | Field | Value |
 |---|---|
-| Downstream repository | TBD |
-| PSDM commit tested | TBD |
-| Pass workflow run URL | TBD |
-| Fail workflow run URL | TBD |
-| Pass result | TBD |
-| Fail result | TBD |
-| Notes | TBD |
+| Downstream repository | `https://github.com/pablotech80/psdm-action-smoke` |
+| PSDM commit tested | `7dc09ddefe4172f39d73ddfb46a4e9111ecff5c7` |
+| Pass workflow run URL | `https://github.com/pablotech80/psdm-action-smoke/actions/runs/28907945061` |
+| Fail workflow run URL | `https://github.com/pablotech80/psdm-action-smoke/actions/runs/28907914706` |
+| Pass result | `success`; validation returned `METHOD_BASELINE_REVIEW_REQUIRED` with `failures: 0`; enforcement returned `CHANGE_LEVEL_APPROVED`. |
+| Fail result | `failure`; validation ran first with `failures: 0`; enforcement returned `CHANGE_LEVEL_BLOCKED`, estimated `Level 4`, max `Level 2`. |
+| Notes | Source repository is private; GitHub Actions private access was set to same-user access. Initial smoke exposed two fixes: use the real owner `pablotech80`, track `ADRs/README.md` during init, and write report JSON outside the target before validation. GitHub emitted an external `actions/checkout@v4` Node runtime deprecation warning; it did not block PSDM. |
 
 ## Acceptance Criteria
 
@@ -135,5 +135,4 @@ Downstream Action validation is complete when:
 
 ## Known Gaps
 
-- Not executed yet.
-- Real downstream run URLs must be added after the smoke repository is created.
+- None for the current downstream Action smoke protocol.
