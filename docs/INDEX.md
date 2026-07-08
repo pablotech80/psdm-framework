@@ -21,6 +21,7 @@ Use it to find the right document by task: adopting PSDM in an existing project,
 
 - `README.md`: local installation and basic commands.
 - `docs/PSDM_OVERVIEW.md`: why PSDM exists and how governance scales by risk.
+- `docs/MODEL_AND_TOOL_INDEPENDENCE.md`: how PSDM coexists with Claude, Cursor, Copilot, Codex, skills, prompts, and other AI tooling.
 - `docs/CHANGE_LEVELS.md`: Level 0 through Level 4 definitions.
 - `docs/RISK_PATHS.md`: path-aware classification rules.
 - `examples/nextjs-saas/README.md`: downstream-like SaaS/AI fixture coverage.
@@ -79,6 +80,7 @@ Key policy concepts:
 - `docs/SECURITY.md`: threat model and security gate.
 - `docs/AI_AGENT_SECURITY.md`: AI-agent and tool-use security expectations.
 - `docs/AI_READINESS_AUDIT.md`: `psdm audit --json` contract for AI readiness signals and governance gaps.
+- `docs/MODEL_AND_TOOL_INDEPENDENCE.md`: model-neutral governance and tool-specific adapter guidance.
 - `docs/TOOL_REGISTRY.md`: tool registry direction.
 - `ADRs/README.md`: ADR usage guidance.
 

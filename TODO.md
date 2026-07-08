@@ -90,6 +90,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added README branding polish, logo reference, badges, and governance flow.
 - [x] Added GitHub metadata guidance for public beta presentation.
 - [x] Added `assets` to package allowlist for npm README logo rendering.
+- [x] Documented PSDM model and tool independence for Claude, Cursor, Copilot, Codex, skills, prompts, and agents.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

@@ -34,3 +34,11 @@ Every change is classified by impact:
 ## AI-Agent Role
 
 Agents can help inspect, design, implement, and validate work, but must stay inside explicit scope and stop when required context is missing.
+
+## Model And Tool Independence
+
+PSDM is independent from any specific AI model, coding assistant, agent runtime, or vendor-specific init command.
+
+Claude, Cursor, Copilot, Codex, custom skills, prompts, and local or hosted agents can all be used in a PSDM-managed repository. Their tool-specific files should adapt PSDM governance, not replace it.
+
+Use `psdm.config.json`, `AGENTS.md`, `docs/CHANGE_GOVERNANCE.md`, and `docs/TOOL_REGISTRY.md` as the source of truth for project governance. Use assistant-specific files such as `CLAUDE.md`, `.cursor/rules`, `.github/copilot-instructions.md`, or Codex instructions as adapters that point back to those rules.

@@ -127,6 +127,14 @@ If the repository already has `AGENTS.md`, Copilot, Cursor, Claude, Codex, skill
 
 `psdm init` also creates `psdm.config.json`. Existing files are skipped.
 
+## Model And Tool Independence
+
+PSDM is independent from any specific model, provider, coding assistant, or init command. It does not replace `claude init`, Cursor rules, Copilot instructions, Codex instructions, custom skills, prompts, or agent runtimes. It gives them a shared governance layer.
+
+Teams customize PSDM through `psdm.config.json`, `AGENTS.md`, `docs/CHANGE_GOVERNANCE.md`, `docs/TOOL_REGISTRY.md`, and AI guardrail docs. Tool-specific files should adapt those rules for a given assistant, but must not weaken PSDM change-level, security, data, deployment, approval, or release boundaries.
+
+See `docs/MODEL_AND_TOOL_INDEPENDENCE.md` for customization examples.
+
 Classify a change:
 
 ```bash

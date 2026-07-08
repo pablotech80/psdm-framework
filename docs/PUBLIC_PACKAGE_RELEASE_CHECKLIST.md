@@ -95,6 +95,7 @@ Must include:
 - [x] `docs/INDEX.md`
 - [x] `docs/CONFIG_SCHEMA.md`
 - [x] `docs/BETA_RELEASE_NOTES.md`
+- [x] `docs/MODEL_AND_TOOL_INDEPENDENCE.md`
 - [x] `docs/DOWNSTREAM_ACTION_VALIDATION.md`
 - [x] `examples/nextjs-saas/**`
 - [x] `scripts/release-check.mjs`
@@ -127,6 +128,7 @@ Before beta:
 - [x] No examples contain real API keys, customer data, production URLs, or secrets.
 - [x] Documentation does not instruct users to paste secrets into prompts.
 - [x] AI guardrail docs preserve the governance-layer boundary.
+- [x] Model and tool independence is documented for Claude, Cursor, Copilot, Codex, skills, prompts, and other AI tooling.
 - [x] Package contents are reviewed for local-only files.
 - [x] Release notes disclose known limitations around simple secret scanning and advisory classification.
 - [ ] Public repository readiness blockers are resolved or explicitly deferred before publication.
@@ -218,7 +220,7 @@ Result:
 - Added README branding guidance, logo reference, badges, and governance flow.
 - Added `assets` to npm package allowlist so the README logo is packaged.
 - Re-ran `npm run release:check -- --allow-dirty`: passed.
-- Re-ran `npm publish --dry-run --access public --tag beta`: passed with 83 files.
+- Re-ran `npm publish --dry-run --access public --tag beta`: passed with 84 files.
 - `npm access list packages @ptech --json` returned `{}`.
 - `npm team ls ptech --json` returned `403 Forbidden`, so scope ownership is still not confirmed.
 - Remaining blocker: npm scope ownership for `@ptech` must be confirmed before real publication.

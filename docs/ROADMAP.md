@@ -135,6 +135,7 @@
 - [x] public repository readiness cleanup started.
 - [x] public contribution, conduct, issue, and PR templates.
 - [x] README branding and GitHub metadata guidance for public beta.
+- [x] Model and tool independence documentation.
 - [ ] explicit owner approval for beta publish.
 
 ## v1.0
@@ -150,6 +151,7 @@
 - [x] public repository readiness cleanup started.
 - [x] public contribution, conduct, issue, and PR templates.
 - [x] README branding and GitHub metadata guidance for public beta.
+- [x] Model and tool independence documentation.
 - [ ] explicit owner approval for beta publish.
 - [ ] Public npm package.
 - [x] Example project fixture coverage.

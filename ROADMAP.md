@@ -58,6 +58,7 @@ Completed:
 - npm CLI authentication configured; publish dry-run passed after normalizing `bin.psdm`.
 - Public repository readiness started: private downstream evidence sanitized, social contribution files added, and package dry-run revalidated.
 - Public beta presentation polish started: README branding, logo reference, GitHub metadata guidance, and asset packaging added.
+- Model and tool independence documented so PSDM remains neutral across Claude, Cursor, Copilot, Codex, skills, prompts, and agents.
 
 ## Active Milestone
 
@@ -186,6 +187,7 @@ Planned outcomes:
 - [x] Start public repository readiness cleanup.
 - [x] Add public contribution, conduct, issue, and PR templates.
 - [x] Add README branding and GitHub metadata guidance for public beta.
+- [x] Document model and tool independence for project customization.
 - [ ] Record explicit owner approval for beta publish.
 
 ### `1.0.0`
@@ -200,6 +202,7 @@ Planned outcomes:
 - [x] Start public repository readiness cleanup.
 - [x] Add public contribution, conduct, issue, and PR templates.
 - [x] Add README branding and GitHub metadata guidance for public beta.
+- [x] Document model and tool independence for project customization.
 - [ ] Record explicit owner approval for beta publish.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.

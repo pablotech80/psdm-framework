@@ -25,6 +25,7 @@ const requiredPackageFiles = [
   'docs/INDEX.md',
   'docs/CONFIG_SCHEMA.md',
   'docs/BETA_RELEASE_NOTES.md',
+  'docs/MODEL_AND_TOOL_INDEPENDENCE.md',
   'docs/DOWNSTREAM_ACTION_VALIDATION.md',
   'docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md',
   'docs/PUBLIC_REPOSITORY_READINESS.md',

@@ -59,6 +59,7 @@ Recommended public repository metadata:
 - [x] README avoids overclaiming production readiness before beta feedback.
 - [x] Public docs make adoption flow obvious: `audit`, `init`, `check`, `validate`, then CI enforcement.
 - [x] README includes a visual governance flow diagram.
+- [x] README explains PSDM's model and tool independence.
 - [x] Known limitations are visible in beta release notes.
 - [x] The package can be evaluated without private access to any other repository.
 
@@ -68,7 +69,7 @@ Recommended public repository metadata:
 
 - Sensitive-publication scan found no private repository URLs, GitHub Actions run URLs, local account paths, emails, browser profile IDs, npm auth details, or known private account identifiers in public package paths.
 - `npm run release:check -- --allow-dirty` passed before commit.
-- `npm publish --dry-run --access public --tag beta` passed and produced an 83-file tarball.
+- `npm publish --dry-run --access public --tag beta` passed and produced an 84-file tarball.
 - `npm team ls ptech --json` returned `403 Forbidden`; npm scope ownership is not confirmed by this workstation.
 - README branding polish added: centered logo, Ptech AI Applied Lab brand, tagline, badges, clearer opening, and governance flow diagram.
 
