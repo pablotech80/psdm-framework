@@ -178,6 +178,19 @@ function readTextIfExists(target, path) {
   return readFileSync(fullPath, 'utf8')
 }
 
+function isPsdmManagedGovernancePath(target, path) {
+  if (path !== 'AGENTS.md') {
+    return false
+  }
+
+  const content = readTextIfExists(target, path)
+  return Boolean(
+    content
+    && content.includes('Method: `PTECH SPEC-DRIVEN METHOD`')
+    && content.includes('Artifact Type: `AI Agent Governance`'),
+  )
+}
+
 function packageJsonDependencies(target) {
   const content = readTextIfExists(target, 'package.json')
   if (!content) {
@@ -290,6 +303,7 @@ function detectAiReadiness(target, aiGovernance) {
 
 export function detectAiGovernance(target) {
   const existing = existingPaths(target, AI_GOVERNANCE_PATHS)
+    .filter((path) => !isPsdmManagedGovernancePath(target, path))
   const hasExisting = existing.length > 0
 
   return {

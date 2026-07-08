@@ -70,6 +70,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Bumped package status to `0.17.0-alpha`.
 - [x] Documented downstream GitHub Action validation protocol.
 - [x] Fixed downstream Action smoke bootstrap issues found during first external run.
+- [x] Fixed `psdm init` idempotence for PSDM-managed `AGENTS.md`.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

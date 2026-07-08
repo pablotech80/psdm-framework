@@ -11,6 +11,7 @@ Project: `psdm-framework`
 - Emit an `aiReadiness` contract from `psdm audit --json` for AI surface and governance gap reporting.
 - Detect AI readiness surfaces from common folders and manifests for agents, RAG, prompts, embeddings, tools, provider SDKs, vector stores, and automation.
 - Create `docs/PSDM_ADOPTION.md` during init when existing AI governance files are detected.
+- Do not create an adoption plan only because a repository already contains PSDM-managed `AGENTS.md`.
 - Keep the CLI dependency-free and runnable on Node.js 20 or newer.
 - Support human-readable command output by default.
 - Support JSON output for automation where applicable.
@@ -40,6 +41,7 @@ Project: `psdm-framework`
 - Audit JSON includes `aiReadiness.version`, `status`, `surfaces`, `governanceArtifacts`, `gaps`, and `recommendations`.
 - AI readiness surfaces include path and manifest signals such as `rag`, `prompts`, `package.json:openai`, and `requirements.txt:tiktoken`.
 - `node bin/psdm.mjs init <target>` creates `docs/PSDM_ADOPTION.md` when adopting into a repository with existing AI governance files.
+- Re-running `node bin/psdm.mjs init <target>` on a PSDM-initialized repository does not create a false adoption plan.
 - `node bin/psdm.mjs adr "<title>" --target <target> --json` creates a non-overwriting ADR file under `ADRs/`.
 - `node bin/psdm.mjs init <target>` creates baseline artifacts without overwriting existing files.
 - Initialized baselines include a tracked `ADRs/README.md` file.

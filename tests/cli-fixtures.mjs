@@ -135,6 +135,19 @@ function testInitCreatesAdoptionPlanForExistingAiGovernance() {
   assert.match(readFileSync(resolve(target, 'docs', 'PSDM_ADOPTION.md'), 'utf8'), /Existing AI Governance/)
 }
 
+function testInitIsIdempotentForPsdmManagedGovernance() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-idempotent-'))
+
+  run(['init', target])
+  const output = run(['init', target])
+  const report = runJson(['audit', target, '--json'])
+
+  assert.doesNotMatch(output, /CREATED docs\/PSDM_ADOPTION\.md/)
+  assert.equal(existsSync(resolve(target, 'docs', 'PSDM_ADOPTION.md')), false)
+  assert.equal(report.aiGovernance.adoptionMode, 'initialize')
+  assert.deepEqual(report.aiGovernance.existing, [])
+}
+
 function testInitDryRunDoesNotWrite() {
   const target = existingProject()
   const output = run(['init', target, '--dry-run'])
@@ -599,6 +612,7 @@ const tests = [
   testAuditDetectsExistingAiGovernance,
   testAuditDetectsAiRuntimeSurfaces,
   testInitCreatesAdoptionPlanForExistingAiGovernance,
+  testInitIsIdempotentForPsdmManagedGovernance,
   testInitDryRunDoesNotWrite,
   testAdrCreatesDecisionRecord,
   testAdrRejectsInvalidDate,

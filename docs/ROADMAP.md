@@ -124,6 +124,7 @@
 - [x] Beta release notes.
 - [x] Downstream GitHub Action validation protocol.
 - [x] Downstream Action smoke bootstrap fixes.
+- [x] Idempotent init for PSDM-managed governance files.
 - [ ] Downstream GitHub Action validation executed.
 
 ## v1.0
