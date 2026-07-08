@@ -16,7 +16,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Next
 
-- [ ] Record explicit owner approval before publishing `1.0.0-beta.3`.
+- [ ] Verify npm package page displays provenance for `1.0.0-beta.3`.
 
 ## Later
 
@@ -118,6 +118,9 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Ran protected npm publish workflow in `dry_run` mode successfully.
 - [x] Prepared `1.0.0-beta.3` candidate for trusted publishing validation.
 - [x] Ran protected npm publish workflow in `dry_run` mode for `1.0.0-beta.3`.
+- [x] Published `@ptechsolution/psdm-framework@1.0.0-beta.3` through trusted publishing.
+- [x] Created Git tag and GitHub pre-release `v1.0.0-beta.3`.
+- [x] Verified clean install from npm `@beta` for `1.0.0-beta.3`.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

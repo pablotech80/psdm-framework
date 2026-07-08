@@ -3,8 +3,7 @@
 Status: `Active`
 Project: `psdm-framework`
 Release Target: `1.0.0-beta.1`
-Latest Beta: `1.0.0-beta.2`
-Next Candidate: `1.0.0-beta.3`
+Latest Beta: `1.0.0-beta.3`
 
 ## Purpose
 
@@ -353,17 +352,25 @@ Result:
 - npm `beta` remained `1.0.0-beta.2`.
 - npm `latest` remained `1.0.0-beta.1`.
 
-## Beta 3 Candidate - 2026-07-08
+## Beta 3 Publication - 2026-07-08
 
 Result:
 
-- Prepared `1.0.0-beta.3` as a trusted-publishing validation candidate.
+- Published `@ptechsolution/psdm-framework@1.0.0-beta.3` through the protected trusted publishing workflow.
 - Scope is limited to release documentation and protected workflow safety updates after `1.0.0-beta.2`.
 - No CLI behavior, tests, governance logic, or package runtime changes are included.
-- `1.0.0-beta.3` is not currently published on npm.
 - Local `npm run release:check`: passed.
 - Local `npm publish --dry-run --access public --tag beta`: passed.
-- Protected workflow run: `https://github.com/pablotech80/psdm-framework/actions/runs/28950450867`
+- Protected workflow dry-run: `https://github.com/pablotech80/psdm-framework/actions/runs/28950450867`
 - Protected workflow dry-run: passed.
-- Real publish step was skipped.
-- Real publication remains blocked until explicit owner approval is recorded.
+- Protected workflow real publish: `https://github.com/pablotech80/psdm-framework/actions/runs/28951156784`
+- Real publish step passed.
+- npm package URL: `https://www.npmjs.com/package/@ptechsolution/psdm-framework/v/1.0.0-beta.3`
+- npm tarball: `https://registry.npmjs.org/@ptechsolution/psdm-framework/-/psdm-framework-1.0.0-beta.3.tgz`
+- npm integrity: `sha512-W0Sxz/mBWlUK1CTdH0FkvsMnPj566aiNggNUAa4748gvEj2547FtbxJzqdBt/iTM1T7P9tEOwyWgM/Al3UqQaQ==`
+- Git commit: `aa2687780e8f58c617f64302eb46f7d738cd792e`
+- Git tag: `v1.0.0-beta.3`
+- GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.3`
+- Clean install from npm `@beta`: passed.
+- npm dist-tag `beta` points to `1.0.0-beta.3`.
+- npm dist-tag `latest` still points to `1.0.0-beta.1`.

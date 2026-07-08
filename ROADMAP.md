@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is published at `1.0.0-beta.2`; `1.0.0-beta.3` is prepared locally as a trusted-publishing validation candidate.
+PSDM is published at `1.0.0-beta.3`.
 
 Completed:
 
@@ -78,6 +78,7 @@ Completed:
 - Protected npm publish workflow dry-run executed successfully.
 - `1.0.0-beta.3` candidate prepared for trusted publishing validation.
 - Protected npm publish workflow dry-run passed for `1.0.0-beta.3`.
+- `1.0.0-beta.3` published through protected trusted publishing workflow.
 
 ## Active Milestone
 
@@ -228,6 +229,8 @@ Planned outcomes:
 - [x] Verify protected npm publish workflow in dry-run mode.
 - [x] Prepare `1.0.0-beta.3` candidate for trusted publishing validation.
 - [x] Verify `1.0.0-beta.3` through protected workflow dry-run.
+- [x] Publish `@ptechsolution/psdm-framework@1.0.0-beta.3` through trusted publishing.
+- [x] Create Git tag and GitHub pre-release `v1.0.0-beta.3`.
 - [ ] Resolve npm `latest` dist-tag `E403` follow-up.
 
 ### `1.0.0`

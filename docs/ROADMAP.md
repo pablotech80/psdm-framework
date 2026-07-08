@@ -156,6 +156,7 @@
 - [x] protected npm publish workflow dry-run executed successfully.
 - [x] prepared `1.0.0-beta.3` candidate for trusted publishing validation.
 - [x] verified `1.0.0-beta.3` through protected workflow dry-run.
+- [x] published `1.0.0-beta.3` through protected trusted publishing workflow.
 - [ ] npm `latest` dist-tag `E403` follow-up.
 
 ## v1.0

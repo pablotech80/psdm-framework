@@ -1,8 +1,7 @@
 # BETA_RELEASE_NOTES.md
 
 Status: `Published`
-Latest Beta Release: `1.0.0-beta.2`
-Next Candidate: `1.0.0-beta.3`
+Latest Beta Release: `1.0.0-beta.3`
 First Beta Release: `1.0.0-beta.1`
 Project: `psdm-framework`
 
@@ -156,9 +155,17 @@ Known limitations:
 - npm dist-tag `latest` still points to `1.0.0-beta.1`.
 - Trusted publishing was configured after beta publication.
 
-## Next Beta Candidate - 1.0.0-beta.3
+## Beta Release - 1.0.0-beta.3
 
-Status: `Prepared, not published`
+Status: `Published`
+
+Published: `2026-07-08`
+
+Package: `@ptechsolution/psdm-framework@1.0.0-beta.3`
+
+Git tag: `v1.0.0-beta.3`
+
+GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.3`
 
 Purpose:
 
@@ -171,6 +178,11 @@ Validation:
 - Local `npm run release:check`: passed.
 - Local `npm publish --dry-run --access public --tag beta`: passed.
 - Protected workflow dry-run: passed.
-- `1.0.0-beta.3` remains unpublished on npm.
+- Protected workflow real publish: passed.
+- Clean install from npm `@beta`: passed.
+- `npx psdm help`: passed.
 
-Publication remains blocked until explicit owner approval is recorded.
+Known limitations:
+
+- npm dist-tag `beta` points to `1.0.0-beta.3`.
+- npm dist-tag `latest` still points to `1.0.0-beta.1`.

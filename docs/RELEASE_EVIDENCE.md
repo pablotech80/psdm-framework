@@ -270,7 +270,7 @@ Dry-run evidence:
 - real publish step: skipped
 - verification date: `2026-07-08`
 
-## Beta 3 Candidate Evidence
+## Release Evidence - 1.0.0-beta.3
 
 Package: `@ptechsolution/psdm-framework`
 
@@ -278,22 +278,39 @@ Version: `1.0.0-beta.3`
 
 Git commit: `2780c2dca182323cca439fa4f91fac28b02c8d95`
 
-Publication status: not published.
+Publication status: published through trusted publishing.
+
+Published commit: `aa2687780e8f58c617f64302eb46f7d738cd792e`
+
+Git tag: `v1.0.0-beta.3`
+
+GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.3`
+
+npm package: `https://www.npmjs.com/package/@ptechsolution/psdm-framework/v/1.0.0-beta.3`
+
+npm tarball: `https://registry.npmjs.org/@ptechsolution/psdm-framework/-/psdm-framework-1.0.0-beta.3.tgz`
+
+npm integrity: `sha512-W0Sxz/mBWlUK1CTdH0FkvsMnPj566aiNggNUAa4748gvEj2547FtbxJzqdBt/iTM1T7P9tEOwyWgM/Al3UqQaQ==`
 
 Validation:
 
 - Local `npm run release:check`: passed.
 - Local `npm publish --dry-run --access public --tag beta`: passed.
 - Protected workflow dry-run: passed.
+- Protected workflow real publish: passed.
+- Clean install from npm `@beta`: passed.
+- `npx psdm help`: passed.
 
-Protected workflow run: `https://github.com/pablotech80/psdm-framework/actions/runs/28950450867`
+Protected workflow dry-run: `https://github.com/pablotech80/psdm-framework/actions/runs/28950450867`
+
+Protected workflow real publish: `https://github.com/pablotech80/psdm-framework/actions/runs/28951156784`
 
 npm registry check:
 
-- `@ptechsolution/psdm-framework@1.0.0-beta.3`: not found.
-- `beta`: `1.0.0-beta.2`
+- `@ptechsolution/psdm-framework@1.0.0-beta.3`: published.
+- `beta`: `1.0.0-beta.3`
 - `latest`: `1.0.0-beta.1`
 
 Next gate:
 
-- real publication requires explicit owner approval.
+- verify npm package page displays provenance for `1.0.0-beta.3`.
