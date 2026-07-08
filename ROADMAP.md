@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is published at `1.0.0-beta.2`.
+PSDM is published at `1.0.0-beta.2`; `1.0.0-beta.3` is prepared locally as a trusted-publishing validation candidate.
 
 Completed:
 
@@ -76,6 +76,7 @@ Completed:
 - npm trusted publishing configured for future releases.
 - Protected npm publish workflow dry-run mode and expected-version guard added.
 - Protected npm publish workflow dry-run executed successfully.
+- `1.0.0-beta.3` candidate prepared for trusted publishing validation.
 
 ## Active Milestone
 
@@ -224,6 +225,7 @@ Planned outcomes:
 - [x] Configure npm trusted publishing for future releases.
 - [x] Add protected workflow dry-run mode and expected-version guard.
 - [x] Verify protected npm publish workflow in dry-run mode.
+- [x] Prepare `1.0.0-beta.3` candidate for trusted publishing validation.
 - [ ] Resolve npm `latest` dist-tag `E403` follow-up.
 
 ### `1.0.0`

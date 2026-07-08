@@ -16,7 +16,8 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Next
 
-- [ ] Use protected trusted publishing workflow for the next real beta release.
+- [ ] Run protected npm publish workflow in `dry_run` mode for `1.0.0-beta.3`.
+- [ ] Record explicit owner approval before publishing `1.0.0-beta.3`.
 
 ## Later
 
@@ -116,6 +117,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Configured npm trusted publishing for GitHub Actions.
 - [x] Added protected workflow dry-run mode and expected-version guard for npm publishing.
 - [x] Ran protected npm publish workflow in `dry_run` mode successfully.
+- [x] Prepared `1.0.0-beta.3` candidate for trusted publishing validation.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

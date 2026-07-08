@@ -99,7 +99,9 @@ flowchart TD
 
 ## Status
 
-`1.0.0-beta.2`
+`1.0.0-beta.3` candidate.
+
+Published npm beta: `1.0.0-beta.2`.
 
 ## Install Locally
 

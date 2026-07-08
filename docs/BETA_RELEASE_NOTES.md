@@ -2,6 +2,7 @@
 
 Status: `Published`
 Latest Beta Release: `1.0.0-beta.2`
+Next Candidate: `1.0.0-beta.3`
 First Beta Release: `1.0.0-beta.1`
 Project: `psdm-framework`
 
@@ -154,3 +155,15 @@ Known limitations:
 - npm dist-tag `beta` points to `1.0.0-beta.2`.
 - npm dist-tag `latest` still points to `1.0.0-beta.1`.
 - Trusted publishing was configured after beta publication.
+
+## Next Beta Candidate - 1.0.0-beta.3
+
+Status: `Prepared, not published`
+
+Purpose:
+
+- Validate the protected trusted publishing workflow as the next real release path.
+- Include post-`1.0.0-beta.2` release documentation and workflow safety updates.
+- Keep CLI behavior, tests, and governance logic unchanged.
+
+Publication remains blocked until explicit owner approval is recorded.

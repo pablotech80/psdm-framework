@@ -4,6 +4,7 @@ Status: `Active`
 Project: `psdm-framework`
 Release Target: `1.0.0-beta.1`
 Latest Beta: `1.0.0-beta.2`
+Next Candidate: `1.0.0-beta.3`
 
 ## Purpose
 
@@ -351,3 +352,13 @@ Result:
 - Real publish step was skipped.
 - npm `beta` remained `1.0.0-beta.2`.
 - npm `latest` remained `1.0.0-beta.1`.
+
+## Beta 3 Candidate - 2026-07-08
+
+Result:
+
+- Prepared `1.0.0-beta.3` as a trusted-publishing validation candidate.
+- Scope is limited to release documentation and protected workflow safety updates after `1.0.0-beta.2`.
+- No CLI behavior, tests, governance logic, or package runtime changes are included.
+- `1.0.0-beta.3` is not currently published on npm.
+- Real publication remains blocked until explicit owner approval is recorded.
