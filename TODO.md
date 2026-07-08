@@ -12,7 +12,9 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Re-enable npm account 2FA and resolve npm `latest`/trusted publishing `E403`.
+- [ ] Re-enable npm account 2FA immediately after the temporary dist-tag attempt.
+- [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
+- [ ] Resolve npm trusted publishing `E403` before the next release.
 
 ## Next
 

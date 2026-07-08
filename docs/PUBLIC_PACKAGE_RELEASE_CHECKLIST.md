@@ -290,5 +290,5 @@ Result:
 - GitHub Release is marked as pre-release.
 - `npm install @ptechsolution/psdm-framework@beta` passed in a clean temp project.
 - `npx psdm help` passed from the installed package.
-- npm reports both `beta` and `latest` on `1.0.0-beta.1`; `npm dist-tag rm @ptechsolution/psdm-framework latest` returned `E403 Forbidden`.
+- npm reports both `beta` and `latest` on `1.0.0-beta.1`; `npm dist-tag rm @ptechsolution/psdm-framework latest` returned `E403 Forbidden` even after confirming owner, read-write access, and retrying while account 2FA was temporarily disabled.
 - Post-publish trusted publisher creation returned `E403 Forbidden`; resolve before the next release.

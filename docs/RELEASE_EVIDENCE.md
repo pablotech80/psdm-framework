@@ -174,5 +174,6 @@ Post-release verification:
 Known limitations:
 
 - First beta was published through the documented manual bootstrap exception.
-- npm currently reports `latest` and `beta` on `1.0.0-beta.1`; removing `latest` returned `E403` even with package read-write permissions.
+- npm currently reports `latest` and `beta` on `1.0.0-beta.1`.
+- Removing `latest` returned `E403` with npm account `ptech_`, package owner confirmed, package access `read-write`, and npm account 2FA temporarily disabled for the retry.
 - Configure npm trusted publishing before the next release.
