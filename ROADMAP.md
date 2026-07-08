@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is published at `1.0.0-beta.1`; `1.0.0-beta.2` is prepared locally as a presentation-only candidate.
+PSDM is published at `1.0.0-beta.2`.
 
 Completed:
 
@@ -72,7 +72,7 @@ Completed:
 - One-time manual bootstrap path accepted for `1.0.0-beta.1` after npm trusted publisher `E404`, pending explicit publish approval.
 - `@ptechsolution/psdm-framework@1.0.0-beta.1` published to npm and verified with clean install.
 - Git tag and GitHub pre-release `v1.0.0-beta.1` created.
-- `1.0.0-beta.2` candidate prepared for README presentation updates without CLI behavior changes.
+- `1.0.0-beta.2` published as a presentation-only beta refresh without CLI behavior changes.
 
 ## Active Milestone
 
@@ -216,7 +216,8 @@ Planned outcomes:
 - [x] Record explicit owner approval for beta publish.
 - [x] Publish `@ptechsolution/psdm-framework@1.0.0-beta.1`.
 - [x] Create Git tag and GitHub pre-release `v1.0.0-beta.1`.
-- [x] Prepare `1.0.0-beta.2` presentation-only candidate.
+- [x] Publish `@ptechsolution/psdm-framework@1.0.0-beta.2`.
+- [x] Create Git tag and GitHub pre-release `v1.0.0-beta.2`.
 - [ ] Resolve npm `latest`/trusted publishing `E403` follow-up.
 
 ### `1.0.0`

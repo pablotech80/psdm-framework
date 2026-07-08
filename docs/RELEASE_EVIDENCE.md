@@ -177,3 +177,51 @@ Known limitations:
 - npm currently reports `latest` and `beta` on `1.0.0-beta.1`.
 - Removing `latest` returned `E403` with npm account `ptech_`, package owner confirmed, package access `read-write`, and npm account 2FA temporarily disabled for the retry.
 - Configure npm trusted publishing before the next release.
+
+## Release Evidence - 1.0.0-beta.2
+
+Package: `@ptechsolution/psdm-framework`
+
+Version: `1.0.0-beta.2`
+
+npm dist-tags:
+
+- `beta`: `1.0.0-beta.2`
+- `latest`: `1.0.0-beta.1`
+
+Git commit: `8d717a595399f03062992e0a06f135b39847bd94`
+
+Git tag: `v1.0.0-beta.2`
+
+GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.2`
+
+npm package: `https://www.npmjs.com/package/@ptechsolution/psdm-framework/v/1.0.0-beta.2`
+
+npm tarball: `https://registry.npmjs.org/@ptechsolution/psdm-framework/-/psdm-framework-1.0.0-beta.2.tgz`
+
+npm integrity: `sha512-9dbzlLUNIzuaCjsi+11lOaA0Q9UsBstsmF0Z5xzCnMAufmHeaSGnqw+zBEtSau59hD4WgVdXHoZRP1/lMSUS1Q==`
+
+PSDM workflow: `https://github.com/pablotech80/psdm-framework/actions/runs/28947967690`
+
+CodeQL workflow: `https://github.com/pablotech80/psdm-framework/actions/runs/28947967842`
+
+npm dry-run: passed before publication with 87 package files.
+
+Publication method: manual publication with npm account 2FA.
+
+Trusted publisher: protected GitHub workflow exists, but npm trusted publisher creation remains blocked by npm `E403`.
+
+Approval: `CONFIRM NPM BETA PUBLISH`
+
+Release date: `2026-07-08`
+
+Post-release verification:
+
+- Clean install from npm `@beta`: passed.
+- `npx psdm help`: passed.
+
+Known limitations:
+
+- `1.0.0-beta.2` is a presentation-only beta refresh.
+- npm dist-tag `latest` still points to `1.0.0-beta.1`.
+- Configure npm trusted publishing before future release automation.

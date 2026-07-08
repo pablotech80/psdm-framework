@@ -150,7 +150,7 @@
 - [x] explicit owner approval for beta publish.
 - [x] published npm beta package.
 - [x] Git tag and GitHub pre-release.
-- [x] prepared `1.0.0-beta.2` presentation-only candidate.
+- [x] published `1.0.0-beta.2` presentation-only beta refresh.
 - [ ] npm `latest`/trusted publishing `E403` follow-up.
 
 ## v1.0

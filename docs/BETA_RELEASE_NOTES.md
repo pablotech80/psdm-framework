@@ -1,8 +1,8 @@
 # BETA_RELEASE_NOTES.md
 
 Status: `Published`
-Target Release: `1.0.0-beta.1`
-Next Candidate: `1.0.0-beta.2`
+Latest Beta Release: `1.0.0-beta.2`
+First Beta Release: `1.0.0-beta.1`
 Project: `psdm-framework`
 
 Published: `2026-07-08`
@@ -121,9 +121,17 @@ Proceed to beta only after validating the Action in at least one downstream repo
 - Clean install from npm `@beta`: passed.
 - Trusted publishing workflow exists, but npm trusted publisher configuration is still blocked by npm `E403`.
 
-## Next Beta Candidate - 1.0.0-beta.2
+## Beta Release - 1.0.0-beta.2
 
-Status: `Prepared, not published`
+Status: `Published`
+
+Published: `2026-07-08`
+
+Package: `@ptechsolution/psdm-framework@1.0.0-beta.2`
+
+Git tag: `v1.0.0-beta.2`
+
+GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.2`
 
 Purpose:
 
@@ -132,4 +140,17 @@ Purpose:
 - Include the npm weekly downloads badge.
 - Keep CLI behavior, tests, governance logic, and publishing workflow unchanged.
 
-Publication remains blocked until explicit owner approval is recorded and npm `latest`/trusted publishing `E403` handling is accepted or resolved.
+Validation:
+
+- `npm run release:check`: passed.
+- `npm publish --dry-run --access public --tag beta`: passed.
+- `npm publish --access public --tag beta`: passed.
+- Clean install from npm `@beta`: passed.
+- PSDM GitHub Action: passed.
+- CodeQL: passed.
+
+Known limitations:
+
+- npm dist-tag `beta` points to `1.0.0-beta.2`.
+- npm dist-tag `latest` still points to `1.0.0-beta.1`.
+- Trusted publishing workflow exists, but npm trusted publisher configuration is still blocked by npm `E403`.

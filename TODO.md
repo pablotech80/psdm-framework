@@ -15,7 +15,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [ ] Re-enable npm account 2FA immediately after the temporary dist-tag attempt.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 - [ ] Resolve npm trusted publishing `E403` before the next release.
-- [ ] Record explicit owner approval before publishing `1.0.0-beta.2`.
+- [ ] Rotate or regenerate npm recovery codes because recovery codes were shared during publication support.
 
 ## Next
 
@@ -111,6 +111,9 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Verified clean install from npm `@beta`.
 - [x] Prepared `1.0.0-beta.2` candidate for README presentation updates.
 - [x] Ran `npm publish --dry-run --access public --tag beta` for `1.0.0-beta.2`.
+- [x] Published `@ptechsolution/psdm-framework@1.0.0-beta.2`.
+- [x] Created Git tag and GitHub pre-release `v1.0.0-beta.2`.
+- [x] Verified clean install from npm `@beta` for `1.0.0-beta.2`.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.
