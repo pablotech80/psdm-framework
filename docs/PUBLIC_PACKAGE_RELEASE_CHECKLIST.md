@@ -96,6 +96,7 @@ Must include:
 - [x] `docs/CONFIG_SCHEMA.md`
 - [x] `docs/BETA_RELEASE_NOTES.md`
 - [x] `docs/MODEL_AND_TOOL_INDEPENDENCE.md`
+- [x] `docs/PUBLICATION_CHECKLIST.md`
 - [x] `docs/DOWNSTREAM_ACTION_VALIDATION.md`
 - [x] `examples/nextjs-saas/**`
 - [x] `scripts/release-check.mjs`
@@ -220,7 +221,7 @@ Result:
 - Added README branding guidance, logo reference, badges, and governance flow.
 - Added `assets` to npm package allowlist so the README logo is packaged.
 - Re-ran `npm run release:check -- --allow-dirty`: passed.
-- Re-ran `npm publish --dry-run --access public --tag beta`: passed with 84 files.
+- Re-ran `npm publish --dry-run --access public --tag beta`: passed with 85 files.
 - `npm access list packages @ptech --json` returned `{}`.
 - `npm team ls ptech --json` returned `403 Forbidden`, so scope ownership is still not confirmed.
 - Remaining blocker: npm scope ownership for `@ptech` must be confirmed before real publication.

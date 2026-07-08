@@ -9,14 +9,6 @@
 </p>
 
 <p align="center">
-  Ptech AI Applied Lab
-</p>
-
-<p align="center">
-  Specification-first governance for AI-assisted software projects.
-</p>
-
-<p align="center">
   <img src="https://img.shields.io/badge/npm-beta-cb3837" alt="npm beta" />
   <img src="https://img.shields.io/badge/license-MIT-2ea44f" alt="MIT license" />
   <img src="https://img.shields.io/badge/node-%3E%3D20.0.0-339933" alt="Node.js >=20.0.0" />
@@ -28,13 +20,24 @@
   <strong>AI writes code. PSDM governs it.</strong>
 </p>
 
-PSDM Framework is an AI Engineering Governance framework for repositories, teams, and AI-assisted delivery. It is not just a CLI that creates files. It gives software projects a repeatable way to preserve specification, architecture, security, testing, deployment, and operational context while developers and AI agents move quickly.
+<p align="center">
+  Govern AI-assisted software delivery with specification, architecture, risk-based controls, and production-ready governance.
+</p>
+
+PSDM Framework helps repositories, teams, developers, AI agents, technical leads, and product teams keep delivery controlled while moving quickly.
 
 AI-assisted development is fast, but speed without governance creates risk.
 
 PSDM helps teams decide how much process a change needs based on risk: small safe changes stay fast; security, data, AI, infrastructure, and production-sensitive changes get stronger governance.
 
 PSDM is currently beta software. It is a local CLI and GitHub Action, not a hosted platform.
+
+Try it locally:
+
+```bash
+npm install -g .
+psdm audit
+```
 
 ## Table Of Contents
 
@@ -46,6 +49,8 @@ PSDM is currently beta software. It is a local CLI and GitHub Action, not a host
 - [CLI](#cli)
 - [Quick Start](#quick-start)
 - [Model And Tool Independence](#model-and-tool-independence)
+- [Common Workflows](#common-workflows)
+- [Local Validation](#local-validation)
 - [Contributing And Security](#contributing-and-security)
 - [What PSDM Is Not](#what-psdm-is-not)
 - [Examples](#examples)
@@ -116,18 +121,35 @@ npm install -g @ptech/psdm-framework@beta
 
 ## CLI
 
+### Repository
+
 ```bash
 psdm audit [target] [--json] [--feature <name>] [--config <path>]
-psdm adr "<decision title>" [--json] [--target <path>] [--date YYYY-MM-DD] [--status Proposed]
+psdm check [target] [--json] [--feature <name>] [--config <path>]
+psdm validate [target] [--json] [--feature <name>] [--config <path>]
+psdm report [target] [--json] [--feature <name>] [--config <path>]
+```
+
+### Initialization
+
+```bash
 psdm init [target]
 psdm init [target] --dry-run
 psdm init [target] --feature <name>
-psdm check [target] [--json] [--feature <name>] [--config <path>]
-psdm validate [target] [--json] [--feature <name>] [--config <path>]
+```
+
+### Governance
+
+```bash
 psdm classify "<change description>" [--json] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
 psdm enforce "<change description>" [--json] [--max-level "Level 2"] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
 psdm pr-checklist "<change description>" [--json] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
-psdm report [target] [--json] [--feature <name>] [--config <path>]
+```
+
+### Architecture
+
+```bash
+psdm adr "<decision title>" [--json] [--target <path>] [--date YYYY-MM-DD] [--status Proposed]
 ```
 
 ## Quick Start
@@ -136,9 +158,13 @@ Inside a project:
 
 ```bash
 psdm audit
+# Analyze repository readiness before writing files.
+
 psdm init
-psdm check
+# Bootstrap PSDM governance artifacts.
+
 psdm validate
+# Validate the governance baseline.
 ```
 
 Use `psdm audit` before initializing PSDM in an existing project. It does not modify files; it shows current state, what `psdm init` would create or skip, pros, cons, and recommendations.
@@ -157,7 +183,9 @@ Teams customize PSDM through `psdm.config.json`, `AGENTS.md`, `docs/CHANGE_GOVER
 
 See `docs/MODEL_AND_TOOL_INDEPENDENCE.md` for customization examples.
 
-Classify a change:
+## Common Workflows
+
+### Classify a Change
 
 ```bash
 psdm classify "change Supabase RLS policy for client documents"
@@ -189,11 +217,15 @@ Configured risk paths can raise the level even when the description is vague:
 Estimated level: Level 3
 ```
 
+### Generate A PR Checklist
+
 Generate a PR checklist:
 
 ```bash
 psdm pr-checklist "change auth session validation" --file backend/auth/session.py
 ```
+
+### Enforce In CI
 
 Enforce a maximum level in CI:
 
@@ -201,11 +233,15 @@ Enforce a maximum level in CI:
 psdm enforce "small cleanup" --file src/index.mjs --max-level "Level 2"
 ```
 
+### Create An ADR
+
 Create an ADR:
 
 ```bash
 psdm adr "Adopt CI change level enforcement"
 ```
+
+## Local Validation
 
 Run local fixtures:
 
@@ -245,78 +281,15 @@ It is not a runnable application. It exists to prove that PSDM can audit, initia
 
 `psdm.config.json` is optional. When it is absent, PSDM uses the default baseline artifacts.
 
-Example:
+Minimal example:
 
 ```json
 {
-  "version": 1,
-  "profile": "standard",
-  "requiredArtifacts": [
-    "AGENTS.md",
-    "docs/PROJECT_BRIEF.md",
-    "docs/SPEC.md",
-    "docs/ARCHITECTURE.md",
-    "docs/CHANGE_GOVERNANCE.md",
-    "docs/TASKS.md",
-    "docs/TESTING.md",
-    "docs/DEPLOYMENT.md",
-    "docs/SECURITY.md",
-    "docs/OPERATIONS.md",
-    "ADRs"
-  ],
-  "extraRequiredArtifacts": [],
-  "features": {
-    "root": "docs/features",
-    "requiredArtifacts": [
-      "PROJECT_BRIEF.md",
-      "SPEC.md",
-      "ARCHITECTURE.md",
-      "SECURITY.md",
-      "TESTING.md"
-    ]
-  },
-  "git": {
-    "warnOnDirty": true
-  },
-  "ai": {
-    "pii": {
-      "allowedInPrompts": false,
-      "redactionRequired": true
-    },
-    "cost": {
-      "maxUsdPerRequest": null,
-      "monthlyBudgetUsd": null
-    },
-    "latency": {
-      "p95Ms": null
-    },
-    "tools": {
-      "registryRequired": true,
-      "humanApprovalForExternalActions": true
-    },
-    "evals": {
-      "required": true
-    },
-    "security": {
-      "promptInjectionTestsRequired": true
-    }
-  },
-  "riskPaths": [
-    {
-      "pattern": "backend/auth/**",
-      "minimumLevel": "Level 3",
-      "requiredArtifacts": ["docs/SECURITY.md", "docs/TESTING.md"],
-      "reason": "Authentication and authorization changes can expose private data or bypass access control."
-    },
-    {
-      "pattern": "backend/migrations/**",
-      "minimumLevel": "Level 4",
-      "requiredArtifacts": ["docs/DEPLOYMENT.md", "docs/OPERATIONS.md"],
-      "reason": "Database migrations can require rollback and production operations planning."
-    }
-  ]
+  "profile": "backend-api"
 }
 ```
+
+Use the README to start. Use `docs/CONFIG_SCHEMA.md` for the full schema, supported fields, compatibility rules, AI policy fields, and `riskPaths` examples.
 
 Supported profiles:
 
@@ -413,10 +386,12 @@ CONFIRM PRODUCTION DEPLOY
 
 This repository includes a composite GitHub Action:
 
+Replace `<owner>` with the public GitHub owner for the repository.
+
 ```yaml
 steps:
   - uses: actions/checkout@v4
-  - uses: ptech/psdm-framework@main
+  - uses: <owner>/psdm-framework@main
     with:
       target: .
 ```
@@ -428,7 +403,7 @@ Enable change-level enforcement:
 ```yaml
 steps:
   - uses: actions/checkout@v4
-  - uses: ptech/psdm-framework@main
+  - uses: <owner>/psdm-framework@main
     with:
       target: .
       enforce-change-level: 'true'
@@ -450,7 +425,7 @@ The action writes `psdm-enforcement.json` and fails when the classified change e
 
 ## Current Limitations
 
-This alpha does not yet provide:
+This beta does not yet provide:
 
 - Full AI agent security runtime guardrail enforcement.
 - Tool registry enforcement.
@@ -461,3 +436,13 @@ This alpha does not yet provide:
 Freshly initialized templates intentionally contain placeholders. `psdm validate` reports them as warnings and returns `METHOD_BASELINE_REVIEW_REQUIRED` until the artifacts are filled with project-specific content.
 
 See `docs/ROADMAP.md`.
+
+---
+
+Built by Ptech AI Applied Lab
+
+PSDM is the open governance framework behind the PTECH SPEC-DRIVEN METHOD.
+
+Specification-first AI Engineering.
+
+https://ptechsolution.net

@@ -16,16 +16,17 @@ Recommended public repository metadata:
 - Owner-facing brand: `Ptech AI Applied Lab`.
 - Repository name: `psdm-framework`.
 - Display name: `PSDM Framework`.
-- Description: `Specification-first governance for AI-assisted software projects.`
+- Description: `Specification-first governance framework for AI-assisted software projects.`
+- Website: `https://ptechsolution.net`.
 - Short tagline: `AI writes code. PSDM governs it.`
-- Topics: `ai`, `governance`, `cli`, `github-action`, `spec-driven`, `software-architecture`, `ai-engineering`, `developer-tools`.
+- Topics: `ai-engineering`, `ai-governance`, `software-engineering`, `developer-tools`, `github-actions`, `cli`, `architecture`, `specification`, `devops`, `ai-agents`, `risk-management`.
 - Social preview image: `assets/psdm-logo.png` or a wider derived image using the same mark.
 
 ## Public Presentation Gate
 
 - [ ] Repository visibility is intentionally changed to public by the owner.
-- [x] Repository description guidance clearly says PSDM is specification-first governance for AI-assisted software projects.
-- [x] Repository topics guidance includes relevant terms such as `ai`, `governance`, `cli`, `github-action`, `spec-driven`, and `software-architecture`.
+- [x] Repository description guidance clearly says PSDM is a specification-first governance framework for AI-assisted software projects.
+- [x] Repository topics guidance includes the final public topic set from `docs/PUBLICATION_CHECKLIST.md`.
 - [x] `README.md` explains purpose, install, quick start, CLI commands, examples, and beta status.
 - [x] `README.md` displays the PSDM logo from `assets/psdm-logo.png`.
 - [x] `LICENSE` is present.
@@ -69,9 +70,10 @@ Recommended public repository metadata:
 
 - Sensitive-publication scan found no private repository URLs, GitHub Actions run URLs, local account paths, emails, browser profile IDs, npm auth details, or known private account identifiers in public package paths.
 - `npm run release:check -- --allow-dirty` passed before commit.
-- `npm publish --dry-run --access public --tag beta` passed and produced an 84-file tarball.
+- `npm publish --dry-run --access public --tag beta` passed and produced an 85-file tarball.
 - `npm team ls ptech --json` returned `403 Forbidden`; npm scope ownership is not confirmed by this workstation.
 - README branding polish added: centered logo, Ptech AI Applied Lab brand, tagline, badges, clearer opening, and governance flow diagram.
+- Final README polish added: reduced density, grouped CLI reference, minimal config example, footer, and publication metadata checklist.
 
 ## Current Blockers
 

@@ -61,6 +61,7 @@ Completed:
 - Model and tool independence documented so PSDM remains neutral across Claude, Cursor, Copilot, Codex, skills, prompts, and agents.
 - Model and tool independence added to the generated `AGENTS.md` template and repository agent rules.
 - README navigation improved with a public-facing table of contents.
+- Final README density, CLI grouping, minimal config example, footer, and publication metadata checklist polished for public beta.
 
 ## Active Milestone
 
@@ -192,6 +193,7 @@ Planned outcomes:
 - [x] Document model and tool independence for project customization.
 - [x] Add model and tool independence rule to `AGENTS.md` template.
 - [x] Add README table of contents for public navigation.
+- [x] Polish README density, CLI groups, configuration section, footer, and publication checklist.
 - [ ] Record explicit owner approval for beta publish.
 
 ### `1.0.0`
@@ -209,6 +211,7 @@ Planned outcomes:
 - [x] Document model and tool independence for project customization.
 - [x] Add model and tool independence rule to `AGENTS.md` template.
 - [x] Add README table of contents for public navigation.
+- [x] Polish README density, CLI groups, configuration section, footer, and publication checklist.
 - [ ] Record explicit owner approval for beta publish.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.
