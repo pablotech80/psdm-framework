@@ -32,10 +32,10 @@ PSDM helps teams decide how much process a change needs based on risk: small saf
 
 PSDM is currently beta software. It is a local CLI and GitHub Action, not a hosted platform.
 
-Try it locally:
+Try the published beta:
 
 ```bash
-npm install -g .
+npm install -g @ptechsolution/psdm-framework@beta
 psdm audit
 ```
 
@@ -45,7 +45,7 @@ psdm audit
 - [Governance Flow](#governance-flow)
 - [What PSDM Provides](#what-psdm-provides)
 - [Status](#status)
-- [Install Locally](#install-locally)
+- [Install](#install)
 - [CLI](#cli)
 - [Quick Start](#quick-start)
 - [Model And Tool Independence](#model-and-tool-independence)
@@ -101,7 +101,21 @@ flowchart TD
 
 `1.0.0-beta.3`
 
-## Install Locally
+## Install
+
+Install the published beta from npm:
+
+```bash
+npm install -g @ptechsolution/psdm-framework@beta
+```
+
+Then run:
+
+```bash
+psdm help
+```
+
+For development from this checkout:
 
 ```bash
 npm install -g .
@@ -111,12 +125,6 @@ Then run:
 
 ```bash
 psdm help
-```
-
-After beta publication:
-
-```bash
-npm install -g @ptechsolution/psdm-framework@beta
 ```
 
 ## CLI

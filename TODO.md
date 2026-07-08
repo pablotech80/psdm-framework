@@ -121,6 +121,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Published `@ptechsolution/psdm-framework@1.0.0-beta.3` through trusted publishing.
 - [x] Created Git tag and GitHub pre-release `v1.0.0-beta.3`.
 - [x] Verified clean install from npm `@beta` for `1.0.0-beta.3`.
+- [x] Promoted npm `@beta` as the primary public install command in README.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.
