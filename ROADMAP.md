@@ -60,6 +60,7 @@ Completed:
 - Public beta presentation polish started: README branding, logo reference, GitHub metadata guidance, and asset packaging added.
 - Model and tool independence documented so PSDM remains neutral across Claude, Cursor, Copilot, Codex, skills, prompts, and agents.
 - Model and tool independence added to the generated `AGENTS.md` template and repository agent rules.
+- README navigation improved with a public-facing table of contents.
 
 ## Active Milestone
 
@@ -190,6 +191,7 @@ Planned outcomes:
 - [x] Add README branding and GitHub metadata guidance for public beta.
 - [x] Document model and tool independence for project customization.
 - [x] Add model and tool independence rule to `AGENTS.md` template.
+- [x] Add README table of contents for public navigation.
 - [ ] Record explicit owner approval for beta publish.
 
 ### `1.0.0`
@@ -206,6 +208,7 @@ Planned outcomes:
 - [x] Add README branding and GitHub metadata guidance for public beta.
 - [x] Document model and tool independence for project customization.
 - [x] Add model and tool independence rule to `AGENTS.md` template.
+- [x] Add README table of contents for public navigation.
 - [ ] Record explicit owner approval for beta publish.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.

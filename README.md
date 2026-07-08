@@ -36,6 +36,28 @@ PSDM helps teams decide how much process a change needs based on risk: small saf
 
 PSDM is currently beta software. It is a local CLI and GitHub Action, not a hosted platform.
 
+## Table Of Contents
+
+- [Why PSDM Exists](#why-psdm-exists)
+- [Governance Flow](#governance-flow)
+- [What PSDM Provides](#what-psdm-provides)
+- [Status](#status)
+- [Install Locally](#install-locally)
+- [CLI](#cli)
+- [Quick Start](#quick-start)
+- [Model And Tool Independence](#model-and-tool-independence)
+- [Contributing And Security](#contributing-and-security)
+- [What PSDM Is Not](#what-psdm-is-not)
+- [Examples](#examples)
+- [Configuration](#configuration)
+- [Feature Artifacts](#feature-artifacts)
+- [Backend And Platform Governance](#backend-and-platform-governance)
+- [Change Levels](#change-levels)
+- [Production Gate](#production-gate)
+- [GitHub Action](#github-action)
+- [Design Principles](#design-principles)
+- [Current Limitations](#current-limitations)
+
 ## Why PSDM Exists
 
 AI can generate code quickly. Repositories still need durable context: product intent, specifications, architecture decisions, test expectations, security boundaries, deployment rules, and operational ownership.

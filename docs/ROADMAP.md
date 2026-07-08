@@ -137,6 +137,7 @@
 - [x] README branding and GitHub metadata guidance for public beta.
 - [x] Model and tool independence documentation.
 - [x] Model and tool independence rule in `AGENTS.md` template.
+- [x] README table of contents.
 - [ ] explicit owner approval for beta publish.
 
 ## v1.0
@@ -154,6 +155,7 @@
 - [x] README branding and GitHub metadata guidance for public beta.
 - [x] Model and tool independence documentation.
 - [x] Model and tool independence rule in `AGENTS.md` template.
+- [x] README table of contents.
 - [ ] explicit owner approval for beta publish.
 - [ ] Public npm package.
 - [x] Example project fixture coverage.
