@@ -122,6 +122,8 @@
 - [x] Security-sensitive file path rule validation.
 - [x] ADR generator.
 - [x] Beta release notes.
+- [x] Downstream GitHub Action validation protocol.
+- [ ] Downstream GitHub Action validation executed.
 
 ## v1.0
 

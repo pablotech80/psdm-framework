@@ -12,7 +12,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Validate GitHub Action in a downstream repository.
+- [ ] Execute downstream GitHub Action validation.
 
 ## Next
 
@@ -67,6 +67,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added AI guardrail templates for PII, prompt injection, cost, latency, evals, and tool security.
 - [x] Added `ai-agent` profile fixture for AI guardrail artifact creation.
 - [x] Bumped package status to `0.17.0-alpha`.
+- [x] Documented downstream GitHub Action validation protocol.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

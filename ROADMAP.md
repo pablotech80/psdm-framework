@@ -45,6 +45,7 @@ Completed:
 - Optional AI policy schema added to `psdm.config.json`.
 - ADR accepted to keep PSDM as a governance layer instead of an AI observability platform.
 - AI guardrail templates added for the `ai-agent` profile.
+- Downstream GitHub Action validation protocol documented.
 
 ## Active Milestone
 
@@ -163,6 +164,8 @@ Planned outcomes:
 - [x] ADR generator.
 - [x] Tested fixtures for CLI behavior.
 - [x] Prepare beta release notes.
+- [x] Document downstream GitHub Action validation protocol.
+- [ ] Execute downstream GitHub Action validation.
 
 ### `1.0.0`
 
