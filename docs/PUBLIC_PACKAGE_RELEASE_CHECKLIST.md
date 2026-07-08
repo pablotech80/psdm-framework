@@ -29,6 +29,7 @@ Before release, confirm:
 - [ ] `ROADMAP.md` and `TODO.md` reflect the current release state and next action.
 - [ ] `docs/DOWNSTREAM_ACTION_VALIDATION.md` has current downstream Action evidence.
 - [ ] `docs/PUBLIC_REPOSITORY_READINESS.md` has no blocking public-readiness findings.
+- [ ] `docs/RELEASE_EVIDENCE.md` defines required release evidence for the target.
 - [x] Public collaboration files are present: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, issue templates, and PR template.
 
 ## Validation Commands
@@ -149,6 +150,8 @@ git push origin v1.0.0-beta.1
 
 Adjust version, tag, and npm dist-tag for the actual release.
 
+For trusted publishing, follow `docs/NPM_TRUSTED_PUBLISHING.md` and record evidence from `docs/RELEASE_EVIDENCE.md`.
+
 ## Post-Release Verification
 
 After publication:
@@ -159,6 +162,7 @@ After publication:
 - [ ] Run `psdm init`, `psdm validate`, and `psdm audit --json` in a temp project.
 - [ ] Confirm GitHub release/tag points to the intended commit.
 - [ ] Record package URL, tag URL, version, and validation result in release notes.
+- [ ] Record release evidence using `docs/RELEASE_EVIDENCE.md`.
 
 ## Rollback
 
@@ -175,6 +179,7 @@ If release validation fails after publication:
 - [x] Earlier metadata decision recorded: defer `repository`, `homepage`, and `bugs` until the GitHub repository or docs site is public.
 - [x] Add `repository`, `homepage`, and `bugs` metadata after the GitHub repository became public.
 - [x] Define npm trusted publishing/provenance plan.
+- [x] Define release evidence and beta exit policy.
 - [x] Decide whether to introduce an npm `files` allowlist before beta: yes, keep one in `package.json`.
 - [x] Decide whether release validation should become an npm script or CI workflow: yes, use `npm run release:check` locally and in CI.
 - [x] Decide final beta version string and dist-tag: `1.0.0-beta.1` with npm dist-tag `beta`.
@@ -194,6 +199,7 @@ Decision date: `2026-07-08`
 - Release automation: use `npm run release:check` as the repeatable non-publishing gate. It supports `-- --allow-dirty` for local development validation, but CI and real release checks should run without that flag.
 - Beta versioning: use `1.0.0-beta.1` for the first public beta candidate and npm dist-tag `beta` to avoid promoting it as `latest`.
 - Trusted publishing: plan GitHub Actions OIDC with workflow filename `npm-publish.yml`, protected environment `npm-publish`, and npm provenance before promoting beyond beta.
+- Release evidence: keep beta as `beta` until release evidence, compatibility, downstream validation, and stable-release criteria are satisfied for `1.0.0`.
 
 ## Pre-Publish Check - 2026-07-08
 
@@ -238,3 +244,12 @@ Result:
 - Added `docs/NPM_TRUSTED_PUBLISHING.md`.
 - Planned npm trusted publisher configuration for GitHub Actions, workflow `npm-publish.yml`, and protected environment `npm-publish`.
 - Kept executable publishing workflow out of the repository until npm scope ownership, trusted publisher settings, and explicit owner approval are confirmed.
+
+## Release Evidence Policy - 2026-07-08
+
+Result:
+
+- Added `docs/RELEASE_EVIDENCE.md`.
+- Defined beta and stable tag policy.
+- Defined required release evidence fields.
+- Defined when PSDM can leave beta and become `1.0.0` with npm dist-tag `latest`.

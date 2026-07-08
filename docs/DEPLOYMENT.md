@@ -29,6 +29,8 @@ Manual public package readiness is tracked in `docs/PUBLIC_PACKAGE_RELEASE_CHECK
 
 Trusted publishing and provenance planning is tracked in `docs/NPM_TRUSTED_PUBLISHING.md`.
 
+Release evidence, tag policy, and beta exit criteria are tracked in `docs/RELEASE_EVIDENCE.md`.
+
 ## Deployment Gate
 
 Before release or publication:
@@ -43,6 +45,7 @@ Before release or publication:
 - confirm change-level enforcement behavior when Action inputs or `psdm enforce` change;
 - complete `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`;
 - confirm trusted publishing/provenance readiness in `docs/NPM_TRUSTED_PUBLISHING.md`;
+- confirm release evidence requirements in `docs/RELEASE_EVIDENCE.md`;
 - confirm no secrets or local-only files are included.
 
 Production publishing is never implied by code changes. Publishing to a package registry requires explicit owner approval.

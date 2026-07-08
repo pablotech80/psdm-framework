@@ -92,6 +92,7 @@ Use `psdm adr "<decision title>"` when a Level 3 or Level 4 change creates or re
 - `docs/DOWNSTREAM_ACTION_VALIDATION.md`: downstream GitHub Action smoke-test protocol.
 - `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`: manual package publication readiness gate.
 - `docs/NPM_TRUSTED_PUBLISHING.md`: trusted publishing and provenance plan.
+- `docs/RELEASE_EVIDENCE.md`: release evidence, tag policy, and beta exit criteria.
 - `docs/PUBLICATION_CHECKLIST.md`: final public repository metadata checklist.
 - `docs/PUBLIC_REPOSITORY_READINESS.md`: public repository presentation and privacy gate.
 - `docs/DEPLOYMENT.md`: packaging and publication gate.

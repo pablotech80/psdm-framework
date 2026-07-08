@@ -42,7 +42,7 @@ Expected compatible behavior:
 - Unknown profiles fail validation instead of silently changing policy.
 - Malformed risk path rules fail validation and are ignored by classification.
 - JSON output is intended for automation and should remain stable across beta patch releases.
-- Public package metadata intentionally defers GitHub repository links until the repository or docs site is public.
+- Public package metadata points to the public GitHub repository.
 - First beta publication should use npm dist-tag `beta`, not `latest`.
 
 ## Operator Validation
@@ -86,8 +86,12 @@ The beta is ready for `1.0.0` when:
 - Public docs include a navigable index and example adoption flow.
 - Example project coverage demonstrates at least one backend or SaaS repository.
 - Release process is documented and repeatable.
+- Release evidence policy is documented and applied to the beta.
+- Trusted publishing/provenance is configured or explicitly deferred by owner approval.
 - Public package readiness checklist is completed or explicitly deferred by owner approval.
 - Known limitations are documented with owner-approved follow-up scope.
+
+Publishing `1.0.0-beta.1` does not end beta. PSDM leaves beta only when a later release is intentionally promoted to `1.0.0` and published with npm dist-tag `latest`.
 
 ## Known Limitations
 
@@ -99,4 +103,4 @@ The beta is ready for `1.0.0` when:
 
 ## Release Recommendation
 
-Proceed to beta only after validating the Action in at least one downstream repository workflow, completing `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`, authenticating npm, and recording explicit owner approval for publication.
+Proceed to beta only after validating the Action in at least one downstream repository workflow, completing `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`, authenticating npm, recording release evidence requirements, and recording explicit owner approval for publication.

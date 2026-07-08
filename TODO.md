@@ -12,11 +12,11 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Decide release tag signing/provenance evidence policy.
+- [ ] Confirm npm scope ownership for `@ptech`.
 
 ## Next
 
-- [ ] Confirm npm scope ownership for `@ptech`.
+- [ ] Resolve or explicitly defer npm trusted publishing for first beta.
 
 ## Later
 
@@ -100,6 +100,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Documented public security reporting policy.
 - [x] Added CodeQL, dependency review, Dependabot config, GitHub security settings, and private vulnerability reporting.
 - [x] Added npm trusted publishing/provenance plan and public package metadata.
+- [x] Defined release evidence, tag policy, and beta exit criteria.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.
