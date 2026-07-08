@@ -119,7 +119,7 @@ Proceed to beta only after validating the Action in at least one downstream repo
 - Git commit: `a7b2055ee734a3645888132c29f736e9593e9b6f`
 - GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.1`
 - Clean install from npm `@beta`: passed.
-- Trusted publishing workflow exists, but npm trusted publisher configuration is still blocked by npm `E403`.
+- Trusted publishing was configured after beta publication.
 
 ## Beta Release - 1.0.0-beta.2
 
@@ -153,4 +153,4 @@ Known limitations:
 
 - npm dist-tag `beta` points to `1.0.0-beta.2`.
 - npm dist-tag `latest` still points to `1.0.0-beta.1`.
-- Trusted publishing workflow exists, but npm trusted publisher configuration is still blocked by npm `E403`.
+- Trusted publishing was configured after beta publication.

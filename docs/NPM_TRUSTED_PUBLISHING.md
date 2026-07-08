@@ -28,8 +28,10 @@ Configuration status:
 - npm trusted publisher record: blocked by npm registry `E404` while the package does not yet exist;
 - first beta bootstrap: one-time manual publication exception accepted after npm `E404`, pending explicit `CONFIRM NPM BETA PUBLISH` approval;
 - first beta publication: completed through the documented manual bootstrap exception;
-- post-publish npm trusted publisher creation: blocked by npm registry `E403`;
-- next release publication: blocked until trusted publisher configuration is confirmed or an explicit owner exception is recorded.
+- second beta publication: completed manually before trusted publishing was configured;
+- post-publish npm trusted publisher creation: completed successfully;
+- trusted publisher id: `a2992f4e-9060-4100-8d42-e0abcafaf0f3`;
+- next release publication: use the protected GitHub Actions trusted publishing workflow unless an explicit owner exception is recorded.
 
 ## Why
 
@@ -129,7 +131,7 @@ jobs:
       - run: npm publish --provenance --access public --tag beta
 ```
 
-Do not run this workflow until npm trusted publisher settings and owner approval are confirmed.
+Do not run this workflow until owner approval is confirmed.
 
 ## Verification
 
@@ -141,7 +143,7 @@ Before publishing:
 - `npm publish --dry-run --access public --tag beta` succeeds locally;
 - `npm trust list @ptechsolution/psdm-framework` shows a GitHub Actions trusted publisher matching the exact GitHub owner, repository, workflow filename, and environment.
 
-If `npm trust list @ptechsolution/psdm-framework` returns `E404` because the package does not yet exist, the first beta may use the documented one-time manual bootstrap exception only after explicit owner approval. After the package exists, configure and verify npm trusted publishing before subsequent releases. If npm returns `E403`, resolve package or organization permissions in npm before any next release.
+If `npm trust list @ptechsolution/psdm-framework` stops showing the GitHub Actions trusted publisher, do not publish through the workflow until the trusted publisher is restored. The manual bootstrap exception was used only for early beta publication before trusted publishing was available.
 
 After publishing:
 

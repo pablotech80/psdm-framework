@@ -73,6 +73,7 @@ Completed:
 - `@ptechsolution/psdm-framework@1.0.0-beta.1` published to npm and verified with clean install.
 - Git tag and GitHub pre-release `v1.0.0-beta.1` created.
 - `1.0.0-beta.2` published as a presentation-only beta refresh without CLI behavior changes.
+- npm trusted publishing configured for future releases.
 
 ## Active Milestone
 
@@ -218,7 +219,8 @@ Planned outcomes:
 - [x] Create Git tag and GitHub pre-release `v1.0.0-beta.1`.
 - [x] Publish `@ptechsolution/psdm-framework@1.0.0-beta.2`.
 - [x] Create Git tag and GitHub pre-release `v1.0.0-beta.2`.
-- [ ] Resolve npm `latest`/trusted publishing `E403` follow-up.
+- [x] Configure npm trusted publishing for future releases.
+- [ ] Resolve npm `latest` dist-tag `E403` follow-up.
 
 ### `1.0.0`
 
@@ -247,7 +249,8 @@ Planned outcomes:
 - [x] Record explicit owner approval for beta publish.
 - [x] Public npm package readiness for beta.
 - [x] Create Git tag and GitHub pre-release `v1.0.0-beta.1`.
-- [ ] Resolve npm `latest`/trusted publishing `E403` follow-up before next release.
+- [x] Configure npm trusted publishing for future releases.
+- [ ] Resolve npm `latest` dist-tag `E403` follow-up before stable release.
 - [x] Documentation site or complete docs index.
 - [x] Example project fixture coverage.
 

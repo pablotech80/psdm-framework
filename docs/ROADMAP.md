@@ -151,7 +151,8 @@
 - [x] published npm beta package.
 - [x] Git tag and GitHub pre-release.
 - [x] published `1.0.0-beta.2` presentation-only beta refresh.
-- [ ] npm `latest`/trusted publishing `E403` follow-up.
+- [x] npm trusted publishing configured for future releases.
+- [ ] npm `latest` dist-tag `E403` follow-up.
 
 ## v1.0
 
@@ -181,7 +182,8 @@
 - [x] explicit owner approval for beta publish.
 - [x] Public npm beta package.
 - [x] Git tag and GitHub pre-release.
-- [ ] npm `latest`/trusted publishing `E403` follow-up before next release.
+- [x] npm trusted publishing configured for future releases.
+- [ ] npm `latest` dist-tag `E403` follow-up before stable release.
 - [x] Example project fixture coverage.
 - [ ] Runnable example projects.
 

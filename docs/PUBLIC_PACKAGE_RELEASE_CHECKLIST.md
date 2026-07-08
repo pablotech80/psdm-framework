@@ -292,7 +292,7 @@ Result:
 - `npm install @ptechsolution/psdm-framework@beta` passed in a clean temp project.
 - `npx psdm help` passed from the installed package.
 - npm reports both `beta` and `latest` on `1.0.0-beta.1`; `npm dist-tag rm @ptechsolution/psdm-framework latest` returned `E403 Forbidden` even after confirming owner, read-write access, and retrying while account 2FA was temporarily disabled.
-- Post-publish trusted publisher creation returned `E403 Forbidden`; resolve before the next release.
+- Post-publish trusted publisher creation initially returned `E403 Forbidden`; later retry after browser authentication succeeded.
 
 ## Beta 2 Publication - 2026-07-08
 
@@ -314,4 +314,18 @@ Result:
 - Clean install from npm `@beta`: passed.
 - npm dist-tag `beta` points to `1.0.0-beta.2`.
 - npm dist-tag `latest` still points to `1.0.0-beta.1`.
-- npm `latest`/trusted publishing `E403` remains an accepted blocker or support follow-up before subsequent releases.
+- npm trusted publishing is configured for future releases.
+- npm `latest` dist-tag `E403` remains an accepted blocker or support follow-up.
+
+## Trusted Publishing Configuration - 2026-07-08
+
+Result:
+
+- Configured npm trusted publisher for `@ptechsolution/psdm-framework`.
+- Trusted publisher id: `a2992f4e-9060-4100-8d42-e0abcafaf0f3`.
+- Type: GitHub Actions.
+- Repository: `pablotech80/psdm-framework`.
+- Workflow file: `npm-publish.yml`.
+- Environment: `npm-publish`.
+- Permission: `createPackage`.
+- Verification command passed: `npx npm@latest trust list @ptechsolution/psdm-framework --json`.

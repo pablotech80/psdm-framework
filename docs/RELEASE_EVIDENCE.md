@@ -171,12 +171,12 @@ Post-release verification:
 - Clean install from npm `@beta`: passed.
 - `npx psdm help`: passed.
 
-Known limitations:
+Follow-up:
 
 - First beta was published through the documented manual bootstrap exception.
 - npm currently reports `latest` and `beta` on `1.0.0-beta.1`.
 - Removing `latest` returned `E403` with npm account `ptech_`, package owner confirmed, package access `read-write`, and npm account 2FA temporarily disabled for the retry.
-- Configure npm trusted publishing before the next release.
+- npm trusted publishing was later configured successfully.
 
 ## Release Evidence - 1.0.0-beta.2
 
@@ -209,7 +209,7 @@ npm dry-run: passed before publication with 87 package files.
 
 Publication method: manual publication with npm account 2FA.
 
-Trusted publisher: protected GitHub workflow exists, but npm trusted publisher creation remains blocked by npm `E403`.
+Trusted publisher: protected GitHub workflow exists; trusted publisher was configured after publication.
 
 Approval: `CONFIRM NPM BETA PUBLISH`
 
@@ -224,4 +224,28 @@ Known limitations:
 
 - `1.0.0-beta.2` is a presentation-only beta refresh.
 - npm dist-tag `latest` still points to `1.0.0-beta.1`.
-- Configure npm trusted publishing before future release automation.
+- Use trusted publishing for future release automation.
+
+## Trusted Publisher Evidence
+
+Trusted publisher id: `a2992f4e-9060-4100-8d42-e0abcafaf0f3`
+
+Type: `github`
+
+Repository: `pablotech80/psdm-framework`
+
+Workflow file: `npm-publish.yml`
+
+Environment: `npm-publish`
+
+Permissions:
+
+- `createPackage`
+
+Verification command:
+
+```bash
+npx npm@latest trust list @ptechsolution/psdm-framework --json
+```
+
+Verification date: `2026-07-08`
