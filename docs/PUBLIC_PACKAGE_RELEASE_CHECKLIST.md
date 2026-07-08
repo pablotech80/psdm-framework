@@ -338,3 +338,16 @@ Result:
 - Added workflow input `dry_run`, defaulting to `true`, to test the protected workflow without publishing.
 - Added a registry check before real publication so an already-published version fails before `npm publish`.
 - Real workflow publication remains blocked unless `dry_run` is explicitly set to `false` and owner approval is recorded.
+
+## Protected Workflow Dry-Run - 2026-07-08
+
+Result:
+
+- Ran the protected `Publish npm package` workflow with `dry_run=true`.
+- Workflow run: `https://github.com/pablotech80/psdm-framework/actions/runs/28949864639`
+- `Validate release candidate`: passed.
+- `Confirm requested version`: passed.
+- `Dry-run beta publish`: passed.
+- Real publish step was skipped.
+- npm `beta` remained `1.0.0-beta.2`.
+- npm `latest` remained `1.0.0-beta.1`.

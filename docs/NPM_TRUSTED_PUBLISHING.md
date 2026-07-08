@@ -169,3 +169,24 @@ After publishing:
 - installing `@ptechsolution/psdm-framework@beta` works in a clean temp project;
 - `psdm help`, `psdm audit`, `psdm init`, and `psdm validate` work from the installed package;
 - GitHub tag and npm version point to the same commit.
+
+## Dry-Run Verification - 2026-07-08
+
+The protected workflow was executed with:
+
+- `expected_version`: `1.0.0-beta.2`
+- `dry_run`: `true`
+
+Result:
+
+- workflow run: `https://github.com/pablotech80/psdm-framework/actions/runs/28949864639`
+- conclusion: `success`
+- `Validate release candidate`: passed
+- `Confirm requested version`: passed
+- `Dry-run beta publish`: passed
+- `Publish beta with provenance`: skipped
+
+npm remained unchanged after the dry-run:
+
+- `beta`: `1.0.0-beta.2`
+- `latest`: `1.0.0-beta.1`

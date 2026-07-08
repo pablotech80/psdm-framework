@@ -75,6 +75,7 @@ Completed:
 - `1.0.0-beta.2` published as a presentation-only beta refresh without CLI behavior changes.
 - npm trusted publishing configured for future releases.
 - Protected npm publish workflow dry-run mode and expected-version guard added.
+- Protected npm publish workflow dry-run executed successfully.
 
 ## Active Milestone
 
@@ -222,6 +223,7 @@ Planned outcomes:
 - [x] Create Git tag and GitHub pre-release `v1.0.0-beta.2`.
 - [x] Configure npm trusted publishing for future releases.
 - [x] Add protected workflow dry-run mode and expected-version guard.
+- [x] Verify protected npm publish workflow in dry-run mode.
 - [ ] Resolve npm `latest` dist-tag `E403` follow-up.
 
 ### `1.0.0`

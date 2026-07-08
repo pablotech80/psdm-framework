@@ -153,6 +153,7 @@
 - [x] published `1.0.0-beta.2` presentation-only beta refresh.
 - [x] npm trusted publishing configured for future releases.
 - [x] protected npm publish workflow dry-run mode and expected-version guard.
+- [x] protected npm publish workflow dry-run executed successfully.
 - [ ] npm `latest` dist-tag `E403` follow-up.
 
 ## v1.0

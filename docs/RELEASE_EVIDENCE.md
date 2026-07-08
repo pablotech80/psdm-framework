@@ -260,3 +260,12 @@ The protected npm publish workflow requires:
 When `dry_run` is `true`, the workflow runs release validation and `npm publish --dry-run --access public --tag beta`.
 
 When `dry_run` is `false`, the workflow first verifies that the requested version is not already published, then runs `npm publish --provenance --access public --tag beta`.
+
+Dry-run evidence:
+
+- workflow run: `https://github.com/pablotech80/psdm-framework/actions/runs/28949864639`
+- expected version: `1.0.0-beta.2`
+- dry run: `true`
+- conclusion: `success`
+- real publish step: skipped
+- verification date: `2026-07-08`
