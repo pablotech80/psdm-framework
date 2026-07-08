@@ -16,7 +16,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Next
 
-- [ ] Run the next npm beta publication through trusted publishing workflow instead of local `npm publish`.
+- [ ] Run the protected npm publish workflow in `dry_run` mode from GitHub Actions.
 
 ## Later
 
@@ -114,6 +114,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Confirmed npm account 2FA is active during `1.0.0-beta.2` publication.
 - [x] Regenerated npm recovery codes after publication support.
 - [x] Configured npm trusted publishing for GitHub Actions.
+- [x] Added protected workflow dry-run mode and expected-version guard for npm publishing.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

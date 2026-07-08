@@ -2,6 +2,16 @@ name: Publish npm package
 
 on:
   workflow_dispatch:
+    inputs:
+      expected_version:
+        description: 'Version expected in package.json, for example 1.0.0-beta.3'
+        required: true
+        type: string
+      dry_run:
+        description: 'Run npm publish as a dry-run without publishing a package'
+        required: true
+        default: true
+        type: boolean
 
 permissions:
   contents: read
@@ -37,5 +47,27 @@ jobs:
       - name: Validate release candidate
         run: npm run release:check
 
+      - name: Confirm requested version
+        run: |
+          PACKAGE_VERSION="$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version")"
+          if [ "$PACKAGE_VERSION" != "${{ inputs.expected_version }}" ]; then
+            echo "Expected version ${{ inputs.expected_version }}, but package.json contains $PACKAGE_VERSION"
+            exit 1
+          fi
+
+      - name: Ensure version is not already published
+        if: ${{ !inputs.dry_run }}
+        run: |
+          PACKAGE_VERSION="$(node -p "JSON.parse(require('fs').readFileSync('package.json', 'utf8')).version")"
+          if npm view "@ptechsolution/psdm-framework@$PACKAGE_VERSION" version >/dev/null 2>&1; then
+            echo "Version $PACKAGE_VERSION is already published on npm"
+            exit 1
+          fi
+
+      - name: Dry-run beta publish
+        if: ${{ inputs.dry_run }}
+        run: npm publish --dry-run --access public --tag beta
+
       - name: Publish beta with provenance
+        if: ${{ !inputs.dry_run }}
         run: npm publish --provenance --access public --tag beta

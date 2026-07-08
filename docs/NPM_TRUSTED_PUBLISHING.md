@@ -70,12 +70,16 @@ Publishing workflow:
 
 - file: `.github/workflows/npm-publish.yml`;
 - trigger: manual `workflow_dispatch`;
+- required input `expected_version`, which must match `package.json`;
+- required input `dry_run`, defaulting to `true`;
 - GitHub-hosted runner;
 - `permissions.contents: read`;
 - `permissions.id-token: write`;
 - Node.js `24`, or at least Node.js `22.14.0`;
 - npm CLI `11.5.1` or later;
 - `npm run release:check` before publication;
+- `npm publish --dry-run --access public --tag beta` when `dry_run` is `true`;
+- npm registry version-exists check when `dry_run` is `false`;
 - `npm publish --provenance --access public --tag beta` for the beta publish.
 
 ## Package Metadata Requirements
@@ -112,6 +116,14 @@ name: Publish npm package
 
 on:
   workflow_dispatch:
+    inputs:
+      expected_version:
+        required: true
+        type: string
+      dry_run:
+        required: true
+        default: true
+        type: boolean
 
 permissions:
   contents: read
@@ -128,10 +140,15 @@ jobs:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
       - run: npm run release:check
+      - run: npm publish --dry-run --access public --tag beta
+        if: ${{ inputs.dry_run }}
       - run: npm publish --provenance --access public --tag beta
+        if: ${{ !inputs.dry_run }}
 ```
 
-Do not run this workflow until owner approval is confirmed.
+Use `dry_run: true` to test the protected workflow without publishing.
+
+Do not run this workflow with `dry_run: false` until owner approval is confirmed and the package version has not been published.
 
 ## Verification
 
@@ -142,6 +159,7 @@ Before publishing:
 - `npm run release:check` succeeds locally on a clean tree;
 - `npm publish --dry-run --access public --tag beta` succeeds locally;
 - `npm trust list @ptechsolution/psdm-framework` shows a GitHub Actions trusted publisher matching the exact GitHub owner, repository, workflow filename, and environment.
+- for real publication, the requested version is not already present on npm.
 
 If `npm trust list @ptechsolution/psdm-framework` stops showing the GitHub Actions trusted publisher, do not publish through the workflow until the trusted publisher is restored. The manual bootstrap exception was used only for early beta publication before trusted publishing was available.
 

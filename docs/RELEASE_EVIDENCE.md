@@ -249,3 +249,14 @@ npx npm@latest trust list @ptechsolution/psdm-framework --json
 ```
 
 Verification date: `2026-07-08`
+
+## Protected Workflow Safety
+
+The protected npm publish workflow requires:
+
+- `expected_version`, which must match `package.json`;
+- `dry_run`, defaulting to `true`.
+
+When `dry_run` is `true`, the workflow runs release validation and `npm publish --dry-run --access public --tag beta`.
+
+When `dry_run` is `false`, the workflow first verifies that the requested version is not already published, then runs `npm publish --provenance --access public --tag beta`.

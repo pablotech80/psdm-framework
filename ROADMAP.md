@@ -74,6 +74,7 @@ Completed:
 - Git tag and GitHub pre-release `v1.0.0-beta.1` created.
 - `1.0.0-beta.2` published as a presentation-only beta refresh without CLI behavior changes.
 - npm trusted publishing configured for future releases.
+- Protected npm publish workflow dry-run mode and expected-version guard added.
 
 ## Active Milestone
 
@@ -220,6 +221,7 @@ Planned outcomes:
 - [x] Publish `@ptechsolution/psdm-framework@1.0.0-beta.2`.
 - [x] Create Git tag and GitHub pre-release `v1.0.0-beta.2`.
 - [x] Configure npm trusted publishing for future releases.
+- [x] Add protected workflow dry-run mode and expected-version guard.
 - [ ] Resolve npm `latest` dist-tag `E403` follow-up.
 
 ### `1.0.0`

@@ -329,3 +329,12 @@ Result:
 - Environment: `npm-publish`.
 - Permission: `createPackage`.
 - Verification command passed: `npx npm@latest trust list @ptechsolution/psdm-framework --json`.
+
+## Protected Workflow Safety - 2026-07-08
+
+Result:
+
+- Added workflow input `expected_version` to force the operator to confirm the version in `package.json`.
+- Added workflow input `dry_run`, defaulting to `true`, to test the protected workflow without publishing.
+- Added a registry check before real publication so an already-published version fails before `npm publish`.
+- Real workflow publication remains blocked unless `dry_run` is explicitly set to `false` and owner approval is recorded.
