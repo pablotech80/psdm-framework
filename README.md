@@ -4,6 +4,8 @@ PTECH SPEC-DRIVEN METHOD is a governance framework for AI-assisted software proj
 
 It helps teams decide how much process a change needs based on risk. The goal is not bureaucracy. The goal is controlled delivery: small safe changes stay fast, production-sensitive changes get stronger governance.
 
+PSDM is currently beta software. It is a local CLI and GitHub Action, not a hosted platform.
+
 ## Status
 
 `1.0.0-beta.1`
@@ -29,6 +31,7 @@ This repository currently provides:
 - Config schema stability documentation.
 - Public package release checklist.
 - Release check automation.
+- Public repository readiness checklist.
 - Baseline artifact checks.
 - Baseline structure validation.
 - Change-level classification.
@@ -52,6 +55,12 @@ Then run:
 
 ```bash
 psdm help
+```
+
+After beta publication:
+
+```bash
+npm install -g @ptech/psdm-framework@beta
 ```
 
 ## CLI
@@ -156,6 +165,16 @@ Use `npm run release:check -- --allow-dirty` only when validating local changes 
 Beta release scope and exit criteria are tracked in `docs/BETA_RELEASE_NOTES.md`.
 
 The public documentation index is `docs/INDEX.md`.
+
+## Contributing And Security
+
+Public contribution expectations are in `CONTRIBUTING.md` and `CODE_OF_CONDUCT.md`.
+
+Security reporting expectations are in `SECURITY.md`. Do not open public issues for secrets, credentials, exploitable behavior, private repository output, or customer data.
+
+## What PSDM Is Not
+
+PSDM is not a hosted observability platform, a runtime security product, a secret scanner, or a replacement for owner approval. It provides governance artifacts, local validation, change classification, CI enforcement hooks, and AI-agent guardrail templates.
 
 ## Examples
 

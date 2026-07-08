@@ -55,7 +55,8 @@ Completed:
 - Public npm release check automated through `npm run release:check` and CI.
 - Final beta version string decided as `1.0.0-beta.1` with npm dist-tag `beta`.
 - Beta pre-publish check passed release validation but is blocked on npm authentication and explicit publish approval.
-- npm CLI authentication configured as `ptech_`; publish dry-run passed after normalizing `bin.psdm`.
+- npm CLI authentication configured; publish dry-run passed after normalizing `bin.psdm`.
+- Public repository readiness started: private downstream evidence sanitized, social contribution files added, and package dry-run revalidated.
 
 ## Active Milestone
 
@@ -181,6 +182,8 @@ Planned outcomes:
 - [x] Add example project fixture coverage.
 - [x] Decide final beta version string and npm dist-tag.
 - [x] Configure npm authentication for beta publish.
+- [x] Start public repository readiness cleanup.
+- [x] Add public contribution, conduct, issue, and PR templates.
 - [ ] Record explicit owner approval for beta publish.
 
 ### `1.0.0`
@@ -192,6 +195,8 @@ Planned outcomes:
 - [x] Define public npm release automation.
 - [x] Decide final beta version string and npm dist-tag.
 - [x] Configure npm authentication for beta publish.
+- [x] Start public repository readiness cleanup.
+- [x] Add public contribution, conduct, issue, and PR templates.
 - [ ] Record explicit owner approval for beta publish.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.

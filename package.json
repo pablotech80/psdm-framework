@@ -9,9 +9,12 @@
   "files": [
     "ADRs",
     "AGENTS.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
     "LICENSE",
     "README.md",
     "ROADMAP.md",
+    "SECURITY.md",
     "TODO.md",
     "action.yml",
     "bin",
@@ -36,7 +39,9 @@
     "governance",
     "spec-driven",
     "software-architecture",
-    "agents"
+    "agents",
+    "github-action",
+    "cli"
   ],
   "author": "PTECH",
   "license": "MIT",

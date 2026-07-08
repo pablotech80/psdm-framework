@@ -132,6 +132,8 @@
 - [x] Public npm release check automation.
 - [x] Final beta version string and npm dist-tag decision.
 - [x] npm authentication for beta publish.
+- [x] public repository readiness cleanup started.
+- [x] public contribution, conduct, issue, and PR templates.
 - [ ] explicit owner approval for beta publish.
 
 ## v1.0
@@ -144,6 +146,8 @@
 - [x] Public npm release check automation.
 - [x] Final beta version string and npm dist-tag decision.
 - [x] npm authentication for beta publish.
+- [x] public repository readiness cleanup started.
+- [x] public contribution, conduct, issue, and PR templates.
 - [ ] explicit owner approval for beta publish.
 - [ ] Public npm package.
 - [x] Example project fixture coverage.

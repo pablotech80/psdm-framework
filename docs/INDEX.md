@@ -15,6 +15,7 @@ Use it to find the right document by task: adopting PSDM in an existing project,
 - `docs/PSDM_OVERVIEW.md`: method overview and governance model.
 - `docs/PROJECT_BRIEF.md`: project purpose, audience, and success criteria.
 - `docs/BETA_RELEASE_NOTES.md`: beta release scope, validation, limitations, and exit criteria.
+- `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md`: public collaboration and reporting expectations.
 
 ## Adoption
 
@@ -88,6 +89,7 @@ Use `psdm adr "<decision title>"` when a Level 3 or Level 4 change creates or re
 - `action.yml`: composite GitHub Action metadata.
 - `docs/DOWNSTREAM_ACTION_VALIDATION.md`: downstream GitHub Action smoke-test protocol.
 - `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`: manual package publication readiness gate.
+- `docs/PUBLIC_REPOSITORY_READINESS.md`: public repository presentation and privacy gate.
 - `docs/DEPLOYMENT.md`: packaging and publication gate.
 - `docs/OPERATIONS.md`: operational signals and maintenance expectations.
 - `docs/BETA_RELEASE_NOTES.md`: beta release readiness and exit criteria.
@@ -130,5 +132,8 @@ Templates are intentionally plain Markdown and JSON so teams can adapt them with
 - `docs/ROADMAP.md`: broader product roadmap.
 - `docs/TASKS.md`: operational task workflow.
 - `docs/BETA_RELEASE_NOTES.md`: release readiness record.
+- `CONTRIBUTING.md`: contribution expectations.
+- `CODE_OF_CONDUCT.md`: public conduct expectations.
+- `SECURITY.md`: vulnerability reporting policy.
 
 Before merging meaningful changes, keep `ROADMAP.md` and `TODO.md` current and run the validation commands listed in `docs/TESTING.md`.

@@ -12,11 +12,11 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
+- [ ] Confirm npm scope ownership for `@ptech`.
 
 ## Next
 
-- [ ] Publish `1.0.0-beta.1` with npm dist-tag `beta`.
+- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
 
 ## Later
 
@@ -79,9 +79,14 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Bumped package status to `1.0.0-beta.1`.
 - [x] Ran strict release check on clean tree.
 - [x] Checked npm publish readiness and found npm auth missing.
-- [x] Configured npm CLI authentication as `ptech_`.
+- [x] Configured npm CLI authentication.
 - [x] Ran npm publish dry-run for `1.0.0-beta.1`.
 - [x] Normalized `bin.psdm` package metadata before publish.
+- [x] Started public repository readiness cleanup.
+- [x] Sanitized private downstream validation evidence from public docs.
+- [x] Added root `CONTRIBUTING.md` and `SECURITY.md`.
+- [x] Added public `CODE_OF_CONDUCT.md`, issue templates, and PR template.
+- [x] Revalidated release check and npm publish dry-run after public-readiness cleanup.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

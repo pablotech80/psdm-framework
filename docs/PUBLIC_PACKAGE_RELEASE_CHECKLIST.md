@@ -18,7 +18,7 @@ Before release, confirm:
 - [x] Release type is agreed: `beta`.
 - [x] Release channel is agreed: npm public package and GitHub tag after approval.
 - [ ] Owner approval is recorded for public publication with explicit `CONFIRM NPM BETA PUBLISH`.
-- [ ] No production deployment is implied by this release.
+- [x] No production deployment is implied by this release.
 
 ## Repository Preflight
 
@@ -28,6 +28,8 @@ Before release, confirm:
 - [ ] `README.md`, `docs/INDEX.md`, and `docs/BETA_RELEASE_NOTES.md` describe the release scope.
 - [ ] `ROADMAP.md` and `TODO.md` reflect the current release state and next action.
 - [ ] `docs/DOWNSTREAM_ACTION_VALIDATION.md` has current downstream Action evidence.
+- [ ] `docs/PUBLIC_REPOSITORY_READINESS.md` has no blocking public-readiness findings.
+- [x] Public collaboration files are present: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, issue templates, and PR template.
 
 ## Validation Commands
 
@@ -54,12 +56,12 @@ git diff --check
 
 Expected:
 
-- [ ] Syntax checks pass.
-- [ ] `npm test` passes.
-- [ ] `psdm validate . --json` has `failures: 0`.
-- [ ] CLI smoke commands return expected JSON or help text.
-- [ ] `npm pack --dry-run` completes.
-- [ ] `git diff --check` reports no whitespace errors.
+- [x] Syntax checks pass.
+- [x] `npm test` passes.
+- [x] `psdm validate . --json` has `failures: 0`.
+- [x] CLI smoke commands return expected JSON or help text.
+- [x] `npm pack --dry-run` completes.
+- [x] `git diff --check` reports no whitespace errors.
 
 ## Package Metadata
 
@@ -67,11 +69,11 @@ Verify `package.json`:
 
 - [x] `name` is final for the intended public package: `@ptech/psdm-framework`.
 - [x] `version` matches the release target: `1.0.0-beta.1`.
-- [ ] `description` is clear and public-safe.
-- [ ] `license` is correct.
+- [x] `description` is clear and public-safe.
+- [x] `license` is correct.
 - [x] `bin.psdm` points to `bin/psdm.mjs`.
-- [ ] `engines.node` matches supported runtime.
-- [ ] `keywords` are useful for discovery.
+- [x] `engines.node` matches supported runtime.
+- [x] `keywords` are useful for discovery.
 - [x] `publishConfig.access` is set to `public` for scoped package publication.
 - [x] Repository, homepage, bugs, and funding metadata are explicitly deferred until the GitHub repository or docs site is public.
 - [x] `files` allowlist is present to control package contents.
@@ -82,28 +84,32 @@ Inspect `npm pack --dry-run` output.
 
 Must include:
 
-- [ ] `bin/psdm.mjs`
-- [ ] `src/**`
-- [ ] `templates/**`
-- [ ] `action.yml`
-- [ ] `README.md`
-- [ ] `LICENSE`
-- [ ] `docs/INDEX.md`
-- [ ] `docs/CONFIG_SCHEMA.md`
-- [ ] `docs/BETA_RELEASE_NOTES.md`
-- [ ] `docs/DOWNSTREAM_ACTION_VALIDATION.md`
-- [ ] `examples/nextjs-saas/**`
-- [ ] `scripts/release-check.mjs`
-- [ ] `tests/cli-fixtures.mjs`
+- [x] `bin/psdm.mjs`
+- [x] `src/**`
+- [x] `templates/**`
+- [x] `action.yml`
+- [x] `CODE_OF_CONDUCT.md`
+- [x] `README.md`
+- [x] `LICENSE`
+- [x] `docs/INDEX.md`
+- [x] `docs/CONFIG_SCHEMA.md`
+- [x] `docs/BETA_RELEASE_NOTES.md`
+- [x] `docs/DOWNSTREAM_ACTION_VALIDATION.md`
+- [x] `examples/nextjs-saas/**`
+- [x] `scripts/release-check.mjs`
+- [x] `CONTRIBUTING.md`
+- [x] `SECURITY.md`
+- [x] `docs/PUBLIC_REPOSITORY_READINESS.md`
+- [x] `tests/cli-fixtures.mjs`
 
 Must not include:
 
-- [ ] local `.env` files;
-- [ ] local package tarballs;
-- [ ] secrets, tokens, credentials, or private data;
-- [ ] generated coverage output;
-- [ ] temporary downstream smoke repositories;
-- [ ] editor or OS metadata.
+- [x] local `.env` files;
+- [x] local package tarballs;
+- [x] secrets, tokens, credentials, or private data;
+- [x] generated coverage output;
+- [x] temporary downstream smoke repositories;
+- [x] editor or OS metadata.
 
 ## GitHub Action Gate
 
@@ -117,11 +123,12 @@ Before beta:
 
 ## Security And Privacy Gate
 
-- [ ] No examples contain real API keys, customer data, production URLs, or secrets.
-- [ ] Documentation does not instruct users to paste secrets into prompts.
-- [ ] AI guardrail docs preserve the governance-layer boundary.
-- [ ] Package contents are reviewed for local-only files.
-- [ ] Release notes disclose known limitations around simple secret scanning and advisory classification.
+- [x] No examples contain real API keys, customer data, production URLs, or secrets.
+- [x] Documentation does not instruct users to paste secrets into prompts.
+- [x] AI guardrail docs preserve the governance-layer boundary.
+- [x] Package contents are reviewed for local-only files.
+- [x] Release notes disclose known limitations around simple secret scanning and advisory classification.
+- [ ] Public repository readiness blockers are resolved or explicitly deferred before publication.
 
 ## Publication Gate
 
@@ -160,22 +167,23 @@ If release validation fails after publication:
 
 ## Open Release Gaps
 
-- [x] Decide whether to add `repository`, `homepage`, and `bugs` metadata before beta: deferred while `pablotech80/psdm-framework` is private.
+- [x] Decide whether to add `repository`, `homepage`, and `bugs` metadata before beta: deferred until the GitHub repository or docs site is public.
 - [x] Decide whether to introduce an npm `files` allowlist before beta: yes, keep one in `package.json`.
 - [x] Decide whether release validation should become an npm script or CI workflow: yes, use `npm run release:check` locally and in CI.
 - [x] Decide final beta version string and dist-tag: `1.0.0-beta.1` with npm dist-tag `beta`.
-- [ ] Configure npm authentication for the publishing owner or CI.
+- [x] Configure npm authentication for the publishing owner or CI.
+- [ ] Confirm npm scope ownership or publish permission for `@ptech`.
 - [ ] Record explicit owner approval before running `npm publish`.
 
 ## Decision Record
 
 Decision date: `2026-07-08`
 
-- Package name: keep `@ptech/psdm-framework`; `npm view @ptech/psdm-framework` returned `E404`, so no public package is currently visible under that name. Publication still requires npm authentication and scope permission.
-- GitHub metadata: defer `repository`, `homepage`, and `bugs`; `pablotech80/psdm-framework` is currently private, so public npm metadata would point users to inaccessible links.
+- Package name: keep `@ptech/psdm-framework`; `npm view @ptech/psdm-framework` returned `E404`, so no public package is currently visible under that name. Publication still requires scope permission.
+- GitHub metadata: defer `repository`, `homepage`, and `bugs` until the repository or docs site is public, so public npm metadata does not point users to inaccessible links.
 - Package contents: add a `files` allowlist before beta to reduce accidental publication of local or unrelated files.
 - Scoped publication: set `publishConfig.access` to `public` so an approved scoped npm publish uses the intended access mode.
-- Authentication: this machine is not logged into npm; `npm whoami` returned `ENEEDAUTH`, so publication remains blocked until owner login/automation is configured.
+- Authentication: npm CLI authentication is configured for a publisher account; publication remains blocked until `@ptech` scope permission and explicit owner approval are confirmed.
 - Release automation: use `npm run release:check` as the repeatable non-publishing gate. It supports `-- --allow-dirty` for local development validation, but CI and real release checks should run without that flag.
 - Beta versioning: use `1.0.0-beta.1` for the first public beta candidate and npm dist-tag `beta` to avoid promoting it as `latest`.
 
@@ -185,15 +193,29 @@ Result:
 
 - `npm run release:check`: passed.
 - `npm view @ptech/psdm-framework name version --json`: returned `E404`; no public package is visible under this name, or current credentials cannot access it.
-- `npm whoami`: returned `ENEEDAUTH`; this machine is not authenticated to npm.
-- Publish status: blocked until npm authentication and explicit owner approval are available.
+- `npm whoami`: authentication was not available during this earlier check.
+- Publish status: was blocked until npm authentication and explicit owner approval were available.
 
 ## Pre-Publish Check - 2026-07-08 After npm Login
 
 Result:
 
-- `npm whoami`: returned `ptech_`.
+- `npm whoami`: authenticated publisher account verified.
 - `npm view @ptech/psdm-framework name version --json`: returned `E404`; no public package is visible under this name.
 - `npm run release:check`: passed.
 - `npm publish --dry-run --access public --tag beta`: passed after normalizing `bin.psdm` to `bin/psdm.mjs` with `npm pkg fix`.
-- Publish status: blocked only on explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
+- Publish status: blocked on npm scope ownership confirmation and explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
+
+## Public Readiness Review - 2026-07-08
+
+Result:
+
+- Removed private downstream repository URLs, GitHub Actions run URLs, and local absolute paths from public downstream validation docs.
+- Added root `CONTRIBUTING.md` and `SECURITY.md`.
+- Added root `CODE_OF_CONDUCT.md`, issue templates, and PR template.
+- Added `docs/PUBLIC_REPOSITORY_READINESS.md`.
+- Re-ran `npm run release:check -- --allow-dirty`: passed.
+- Re-ran `npm publish --dry-run --access public --tag beta`: passed with 82 files.
+- `npm access list packages @ptech --json` returned `{}`.
+- `npm team ls ptech --json` returned `403 Forbidden`, so scope ownership is still not confirmed.
+- Remaining blocker: npm scope ownership for `@ptech` must be confirmed before real publication.
