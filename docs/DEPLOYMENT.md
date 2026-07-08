@@ -27,6 +27,8 @@ npm pack --dry-run
 
 Manual public package readiness is tracked in `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`.
 
+Trusted publishing and provenance planning is tracked in `docs/NPM_TRUSTED_PUBLISHING.md`.
+
 ## Deployment Gate
 
 Before release or publication:
@@ -40,10 +42,13 @@ Before release or publication:
 - validate GitHub Action behavior in a downstream repository before beta/release readiness;
 - confirm change-level enforcement behavior when Action inputs or `psdm enforce` change;
 - complete `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`;
+- confirm trusted publishing/provenance readiness in `docs/NPM_TRUSTED_PUBLISHING.md`;
 - confirm no secrets or local-only files are included.
 
 Production publishing is never implied by code changes. Publishing to a package registry requires explicit owner approval.
 
 For beta publication, require an explicit `CONFIRM NPM BETA PUBLISH` instruction after npm authentication is configured.
+
+When trusted publishing is enabled, prefer GitHub Actions OIDC over long-lived npm write tokens.
 
 Downstream GitHub Action validation is tracked in `docs/DOWNSTREAM_ACTION_VALIDATION.md`.

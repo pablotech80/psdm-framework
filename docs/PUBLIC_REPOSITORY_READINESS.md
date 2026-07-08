@@ -51,8 +51,9 @@ Recommended public repository metadata:
 
 - [ ] npm package scope is confirmed and controlled by the publisher.
 - [x] `package.json` includes public-safe `name`, `description`, `license`, `keywords`, `bin`, `files`, and `publishConfig`.
+- [x] `package.json` includes public `repository`, `homepage`, and `bugs` metadata.
 - [x] `package.json` includes `assets` in the package allowlist for README logo rendering on npm.
-- [ ] Add `repository`, `homepage`, and `bugs` only after the repository is public.
+- [x] Added `repository`, `homepage`, and `bugs` after the repository became public.
 - [x] `npm publish --dry-run --access public --tag beta` passes without npm metadata warnings.
 - [x] First beta uses npm dist-tag `beta`, not `latest`.
 

@@ -62,6 +62,7 @@ risk-management
 - [x] Add CodeQL workflow.
 - [x] Add dependency review workflow.
 - [x] Add Dependabot update configuration.
+- [x] Add npm trusted publishing/provenance plan.
 - [ ] Confirm npm scope ownership for `@ptech`.
 - [ ] Record explicit publication approval before `npm publish`.
 

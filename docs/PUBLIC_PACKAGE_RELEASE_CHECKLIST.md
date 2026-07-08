@@ -75,7 +75,7 @@ Verify `package.json`:
 - [x] `engines.node` matches supported runtime.
 - [x] `keywords` are useful for discovery.
 - [x] `publishConfig.access` is set to `public` for scoped package publication.
-- [x] Repository, homepage, bugs, and funding metadata are explicitly deferred until the GitHub repository or docs site is public.
+- [x] Repository, homepage, and bugs metadata point to the public GitHub repository.
 - [x] `files` allowlist is present to control package contents.
 
 ## Tarball Contents
@@ -133,6 +133,7 @@ Before beta:
 - [x] Package contents are reviewed for local-only files.
 - [x] Release notes disclose known limitations around simple secret scanning and advisory classification.
 - [ ] Public repository readiness blockers are resolved or explicitly deferred before publication.
+- [ ] npm trusted publishing/provenance blockers are resolved or explicitly deferred before publication.
 
 ## Publication Gate
 
@@ -171,7 +172,9 @@ If release validation fails after publication:
 
 ## Open Release Gaps
 
-- [x] Decide whether to add `repository`, `homepage`, and `bugs` metadata before beta: deferred until the GitHub repository or docs site is public.
+- [x] Earlier metadata decision recorded: defer `repository`, `homepage`, and `bugs` until the GitHub repository or docs site is public.
+- [x] Add `repository`, `homepage`, and `bugs` metadata after the GitHub repository became public.
+- [x] Define npm trusted publishing/provenance plan.
 - [x] Decide whether to introduce an npm `files` allowlist before beta: yes, keep one in `package.json`.
 - [x] Decide whether release validation should become an npm script or CI workflow: yes, use `npm run release:check` locally and in CI.
 - [x] Decide final beta version string and dist-tag: `1.0.0-beta.1` with npm dist-tag `beta`.
@@ -184,12 +187,13 @@ If release validation fails after publication:
 Decision date: `2026-07-08`
 
 - Package name: keep `@ptech/psdm-framework`; `npm view @ptech/psdm-framework` returned `E404`, so no public package is currently visible under that name. Publication still requires scope permission.
-- GitHub metadata: defer `repository`, `homepage`, and `bugs` until the repository or docs site is public, so public npm metadata does not point users to inaccessible links.
+- GitHub metadata: add `repository`, `homepage`, and `bugs` after the repository became public, so npm provenance and package presentation can point to accessible source.
 - Package contents: add a `files` allowlist before beta to reduce accidental publication of local or unrelated files.
 - Scoped publication: set `publishConfig.access` to `public` so an approved scoped npm publish uses the intended access mode.
 - Authentication: npm CLI authentication is configured for a publisher account; publication remains blocked until `@ptech` scope permission and explicit owner approval are confirmed.
 - Release automation: use `npm run release:check` as the repeatable non-publishing gate. It supports `-- --allow-dirty` for local development validation, but CI and real release checks should run without that flag.
 - Beta versioning: use `1.0.0-beta.1` for the first public beta candidate and npm dist-tag `beta` to avoid promoting it as `latest`.
+- Trusted publishing: plan GitHub Actions OIDC with workflow filename `npm-publish.yml`, protected environment `npm-publish`, and npm provenance before promoting beyond beta.
 
 ## Pre-Publish Check - 2026-07-08
 
@@ -225,3 +229,12 @@ Result:
 - `npm access list packages @ptech --json` returned `{}`.
 - `npm team ls ptech --json` returned `403 Forbidden`, so scope ownership is still not confirmed.
 - Remaining blocker: npm scope ownership for `@ptech` must be confirmed before real publication.
+
+## Trusted Publishing Plan - 2026-07-08
+
+Result:
+
+- Added public `repository`, `homepage`, and `bugs` metadata to `package.json`.
+- Added `docs/NPM_TRUSTED_PUBLISHING.md`.
+- Planned npm trusted publisher configuration for GitHub Actions, workflow `npm-publish.yml`, and protected environment `npm-publish`.
+- Kept executable publishing workflow out of the repository until npm scope ownership, trusted publisher settings, and explicit owner approval are confirmed.

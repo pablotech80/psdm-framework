@@ -65,6 +65,7 @@ Completed:
 - GitHub repository description, website, and topics configured for public beta presentation.
 - Public security reporting policy documented for beta trust readiness.
 - Automated security checks added: CodeQL, dependency review, Dependabot config, secret scanning, push protection, Dependabot security updates, and private vulnerability reporting.
+- npm trusted publishing/provenance plan documented and public npm metadata added.
 
 ## Active Milestone
 
@@ -200,6 +201,7 @@ Planned outcomes:
 - [x] Configure GitHub repository description, website, and topics.
 - [x] Document public security reporting policy.
 - [x] Add CodeQL, dependency review, Dependabot config, and GitHub security settings.
+- [x] Add npm trusted publishing/provenance plan and public package metadata.
 - [ ] Record explicit owner approval for beta publish.
 
 ### `1.0.0`
@@ -221,6 +223,7 @@ Planned outcomes:
 - [x] Configure GitHub repository description, website, and topics.
 - [x] Document public security reporting policy.
 - [x] Add CodeQL, dependency review, Dependabot config, and GitHub security settings.
+- [x] Add npm trusted publishing/provenance plan and public package metadata.
 - [ ] Record explicit owner approval for beta publish.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.

@@ -48,6 +48,14 @@
   ],
   "author": "Ptech AI Applied Lab",
   "license": "MIT",
+  "homepage": "https://github.com/pablotech80/psdm-framework#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pablotech80/psdm-framework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pablotech80/psdm-framework/issues"
+  },
   "publishConfig": {
     "access": "public"
   },
