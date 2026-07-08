@@ -84,5 +84,5 @@ Recommended public repository metadata:
 
 ## Current Blockers
 
-- GitHub social preview asset is prepared at `assets/psdm-social-preview.png`, but manual upload in GitHub repository settings is still required.
+- GitHub social preview image is configured from `assets/psdm-social-preview.png`.
 - Explicit owner approval is still required before `npm publish`.

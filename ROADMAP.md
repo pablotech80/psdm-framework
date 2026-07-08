@@ -81,6 +81,7 @@ Completed:
 - `1.0.0-beta.3` published through protected trusted publishing workflow.
 - Public README install path now promotes npm `@beta` first, with local checkout installation kept as the development path.
 - GitHub social preview image asset prepared at `assets/psdm-social-preview.png`.
+- GitHub social preview image configured in repository settings.
 
 ## Active Milestone
 
@@ -235,7 +236,7 @@ Planned outcomes:
 - [x] Create Git tag and GitHub pre-release `v1.0.0-beta.3`.
 - [x] Promote npm `@beta` as the primary public install command in README.
 - [x] Prepare GitHub social preview image asset.
-- [ ] Upload GitHub social preview image in repository settings.
+- [x] Upload GitHub social preview image in repository settings.
 - [ ] Resolve npm `latest` dist-tag `E403` follow-up.
 
 ### `1.0.0`
