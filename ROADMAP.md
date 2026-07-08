@@ -77,6 +77,7 @@ Completed:
 - Protected npm publish workflow dry-run mode and expected-version guard added.
 - Protected npm publish workflow dry-run executed successfully.
 - `1.0.0-beta.3` candidate prepared for trusted publishing validation.
+- Protected npm publish workflow dry-run passed for `1.0.0-beta.3`.
 
 ## Active Milestone
 
@@ -226,6 +227,7 @@ Planned outcomes:
 - [x] Add protected workflow dry-run mode and expected-version guard.
 - [x] Verify protected npm publish workflow in dry-run mode.
 - [x] Prepare `1.0.0-beta.3` candidate for trusted publishing validation.
+- [x] Verify `1.0.0-beta.3` through protected workflow dry-run.
 - [ ] Resolve npm `latest` dist-tag `E403` follow-up.
 
 ### `1.0.0`

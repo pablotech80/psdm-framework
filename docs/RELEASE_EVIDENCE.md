@@ -269,3 +269,31 @@ Dry-run evidence:
 - conclusion: `success`
 - real publish step: skipped
 - verification date: `2026-07-08`
+
+## Beta 3 Candidate Evidence
+
+Package: `@ptechsolution/psdm-framework`
+
+Version: `1.0.0-beta.3`
+
+Git commit: `2780c2dca182323cca439fa4f91fac28b02c8d95`
+
+Publication status: not published.
+
+Validation:
+
+- Local `npm run release:check`: passed.
+- Local `npm publish --dry-run --access public --tag beta`: passed.
+- Protected workflow dry-run: passed.
+
+Protected workflow run: `https://github.com/pablotech80/psdm-framework/actions/runs/28950450867`
+
+npm registry check:
+
+- `@ptechsolution/psdm-framework@1.0.0-beta.3`: not found.
+- `beta`: `1.0.0-beta.2`
+- `latest`: `1.0.0-beta.1`
+
+Next gate:
+
+- real publication requires explicit owner approval.

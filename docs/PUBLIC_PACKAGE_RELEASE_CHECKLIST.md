@@ -361,4 +361,9 @@ Result:
 - Scope is limited to release documentation and protected workflow safety updates after `1.0.0-beta.2`.
 - No CLI behavior, tests, governance logic, or package runtime changes are included.
 - `1.0.0-beta.3` is not currently published on npm.
+- Local `npm run release:check`: passed.
+- Local `npm publish --dry-run --access public --tag beta`: passed.
+- Protected workflow run: `https://github.com/pablotech80/psdm-framework/actions/runs/28950450867`
+- Protected workflow dry-run: passed.
+- Real publish step was skipped.
 - Real publication remains blocked until explicit owner approval is recorded.

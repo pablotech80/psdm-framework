@@ -166,4 +166,11 @@ Purpose:
 - Include post-`1.0.0-beta.2` release documentation and workflow safety updates.
 - Keep CLI behavior, tests, and governance logic unchanged.
 
+Validation:
+
+- Local `npm run release:check`: passed.
+- Local `npm publish --dry-run --access public --tag beta`: passed.
+- Protected workflow dry-run: passed.
+- `1.0.0-beta.3` remains unpublished on npm.
+
 Publication remains blocked until explicit owner approval is recorded.
