@@ -139,6 +139,7 @@
 - [x] Model and tool independence rule in `AGENTS.md` template.
 - [x] README table of contents.
 - [x] README density, CLI grouping, minimal config example, footer, and publication checklist polish.
+- [x] GitHub repository description, website, and topics configured.
 - [ ] explicit owner approval for beta publish.
 
 ## v1.0
@@ -158,6 +159,7 @@
 - [x] Model and tool independence rule in `AGENTS.md` template.
 - [x] README table of contents.
 - [x] README density, CLI grouping, minimal config example, footer, and publication checklist polish.
+- [x] GitHub repository description, website, and topics configured.
 - [ ] explicit owner approval for beta publish.
 - [ ] Public npm package.
 - [x] Example project fixture coverage.

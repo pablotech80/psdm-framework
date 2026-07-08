@@ -51,10 +51,20 @@ risk-management
 
 ## Remaining Owner Actions
 
-- [ ] Set GitHub repository description.
-- [ ] Set GitHub website.
-- [ ] Set GitHub topics.
+- [x] Set GitHub repository description.
+- [x] Set GitHub website.
+- [x] Set GitHub topics.
 - [ ] Set GitHub social preview image.
 - [ ] Confirm public security contact.
 - [ ] Confirm npm scope ownership for `@ptech`.
 - [ ] Record explicit publication approval before `npm publish`.
+
+## Applied Metadata
+
+2026-07-08:
+
+- Repository: `pablotech80/psdm-framework`
+- Visibility: `PRIVATE`
+- Description: `Specification-first governance framework for AI-assisted software projects.`
+- Website: `https://ptechsolution.net`
+- Topics: `ai-agents`, `ai-engineering`, `ai-governance`, `architecture`, `cli`, `developer-tools`, `devops`, `github-actions`, `risk-management`, `software-engineering`, `specification`

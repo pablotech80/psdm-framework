@@ -25,8 +25,9 @@ Recommended public repository metadata:
 ## Public Presentation Gate
 
 - [ ] Repository visibility is intentionally changed to public by the owner.
-- [x] Repository description guidance clearly says PSDM is a specification-first governance framework for AI-assisted software projects.
-- [x] Repository topics guidance includes the final public topic set from `docs/PUBLICATION_CHECKLIST.md`.
+- [x] Repository description is set to a specification-first governance framework for AI-assisted software projects.
+- [x] Repository website is set to `https://ptechsolution.net`.
+- [x] Repository topics are set to the final public topic set from `docs/PUBLICATION_CHECKLIST.md`.
 - [x] `README.md` explains purpose, install, quick start, CLI commands, examples, and beta status.
 - [x] `README.md` displays the PSDM logo from `assets/psdm-logo.png`.
 - [x] `LICENSE` is present.
@@ -74,10 +75,12 @@ Recommended public repository metadata:
 - `npm team ls ptech --json` returned `403 Forbidden`; npm scope ownership is not confirmed by this workstation.
 - README branding polish added: centered logo, Ptech AI Applied Lab brand, tagline, badges, clearer opening, and governance flow diagram.
 - Final README polish added: reduced density, grouped CLI reference, minimal config example, footer, and publication metadata checklist.
+- GitHub repository metadata applied: description, website, and topics.
 
 ## Current Blockers
 
 - npm scope ownership for `@ptech` must be confirmed before publish.
 - Repository is still private at the time of this checklist.
+- GitHub social preview image still requires manual configuration.
 - Public security contact is not yet defined.
 - Explicit owner approval is still required before `npm publish`.

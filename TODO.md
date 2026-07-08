@@ -94,6 +94,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added model and tool independence rule to generated `AGENTS.md` template and repository `AGENTS.md`.
 - [x] Added README table of contents for public navigation.
 - [x] Polished README density, CLI grouping, minimal config example, footer, and publication metadata checklist.
+- [x] Configured GitHub repository description, website, and topics for public beta.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.
