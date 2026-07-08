@@ -54,7 +54,8 @@ risk-management
 - [x] Set GitHub repository description.
 - [x] Set GitHub website.
 - [x] Set GitHub topics.
-- [ ] Set GitHub social preview image.
+- [x] Prepare GitHub social preview image asset: `assets/psdm-social-preview.png`.
+- [ ] Upload GitHub social preview image in repository settings.
 - [x] Confirm public security reporting policy.
 - [x] Verify GitHub private vulnerability reporting after public visibility.
 - [x] Enable GitHub secret scanning and push protection.
@@ -76,6 +77,13 @@ risk-management
 - Description: `Specification-first governance framework for AI-assisted software projects.`
 - Website: `https://ptechsolution.net`
 - Topics: `ai-agents`, `ai-engineering`, `ai-governance`, `architecture`, `cli`, `developer-tools`, `devops`, `github-actions`, `risk-management`, `software-engineering`, `specification`
+- Social preview asset: `assets/psdm-social-preview.png`
+
+Manual upload path:
+
+```text
+GitHub repository -> Settings -> Social preview -> Edit -> Upload an image...
+```
 
 ## Security Reporting
 
