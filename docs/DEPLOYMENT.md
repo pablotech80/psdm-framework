@@ -10,6 +10,7 @@ PSDM distribution currently means packaging and publishing a CLI package, plus m
 Deployment-sensitive surfaces:
 
 - `package.json`
+- package metadata and `files` allowlist;
 - `bin/psdm.mjs`
 - `action.yml`
 - `.github/workflows/**`

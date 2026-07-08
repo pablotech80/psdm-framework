@@ -12,11 +12,11 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Decide package metadata gaps before beta.
+- [ ] Define public npm release automation.
 
 ## Next
 
-- [ ] Define public npm release automation.
+- [ ] Decide final beta version string and dist-tag.
 
 ## Later
 
@@ -73,6 +73,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Executed downstream GitHub Action validation with pass and expected-fail evidence.
 - [x] Added example project fixture coverage.
 - [x] Prepared public package release checklist.
+- [x] Decided package metadata gaps before beta.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

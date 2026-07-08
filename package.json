@@ -6,6 +6,22 @@
   "bin": {
     "psdm": "./bin/psdm.mjs"
   },
+  "files": [
+    "ADRs",
+    "AGENTS.md",
+    "LICENSE",
+    "README.md",
+    "ROADMAP.md",
+    "TODO.md",
+    "action.yml",
+    "bin",
+    "docs",
+    "examples",
+    "psdm.config.json",
+    "src",
+    "templates",
+    "tests"
+  ],
   "scripts": {
     "check": "node bin/psdm.mjs check",
     "validate": "node bin/psdm.mjs validate",
@@ -22,6 +38,9 @@
   ],
   "author": "PTECH",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=20.0.0"
   }

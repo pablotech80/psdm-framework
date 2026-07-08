@@ -59,14 +59,16 @@ Expected:
 
 Verify `package.json`:
 
-- [ ] `name` is final for the intended public package.
+- [x] `name` is final for the intended public package: `@ptech/psdm-framework`.
 - [ ] `version` matches the release target.
 - [ ] `description` is clear and public-safe.
 - [ ] `license` is correct.
 - [ ] `bin.psdm` points to `./bin/psdm.mjs`.
 - [ ] `engines.node` matches supported runtime.
 - [ ] `keywords` are useful for discovery.
-- [ ] Repository, homepage, bugs, and funding metadata are added or explicitly deferred.
+- [x] `publishConfig.access` is set to `public` for scoped package publication.
+- [x] Repository, homepage, bugs, and funding metadata are explicitly deferred until the GitHub repository or docs site is public.
+- [x] `files` allowlist is present to control package contents.
 
 ## Tarball Contents
 
@@ -151,7 +153,17 @@ If release validation fails after publication:
 
 ## Open Release Gaps
 
-- [ ] Decide whether to add `repository`, `homepage`, and `bugs` metadata before beta.
-- [ ] Decide whether to introduce an npm `files` allowlist before beta.
+- [x] Decide whether to add `repository`, `homepage`, and `bugs` metadata before beta: deferred while `pablotech80/psdm-framework` is private.
+- [x] Decide whether to introduce an npm `files` allowlist before beta: yes, keep one in `package.json`.
 - [ ] Decide whether release validation should become an npm script or CI workflow.
 - [ ] Decide final beta version string and dist-tag.
+
+## Decision Record
+
+Decision date: `2026-07-08`
+
+- Package name: keep `@ptech/psdm-framework`; `npm view @ptech/psdm-framework` returned `E404`, so no public package is currently visible under that name. Publication still requires npm authentication and scope permission.
+- GitHub metadata: defer `repository`, `homepage`, and `bugs`; `pablotech80/psdm-framework` is currently private, so public npm metadata would point users to inaccessible links.
+- Package contents: add a `files` allowlist before beta to reduce accidental publication of local or unrelated files.
+- Scoped publication: set `publishConfig.access` to `public` so an approved scoped npm publish uses the intended access mode.
+- Authentication: this machine is not logged into npm; `npm whoami` returned `ENEEDAUTH`, so publication remains blocked until owner login/automation is configured.

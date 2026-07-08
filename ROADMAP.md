@@ -51,6 +51,7 @@ Completed:
 - Downstream GitHub Action validation executed with pass and expected-fail workflow evidence.
 - Example project fixture coverage added for a downstream-like Next.js SaaS/AI project.
 - Public package release checklist documented.
+- Package metadata gaps decided for beta: npm files allowlist added, public scoped publish configured, and private GitHub metadata deferred.
 
 ## Active Milestone
 
@@ -180,6 +181,7 @@ Planned outcomes:
 - [ ] Stable CLI API.
 - [ ] Stable config schema.
 - [x] Public package release checklist.
+- [x] Decide package metadata gaps before beta.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.
 - [x] Example project fixture coverage.

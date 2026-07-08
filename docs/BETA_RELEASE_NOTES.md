@@ -42,6 +42,7 @@ Expected compatible behavior:
 - Unknown profiles fail validation instead of silently changing policy.
 - Malformed risk path rules fail validation and are ignored by classification.
 - JSON output is intended for automation and should remain stable across beta patch releases.
+- Public package metadata intentionally defers GitHub repository links until the repository or docs site is public.
 
 ## Operator Validation
 

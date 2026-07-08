@@ -128,6 +128,7 @@
 - [x] Downstream GitHub Action validation executed.
 - [x] Example project fixture coverage.
 - [x] Public package release checklist.
+- [x] Package metadata gap decisions before beta.
 
 ## v1.0
 
@@ -135,6 +136,7 @@
 - [x] Full documentation index.
 - [ ] Tested fixtures.
 - [x] Public package release checklist.
+- [x] Package metadata gap decisions before beta.
 - [ ] Public npm package.
 - [x] Example project fixture coverage.
 - [ ] Runnable example projects.
