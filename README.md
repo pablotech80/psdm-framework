@@ -10,6 +10,7 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/npm-beta-cb3837" alt="npm beta" />
+  <img src="https://img.shields.io/npm/dw/%40ptechsolution%2Fpsdm-framework?label=downloads" alt="npm weekly downloads" />
   <img src="https://img.shields.io/badge/license-MIT-2ea44f" alt="MIT license" />
   <img src="https://img.shields.io/badge/node-%3E%3D20.0.0-339933" alt="Node.js >=20.0.0" />
   <img src="https://img.shields.io/badge/GitHub%20Action-ready-2088ff" alt="GitHub Action" />
