@@ -13,7 +13,7 @@ This validation proves that `action.yml` works as a consumed Action, not only in
 
 Validate:
 
-- `uses: ptech/psdm-framework@main` resolves from another repository;
+- `uses: pablotech80/psdm-framework@main` resolves from another repository;
 - `psdm validate` runs against a downstream checkout;
 - `psdm-report.json` is created and printed;
 - `psdm enforce` runs when `enforce-change-level: 'true'`;
@@ -65,7 +65,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ptech/psdm-framework@main
+      - uses: pablotech80/psdm-framework@main
         with:
           target: .
           enforce-change-level: 'true'

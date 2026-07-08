@@ -302,6 +302,7 @@ function testValidateInitializedProject() {
   assert.equal(report.config.exists, true)
   assert.equal(report.config.ai.pii.allowedInPrompts, false)
   assert.equal(report.config.ai.tools.registryRequired, true)
+  assert.equal(existsSync(resolve(target, 'ADRs', 'README.md')), true)
   assert.ok(report.results.some((item) => item.artifact === 'AGENTS.md' && item.status === 'PASS'))
 }
 

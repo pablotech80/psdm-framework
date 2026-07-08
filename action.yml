@@ -47,13 +47,15 @@ runs:
         if [ -n "$PSDM_CONFIG" ]; then
           config_args=(--config "$PSDM_CONFIG")
         fi
+        report_path="${RUNNER_TEMP:-$PWD}/psdm-report.json"
 
         if [ -n "$PSDM_FEATURE" ]; then
-          node "$GITHUB_ACTION_PATH/bin/psdm.mjs" validate "$PSDM_TARGET" --feature "$PSDM_FEATURE" "${config_args[@]}" --json > psdm-report.json || status=$?
+          node "$GITHUB_ACTION_PATH/bin/psdm.mjs" validate "$PSDM_TARGET" --feature "$PSDM_FEATURE" "${config_args[@]}" --json > "$report_path" || status=$?
         else
-          node "$GITHUB_ACTION_PATH/bin/psdm.mjs" validate "$PSDM_TARGET" "${config_args[@]}" --json > psdm-report.json || status=$?
+          node "$GITHUB_ACTION_PATH/bin/psdm.mjs" validate "$PSDM_TARGET" "${config_args[@]}" --json > "$report_path" || status=$?
         fi
-        cat psdm-report.json
+        cat "$report_path"
+        cp "$report_path" psdm-report.json
         exit "$status"
     - name: Enforce PSDM change level
       if: ${{ inputs.enforce-change-level == 'true' }}
@@ -82,11 +84,13 @@ runs:
         fi
 
         status=0
+        enforcement_path="${RUNNER_TEMP:-$PWD}/psdm-enforcement.json"
         node "$GITHUB_ACTION_PATH/bin/psdm.mjs" enforce "$PSDM_CHANGE_DESCRIPTION" \
           --target "$PSDM_TARGET" \
           --max-level "$PSDM_MAX_LEVEL" \
           "${file_args[@]}" \
           "${config_args[@]}" \
-          --json > psdm-enforcement.json || status=$?
-        cat psdm-enforcement.json
+          --json > "$enforcement_path" || status=$?
+        cat "$enforcement_path"
+        cp "$enforcement_path" psdm-enforcement.json
         exit "$status"

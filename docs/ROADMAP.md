@@ -123,6 +123,7 @@
 - [x] ADR generator.
 - [x] Beta release notes.
 - [x] Downstream GitHub Action validation protocol.
+- [x] Downstream Action smoke bootstrap fixes.
 - [ ] Downstream GitHub Action validation executed.
 
 ## v1.0

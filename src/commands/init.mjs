@@ -38,9 +38,17 @@ export async function initCommand(args) {
     if (artifact === 'ADRs') {
       if (!existsSync(destination)) {
         mkdirSync(destination, { recursive: true })
+        const readme = join(destination, 'README.md')
+        const template = readFileSync(join(templates, 'ADRS_README.md'), 'utf8')
+        writeFileSync(readme, template)
         created += 1
         console.log(`CREATED ${artifact}`)
       } else {
+        const readme = join(destination, 'README.md')
+        if (!existsSync(readme)) {
+          const template = readFileSync(join(templates, 'ADRS_README.md'), 'utf8')
+          writeFileSync(readme, template)
+        }
         skipped += 1
         console.log(`SKIP    ${artifact}`)
       }

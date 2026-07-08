@@ -26,6 +26,7 @@ Project: `psdm-framework`
 - Classify changes using textual signals and configured risk paths.
 - Enforce maximum allowed change level for CI policy gates.
 - Generate ADR scaffolds under `ADRs/` for durable architecture and governance decisions.
+- Create `ADRs/README.md` during baseline init so the ADR directory is versionable in Git.
 - Validate required artifacts, required sections, non-empty files, draft-marker wording, and simple secret-like values.
 - Provide templates for newly initialized projects.
 - Provide a GitHub Action entrypoint for repository validation.
@@ -41,6 +42,7 @@ Project: `psdm-framework`
 - `node bin/psdm.mjs init <target>` creates `docs/PSDM_ADOPTION.md` when adopting into a repository with existing AI governance files.
 - `node bin/psdm.mjs adr "<title>" --target <target> --json` creates a non-overwriting ADR file under `ADRs/`.
 - `node bin/psdm.mjs init <target>` creates baseline artifacts without overwriting existing files.
+- Initialized baselines include a tracked `ADRs/README.md` file.
 - `node bin/psdm.mjs init <target> --dry-run` previews the same planned actions without writing files.
 - `node bin/psdm.mjs validate <target> --json` emits parseable JSON with decision, results, config, git, and target metadata.
 - Validation JSON includes the active profile and whether it was recognized.

@@ -46,6 +46,7 @@ Completed:
 - ADR accepted to keep PSDM as a governance layer instead of an AI observability platform.
 - AI guardrail templates added for the `ai-agent` profile.
 - Downstream GitHub Action validation protocol documented.
+- GitHub Action downstream smoke blocker fixed by making `ADRs/` versionable during `psdm init` and avoiding validation-time report dirtying.
 
 ## Active Milestone
 
@@ -165,6 +166,7 @@ Planned outcomes:
 - [x] Tested fixtures for CLI behavior.
 - [x] Prepare beta release notes.
 - [x] Document downstream GitHub Action validation protocol.
+- [x] Fix downstream Action smoke bootstrap issues found during first external run.
 - [ ] Execute downstream GitHub Action validation.
 
 ### `1.0.0`
