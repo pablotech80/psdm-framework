@@ -69,6 +69,7 @@ Completed:
 - Release evidence, tag policy, and beta exit criteria documented.
 - npm scope ownership confirmed for `@ptechsolution`; package scope updated from unavailable `@ptech`.
 - Protected npm trusted publishing workflow added for first beta publication.
+- One-time manual bootstrap path accepted for `1.0.0-beta.1` after npm trusted publisher `E404`, pending explicit publish approval.
 
 ## Active Milestone
 
@@ -208,6 +209,7 @@ Planned outcomes:
 - [x] Define release evidence, tag policy, and beta exit criteria.
 - [x] Confirm npm scope ownership and package name under `@ptechsolution`.
 - [x] Add protected npm trusted publishing workflow.
+- [x] Decide one-time manual bootstrap path after npm trusted publisher `E404`.
 - [ ] Record explicit owner approval for beta publish.
 
 ### `1.0.0`
@@ -233,6 +235,7 @@ Planned outcomes:
 - [x] Define release evidence, tag policy, and beta exit criteria.
 - [x] Confirm npm scope ownership and package name under `@ptechsolution`.
 - [x] Add protected npm trusted publishing workflow.
+- [x] Decide one-time manual bootstrap path after npm trusted publisher `E404`.
 - [ ] Record explicit owner approval for beta publish.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.

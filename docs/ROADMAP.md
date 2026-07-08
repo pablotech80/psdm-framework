@@ -146,6 +146,7 @@
 - [x] release evidence, tag policy, and beta exit criteria.
 - [x] npm scope ownership and package name under `@ptechsolution`.
 - [x] protected npm trusted publishing workflow.
+- [x] one-time manual bootstrap path after npm trusted publisher `E404`.
 - [ ] explicit owner approval for beta publish.
 
 ## v1.0
@@ -172,6 +173,7 @@
 - [x] release evidence, tag policy, and beta exit criteria.
 - [x] npm scope ownership and package name under `@ptechsolution`.
 - [x] protected npm trusted publishing workflow.
+- [x] one-time manual bootstrap path after npm trusted publisher `E404`.
 - [ ] explicit owner approval for beta publish.
 - [ ] Public npm package.
 - [x] Example project fixture coverage.

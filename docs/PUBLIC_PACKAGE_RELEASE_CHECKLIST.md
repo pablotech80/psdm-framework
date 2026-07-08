@@ -135,7 +135,8 @@ Before beta:
 - [x] Release notes disclose known limitations around simple secret scanning and advisory classification.
 - [ ] Public repository readiness blockers are resolved or explicitly deferred before publication.
 - [x] npm trusted publishing/provenance workflow and protected environment are configured.
-- [ ] npm trusted publisher configuration is confirmed before publication.
+- [x] One-time manual bootstrap exception is accepted for `1.0.0-beta.1` because npm trusted publisher creation returns `E404` before first publish.
+- [ ] Explicit owner approval is recorded before manual bootstrap publication.
 
 ## Publication Gate
 
@@ -181,6 +182,7 @@ If release validation fails after publication:
 - [x] Add `repository`, `homepage`, and `bugs` metadata after the GitHub repository became public.
 - [x] Define npm trusted publishing/provenance plan.
 - [x] Add protected npm trusted publishing workflow.
+- [x] Decide first beta bootstrap path after npm trusted publisher `E404`.
 - [x] Define release evidence and beta exit policy.
 - [x] Decide whether to introduce an npm `files` allowlist before beta: yes, keep one in `package.json`.
 - [x] Decide whether release validation should become an npm script or CI workflow: yes, use `npm run release:check` locally and in CI.
@@ -202,6 +204,7 @@ Decision date: `2026-07-08`
 - Beta versioning: use `1.0.0-beta.1` for the first public beta candidate and npm dist-tag `beta` to avoid promoting it as `latest`.
 - Trusted publishing: plan GitHub Actions OIDC with workflow filename `npm-publish.yml`, protected environment `npm-publish`, and npm provenance before promoting beyond beta.
 - Trusted publishing workflow: use `.github/workflows/npm-publish.yml` with GitHub Actions OIDC, protected environment `npm-publish`, and npm provenance for beta publication.
+- First beta bootstrap: accept one-time manual publication for `1.0.0-beta.1` only because npm trusted publisher creation returned `E404` before the package existed. Configure trusted publishing immediately after first publish.
 - Release evidence: keep beta as `beta` until release evidence, compatibility, downstream validation, and stable-release criteria are satisfied for `1.0.0`.
 
 ## Pre-Publish Check - 2026-07-08
@@ -262,7 +265,8 @@ Result:
 - `npm trust github @ptechsolution/psdm-framework --repo pablotech80/psdm-framework --file npm-publish.yml --env npm-publish --allow-publish --dry-run --json` returned the expected `createPackage` permission.
 - Owner browser/OTP authentication was completed, but real npm trusted publisher creation returned `E404 Not Found` while the package does not yet exist.
 - `npm trust list @ptechsolution/psdm-framework --json` also returned `E404 Not Found` while the package does not yet exist.
-- Kept publication blocked on npm trusted publisher confirmation and explicit owner approval.
+- Accepted one-time manual bootstrap publication path for `1.0.0-beta.1`, pending explicit `CONFIRM NPM BETA PUBLISH` owner approval.
+- Trusted publishing must be configured immediately after the package exists.
 
 ## Release Evidence Policy - 2026-07-08
 

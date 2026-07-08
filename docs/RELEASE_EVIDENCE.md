@@ -87,7 +87,8 @@ For the first beta, local publication may be accepted only if:
 - trusted publishing cannot be configured before the first publish;
 - npm scope ownership is confirmed;
 - `npm publish --dry-run --access public --tag beta` passes;
-- owner approval explicitly accepts local publication for that beta.
+- owner approval explicitly accepts local publication for that beta;
+- trusted publishing is configured immediately after the first package version exists.
 
 After trusted publishing is configured, prefer GitHub Actions OIDC over long-lived npm write tokens.
 

@@ -12,11 +12,11 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Decide first beta bootstrap path after npm trusted publisher `E404`.
+- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
 
 ## Next
 
-- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
+- [ ] Publish `1.0.0-beta.1` with one-time manual bootstrap and record release evidence.
 
 ## Later
 
@@ -102,6 +102,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Defined release evidence, tag policy, and beta exit criteria.
 - [x] Confirmed npm scope ownership for `@ptechsolution` and updated package scope.
 - [x] Added protected npm trusted publishing workflow for first beta.
+- [x] Decided one-time manual bootstrap path after npm trusted publisher `E404`.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.
