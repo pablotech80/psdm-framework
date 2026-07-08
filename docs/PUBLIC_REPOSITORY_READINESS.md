@@ -34,6 +34,7 @@ Recommended public repository metadata:
 - [x] `CODE_OF_CONDUCT.md` is present.
 - [x] `CONTRIBUTING.md` is present.
 - [x] `SECURITY.md` is present.
+- [x] Public security reporting policy is documented.
 - [x] Pull request and issue templates are present.
 - [ ] Public issue settings and vulnerability reporting expectations are configured.
 
@@ -76,11 +77,12 @@ Recommended public repository metadata:
 - README branding polish added: centered logo, Ptech AI Applied Lab brand, tagline, badges, clearer opening, and governance flow diagram.
 - Final README polish added: reduced density, grouped CLI reference, minimal config example, footer, and publication metadata checklist.
 - GitHub repository metadata applied: description, website, and topics.
+- Public security reporting policy documented with GitHub private vulnerability reporting as primary channel and `https://ptechsolution.net` as fallback.
 
 ## Current Blockers
 
 - npm scope ownership for `@ptech` must be confirmed before publish.
 - Repository is still private at the time of this checklist.
 - GitHub social preview image still requires manual configuration.
-- Public security contact is not yet defined.
+- GitHub private vulnerability reporting still requires verification after public visibility.
 - Explicit owner approval is still required before `npm publish`.

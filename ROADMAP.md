@@ -63,6 +63,7 @@ Completed:
 - README navigation improved with a public-facing table of contents.
 - Final README density, CLI grouping, minimal config example, footer, and publication metadata checklist polished for public beta.
 - GitHub repository description, website, and topics configured for public beta presentation.
+- Public security reporting policy documented for beta trust readiness.
 
 ## Active Milestone
 
@@ -196,6 +197,7 @@ Planned outcomes:
 - [x] Add README table of contents for public navigation.
 - [x] Polish README density, CLI groups, configuration section, footer, and publication checklist.
 - [x] Configure GitHub repository description, website, and topics.
+- [x] Document public security reporting policy.
 - [ ] Record explicit owner approval for beta publish.
 
 ### `1.0.0`
@@ -215,6 +217,7 @@ Planned outcomes:
 - [x] Add README table of contents for public navigation.
 - [x] Polish README density, CLI groups, configuration section, footer, and publication checklist.
 - [x] Configure GitHub repository description, website, and topics.
+- [x] Document public security reporting policy.
 - [ ] Record explicit owner approval for beta publish.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.

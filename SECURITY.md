@@ -8,7 +8,16 @@ PSDM Framework is currently in beta. Security fixes target the latest published 
 
 Do not open a public issue for secrets, credential exposure, supply-chain concerns, or exploitable behavior.
 
-Until a dedicated security contact is published, report privately through the repository owner's preferred private channel. Public release metadata must be updated with a dedicated security contact before stable `1.0.0`.
+Primary public reporting channel:
+
+- Use GitHub's private vulnerability reporting flow from the repository Security tab when the repository is public.
+
+Fallback public contact:
+
+- If GitHub private vulnerability reporting is unavailable, contact Ptech through `https://ptechsolution.net` and request a private security disclosure channel.
+- Do not include secrets, exploit payloads, private repository output, customer data, or production incident details in the first message.
+
+For stable `1.0.0`, maintainers should verify that GitHub private vulnerability reporting is enabled and visible on the public repository.
 
 ## Scope
 

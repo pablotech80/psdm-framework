@@ -32,6 +32,20 @@ Security posture:
 - simple secret-like pattern detection in validator;
 - explicit production confirmation policy in generated governance docs.
 
+## Public Vulnerability Reporting
+
+Primary channel:
+
+- Use GitHub private vulnerability reporting from the repository Security tab when the repository is public.
+
+Fallback channel:
+
+- Use `https://ptechsolution.net` to request a private security disclosure channel if GitHub private vulnerability reporting is unavailable.
+
+Do not open public issues for secrets, credential exposure, supply-chain concerns, exploitable behavior, private repository output, customer data, or production incident details.
+
+Before stable `1.0.0`, maintainers must verify that the public repository exposes the intended private vulnerability reporting flow.
+
 ## Security Gate
 
 Security review is required when a change:

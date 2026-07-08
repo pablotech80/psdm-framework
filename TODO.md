@@ -12,14 +12,16 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Confirm npm scope ownership for `@ptech`.
+- [ ] Add GitHub CodeQL/dependency review configuration for public beta trust.
 
 ## Next
 
-- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
+- [ ] Add npm trusted publishing/provenance plan.
 
 ## Later
 
+- [ ] Confirm npm scope ownership for `@ptech`.
+- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
 - [ ] Add richer runnable example projects.
 
 ## Done
@@ -95,6 +97,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added README table of contents for public navigation.
 - [x] Polished README density, CLI grouping, minimal config example, footer, and publication metadata checklist.
 - [x] Configured GitHub repository description, website, and topics for public beta.
+- [x] Documented public security reporting policy.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

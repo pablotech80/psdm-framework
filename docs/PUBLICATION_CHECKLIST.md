@@ -55,7 +55,8 @@ risk-management
 - [x] Set GitHub website.
 - [x] Set GitHub topics.
 - [ ] Set GitHub social preview image.
-- [ ] Confirm public security contact.
+- [x] Confirm public security reporting policy.
+- [ ] Verify GitHub private vulnerability reporting after public visibility.
 - [ ] Confirm npm scope ownership for `@ptech`.
 - [ ] Record explicit publication approval before `npm publish`.
 
@@ -68,3 +69,17 @@ risk-management
 - Description: `Specification-first governance framework for AI-assisted software projects.`
 - Website: `https://ptechsolution.net`
 - Topics: `ai-agents`, `ai-engineering`, `ai-governance`, `architecture`, `cli`, `developer-tools`, `devops`, `github-actions`, `risk-management`, `software-engineering`, `specification`
+
+## Security Reporting
+
+Primary channel:
+
+- GitHub private vulnerability reporting from the repository Security tab when the repository is public.
+
+Fallback channel:
+
+- `https://ptechsolution.net`
+
+Validation note:
+
+- A GitHub API PATCH was attempted on 2026-07-08 to enable private vulnerability reporting, but the repository API response did not expose a `private_vulnerability_reporting` status while the repository remained private. Verify this again after changing repository visibility to public.
