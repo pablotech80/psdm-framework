@@ -36,7 +36,14 @@ For security, data, payment, AI, deployment, or operations work, also read:
 
 Agents must not implement product changes without required PSDM artifacts for the change level.
 
-## 5. Decision Model
+## 5. Model And Tool Independence
+
+- Preserve existing Claude, Cursor, Copilot, Codex, skill, prompt, and assistant instruction files.
+- Treat PSDM governance as the source of truth for change level, approval, security, data, deployment, and release rules.
+- Use tool-specific files as adapters for a specific assistant, not as replacements for PSDM governance.
+- Stop when a tool-specific instruction conflicts with PSDM governance and ask the owner to resolve the conflict.
+
+## 6. Decision Model
 
 1. Classify the change.
 2. Confirm allowed and forbidden files.
@@ -44,11 +51,11 @@ Agents must not implement product changes without required PSDM artifacts for th
 4. Proceed only if context is sufficient.
 5. Validate and report.
 
-## 6. Escalation
+## 7. Escalation
 
 Stop when scope, security impact, deployment impact, owner approval, or validation is unclear.
 
-## 7. Approval Policy
+## 8. Approval Policy
 
 Production execution requires:
 
@@ -56,19 +63,19 @@ Production execution requires:
 CONFIRM PRODUCTION DEPLOY
 ```
 
-## 8. Failure Behaviour
+## 9. Failure Behaviour
 
 Report failures directly. Do not hide validation errors.
 
-## 9. Security Assumptions
+## 10. Security Assumptions
 
 Secrets, credentials, private data, logs, and production values must never be copied into documentation or prompts.
 
-## 10. Communication Between Agents
+## 11. Communication Between Agents
 
 Agents must communicate changed files, validation, risks, open questions, and handoff state.
 
-## 11. Capability Matrix
+## 12. Capability Matrix
 
 | Capability | Allowed By Default | Conditions |
 |---|---|---|
@@ -77,6 +84,6 @@ Agents must communicate changed files, validation, risks, open questions, and ha
 | Run tests | Yes | Only relevant, non-destructive commands. |
 | Deploy | No | Requires explicit production confirmation. |
 
-## 12. Final Rule
+## 13. Final Rule
 
 Make the smallest safe change that satisfies the documented requirement.

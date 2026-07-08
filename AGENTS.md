@@ -41,6 +41,15 @@ Agents must preserve these constraints:
 - Treat auth, data, payment, AI, deployment, operations, and CI/CD behavior as high-risk surfaces.
 - Never include secrets, credentials, private customer data, or production values in docs, tests, prompts, or examples.
 
+## Model And Tool Independence
+
+Agents must preserve PSDM's tool-neutral governance boundary:
+
+- Preserve existing Claude, Cursor, Copilot, Codex, skill, prompt, and assistant instruction files.
+- Treat PSDM governance as the source of truth for change level, approval, security, data, deployment, and release rules.
+- Use tool-specific files as adapters for a specific assistant, not as replacements for PSDM governance.
+- Stop when a tool-specific instruction conflicts with PSDM governance and surface the conflict for owner resolution.
+
 ## Change Flow
 
 1. Classify the change by behavior, touched files, and risk paths.
