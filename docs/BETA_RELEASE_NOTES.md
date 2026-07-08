@@ -2,6 +2,7 @@
 
 Status: `Published`
 Target Release: `1.0.0-beta.1`
+Next Candidate: `1.0.0-beta.2`
 Project: `psdm-framework`
 
 Published: `2026-07-08`
@@ -119,3 +120,16 @@ Proceed to beta only after validating the Action in at least one downstream repo
 - GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.1`
 - Clean install from npm `@beta`: passed.
 - Trusted publishing workflow exists, but npm trusted publisher configuration is still blocked by npm `E403`.
+
+## Next Beta Candidate - 1.0.0-beta.2
+
+Status: `Prepared, not published`
+
+Purpose:
+
+- Refresh npm/GitHub presentation after public beta publication.
+- Include the cleaned README badge set.
+- Include the npm weekly downloads badge.
+- Keep CLI behavior, tests, governance logic, and publishing workflow unchanged.
+
+Publication remains blocked until explicit owner approval is recorded and npm `latest`/trusted publishing `E403` handling is accepted or resolved.

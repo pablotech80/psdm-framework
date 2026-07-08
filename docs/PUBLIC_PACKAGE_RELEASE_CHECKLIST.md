@@ -3,6 +3,7 @@
 Status: `Active`
 Project: `psdm-framework`
 Release Target: `1.0.0-beta.1`
+Next Candidate: `1.0.0-beta.2`
 
 ## Purpose
 
@@ -292,3 +293,15 @@ Result:
 - `npx psdm help` passed from the installed package.
 - npm reports both `beta` and `latest` on `1.0.0-beta.1`; `npm dist-tag rm @ptechsolution/psdm-framework latest` returned `E403 Forbidden` even after confirming owner, read-write access, and retrying while account 2FA was temporarily disabled.
 - Post-publish trusted publisher creation returned `E403 Forbidden`; resolve before the next release.
+
+## Beta 2 Candidate - 2026-07-08
+
+Result:
+
+- Prepared `1.0.0-beta.2` as a presentation-only candidate.
+- Scope is limited to README polish already merged after `1.0.0-beta.1`: duplicate beta badge removal and npm weekly downloads badge.
+- No CLI behavior, tests, governance logic, or publishing workflow changes are included.
+- `npm run release:check -- --allow-dirty`: passed.
+- `npm publish --dry-run --access public --tag beta`: passed for `1.0.0-beta.2` with 87 files.
+- Real publication remains blocked until explicit owner approval is recorded.
+- npm `latest`/trusted publishing `E403` remains an accepted blocker or support follow-up before subsequent releases.
