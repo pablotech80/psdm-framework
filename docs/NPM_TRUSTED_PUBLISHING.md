@@ -1,25 +1,31 @@
 # NPM_TRUSTED_PUBLISHING.md
 
-Status: `Planned`
+Status: `Active`
 Project: `psdm-framework`
 
 ## Purpose
 
-Define how PSDM should move from local npm publication to trusted publishing with provenance.
+Define how PSDM publishes through npm trusted publishing with provenance.
 
-This document does not approve publication and does not create a publishing workflow by itself.
+This document does not approve publication. Publication still requires the protected GitHub environment approval and explicit owner approval.
 
 ## Decision
 
-Use npm trusted publishing through GitHub Actions before promoting PSDM beyond the first beta candidate.
+Use npm trusted publishing through GitHub Actions from the first beta candidate.
 
 For the first beta, publication remains blocked until:
 
-- npm scope ownership or publish permission for `@ptechsolution` is confirmed;
-- the npm package can be configured with a trusted publisher;
-- the release workflow has manual GitHub environment approval;
+- npm trusted publisher configuration is confirmed on npm;
+- the release workflow receives manual GitHub environment approval;
 - `npm run release:check` passes on the release commit;
 - the owner gives explicit `CONFIRM NPM BETA PUBLISH` approval.
+
+Configuration status:
+
+- GitHub environment `npm-publish`: configured;
+- GitHub workflow `.github/workflows/npm-publish.yml`: configured;
+- npm trusted publisher record: pending owner browser/OTP authentication;
+- publication: blocked until the trusted publisher record is confirmed and owner approval is recorded.
 
 ## Why
 
@@ -31,7 +37,7 @@ This does not prove the package is bug-free or secure. It improves supply-chain 
 
 ## Required NPM Configuration
 
-After the package exists or npm allows pre-publication trusted publisher configuration for the package, configure npm:
+Trusted publisher configuration:
 
 - Package: `@ptechsolution/psdm-framework`
 - Publisher: GitHub Actions
@@ -43,20 +49,21 @@ After the package exists or npm allows pre-publication trusted publisher configu
 
 Only one trusted publisher should be active for the package.
 
-After trusted publishing is confirmed, restrict legacy token publishing where npm package settings allow it.
+After the first package version exists, restrict legacy token publishing where npm package settings allow it.
 
 ## Required GitHub Configuration
 
-Create a protected GitHub environment named `npm-publish` before enabling an executable publish workflow.
+Protected GitHub environment:
 
-Recommended environment rules:
-
+- name: `npm-publish`;
 - required reviewer: repository owner or release maintainer;
 - deployment branch: `main` only;
 - secrets: none for npm publishing when OIDC trusted publishing is active.
 
-The publishing job must use:
+Publishing workflow:
 
+- file: `.github/workflows/npm-publish.yml`;
+- trigger: manual `workflow_dispatch`;
 - GitHub-hosted runner;
 - `permissions.contents: read`;
 - `permissions.id-token: write`;
@@ -90,9 +97,9 @@ This plan does not:
 
 ## Manual Release Shape
 
-When all blockers are resolved, the intended publish workflow should be manual or release-triggered with protected environment approval.
+The publish workflow is manual and protected by the `npm-publish` environment.
 
-Minimum workflow shape:
+Current workflow shape:
 
 ```yaml
 name: Publish npm package
@@ -118,7 +125,7 @@ jobs:
       - run: npm publish --provenance --access public --tag beta
 ```
 
-Do not add this as an executable repository workflow until `@ptechsolution` publish permission, npm trusted publisher settings, and owner approval are confirmed.
+Do not run this workflow until npm trusted publisher settings and owner approval are confirmed.
 
 ## Verification
 
@@ -128,7 +135,7 @@ Before publishing:
 - CodeQL succeeded for the release commit;
 - `npm run release:check` succeeds locally on a clean tree;
 - `npm publish --dry-run --access public --tag beta` succeeds locally;
-- npm trusted publisher settings match the exact GitHub owner, repository, workflow filename, and environment.
+- `npm trust list @ptechsolution/psdm-framework` shows a GitHub Actions trusted publisher matching the exact GitHub owner, repository, workflow filename, and environment.
 
 After publishing:
 

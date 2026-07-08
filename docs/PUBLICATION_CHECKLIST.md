@@ -63,6 +63,7 @@ risk-management
 - [x] Add dependency review workflow.
 - [x] Add Dependabot update configuration.
 - [x] Add npm trusted publishing/provenance plan.
+- [x] Add protected npm trusted publishing workflow.
 - [x] Confirm npm scope ownership for `@ptechsolution`.
 - [ ] Record explicit publication approval before `npm publish`.
 

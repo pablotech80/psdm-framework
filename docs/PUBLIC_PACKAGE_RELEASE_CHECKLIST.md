@@ -134,7 +134,8 @@ Before beta:
 - [x] Package contents are reviewed for local-only files.
 - [x] Release notes disclose known limitations around simple secret scanning and advisory classification.
 - [ ] Public repository readiness blockers are resolved or explicitly deferred before publication.
-- [ ] npm trusted publishing/provenance blockers are resolved or explicitly deferred before publication.
+- [x] npm trusted publishing/provenance workflow and protected environment are configured.
+- [ ] npm trusted publisher configuration is confirmed before publication.
 
 ## Publication Gate
 
@@ -150,7 +151,7 @@ git push origin v1.0.0-beta.1
 
 Adjust version, tag, and npm dist-tag for the actual release.
 
-For trusted publishing, follow `docs/NPM_TRUSTED_PUBLISHING.md` and record evidence from `docs/RELEASE_EVIDENCE.md`.
+For trusted publishing, use `.github/workflows/npm-publish.yml`, follow `docs/NPM_TRUSTED_PUBLISHING.md`, and record evidence from `docs/RELEASE_EVIDENCE.md`.
 
 ## Post-Release Verification
 
@@ -179,6 +180,7 @@ If release validation fails after publication:
 - [x] Earlier metadata decision recorded: defer `repository`, `homepage`, and `bugs` until the GitHub repository or docs site is public.
 - [x] Add `repository`, `homepage`, and `bugs` metadata after the GitHub repository became public.
 - [x] Define npm trusted publishing/provenance plan.
+- [x] Add protected npm trusted publishing workflow.
 - [x] Define release evidence and beta exit policy.
 - [x] Decide whether to introduce an npm `files` allowlist before beta: yes, keep one in `package.json`.
 - [x] Decide whether release validation should become an npm script or CI workflow: yes, use `npm run release:check` locally and in CI.
@@ -199,6 +201,7 @@ Decision date: `2026-07-08`
 - Release automation: use `npm run release:check` as the repeatable non-publishing gate. It supports `-- --allow-dirty` for local development validation, but CI and real release checks should run without that flag.
 - Beta versioning: use `1.0.0-beta.1` for the first public beta candidate and npm dist-tag `beta` to avoid promoting it as `latest`.
 - Trusted publishing: plan GitHub Actions OIDC with workflow filename `npm-publish.yml`, protected environment `npm-publish`, and npm provenance before promoting beyond beta.
+- Trusted publishing workflow: use `.github/workflows/npm-publish.yml` with GitHub Actions OIDC, protected environment `npm-publish`, and npm provenance for beta publication.
 - Release evidence: keep beta as `beta` until release evidence, compatibility, downstream validation, and stable-release criteria are satisfied for `1.0.0`.
 
 ## Pre-Publish Check - 2026-07-08
@@ -246,6 +249,19 @@ Result:
 - Added `docs/NPM_TRUSTED_PUBLISHING.md`.
 - Planned npm trusted publisher configuration for GitHub Actions, workflow `npm-publish.yml`, and protected environment `npm-publish`.
 - Kept executable publishing workflow out of the repository until npm scope ownership, trusted publisher settings, and explicit owner approval are confirmed.
+
+## Trusted Publishing Workflow - 2026-07-08
+
+Result:
+
+- Added `.github/workflows/npm-publish.yml`.
+- Created protected GitHub environment `npm-publish`.
+- Restricted the environment to branch `main`.
+- Configured the workflow to use GitHub Actions OIDC through `permissions.id-token: write`.
+- Configured the workflow to run `npm run release:check` before `npm publish --provenance --access public --tag beta`.
+- `npm trust github @ptechsolution/psdm-framework --repo pablotech80/psdm-framework --file npm-publish.yml --env npm-publish --allow-publish --dry-run --json` returned the expected `createPackage` permission.
+- Real npm trusted publisher creation requires owner browser/OTP authentication before it can be marked complete.
+- Kept publication blocked on npm trusted publisher confirmation and explicit owner approval.
 
 ## Release Evidence Policy - 2026-07-08
 

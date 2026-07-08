@@ -1,0 +1,41 @@
+name: Publish npm package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish beta to npm
+    runs-on: ubuntu-latest
+    environment: npm-publish
+    if: github.ref == 'refs/heads/main'
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Upgrade npm for trusted publishing
+        run: npm install -g npm@latest
+
+      - name: Show release toolchain
+        run: |
+          node --version
+          npm --version
+
+      - name: Validate release candidate
+        run: npm run release:check
+
+      - name: Publish beta with provenance
+        run: npm publish --provenance --access public --tag beta

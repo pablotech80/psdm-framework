@@ -12,7 +12,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Resolve or explicitly defer npm trusted publishing for first beta.
+- [ ] Confirm npm trusted publisher configuration for `@ptechsolution/psdm-framework`.
 
 ## Next
 
@@ -101,6 +101,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added npm trusted publishing/provenance plan and public package metadata.
 - [x] Defined release evidence, tag policy, and beta exit criteria.
 - [x] Confirmed npm scope ownership for `@ptechsolution` and updated package scope.
+- [x] Added protected npm trusted publishing workflow for first beta.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

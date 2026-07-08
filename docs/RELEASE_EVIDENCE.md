@@ -25,6 +25,7 @@ Every public npm release must record:
 - CodeQL workflow result;
 - npm dry-run result before publication;
 - publication command or trusted publishing workflow reference;
+- trusted publisher configuration evidence;
 - approval phrase or approval record;
 - release date.
 
@@ -121,6 +122,7 @@ PSDM workflow:
 CodeQL workflow:
 npm dry-run:
 Publication method:
+Trusted publisher:
 Approval:
 Release date:
 Known limitations:

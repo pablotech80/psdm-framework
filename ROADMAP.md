@@ -68,6 +68,7 @@ Completed:
 - npm trusted publishing/provenance plan documented and public npm metadata added.
 - Release evidence, tag policy, and beta exit criteria documented.
 - npm scope ownership confirmed for `@ptechsolution`; package scope updated from unavailable `@ptech`.
+- Protected npm trusted publishing workflow added for first beta publication.
 
 ## Active Milestone
 
@@ -206,6 +207,7 @@ Planned outcomes:
 - [x] Add npm trusted publishing/provenance plan and public package metadata.
 - [x] Define release evidence, tag policy, and beta exit criteria.
 - [x] Confirm npm scope ownership and package name under `@ptechsolution`.
+- [x] Add protected npm trusted publishing workflow.
 - [ ] Record explicit owner approval for beta publish.
 
 ### `1.0.0`
@@ -230,6 +232,7 @@ Planned outcomes:
 - [x] Add npm trusted publishing/provenance plan and public package metadata.
 - [x] Define release evidence, tag policy, and beta exit criteria.
 - [x] Confirm npm scope ownership and package name under `@ptechsolution`.
+- [x] Add protected npm trusted publishing workflow.
 - [ ] Record explicit owner approval for beta publish.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.
