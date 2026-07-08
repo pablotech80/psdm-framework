@@ -99,4 +99,4 @@ The beta is ready for `1.0.0` when:
 
 ## Release Recommendation
 
-Proceed to beta only after validating the Action in at least one downstream repository workflow and completing `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`.
+Proceed to beta only after validating the Action in at least one downstream repository workflow, completing `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`, authenticating npm, and recording explicit owner approval for publication.

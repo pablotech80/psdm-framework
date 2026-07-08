@@ -12,11 +12,11 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Run strict release check on clean tree.
+- [ ] Configure npm authentication for beta publish.
 
 ## Next
 
-- [ ] Confirm npm auth and owner approval for beta publish.
+- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
 
 ## Later
 
@@ -77,6 +77,8 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Defined public npm release automation.
 - [x] Decided final beta version string and dist-tag.
 - [x] Bumped package status to `1.0.0-beta.1`.
+- [x] Ran strict release check on clean tree.
+- [x] Checked npm publish readiness and found npm auth missing.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

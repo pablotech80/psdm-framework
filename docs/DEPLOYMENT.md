@@ -43,4 +43,6 @@ Before release or publication:
 
 Production publishing is never implied by code changes. Publishing to a package registry requires explicit owner approval.
 
+For beta publication, require an explicit `CONFIRM NPM BETA PUBLISH` instruction after npm authentication is configured.
+
 Downstream GitHub Action validation is tracked in `docs/DOWNSTREAM_ACTION_VALIDATION.md`.

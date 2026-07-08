@@ -54,6 +54,7 @@ Completed:
 - Package metadata gaps decided for beta: npm files allowlist added, public scoped publish configured, and private GitHub metadata deferred.
 - Public npm release check automated through `npm run release:check` and CI.
 - Final beta version string decided as `1.0.0-beta.1` with npm dist-tag `beta`.
+- Beta pre-publish check passed release validation but is blocked on npm authentication and explicit publish approval.
 
 ## Active Milestone
 
@@ -178,6 +179,7 @@ Planned outcomes:
 - [x] Execute downstream GitHub Action validation.
 - [x] Add example project fixture coverage.
 - [x] Decide final beta version string and npm dist-tag.
+- [ ] Configure npm authentication and owner approval for beta publish.
 
 ### `1.0.0`
 
@@ -187,6 +189,7 @@ Planned outcomes:
 - [x] Decide package metadata gaps before beta.
 - [x] Define public npm release automation.
 - [x] Decide final beta version string and npm dist-tag.
+- [ ] Configure npm authentication and owner approval for beta publish.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.
 - [x] Example project fixture coverage.

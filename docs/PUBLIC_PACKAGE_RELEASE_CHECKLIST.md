@@ -17,7 +17,7 @@ Before release, confirm:
 - [x] Target version is agreed and written in `package.json`: `1.0.0-beta.1`.
 - [x] Release type is agreed: `beta`.
 - [x] Release channel is agreed: npm public package and GitHub tag after approval.
-- [ ] Owner approval is recorded for public publication.
+- [ ] Owner approval is recorded for public publication with explicit `CONFIRM NPM BETA PUBLISH`.
 - [ ] No production deployment is implied by this release.
 
 ## Repository Preflight
@@ -164,6 +164,8 @@ If release validation fails after publication:
 - [x] Decide whether to introduce an npm `files` allowlist before beta: yes, keep one in `package.json`.
 - [x] Decide whether release validation should become an npm script or CI workflow: yes, use `npm run release:check` locally and in CI.
 - [x] Decide final beta version string and dist-tag: `1.0.0-beta.1` with npm dist-tag `beta`.
+- [ ] Configure npm authentication for the publishing owner or CI.
+- [ ] Record explicit owner approval before running `npm publish`.
 
 ## Decision Record
 
@@ -176,3 +178,12 @@ Decision date: `2026-07-08`
 - Authentication: this machine is not logged into npm; `npm whoami` returned `ENEEDAUTH`, so publication remains blocked until owner login/automation is configured.
 - Release automation: use `npm run release:check` as the repeatable non-publishing gate. It supports `-- --allow-dirty` for local development validation, but CI and real release checks should run without that flag.
 - Beta versioning: use `1.0.0-beta.1` for the first public beta candidate and npm dist-tag `beta` to avoid promoting it as `latest`.
+
+## Pre-Publish Check - 2026-07-08
+
+Result:
+
+- `npm run release:check`: passed.
+- `npm view @ptech/psdm-framework name version --json`: returned `E404`; no public package is visible under this name, or current credentials cannot access it.
+- `npm whoami`: returned `ENEEDAUTH`; this machine is not authenticated to npm.
+- Publish status: blocked until npm authentication and explicit owner approval are available.

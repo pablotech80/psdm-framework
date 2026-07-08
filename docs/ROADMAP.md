@@ -131,6 +131,7 @@
 - [x] Package metadata gap decisions before beta.
 - [x] Public npm release check automation.
 - [x] Final beta version string and npm dist-tag decision.
+- [ ] npm authentication and explicit owner approval for beta publish.
 
 ## v1.0
 
@@ -141,6 +142,7 @@
 - [x] Package metadata gap decisions before beta.
 - [x] Public npm release check automation.
 - [x] Final beta version string and npm dist-tag decision.
+- [ ] npm authentication and explicit owner approval for beta publish.
 - [ ] Public npm package.
 - [x] Example project fixture coverage.
 - [ ] Runnable example projects.
