@@ -56,7 +56,7 @@ node bin/psdm.mjs validate . --json
 - Run CLI smoke validation for command, parser, config, AI policy, classifier, or validator changes.
 - Run audit validation for changes that affect init, config, required artifacts, AI governance detection, AI readiness output, or AI surface detection.
 - Run PR checklist validation for changes that affect classification, risk paths, or PR workflow output.
-- Run `npm test` for CLI regression coverage around audit, AI readiness contract, AI surface detection, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, enforce, PR checklist, validate, custom config, AI policy validation, validation profiles, unsupported profile validation, invalid risk path validation, and feature artifact behavior.
-- Run initialized project validation for template, config, or artifact changes.
+- Run `npm test` for CLI regression coverage around audit, AI readiness contract, AI surface detection, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, enforce, PR checklist, validate, custom config, AI policy validation, AI guardrail templates, validation profiles, unsupported profile validation, invalid risk path validation, and feature artifact behavior.
+- Run initialized project validation for template, config, AI guardrail, or artifact changes.
 - Run package validation before distribution-related changes.
 - Treat unexpected validation failures as blocking unless explicitly documented as pre-existing.

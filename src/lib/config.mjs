@@ -54,7 +54,15 @@ export const PROFILE_PRESETS = {
     ],
   },
   'ai-agent': {
-    requiredArtifacts: ['docs/SECURITY.md', 'docs/ARCHITECTURE.md'],
+    requiredArtifacts: [
+      'docs/SECURITY.md',
+      'docs/ARCHITECTURE.md',
+      'docs/AI_GUARDRAILS.md',
+      'docs/DATA_CLASSIFICATION.md',
+      'docs/COST_LATENCY_BUDGET.md',
+      'docs/PROMPT_INJECTION_TESTS.md',
+      'docs/AI_EVALS.md',
+    ],
     riskPaths: [
       {
         pattern: 'agents/**',

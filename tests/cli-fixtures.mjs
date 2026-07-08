@@ -417,6 +417,33 @@ function testInvalidAiPolicyFailsValidation() {
   assert.ok(validation.results.some((item) => item.message === 'ai.tools.registryRequired must be a boolean or null.'))
 }
 
+function testAiAgentProfileCreatesGuardrailArtifacts() {
+  const root = mkdtempSync(resolve(tmpdir(), 'psdm-ai-agent-profile-'))
+  const target = resolve(root, 'project')
+  const configPath = resolve(root, 'ai-agent.psdm.json')
+  writeFileSync(configPath, JSON.stringify({
+    version: 1,
+    profile: 'ai-agent',
+    requiredArtifacts: ['AGENTS.md'],
+    git: {
+      warnOnDirty: false,
+    },
+  }))
+
+  run(['init', target, '--config', configPath])
+  const validation = runJson(['validate', target, '--config', configPath, '--json'])
+  const artifacts = validation.results.map((item) => item.artifact)
+
+  assert.equal(validation.failures, 0)
+  assert.ok(artifacts.includes('docs/AI_GUARDRAILS.md'))
+  assert.ok(artifacts.includes('docs/DATA_CLASSIFICATION.md'))
+  assert.ok(artifacts.includes('docs/COST_LATENCY_BUDGET.md'))
+  assert.ok(artifacts.includes('docs/PROMPT_INJECTION_TESTS.md'))
+  assert.ok(artifacts.includes('docs/AI_EVALS.md'))
+  assert.match(readFileSync(resolve(target, 'docs', 'AI_GUARDRAILS.md'), 'utf8'), /Evidence Contract/)
+  assert.match(readFileSync(resolve(target, 'docs', 'COST_LATENCY_BUDGET.md'), 'utf8'), /does not collect runtime traces/)
+}
+
 function testValidationProfileFramework() {
   const root = mkdtempSync(resolve(tmpdir(), 'psdm-profile-'))
   const target = resolve(root, 'project')
@@ -582,6 +609,7 @@ const tests = [
   testValidateInitializedProject,
   testCustomConfigArtifact,
   testInvalidAiPolicyFailsValidation,
+  testAiAgentProfileCreatesGuardrailArtifacts,
   testValidationProfileFramework,
   testUnsupportedProfileFailsValidation,
   testInvalidRiskPathFailsValidation,

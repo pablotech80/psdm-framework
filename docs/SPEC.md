@@ -20,6 +20,7 @@ Project: `psdm-framework`
 - Fail validation when `psdm.config.json` declares malformed `riskPaths`.
 - Support optional `ai` policy fields in `psdm.config.json` for PII, redaction, cost, latency, tools, evals, prompt-injection tests, and approvals.
 - Fail validation when declared `ai` policy fields have invalid types.
+- Provide AI guardrail templates for AI-agent repositories without adding native observability or hosted eval execution.
 - Document the stable config schema contract in `docs/CONFIG_SCHEMA.md`.
 - Support feature-scoped artifacts under `docs/features/<feature>/`.
 - Classify changes using textual signals and configured risk paths.
@@ -47,10 +48,11 @@ Project: `psdm-framework`
 - Unsupported profiles produce a validation failure on `psdm.config.json`.
 - Invalid risk path rules produce validation failures on `psdm.config.json`.
 - Invalid AI policy fields produce validation failures on `psdm.config.json`.
+- `profile: "ai-agent"` creates guardrail artifacts for AI behavior, data classification, cost/latency budgets, prompt-injection tests, and eval governance.
 - `node bin/psdm.mjs classify "<description>" --file <path> --json` includes matched keywords, matched risk paths, required artifacts, and estimated level.
 - `node bin/psdm.mjs enforce "<description>" --file <path> --max-level "Level 2" --json` exits non-zero when the estimated level exceeds the allowed level.
 - `node bin/psdm.mjs pr-checklist "<description>" --file <path>` emits a Markdown checklist derived from change level and risk paths.
-- `npm test` runs dependency-free CLI fixtures for audit, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, enforce, PR checklist, validate, custom config, AI policy validation, validation profiles, invalid risk paths, and feature artifact behavior.
+- `npm test` runs dependency-free CLI fixtures for audit, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, enforce, PR checklist, validate, custom config, AI policy validation, AI guardrail templates, validation profiles, invalid risk paths, and feature artifact behavior.
 - A clean repository with filled PSDM artifacts can reach `METHOD_BASELINE_APPROVED`.
 
 ## Out of Scope

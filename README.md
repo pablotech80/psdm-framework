@@ -6,7 +6,7 @@ It helps teams decide how much process a change needs based on risk. The goal is
 
 ## Status
 
-`0.16.0-alpha`
+`0.17.0-alpha`
 
 This repository currently provides:
 
@@ -16,6 +16,7 @@ This repository currently provides:
 - Existing AI governance detection during audit.
 - AI readiness audit JSON contract.
 - Optional AI policy fields in `psdm.config.json`.
+- AI guardrail templates for `ai-agent` projects.
 - ADR generation.
 - Pull request checklist generation.
 - CLI regression fixtures.
@@ -234,6 +235,18 @@ monorepo
 ```
 
 Profiles add sensible default artifacts and risk paths for common repository types. Explicit config still wins for project-specific policy.
+
+The `ai-agent` profile adds guardrail artifacts for AI runtime governance:
+
+```text
+docs/AI_GUARDRAILS.md
+docs/DATA_CLASSIFICATION.md
+docs/COST_LATENCY_BUDGET.md
+docs/PROMPT_INJECTION_TESTS.md
+docs/AI_EVALS.md
+```
+
+These artifacts define policy, evidence, owners, gates, and accepted external reports. They do not turn PSDM into a native tracing, observability, or hosted eval platform.
 
 Unsupported profile values fail validation instead of silently falling back to `standard`. The validation JSON still reports `config.profile.name` and `config.profile.recognized` so automation can surface the exact policy problem.
 

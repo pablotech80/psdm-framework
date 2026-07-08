@@ -31,6 +31,11 @@ export const TEMPLATE_MAP = {
   'docs/DEPLOYMENT.md': 'DEPLOYMENT.md',
   'docs/SECURITY.md': 'SECURITY.md',
   'docs/OPERATIONS.md': 'OPERATIONS.md',
+  'docs/AI_GUARDRAILS.md': 'AI_GUARDRAILS.md',
+  'docs/DATA_CLASSIFICATION.md': 'DATA_CLASSIFICATION.md',
+  'docs/COST_LATENCY_BUDGET.md': 'COST_LATENCY_BUDGET.md',
+  'docs/PROMPT_INJECTION_TESTS.md': 'PROMPT_INJECTION_TESTS.md',
+  'docs/AI_EVALS.md': 'AI_EVALS.md',
   'PROJECT_BRIEF.md': 'PROJECT_BRIEF.md',
   'SPEC.md': 'SPEC.md',
   'ARCHITECTURE.md': 'ARCHITECTURE.md',
@@ -49,6 +54,11 @@ export const REQUIRED_SECTIONS = {
   'docs/DEPLOYMENT.md': ['# DEPLOYMENT.md', 'Deployment Scope', 'Deployment Gate'],
   'docs/SECURITY.md': ['# SECURITY.md', 'Threat Model', 'Security Gate'],
   'docs/OPERATIONS.md': ['# OPERATIONS.md', 'Monitoring Strategy', 'Operations Gate'],
+  'docs/AI_GUARDRAILS.md': ['# AI_GUARDRAILS.md', 'Guardrail Policy', 'Evidence Contract'],
+  'docs/DATA_CLASSIFICATION.md': ['# DATA_CLASSIFICATION.md', 'Data Classes', 'PII Policy'],
+  'docs/COST_LATENCY_BUDGET.md': ['# COST_LATENCY_BUDGET.md', 'Budget Policy', 'Evidence Contract'],
+  'docs/PROMPT_INJECTION_TESTS.md': ['# PROMPT_INJECTION_TESTS.md', 'Attack Scenarios', 'Evidence Contract'],
+  'docs/AI_EVALS.md': ['# AI_EVALS.md', 'Eval Scope', 'Evidence Contract'],
 }
 
 export function requiredSectionsForArtifact(artifact) {

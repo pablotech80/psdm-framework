@@ -20,6 +20,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/config.mjs` loads PSDM configuration and validates optional AI policy declarations.
 - `src/lib/config.mjs` also applies validation profile presets and exposes the supported profile list.
 - `src/lib/artifacts.mjs` defines baseline artifact contracts.
+- AI guardrail templates are profile-scoped through `ai-agent` so PSDM can govern AI runtime risk without imposing those artifacts on non-AI projects.
 - `src/lib/risk-paths.mjs` validates and evaluates file path risk rules.
 - `src/lib/git.mjs` inspects repository state.
 - `src/validator/validate-method.mjs` evaluates method compliance.
@@ -55,6 +56,7 @@ Changes require architecture review when they affect:
 - config schema or defaults;
 - AI policy schema, defaults, or validation;
 - validation profile behavior;
+- profile-scoped AI guardrail artifact requirements;
 - validator decisions;
 - risk path schema validation;
 - risk path matching;

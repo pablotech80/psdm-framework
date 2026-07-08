@@ -167,6 +167,8 @@ The supported profile values are:
 
 Profiles add preset required artifacts and risk paths for common repository types. Project config can still add explicit policy through `requiredArtifacts`, `extraRequiredArtifacts`, and `riskPaths`.
 
+The `ai-agent` profile adds AI guardrail artifacts for guardrails, data classification, cost and latency budgets, prompt-injection tests, and eval governance.
+
 Unsupported profile values are validation failures. PSDM still includes the requested profile name and `recognized: false` in JSON output so automation can report the exact policy error.
 
 ## Compatibility Rules

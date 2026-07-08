@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is at `0.16.0-alpha`.
+PSDM is at `0.17.0-alpha`.
 
 Completed:
 
@@ -44,6 +44,7 @@ Completed:
 - AI surface detection added for paths and manifests.
 - Optional AI policy schema added to `psdm.config.json`.
 - ADR accepted to keep PSDM as a governance layer instead of an AI observability platform.
+- AI guardrail templates added for the `ai-agent` profile.
 
 ## Active Milestone
 
@@ -147,7 +148,8 @@ Planned outcomes:
 
 ### `0.17.0-alpha`
 
-- [ ] Add AI guardrail templates for data classification, cost/latency budgets, prompt injection tests, and AI evals.
+- [x] Add AI guardrail templates for data classification, cost/latency budgets, prompt injection tests, and AI evals.
+- [x] Add `ai-agent` profile fixture for AI guardrail artifact creation.
 - [x] Accept ADR keeping PSDM as governance layer, not AI observability platform.
 
 ### `0.18.0-alpha`

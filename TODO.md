@@ -12,15 +12,14 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Add AI guardrail templates for PII, prompt injection, cost, latency, evals, and tool security.
+- [ ] Validate GitHub Action in a downstream repository.
 
 ## Next
 
-- [ ] Validate GitHub Action in a downstream repository.
+- [ ] Add example project coverage.
 
 ## Later
 
-- [ ] Add example project coverage.
 - [ ] Prepare public package release checklist.
 
 ## Done
@@ -65,6 +64,9 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Designed optional AI policy fields for `psdm.config.json`.
 - [x] Added AI policy validation fixtures.
 - [x] Accepted ADR keeping PSDM as governance layer, not AI observability platform.
+- [x] Added AI guardrail templates for PII, prompt injection, cost, latency, evals, and tool security.
+- [x] Added `ai-agent` profile fixture for AI guardrail artifact creation.
+- [x] Bumped package status to `0.17.0-alpha`.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

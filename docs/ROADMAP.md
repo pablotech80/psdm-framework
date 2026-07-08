@@ -108,7 +108,8 @@
 
 ## Alpha - 0.17
 
-- [ ] AI guardrail templates for data classification, cost/latency budgets, prompt injection tests, and AI evals.
+- [x] AI guardrail templates for data classification, cost/latency budgets, prompt injection tests, and AI evals.
+- [x] AI-agent profile creates AI guardrail artifacts.
 - [x] ADR boundary: PSDM remains governance layer, not AI observability platform.
 
 ## Alpha - 0.18

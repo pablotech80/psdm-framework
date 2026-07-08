@@ -100,8 +100,13 @@ psdm enforce "change description" --files "src/index.mjs" --max-level "Level 2" 
 ## Artifact Templates
 
 - `templates/AGENTS.md`
+- `templates/AI_GUARDRAILS.md`
+- `templates/AI_EVALS.md`
 - `templates/PROJECT_BRIEF.md`
 - `templates/PSDM_ADOPTION.md`
+- `templates/DATA_CLASSIFICATION.md`
+- `templates/COST_LATENCY_BUDGET.md`
+- `templates/PROMPT_INJECTION_TESTS.md`
 - `templates/SPEC.md`
 - `templates/ARCHITECTURE.md`
 - `templates/CHANGE_GOVERNANCE.md`
