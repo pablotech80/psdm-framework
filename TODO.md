@@ -12,11 +12,11 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
+- [ ] Re-enable npm account 2FA and resolve npm `latest`/trusted publishing `E403`.
 
 ## Next
 
-- [ ] Publish `1.0.0-beta.1` with one-time manual bootstrap and record release evidence.
+- [ ] Configure npm trusted publishing before the next release.
 
 ## Later
 
@@ -103,6 +103,9 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Confirmed npm scope ownership for `@ptechsolution` and updated package scope.
 - [x] Added protected npm trusted publishing workflow for first beta.
 - [x] Decided one-time manual bootstrap path after npm trusted publisher `E404`.
+- [x] Published `@ptechsolution/psdm-framework@1.0.0-beta.1`.
+- [x] Created Git tag and GitHub pre-release `v1.0.0-beta.1`.
+- [x] Verified clean install from npm `@beta`.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

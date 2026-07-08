@@ -27,7 +27,9 @@ Configuration status:
 - npm trusted publisher dry-run: accepted with `createPackage` permission;
 - npm trusted publisher record: blocked by npm registry `E404` while the package does not yet exist;
 - first beta bootstrap: one-time manual publication exception accepted after npm `E404`, pending explicit `CONFIRM NPM BETA PUBLISH` approval;
-- publication: blocked until explicit owner approval is recorded.
+- first beta publication: completed through the documented manual bootstrap exception;
+- post-publish npm trusted publisher creation: blocked by npm registry `E403`;
+- next release publication: blocked until trusted publisher configuration is confirmed or an explicit owner exception is recorded.
 
 ## Why
 
@@ -139,7 +141,7 @@ Before publishing:
 - `npm publish --dry-run --access public --tag beta` succeeds locally;
 - `npm trust list @ptechsolution/psdm-framework` shows a GitHub Actions trusted publisher matching the exact GitHub owner, repository, workflow filename, and environment.
 
-If `npm trust list @ptechsolution/psdm-framework` returns `E404` because the package does not yet exist, the first beta may use the documented one-time manual bootstrap exception only after explicit owner approval. After the package exists, configure and verify npm trusted publishing before subsequent releases.
+If `npm trust list @ptechsolution/psdm-framework` returns `E404` because the package does not yet exist, the first beta may use the documented one-time manual bootstrap exception only after explicit owner approval. After the package exists, configure and verify npm trusted publishing before subsequent releases. If npm returns `E403`, resolve package or organization permissions in npm before any next release.
 
 After publishing:
 

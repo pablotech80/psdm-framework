@@ -17,16 +17,16 @@ Before release, confirm:
 - [x] Target version is agreed and written in `package.json`: `1.0.0-beta.1`.
 - [x] Release type is agreed: `beta`.
 - [x] Release channel is agreed: npm public package and GitHub tag after approval.
-- [ ] Owner approval is recorded for public publication with explicit `CONFIRM NPM BETA PUBLISH`.
+- [x] Owner approval is recorded for public publication with explicit `CONFIRM NPM BETA PUBLISH`.
 - [x] No production deployment is implied by this release.
 
 ## Repository Preflight
 
-- [ ] Working tree is clean before packaging.
-- [ ] Current branch is the intended release branch.
-- [ ] Latest commit is pushed.
-- [ ] `README.md`, `docs/INDEX.md`, and `docs/BETA_RELEASE_NOTES.md` describe the release scope.
-- [ ] `ROADMAP.md` and `TODO.md` reflect the current release state and next action.
+- [x] Working tree is clean before packaging.
+- [x] Current branch is the intended release branch.
+- [x] Latest commit is pushed.
+- [x] `README.md`, `docs/INDEX.md`, and `docs/BETA_RELEASE_NOTES.md` describe the release scope.
+- [x] `ROADMAP.md` and `TODO.md` reflect the current release state and next action.
 - [ ] `docs/DOWNSTREAM_ACTION_VALIDATION.md` has current downstream Action evidence.
 - [ ] `docs/PUBLIC_REPOSITORY_READINESS.md` has no blocking public-readiness findings.
 - [ ] `docs/RELEASE_EVIDENCE.md` defines required release evidence for the target.
@@ -276,3 +276,19 @@ Result:
 - Defined beta and stable tag policy.
 - Defined required release evidence fields.
 - Defined when PSDM can leave beta and become `1.0.0` with npm dist-tag `latest`.
+
+## Beta Publication - 2026-07-08
+
+Result:
+
+- Published `@ptechsolution/psdm-framework@1.0.0-beta.1`.
+- npm package URL: `https://www.npmjs.com/package/@ptechsolution/psdm-framework/v/1.0.0-beta.1`
+- npm tarball: `https://registry.npmjs.org/@ptechsolution/psdm-framework/-/psdm-framework-1.0.0-beta.1.tgz`
+- npm integrity: `sha512-FmUFGq4zlShhkdVCjbUNcsNQ6BReWWZux9gPsH7LoqETZecvfniJcTUUG1jsAnsMZES6wniSfMY2OD1V5l09ug==`
+- Git tag: `v1.0.0-beta.1`
+- GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.1`
+- GitHub Release is marked as pre-release.
+- `npm install @ptechsolution/psdm-framework@beta` passed in a clean temp project.
+- `npx psdm help` passed from the installed package.
+- npm reports both `beta` and `latest` on `1.0.0-beta.1`; `npm dist-tag rm @ptechsolution/psdm-framework latest` returned `E403 Forbidden`.
+- Post-publish trusted publisher creation returned `E403 Forbidden`; resolve before the next release.

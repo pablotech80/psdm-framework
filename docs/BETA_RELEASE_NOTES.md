@@ -1,8 +1,13 @@
 # BETA_RELEASE_NOTES.md
 
-Status: `Draft`
+Status: `Published`
 Target Release: `1.0.0-beta.1`
 Project: `psdm-framework`
+
+Published: `2026-07-08`
+Package: `@ptechsolution/psdm-framework@1.0.0-beta.1`
+Git tag: `v1.0.0-beta.1`
+GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.1`
 
 ## Release Purpose
 
@@ -104,3 +109,13 @@ Publishing `1.0.0-beta.1` does not end beta. PSDM leaves beta only when a later 
 ## Release Recommendation
 
 Proceed to beta only after validating the Action in at least one downstream repository workflow, completing `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`, authenticating npm, recording release evidence requirements, and recording explicit owner approval for publication.
+
+## Publication Evidence
+
+- npm package: `https://www.npmjs.com/package/@ptechsolution/psdm-framework/v/1.0.0-beta.1`
+- npm dist-tag: `beta`
+- npm also reports `latest` on the first beta version; removal returned `E403`.
+- Git commit: `a7b2055ee734a3645888132c29f736e9593e9b6f`
+- GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.1`
+- Clean install from npm `@beta`: passed.
+- Trusted publishing workflow exists, but npm trusted publisher configuration is still blocked by npm `E403`.

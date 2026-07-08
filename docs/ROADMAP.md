@@ -147,7 +147,10 @@
 - [x] npm scope ownership and package name under `@ptechsolution`.
 - [x] protected npm trusted publishing workflow.
 - [x] one-time manual bootstrap path after npm trusted publisher `E404`.
-- [ ] explicit owner approval for beta publish.
+- [x] explicit owner approval for beta publish.
+- [x] published npm beta package.
+- [x] Git tag and GitHub pre-release.
+- [ ] npm `latest`/trusted publishing `E403` follow-up.
 
 ## v1.0
 
@@ -174,8 +177,10 @@
 - [x] npm scope ownership and package name under `@ptechsolution`.
 - [x] protected npm trusted publishing workflow.
 - [x] one-time manual bootstrap path after npm trusted publisher `E404`.
-- [ ] explicit owner approval for beta publish.
-- [ ] Public npm package.
+- [x] explicit owner approval for beta publish.
+- [x] Public npm beta package.
+- [x] Git tag and GitHub pre-release.
+- [ ] npm `latest`/trusted publishing `E403` follow-up before next release.
 - [x] Example project fixture coverage.
 - [ ] Runnable example projects.
 

@@ -128,3 +128,51 @@ Approval:
 Release date:
 Known limitations:
 ```
+
+## Release Evidence - 1.0.0-beta.1
+
+Package: `@ptechsolution/psdm-framework`
+
+Version: `1.0.0-beta.1`
+
+npm dist-tags:
+
+- `beta`: `1.0.0-beta.1`
+- `latest`: `1.0.0-beta.1`
+
+Git commit: `a7b2055ee734a3645888132c29f736e9593e9b6f`
+
+Git tag: `v1.0.0-beta.1`
+
+GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.1`
+
+npm package: `https://www.npmjs.com/package/@ptechsolution/psdm-framework/v/1.0.0-beta.1`
+
+npm tarball: `https://registry.npmjs.org/@ptechsolution/psdm-framework/-/psdm-framework-1.0.0-beta.1.tgz`
+
+npm integrity: `sha512-FmUFGq4zlShhkdVCjbUNcsNQ6BReWWZux9gPsH7LoqETZecvfniJcTUUG1jsAnsMZES6wniSfMY2OD1V5l09ug==`
+
+PSDM workflow: `https://github.com/pablotech80/psdm-framework/actions/runs/28944891197`
+
+CodeQL workflow: `https://github.com/pablotech80/psdm-framework/actions/runs/28944891099`
+
+npm dry-run: passed before publication with 87 package files.
+
+Publication method: one-time manual bootstrap publication.
+
+Trusted publisher: protected GitHub workflow exists, but npm trusted publisher creation returned `E404` before the package existed and `E403` after publication.
+
+Approval: `CONFIRM NPM BETA PUBLISH`
+
+Release date: `2026-07-08`
+
+Post-release verification:
+
+- Clean install from npm `@beta`: passed.
+- `npx psdm help`: passed.
+
+Known limitations:
+
+- First beta was published through the documented manual bootstrap exception.
+- npm currently reports `latest` and `beta` on `1.0.0-beta.1`; removing `latest` returned `E403` even with package read-write permissions.
+- Configure npm trusted publishing before the next release.

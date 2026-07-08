@@ -70,6 +70,8 @@ Completed:
 - npm scope ownership confirmed for `@ptechsolution`; package scope updated from unavailable `@ptech`.
 - Protected npm trusted publishing workflow added for first beta publication.
 - One-time manual bootstrap path accepted for `1.0.0-beta.1` after npm trusted publisher `E404`, pending explicit publish approval.
+- `@ptechsolution/psdm-framework@1.0.0-beta.1` published to npm and verified with clean install.
+- Git tag and GitHub pre-release `v1.0.0-beta.1` created.
 
 ## Active Milestone
 
@@ -210,7 +212,10 @@ Planned outcomes:
 - [x] Confirm npm scope ownership and package name under `@ptechsolution`.
 - [x] Add protected npm trusted publishing workflow.
 - [x] Decide one-time manual bootstrap path after npm trusted publisher `E404`.
-- [ ] Record explicit owner approval for beta publish.
+- [x] Record explicit owner approval for beta publish.
+- [x] Publish `@ptechsolution/psdm-framework@1.0.0-beta.1`.
+- [x] Create Git tag and GitHub pre-release `v1.0.0-beta.1`.
+- [ ] Resolve npm `latest`/trusted publishing `E403` follow-up.
 
 ### `1.0.0`
 
@@ -236,8 +241,10 @@ Planned outcomes:
 - [x] Confirm npm scope ownership and package name under `@ptechsolution`.
 - [x] Add protected npm trusted publishing workflow.
 - [x] Decide one-time manual bootstrap path after npm trusted publisher `E404`.
-- [ ] Record explicit owner approval for beta publish.
-- [ ] Public npm package readiness.
+- [x] Record explicit owner approval for beta publish.
+- [x] Public npm package readiness for beta.
+- [x] Create Git tag and GitHub pre-release `v1.0.0-beta.1`.
+- [ ] Resolve npm `latest`/trusted publishing `E403` follow-up before next release.
 - [x] Documentation site or complete docs index.
 - [x] Example project fixture coverage.
 
