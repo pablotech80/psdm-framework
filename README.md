@@ -13,7 +13,6 @@
   <img src="https://img.shields.io/badge/license-MIT-2ea44f" alt="MIT license" />
   <img src="https://img.shields.io/badge/node-%3E%3D20.0.0-339933" alt="Node.js >=20.0.0" />
   <img src="https://img.shields.io/badge/GitHub%20Action-ready-2088ff" alt="GitHub Action" />
-  <img src="https://img.shields.io/badge/status-beta-f0ad4e" alt="Status beta" />
 </p>
 
 <p align="center">
