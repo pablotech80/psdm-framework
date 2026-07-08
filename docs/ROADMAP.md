@@ -127,12 +127,14 @@
 - [x] Idempotent init for PSDM-managed governance files.
 - [x] Downstream GitHub Action validation executed.
 - [x] Example project fixture coverage.
+- [x] Public package release checklist.
 
 ## v1.0
 
 - [ ] Stable CLI API.
 - [x] Full documentation index.
 - [ ] Tested fixtures.
+- [x] Public package release checklist.
 - [ ] Public npm package.
 - [x] Example project fixture coverage.
 - [ ] Runnable example projects.

@@ -50,6 +50,7 @@ Completed:
 - `psdm init` idempotence fixed so PSDM-managed `AGENTS.md` does not trigger a false adoption plan.
 - Downstream GitHub Action validation executed with pass and expected-fail workflow evidence.
 - Example project fixture coverage added for a downstream-like Next.js SaaS/AI project.
+- Public package release checklist documented.
 
 ## Active Milestone
 
@@ -178,6 +179,7 @@ Planned outcomes:
 
 - [ ] Stable CLI API.
 - [ ] Stable config schema.
+- [x] Public package release checklist.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.
 - [x] Example project fixture coverage.

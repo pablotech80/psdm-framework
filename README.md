@@ -27,6 +27,7 @@ This repository currently provides:
 - Risk path schema validation.
 - Beta release notes.
 - Config schema stability documentation.
+- Public package release checklist.
 - Baseline artifact checks.
 - Baseline structure validation.
 - Change-level classification.

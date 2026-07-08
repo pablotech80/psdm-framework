@@ -77,6 +77,7 @@ The beta is ready for `1.0.0` when:
 - Public docs include a navigable index and example adoption flow.
 - Example project coverage demonstrates at least one backend or SaaS repository.
 - Release process is documented and repeatable.
+- Public package readiness checklist is completed or explicitly deferred by owner approval.
 - Known limitations are documented with owner-approved follow-up scope.
 
 ## Known Limitations
@@ -89,4 +90,4 @@ The beta is ready for `1.0.0` when:
 
 ## Release Recommendation
 
-Proceed to beta only after validating the Action in at least one downstream repository workflow.
+Proceed to beta only after validating the Action in at least one downstream repository workflow and completing `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`.

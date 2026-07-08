@@ -87,6 +87,7 @@ Use `psdm adr "<decision title>"` when a Level 3 or Level 4 change creates or re
 
 - `action.yml`: composite GitHub Action metadata.
 - `docs/DOWNSTREAM_ACTION_VALIDATION.md`: downstream GitHub Action smoke-test protocol.
+- `docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md`: manual package publication readiness gate.
 - `docs/DEPLOYMENT.md`: packaging and publication gate.
 - `docs/OPERATIONS.md`: operational signals and maintenance expectations.
 - `docs/BETA_RELEASE_NOTES.md`: beta release readiness and exit criteria.
