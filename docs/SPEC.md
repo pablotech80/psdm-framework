@@ -31,6 +31,7 @@ Project: `psdm-framework`
 - Validate required artifacts, required sections, non-empty files, draft-marker wording, and simple secret-like values.
 - Provide templates for newly initialized projects.
 - Provide a GitHub Action entrypoint for repository validation.
+- Maintain at least one downstream-like example fixture that exercises audit, init, and validate behavior.
 
 ## Acceptance Criteria
 
@@ -57,6 +58,7 @@ Project: `psdm-framework`
 - `node bin/psdm.mjs enforce "<description>" --file <path> --max-level "Level 2" --json` exits non-zero when the estimated level exceeds the allowed level.
 - `node bin/psdm.mjs pr-checklist "<description>" --file <path>` emits a Markdown checklist derived from change level and risk paths.
 - `npm test` runs dependency-free CLI fixtures for audit, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, enforce, PR checklist, validate, custom config, AI policy validation, AI guardrail templates, validation profiles, invalid risk paths, and feature artifact behavior.
+- `npm test` covers the `examples/nextjs-saas` fixture by auditing, initializing, and validating a temporary copy.
 - A clean repository with filled PSDM artifacts can reach `METHOD_BASELINE_APPROVED`.
 
 ## Out of Scope

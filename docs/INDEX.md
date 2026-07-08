@@ -22,7 +22,7 @@ Use it to find the right document by task: adopting PSDM in an existing project,
 - `docs/PSDM_OVERVIEW.md`: why PSDM exists and how governance scales by risk.
 - `docs/CHANGE_LEVELS.md`: Level 0 through Level 4 definitions.
 - `docs/RISK_PATHS.md`: path-aware classification rules.
-- `examples/nextjs-saas/README.md`: example repository direction.
+- `examples/nextjs-saas/README.md`: downstream-like SaaS/AI fixture coverage.
 
 Recommended adoption flow:
 
@@ -117,6 +117,7 @@ psdm enforce "change description" --files "src/index.mjs" --max-level "Level 2" 
 - `templates/SECURITY.md`
 - `templates/OPERATIONS.md`
 - `templates/ADR.md`
+- `templates/ADRS_README.md`
 - `templates/psdm.config.json`
 
 Templates are intentionally plain Markdown and JSON so teams can adapt them without additional tooling.

@@ -49,6 +49,7 @@ Completed:
 - GitHub Action downstream smoke blocker fixed by making `ADRs/` versionable during `psdm init` and avoiding validation-time report dirtying.
 - `psdm init` idempotence fixed so PSDM-managed `AGENTS.md` does not trigger a false adoption plan.
 - Downstream GitHub Action validation executed with pass and expected-fail workflow evidence.
+- Example project fixture coverage added for a downstream-like Next.js SaaS/AI project.
 
 ## Active Milestone
 
@@ -171,6 +172,7 @@ Planned outcomes:
 - [x] Fix downstream Action smoke bootstrap issues found during first external run.
 - [x] Fix false existing-governance detection on already initialized PSDM repositories.
 - [x] Execute downstream GitHub Action validation.
+- [x] Add example project fixture coverage.
 
 ### `1.0.0`
 
@@ -178,6 +180,7 @@ Planned outcomes:
 - [ ] Stable config schema.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.
+- [x] Example project fixture coverage.
 
 ## Update Rule
 

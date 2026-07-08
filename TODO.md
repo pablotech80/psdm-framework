@@ -12,15 +12,15 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Add example project coverage.
+- [ ] Prepare public package release checklist.
 
 ## Next
 
-- [ ] Prepare public package release checklist.
+- [ ] Define public npm release automation.
 
 ## Later
 
-- [ ] Define public npm release automation.
+- [ ] Add richer runnable example projects.
 
 ## Done
 
@@ -71,6 +71,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Fixed downstream Action smoke bootstrap issues found during first external run.
 - [x] Fixed `psdm init` idempotence for PSDM-managed `AGENTS.md`.
 - [x] Executed downstream GitHub Action validation with pass and expected-fail evidence.
+- [x] Added example project fixture coverage.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

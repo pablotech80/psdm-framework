@@ -20,6 +20,7 @@ This repository currently provides:
 - ADR generation.
 - Pull request checklist generation.
 - CLI regression fixtures.
+- Example project fixture coverage.
 - Validator, custom config, and feature artifact fixtures.
 - Validation profiles.
 - Unsupported profile validation.
@@ -145,6 +146,12 @@ npm test
 Beta release scope and exit criteria are tracked in `docs/BETA_RELEASE_NOTES.md`.
 
 The public documentation index is `docs/INDEX.md`.
+
+## Examples
+
+`examples/nextjs-saas` is a lightweight SaaS/AI fixture used by `npm test`.
+
+It is not a runnable application. It exists to prove that PSDM can audit, initialize, and validate a downstream-like project with package metadata, prompt assets, and an AI-assisted backend surface without requiring external services or dependency installation.
 
 ## Configuration
 

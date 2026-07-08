@@ -1,0 +1,19 @@
+{
+  "name": "psdm-nextjs-saas-example",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "test": "echo \"example fixture only\""
+  },
+  "dependencies": {
+    "next": "^15.0.0",
+    "openai": "^4.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

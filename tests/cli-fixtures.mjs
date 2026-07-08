@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
@@ -607,6 +607,28 @@ function testFeatureArtifacts() {
   assert.ok(validate.results.some((item) => item.artifact === 'docs/features/billing/SECURITY.md'))
 }
 
+function testExampleProjectCoverage() {
+  const source = resolve(repoRoot, 'examples', 'nextjs-saas')
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-example-nextjs-'))
+  cpSync(source, target, { recursive: true })
+
+  const audit = runJson(['audit', target, '--json'])
+  assert.equal(audit.projectSignals.packageManager, true)
+  assert.equal(audit.aiGovernance.adoptionMode, 'integrate')
+  assert.ok(audit.aiGovernance.existing.includes('prompts'))
+  assert.ok(audit.aiReadiness.surfaces.some((item) => (
+    item.kind === 'provider-sdks'
+    && item.detected.includes('package.json:openai')
+  )))
+  assert.ok(audit.aiReadiness.gaps.some((item) => item.key === 'guardrails'))
+
+  run(['init', target])
+  const validation = runJson(['validate', target, '--json'])
+  assert.equal(validation.failures, 0)
+  assert.equal(existsSync(resolve(target, 'docs', 'PSDM_ADOPTION.md')), true)
+  assert.equal(existsSync(resolve(target, 'ADRs', 'README.md')), true)
+}
+
 const tests = [
   testAuditExistingProject,
   testAuditDetectsExistingAiGovernance,
@@ -630,6 +652,7 @@ const tests = [
   testInvalidRiskPathFailsValidation,
   testInvalidRiskPathCollectionFailsValidation,
   testFeatureArtifacts,
+  testExampleProjectCoverage,
 ]
 
 for (const test of tests) {

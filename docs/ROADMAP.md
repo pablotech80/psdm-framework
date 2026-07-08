@@ -126,6 +126,7 @@
 - [x] Downstream Action smoke bootstrap fixes.
 - [x] Idempotent init for PSDM-managed governance files.
 - [x] Downstream GitHub Action validation executed.
+- [x] Example project fixture coverage.
 
 ## v1.0
 
@@ -133,7 +134,8 @@
 - [x] Full documentation index.
 - [ ] Tested fixtures.
 - [ ] Public npm package.
-- [ ] Example projects.
+- [x] Example project fixture coverage.
+- [ ] Runnable example projects.
 
 ## Enterprise Direction
 
