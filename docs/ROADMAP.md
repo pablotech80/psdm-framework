@@ -129,6 +129,7 @@
 - [x] Example project fixture coverage.
 - [x] Public package release checklist.
 - [x] Package metadata gap decisions before beta.
+- [x] Public npm release check automation.
 
 ## v1.0
 
@@ -137,6 +138,7 @@
 - [ ] Tested fixtures.
 - [x] Public package release checklist.
 - [x] Package metadata gap decisions before beta.
+- [x] Public npm release check automation.
 - [ ] Public npm package.
 - [x] Example project fixture coverage.
 - [ ] Runnable example projects.

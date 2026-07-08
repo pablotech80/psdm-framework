@@ -52,6 +52,7 @@ Completed:
 - Example project fixture coverage added for a downstream-like Next.js SaaS/AI project.
 - Public package release checklist documented.
 - Package metadata gaps decided for beta: npm files allowlist added, public scoped publish configured, and private GitHub metadata deferred.
+- Public npm release check automated through `npm run release:check` and CI.
 
 ## Active Milestone
 
@@ -182,6 +183,7 @@ Planned outcomes:
 - [ ] Stable config schema.
 - [x] Public package release checklist.
 - [x] Decide package metadata gaps before beta.
+- [x] Define public npm release automation.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.
 - [x] Example project fixture coverage.

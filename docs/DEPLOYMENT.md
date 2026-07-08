@@ -20,6 +20,7 @@ Deployment-sensitive surfaces:
 Current local release validation:
 
 ```bash
+npm run release:check
 npm pack --dry-run
 ```
 

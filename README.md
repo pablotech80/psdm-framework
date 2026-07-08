@@ -28,6 +28,7 @@ This repository currently provides:
 - Beta release notes.
 - Config schema stability documentation.
 - Public package release checklist.
+- Release check automation.
 - Baseline artifact checks.
 - Baseline structure validation.
 - Change-level classification.
@@ -143,6 +144,14 @@ Run local fixtures:
 ```bash
 npm test
 ```
+
+Run the non-publishing release gate:
+
+```bash
+npm run release:check
+```
+
+Use `npm run release:check -- --allow-dirty` only when validating local changes before commit.
 
 Beta release scope and exit criteria are tracked in `docs/BETA_RELEASE_NOTES.md`.
 

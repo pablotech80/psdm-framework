@@ -18,6 +18,7 @@
     "docs",
     "examples",
     "psdm.config.json",
+    "scripts",
     "src",
     "templates",
     "tests"
@@ -27,7 +28,8 @@
     "validate": "node bin/psdm.mjs validate",
     "classify": "node bin/psdm.mjs classify \"change authentication rules\"",
     "report": "node bin/psdm.mjs report",
-    "test": "node tests/cli-fixtures.mjs"
+    "test": "node tests/cli-fixtures.mjs",
+    "release:check": "node scripts/release-check.mjs"
   },
   "keywords": [
     "ai",

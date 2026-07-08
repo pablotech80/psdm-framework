@@ -41,6 +41,7 @@ node bin/psdm.mjs validate "$tmpdir" --json
 Package validation:
 
 ```bash
+npm run release:check -- --allow-dirty
 npm pack --dry-run
 ```
 

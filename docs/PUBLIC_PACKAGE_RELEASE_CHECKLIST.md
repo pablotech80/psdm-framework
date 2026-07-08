@@ -34,6 +34,12 @@ Before release, confirm:
 Run from repository root:
 
 ```bash
+npm run release:check
+```
+
+Equivalent expanded validation:
+
+```bash
 for file in bin/psdm.mjs src/**/*.mjs tests/**/*.mjs; do node --check "$file"; done
 npm test
 node bin/psdm.mjs validate . --json
@@ -87,6 +93,7 @@ Must include:
 - [ ] `docs/BETA_RELEASE_NOTES.md`
 - [ ] `docs/DOWNSTREAM_ACTION_VALIDATION.md`
 - [ ] `examples/nextjs-saas/**`
+- [ ] `scripts/release-check.mjs`
 - [ ] `tests/cli-fixtures.mjs`
 
 Must not include:
@@ -155,7 +162,7 @@ If release validation fails after publication:
 
 - [x] Decide whether to add `repository`, `homepage`, and `bugs` metadata before beta: deferred while `pablotech80/psdm-framework` is private.
 - [x] Decide whether to introduce an npm `files` allowlist before beta: yes, keep one in `package.json`.
-- [ ] Decide whether release validation should become an npm script or CI workflow.
+- [x] Decide whether release validation should become an npm script or CI workflow: yes, use `npm run release:check` locally and in CI.
 - [ ] Decide final beta version string and dist-tag.
 
 ## Decision Record
@@ -167,3 +174,4 @@ Decision date: `2026-07-08`
 - Package contents: add a `files` allowlist before beta to reduce accidental publication of local or unrelated files.
 - Scoped publication: set `publishConfig.access` to `public` so an approved scoped npm publish uses the intended access mode.
 - Authentication: this machine is not logged into npm; `npm whoami` returned `ENEEDAUTH`, so publication remains blocked until owner login/automation is configured.
+- Release automation: use `npm run release:check` as the repeatable non-publishing gate. It supports `-- --allow-dirty` for local development validation, but CI and real release checks should run without that flag.

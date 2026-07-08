@@ -49,6 +49,12 @@ Expected compatible behavior:
 Before publishing or tagging beta, run:
 
 ```bash
+npm run release:check
+```
+
+The release check runs the expanded validation gate:
+
+```bash
 for file in bin/psdm.mjs src/**/*.mjs tests/**/*.mjs; do node --check "$file"; done
 npm test
 node bin/psdm.mjs validate . --json
@@ -67,6 +73,7 @@ Expected result:
 - Repository validation returns `METHOD_BASELINE_APPROVED`.
 - Package dry-run includes CLI, source, templates, docs, root governance files, and GitHub Action metadata.
 - No local package tarball remains in the repository.
+- `npm run release:check` passes without `--allow-dirty` for a real release gate.
 
 ## Beta Exit Criteria
 
