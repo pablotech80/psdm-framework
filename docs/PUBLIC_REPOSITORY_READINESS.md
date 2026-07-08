@@ -49,7 +49,7 @@ Recommended public repository metadata:
 
 ## Package Metadata Gate
 
-- [ ] npm package scope is confirmed and controlled by the publisher.
+- [x] npm package scope is confirmed and controlled by the publisher.
 - [x] `package.json` includes public-safe `name`, `description`, `license`, `keywords`, `bin`, `files`, and `publishConfig`.
 - [x] `package.json` includes public `repository`, `homepage`, and `bugs` metadata.
 - [x] `package.json` includes `assets` in the package allowlist for README logo rendering on npm.
@@ -74,15 +74,15 @@ Recommended public repository metadata:
 - Sensitive-publication scan found no private repository URLs, GitHub Actions run URLs, local account paths, emails, browser profile IDs, npm auth details, or known private account identifiers in public package paths.
 - `npm run release:check -- --allow-dirty` passed before commit.
 - `npm publish --dry-run --access public --tag beta` passed and produced an 85-file tarball.
-- `npm team ls ptech --json` returned `403 Forbidden`; npm scope ownership is not confirmed by this workstation.
+- `npm team ls ptechsolution --json` returned `["ptechsolution:developers"]`; npm scope ownership is confirmed for the publishing account.
 - README branding polish added: centered logo, Ptech AI Applied Lab brand, tagline, badges, clearer opening, and governance flow diagram.
 - Final README polish added: reduced density, grouped CLI reference, minimal config example, footer, and publication metadata checklist.
 - GitHub repository metadata applied: description, website, and topics.
 - Public security reporting policy documented with GitHub private vulnerability reporting as primary channel and `https://ptechsolution.net` as fallback.
 - Automated security checks added: CodeQL, dependency review, Dependabot config, secret scanning, push protection, Dependabot security updates, and private vulnerability reporting.
+- npm scope ownership confirmed for `@ptechsolution`; package metadata updated to `@ptechsolution/psdm-framework`.
 
 ## Current Blockers
 
-- npm scope ownership for `@ptech` must be confirmed before publish.
 - GitHub social preview image still requires manual configuration.
 - Explicit owner approval is still required before `npm publish`.

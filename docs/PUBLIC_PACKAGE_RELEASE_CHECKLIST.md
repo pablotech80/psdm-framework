@@ -68,7 +68,7 @@ Expected:
 
 Verify `package.json`:
 
-- [x] `name` is final for the intended public package: `@ptech/psdm-framework`.
+- [x] `name` is final for the intended public package: `@ptechsolution/psdm-framework`.
 - [x] `version` matches the release target: `1.0.0-beta.1`.
 - [x] `description` is clear and public-safe.
 - [x] `license` is correct.
@@ -184,18 +184,18 @@ If release validation fails after publication:
 - [x] Decide whether release validation should become an npm script or CI workflow: yes, use `npm run release:check` locally and in CI.
 - [x] Decide final beta version string and dist-tag: `1.0.0-beta.1` with npm dist-tag `beta`.
 - [x] Configure npm authentication for the publishing owner or CI.
-- [ ] Confirm npm scope ownership or publish permission for `@ptech`.
+- [x] Confirm npm scope ownership or publish permission for `@ptechsolution`.
 - [ ] Record explicit owner approval before running `npm publish`.
 
 ## Decision Record
 
 Decision date: `2026-07-08`
 
-- Package name: keep `@ptech/psdm-framework`; `npm view @ptech/psdm-framework` returned `E404`, so no public package is currently visible under that name. Publication still requires scope permission.
+- Package name: use `@ptechsolution/psdm-framework`; `@ptech` was not available, and `@ptechsolution` is controlled by the publishing owner.
 - GitHub metadata: add `repository`, `homepage`, and `bugs` after the repository became public, so npm provenance and package presentation can point to accessible source.
 - Package contents: add a `files` allowlist before beta to reduce accidental publication of local or unrelated files.
 - Scoped publication: set `publishConfig.access` to `public` so an approved scoped npm publish uses the intended access mode.
-- Authentication: npm CLI authentication is configured for a publisher account; publication remains blocked until `@ptech` scope permission and explicit owner approval are confirmed.
+- Authentication: npm CLI authentication is configured for a publisher account; publication remains blocked until explicit owner approval is confirmed.
 - Release automation: use `npm run release:check` as the repeatable non-publishing gate. It supports `-- --allow-dirty` for local development validation, but CI and real release checks should run without that flag.
 - Beta versioning: use `1.0.0-beta.1` for the first public beta candidate and npm dist-tag `beta` to avoid promoting it as `latest`.
 - Trusted publishing: plan GitHub Actions OIDC with workflow filename `npm-publish.yml`, protected environment `npm-publish`, and npm provenance before promoting beyond beta.
@@ -206,7 +206,7 @@ Decision date: `2026-07-08`
 Result:
 
 - `npm run release:check`: passed.
-- `npm view @ptech/psdm-framework name version --json`: returned `E404`; no public package is visible under this name, or current credentials cannot access it.
+- `npm view @ptechsolution/psdm-framework name version --json`: returned `E404`; no public package is visible under this name, or current credentials cannot access it.
 - `npm whoami`: authentication was not available during this earlier check.
 - Publish status: was blocked until npm authentication and explicit owner approval were available.
 
@@ -215,7 +215,7 @@ Result:
 Result:
 
 - `npm whoami`: authenticated publisher account verified.
-- `npm view @ptech/psdm-framework name version --json`: returned `E404`; no public package is visible under this name.
+- `npm view @ptechsolution/psdm-framework name version --json`: returned `E404`; no public package is visible under this name.
 - `npm run release:check`: passed.
 - `npm publish --dry-run --access public --tag beta`: passed after normalizing `bin.psdm` to `bin/psdm.mjs` with `npm pkg fix`.
 - Publish status: blocked on npm scope ownership confirmation and explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
@@ -232,9 +232,11 @@ Result:
 - Added `assets` to npm package allowlist so the README logo is packaged.
 - Re-ran `npm run release:check -- --allow-dirty`: passed.
 - Re-ran `npm publish --dry-run --access public --tag beta`: passed with 85 files.
-- `npm access list packages @ptech --json` returned `{}`.
-- `npm team ls ptech --json` returned `403 Forbidden`, so scope ownership is still not confirmed.
-- Remaining blocker: npm scope ownership for `@ptech` must be confirmed before real publication.
+- Former scope candidate `@ptech` was not available for the publishing owner.
+- `@ptechsolution` was created as the controlled npm organization scope.
+- `npm team ls ptechsolution --json` returned `["ptechsolution:developers"]`.
+- `npm view @ptechsolution/psdm-framework name version --json` returned `E404`; no public package is currently visible under this name.
+- Remaining blocker: explicit owner approval is still required before real publication.
 
 ## Trusted Publishing Plan - 2026-07-08
 

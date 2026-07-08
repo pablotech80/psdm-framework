@@ -15,7 +15,7 @@ Use npm trusted publishing through GitHub Actions before promoting PSDM beyond t
 
 For the first beta, publication remains blocked until:
 
-- npm scope ownership or publish permission for `@ptech` is confirmed;
+- npm scope ownership or publish permission for `@ptechsolution` is confirmed;
 - the npm package can be configured with a trusted publisher;
 - the release workflow has manual GitHub environment approval;
 - `npm run release:check` passes on the release commit;
@@ -33,7 +33,7 @@ This does not prove the package is bug-free or secure. It improves supply-chain 
 
 After the package exists or npm allows pre-publication trusted publisher configuration for the package, configure npm:
 
-- Package: `@ptech/psdm-framework`
+- Package: `@ptechsolution/psdm-framework`
 - Publisher: GitHub Actions
 - GitHub owner: `pablotech80`
 - GitHub repository: `psdm-framework`
@@ -69,7 +69,7 @@ The publishing job must use:
 
 `package.json` must keep public metadata aligned with the public repository:
 
-- `name`: `@ptech/psdm-framework`
+- `name`: `@ptechsolution/psdm-framework`
 - `homepage`: `https://github.com/pablotech80/psdm-framework#readme`
 - `repository.url`: `git+https://github.com/pablotech80/psdm-framework.git`
 - `bugs.url`: `https://github.com/pablotech80/psdm-framework/issues`
@@ -118,7 +118,7 @@ jobs:
       - run: npm publish --provenance --access public --tag beta
 ```
 
-Do not add this as an executable repository workflow until `@ptech` publish permission, npm trusted publisher settings, and owner approval are confirmed.
+Do not add this as an executable repository workflow until `@ptechsolution` publish permission, npm trusted publisher settings, and owner approval are confirmed.
 
 ## Verification
 
@@ -133,6 +133,6 @@ Before publishing:
 After publishing:
 
 - npm package page shows provenance for the version;
-- installing `@ptech/psdm-framework@beta` works in a clean temp project;
+- installing `@ptechsolution/psdm-framework@beta` works in a clean temp project;
 - `psdm help`, `psdm audit`, `psdm init`, and `psdm validate` work from the installed package;
 - GitHub tag and npm version point to the same commit.

@@ -108,7 +108,7 @@ function assertPackageMetadata() {
     encoding: 'utf8',
   }))
 
-  if (packageJson.name !== '@ptech/psdm-framework') {
+  if (packageJson.name !== '@ptechsolution/psdm-framework') {
     throw new Error(`Unexpected package name: ${packageJson.name}`)
   }
 

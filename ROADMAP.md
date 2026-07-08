@@ -67,6 +67,7 @@ Completed:
 - Automated security checks added: CodeQL, dependency review, Dependabot config, secret scanning, push protection, Dependabot security updates, and private vulnerability reporting.
 - npm trusted publishing/provenance plan documented and public npm metadata added.
 - Release evidence, tag policy, and beta exit criteria documented.
+- npm scope ownership confirmed for `@ptechsolution`; package scope updated from unavailable `@ptech`.
 
 ## Active Milestone
 
@@ -204,6 +205,7 @@ Planned outcomes:
 - [x] Add CodeQL, dependency review, Dependabot config, and GitHub security settings.
 - [x] Add npm trusted publishing/provenance plan and public package metadata.
 - [x] Define release evidence, tag policy, and beta exit criteria.
+- [x] Confirm npm scope ownership and package name under `@ptechsolution`.
 - [ ] Record explicit owner approval for beta publish.
 
 ### `1.0.0`
@@ -227,6 +229,7 @@ Planned outcomes:
 - [x] Add CodeQL, dependency review, Dependabot config, and GitHub security settings.
 - [x] Add npm trusted publishing/provenance plan and public package metadata.
 - [x] Define release evidence, tag policy, and beta exit criteria.
+- [x] Confirm npm scope ownership and package name under `@ptechsolution`.
 - [ ] Record explicit owner approval for beta publish.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.

@@ -19,7 +19,7 @@ psdm-framework
 Package name:
 
 ```text
-@ptech/psdm-framework
+@ptechsolution/psdm-framework
 ```
 
 Current branch:

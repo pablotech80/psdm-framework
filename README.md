@@ -116,7 +116,7 @@ psdm help
 After beta publication:
 
 ```bash
-npm install -g @ptech/psdm-framework@beta
+npm install -g @ptechsolution/psdm-framework@beta
 ```
 
 ## CLI

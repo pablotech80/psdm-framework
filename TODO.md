@@ -12,15 +12,14 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Confirm npm scope ownership for `@ptech`.
+- [ ] Resolve or explicitly defer npm trusted publishing for first beta.
 
 ## Next
 
-- [ ] Resolve or explicitly defer npm trusted publishing for first beta.
+- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
 
 ## Later
 
-- [ ] Confirm npm scope ownership for `@ptech`.
 - [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
 - [ ] Add richer runnable example projects.
 
@@ -101,6 +100,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added CodeQL, dependency review, Dependabot config, GitHub security settings, and private vulnerability reporting.
 - [x] Added npm trusted publishing/provenance plan and public package metadata.
 - [x] Defined release evidence, tag policy, and beta exit criteria.
+- [x] Confirmed npm scope ownership for `@ptechsolution` and updated package scope.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

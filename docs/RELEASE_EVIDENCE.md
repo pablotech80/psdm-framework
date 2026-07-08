@@ -110,7 +110,7 @@ Publishing `1.0.0-beta.1` does not end beta. Beta ends only when a later release
 ## Stable Release Evidence Template
 
 ```text
-Package: @ptech/psdm-framework
+Package: @ptechsolution/psdm-framework
 Version:
 npm dist-tag:
 Git commit:
