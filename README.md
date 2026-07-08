@@ -1,49 +1,78 @@
-# PSDM Framework
+<p align="center">
+  <img src="./assets/psdm-logo.png" alt="PSDM Framework by Ptech" width="180" />
+</p>
 
-PTECH SPEC-DRIVEN METHOD is a governance framework for AI-assisted software projects.
+<h1 align="center">PSDM Framework</h1>
 
-It helps teams decide how much process a change needs based on risk. The goal is not bureaucracy. The goal is controlled delivery: small safe changes stay fast, production-sensitive changes get stronger governance.
+<p align="center">
+  <strong>Specification-first governance for AI-assisted software engineering.</strong>
+</p>
+
+<p align="center">
+  Ptech AI Applied Lab
+</p>
+
+<p align="center">
+  Specification-first governance for AI-assisted software projects.
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/npm-beta-cb3837" alt="npm beta" />
+  <img src="https://img.shields.io/badge/license-MIT-2ea44f" alt="MIT license" />
+  <img src="https://img.shields.io/badge/node-%3E%3D20.0.0-339933" alt="Node.js >=20.0.0" />
+  <img src="https://img.shields.io/badge/GitHub%20Action-ready-2088ff" alt="GitHub Action" />
+  <img src="https://img.shields.io/badge/status-beta-f0ad4e" alt="Status beta" />
+</p>
+
+<p align="center">
+  <strong>AI writes code. PSDM governs it.</strong>
+</p>
+
+PSDM Framework is an AI Engineering Governance framework for repositories, teams, and AI-assisted delivery. It is not just a CLI that creates files. It gives software projects a repeatable way to preserve specification, architecture, security, testing, deployment, and operational context while developers and AI agents move quickly.
+
+AI-assisted development is fast, but speed without governance creates risk.
+
+PSDM helps teams decide how much process a change needs based on risk: small safe changes stay fast; security, data, AI, infrastructure, and production-sensitive changes get stronger governance.
 
 PSDM is currently beta software. It is a local CLI and GitHub Action, not a hosted platform.
+
+## Why PSDM Exists
+
+AI can generate code quickly. Repositories still need durable context: product intent, specifications, architecture decisions, test expectations, security boundaries, deployment rules, and operational ownership.
+
+PSDM gives AI-assisted teams a repeatable governance layer. It helps developers, AI agents, technical leads, and product teams classify change risk, create the right artifacts, and keep delivery controlled without forcing heavyweight process onto small changes.
+
+## Governance Flow
+
+```mermaid
+flowchart TD
+    A[Idea or Change] --> B[Risk Classification]
+    B --> C{Change Level}
+    C -->|Level 0-1| D[Fast Path]
+    C -->|Level 2| E[Product Spec + Tests]
+    C -->|Level 3| F[Security / Data / AI Governance]
+    C -->|Level 4| G[Deployment / Operations / Rollback]
+    D --> H[Validate]
+    E --> H
+    F --> H
+    G --> H
+    H --> I[Controlled Delivery]
+```
+
+## What PSDM Provides
+
+- Repository audit before adoption.
+- Governance templates for specs, architecture, security, testing, deployment, operations, and ADRs.
+- Change-level classification from descriptions and touched paths.
+- CI enforcement for maximum allowed change level.
+- AI readiness checks for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
+- AI-agent governance templates for projects using LLMs, tools, prompts, RAG, or automation.
+- JSON output for automation and GitHub Action workflows.
+- Public beta release gates for package contents, docs, and repository readiness.
 
 ## Status
 
 `1.0.0-beta.1`
-
-This repository currently provides:
-
-- PSDM project templates.
-- A local CLI.
-- Pre-init repository audit.
-- Existing AI governance detection during audit.
-- AI readiness audit JSON contract.
-- Optional AI policy fields in `psdm.config.json`.
-- AI guardrail templates for `ai-agent` projects.
-- ADR generation.
-- Pull request checklist generation.
-- CLI regression fixtures.
-- Example project fixture coverage.
-- Validator, custom config, and feature artifact fixtures.
-- Validation profiles.
-- Unsupported profile validation.
-- Risk path schema validation.
-- Beta release notes.
-- Config schema stability documentation.
-- Public package release checklist.
-- Release check automation.
-- Public repository readiness checklist.
-- Baseline artifact checks.
-- Baseline structure validation.
-- Change-level classification.
-- CI change-level enforcement.
-- Markdown compliance reports.
-- Optional `psdm.config.json` policy.
-- JSON output for automation.
-- Feature-specific PSDM artifacts.
-- Dirty git working-tree awareness.
-- GitHub Action MVP.
-- Backend/platform risk path rules.
-- Self-governance baseline artifacts for this repository.
 
 ## Install Locally
 

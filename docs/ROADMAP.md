@@ -134,6 +134,7 @@
 - [x] npm authentication for beta publish.
 - [x] public repository readiness cleanup started.
 - [x] public contribution, conduct, issue, and PR templates.
+- [x] README branding and GitHub metadata guidance for public beta.
 - [ ] explicit owner approval for beta publish.
 
 ## v1.0
@@ -148,6 +149,7 @@
 - [x] npm authentication for beta publish.
 - [x] public repository readiness cleanup started.
 - [x] public contribution, conduct, issue, and PR templates.
+- [x] README branding and GitHub metadata guidance for public beta.
 - [ ] explicit owner approval for beta publish.
 - [ ] Public npm package.
 - [x] Example project fixture coverage.

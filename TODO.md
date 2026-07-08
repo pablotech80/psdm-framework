@@ -87,6 +87,9 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added root `CONTRIBUTING.md` and `SECURITY.md`.
 - [x] Added public `CODE_OF_CONDUCT.md`, issue templates, and PR template.
 - [x] Revalidated release check and npm publish dry-run after public-readiness cleanup.
+- [x] Added README branding polish, logo reference, badges, and governance flow.
+- [x] Added GitHub metadata guidance for public beta presentation.
+- [x] Added `assets` to package allowlist for npm README logo rendering.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

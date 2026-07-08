@@ -16,6 +16,7 @@ const requiredPackageFiles = [
   'src/lib/config.mjs',
   'templates/psdm.config.json',
   'action.yml',
+  'assets/psdm-logo.png',
   'CODE_OF_CONDUCT.md',
   'CONTRIBUTING.md',
   'README.md',

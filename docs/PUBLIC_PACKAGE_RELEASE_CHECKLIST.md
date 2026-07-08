@@ -88,6 +88,7 @@ Must include:
 - [x] `src/**`
 - [x] `templates/**`
 - [x] `action.yml`
+- [x] `assets/psdm-logo.png`
 - [x] `CODE_OF_CONDUCT.md`
 - [x] `README.md`
 - [x] `LICENSE`
@@ -214,8 +215,10 @@ Result:
 - Added root `CONTRIBUTING.md` and `SECURITY.md`.
 - Added root `CODE_OF_CONDUCT.md`, issue templates, and PR template.
 - Added `docs/PUBLIC_REPOSITORY_READINESS.md`.
+- Added README branding guidance, logo reference, badges, and governance flow.
+- Added `assets` to npm package allowlist so the README logo is packaged.
 - Re-ran `npm run release:check -- --allow-dirty`: passed.
-- Re-ran `npm publish --dry-run --access public --tag beta`: passed with 82 files.
+- Re-ran `npm publish --dry-run --access public --tag beta`: passed with 83 files.
 - `npm access list packages @ptech --json` returned `{}`.
 - `npm team ls ptech --json` returned `403 Forbidden`, so scope ownership is still not confirmed.
 - Remaining blocker: npm scope ownership for `@ptech` must be confirmed before real publication.

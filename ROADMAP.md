@@ -57,6 +57,7 @@ Completed:
 - Beta pre-publish check passed release validation but is blocked on npm authentication and explicit publish approval.
 - npm CLI authentication configured; publish dry-run passed after normalizing `bin.psdm`.
 - Public repository readiness started: private downstream evidence sanitized, social contribution files added, and package dry-run revalidated.
+- Public beta presentation polish started: README branding, logo reference, GitHub metadata guidance, and asset packaging added.
 
 ## Active Milestone
 
@@ -184,6 +185,7 @@ Planned outcomes:
 - [x] Configure npm authentication for beta publish.
 - [x] Start public repository readiness cleanup.
 - [x] Add public contribution, conduct, issue, and PR templates.
+- [x] Add README branding and GitHub metadata guidance for public beta.
 - [ ] Record explicit owner approval for beta publish.
 
 ### `1.0.0`
@@ -197,6 +199,7 @@ Planned outcomes:
 - [x] Configure npm authentication for beta publish.
 - [x] Start public repository readiness cleanup.
 - [x] Add public contribution, conduct, issue, and PR templates.
+- [x] Add README branding and GitHub metadata guidance for public beta.
 - [ ] Record explicit owner approval for beta publish.
 - [ ] Public npm package readiness.
 - [x] Documentation site or complete docs index.

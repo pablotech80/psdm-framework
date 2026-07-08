@@ -9,12 +9,25 @@ Prepare the repository for public visibility before npm beta publication.
 
 The public repository should make a clear first impression, avoid private operational evidence, and explain PSDM's scope honestly.
 
+## GitHub Metadata Guidance
+
+Recommended public repository metadata:
+
+- Owner-facing brand: `Ptech AI Applied Lab`.
+- Repository name: `psdm-framework`.
+- Display name: `PSDM Framework`.
+- Description: `Specification-first governance for AI-assisted software projects.`
+- Short tagline: `AI writes code. PSDM governs it.`
+- Topics: `ai`, `governance`, `cli`, `github-action`, `spec-driven`, `software-architecture`, `ai-engineering`, `developer-tools`.
+- Social preview image: `assets/psdm-logo.png` or a wider derived image using the same mark.
+
 ## Public Presentation Gate
 
 - [ ] Repository visibility is intentionally changed to public by the owner.
-- [ ] Repository description clearly says PSDM is a governance CLI and GitHub Action for AI-assisted software delivery.
-- [ ] Repository topics include relevant terms such as `ai`, `governance`, `cli`, `github-action`, `spec-driven`, and `software-architecture`.
+- [x] Repository description guidance clearly says PSDM is specification-first governance for AI-assisted software projects.
+- [x] Repository topics guidance includes relevant terms such as `ai`, `governance`, `cli`, `github-action`, `spec-driven`, and `software-architecture`.
 - [x] `README.md` explains purpose, install, quick start, CLI commands, examples, and beta status.
+- [x] `README.md` displays the PSDM logo from `assets/psdm-logo.png`.
 - [x] `LICENSE` is present.
 - [x] `CODE_OF_CONDUCT.md` is present.
 - [x] `CONTRIBUTING.md` is present.
@@ -35,6 +48,7 @@ The public repository should make a clear first impression, avoid private operat
 
 - [ ] npm package scope is confirmed and controlled by the publisher.
 - [x] `package.json` includes public-safe `name`, `description`, `license`, `keywords`, `bin`, `files`, and `publishConfig`.
+- [x] `package.json` includes `assets` in the package allowlist for README logo rendering on npm.
 - [ ] Add `repository`, `homepage`, and `bugs` only after the repository is public.
 - [x] `npm publish --dry-run --access public --tag beta` passes without npm metadata warnings.
 - [x] First beta uses npm dist-tag `beta`, not `latest`.
@@ -44,6 +58,7 @@ The public repository should make a clear first impression, avoid private operat
 - [x] README states what PSDM is not: not a hosted observability platform, not a security scanner, not a replacement for owner approval.
 - [x] README avoids overclaiming production readiness before beta feedback.
 - [x] Public docs make adoption flow obvious: `audit`, `init`, `check`, `validate`, then CI enforcement.
+- [x] README includes a visual governance flow diagram.
 - [x] Known limitations are visible in beta release notes.
 - [x] The package can be evaluated without private access to any other repository.
 
@@ -53,8 +68,9 @@ The public repository should make a clear first impression, avoid private operat
 
 - Sensitive-publication scan found no private repository URLs, GitHub Actions run URLs, local account paths, emails, browser profile IDs, npm auth details, or known private account identifiers in public package paths.
 - `npm run release:check -- --allow-dirty` passed before commit.
-- `npm publish --dry-run --access public --tag beta` passed and produced an 82-file tarball.
+- `npm publish --dry-run --access public --tag beta` passed and produced an 83-file tarball.
 - `npm team ls ptech --json` returned `403 Forbidden`; npm scope ownership is not confirmed by this workstation.
+- README branding polish added: centered logo, Ptech AI Applied Lab brand, tagline, badges, clearer opening, and governance flow diagram.
 
 ## Current Blockers
 

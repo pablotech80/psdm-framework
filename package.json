@@ -1,7 +1,7 @@
 {
   "name": "@ptech/psdm-framework",
   "version": "1.0.0-beta.1",
-  "description": "PTECH SPEC-DRIVEN METHOD framework for AI-assisted software project governance.",
+  "description": "Specification-first governance for AI-assisted software engineering.",
   "type": "module",
   "bin": {
     "psdm": "bin/psdm.mjs"
@@ -17,6 +17,7 @@
     "SECURITY.md",
     "TODO.md",
     "action.yml",
+    "assets",
     "bin",
     "docs",
     "examples",
@@ -40,10 +41,12 @@
     "spec-driven",
     "software-architecture",
     "agents",
+    "ai-engineering",
+    "developer-tools",
     "github-action",
     "cli"
   ],
-  "author": "PTECH",
+  "author": "Ptech AI Applied Lab",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
