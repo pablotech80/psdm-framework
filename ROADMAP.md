@@ -84,6 +84,7 @@ Completed:
 - GitHub social preview image configured in repository settings.
 - Knowledge as Code Layer documented as a transversal PSDM method layer without adding runtime or tooling dependencies.
 - `1.0.0-beta.4` candidate prepared to publish Knowledge as Code documentation to npm beta.
+- Release checker npm pack parsing made compatible with npm dry-run JSON output used by the protected publish workflow.
 
 ## Active Milestone
 
@@ -241,6 +242,7 @@ Planned outcomes:
 - [x] Upload GitHub social preview image in repository settings.
 - [x] Document Knowledge as Code Layer as optional method guidance.
 - [x] Prepare `1.0.0-beta.4` candidate for Knowledge as Code documentation publication.
+- [x] Fix release checker package dry-run parsing for protected npm workflow.
 - [ ] Publish `@ptechsolution/psdm-framework@1.0.0-beta.4` through trusted publishing.
 - [ ] Create Git tag and GitHub pre-release `v1.0.0-beta.4`.
 - [ ] Resolve npm `latest` dist-tag `E403` follow-up.

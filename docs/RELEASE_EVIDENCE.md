@@ -331,6 +331,7 @@ Scope:
 - README entrypoint for Knowledge as Code.
 - Architecture and model/tool independence boundary updates.
 - `AGENTS.md` and generated `templates/AGENTS.md` source-of-truth boundary for project knowledge.
+- Release checker compatibility fix for npm pack dry-run JSON output in the protected publish workflow.
 
 Expected npm dist-tag:
 

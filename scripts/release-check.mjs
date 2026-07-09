@@ -26,6 +26,7 @@ const requiredPackageFiles = [
   'docs/CONFIG_SCHEMA.md',
   'docs/BETA_RELEASE_NOTES.md',
   'docs/MODEL_AND_TOOL_INDEPENDENCE.md',
+  'docs/KNOWLEDGE_AS_CODE.md',
   'docs/DOWNSTREAM_ACTION_VALIDATION.md',
   'docs/PUBLIC_PACKAGE_RELEASE_CHECKLIST.md',
   'docs/PUBLIC_REPOSITORY_READINESS.md',
@@ -142,7 +143,13 @@ function assertValidation() {
 
 function assertPackageContents() {
   const output = capture('Inspect package dry-run contents', 'npm', ['pack', '--dry-run', '--json'])
-  const [pack] = JSON.parse(output)
+  const parsed = JSON.parse(output)
+  const pack = Array.isArray(parsed) ? parsed[0] : parsed
+
+  if (!pack || !Array.isArray(pack.files)) {
+    throw new Error('Unable to parse npm pack dry-run output.')
+  }
+
   const files = new Set(pack.files.map((file) => file.path))
 
   for (const required of requiredPackageFiles) {
