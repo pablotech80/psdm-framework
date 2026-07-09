@@ -161,6 +161,7 @@
 - [x] prepared `1.0.0-beta.4` candidate for Knowledge as Code documentation publication.
 - [x] hardened release checker package manifest detection for protected npm workflow compatibility.
 - [x] removed unconditional `npm@latest` upgrade from protected npm workflow.
+- [x] verified `1.0.0-beta.4` through protected workflow dry-run.
 - [ ] publish `1.0.0-beta.4` through protected trusted publishing workflow.
 - [ ] npm `latest` dist-tag `E403` follow-up.
 

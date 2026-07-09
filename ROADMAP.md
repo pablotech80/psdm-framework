@@ -87,6 +87,7 @@ Completed:
 - Release checker npm pack parsing made compatible with npm dry-run JSON output used by the protected publish workflow.
 - Release checker npm pack manifest detection hardened for wrapped JSON output from newer npm versions in CI.
 - Protected npm workflow now uses the runner-provided npm when it satisfies trusted publishing requirements instead of upgrading unconditionally to `npm@latest`.
+- Protected npm publish workflow dry-run passed for `1.0.0-beta.4`.
 
 ## Active Milestone
 
@@ -247,6 +248,7 @@ Planned outcomes:
 - [x] Fix release checker package dry-run parsing for protected npm workflow.
 - [x] Harden release checker package manifest detection for protected npm workflow compatibility.
 - [x] Remove unconditional `npm@latest` upgrade from protected npm workflow.
+- [x] Verify protected npm publish workflow dry-run for `1.0.0-beta.4`.
 - [ ] Publish `@ptechsolution/psdm-framework@1.0.0-beta.4` through trusted publishing.
 - [ ] Create Git tag and GitHub pre-release `v1.0.0-beta.4`.
 - [ ] Resolve npm `latest` dist-tag `E403` follow-up.

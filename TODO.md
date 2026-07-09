@@ -130,6 +130,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Fixed release checker package dry-run parsing for protected npm workflow.
 - [x] Hardened release checker package manifest detection for wrapped npm pack JSON output in CI.
 - [x] Removed unconditional `npm@latest` upgrade from protected npm workflow.
+- [x] Ran protected npm publish workflow dry-run for `1.0.0-beta.4`.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.
