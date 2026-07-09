@@ -77,6 +77,7 @@ Publishing workflow:
 - `permissions.id-token: write`;
 - Node.js `24`, or at least Node.js `22.14.0`;
 - npm CLI `11.5.1` or later;
+- no unconditional `npm@latest` upgrade in the workflow; the runner-provided npm is used when it satisfies the minimum trusted publishing version;
 - `npm run release:check` before publication;
 - `npm publish --dry-run --access public --tag beta` when `dry_run` is `true`;
 - npm registry version-exists check when `dry_run` is `false`;
@@ -139,6 +140,15 @@ jobs:
         with:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
+      - run: npm --version
+      - run: |
+          npm_version="$(npm --version)"
+          node - "$npm_version" <<'NODE'
+          const [major, minor, patch] = process.argv[2].split('.').map(Number)
+          if (!(major > 11 || (major === 11 && (minor > 5 || (minor === 5 && patch >= 1))))) {
+            process.exit(1)
+          }
+          NODE
       - run: npm run release:check
       - run: npm publish --dry-run --access public --tag beta
         if: ${{ inputs.dry_run }}
@@ -149,6 +159,8 @@ jobs:
 Use `dry_run: true` to test the protected workflow without publishing.
 
 Do not run this workflow with `dry_run: false` until owner approval is confirmed and the package version has not been published.
+
+Do not install `npm@latest` unconditionally in the workflow. On `2026-07-09`, `npm@12.0.0` failed the dry-run publish step in GitHub Actions with a missing internal `sigstore` module while `actions/setup-node@v6` provided npm `11.16.0`, which satisfies the trusted publishing minimum.
 
 ## Verification
 

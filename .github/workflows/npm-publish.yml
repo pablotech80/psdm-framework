@@ -36,13 +36,24 @@ jobs:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Upgrade npm for trusted publishing
-        run: npm install -g npm@latest
-
       - name: Show release toolchain
         run: |
           node --version
           npm --version
+
+      - name: Verify npm trusted publishing CLI
+        run: |
+          npm_version="$(npm --version)"
+          node - "$npm_version" <<'NODE'
+          const version = process.argv[2]
+          const [major, minor, patch] = version.split('.').map(Number)
+          const isSupported = major > 11 || (major === 11 && (minor > 5 || (minor === 5 && patch >= 1)))
+
+          if (!isSupported) {
+            console.error(`npm ${version} is too old for trusted publishing. Require npm >= 11.5.1.`)
+            process.exit(1)
+          }
+          NODE
 
       - name: Validate release candidate
         run: npm run release:check

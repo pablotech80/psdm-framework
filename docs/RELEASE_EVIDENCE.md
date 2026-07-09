@@ -333,6 +333,7 @@ Scope:
 - `AGENTS.md` and generated `templates/AGENTS.md` source-of-truth boundary for project knowledge.
 - Release checker compatibility fix for npm pack dry-run JSON output in the protected publish workflow.
 - Release checker package manifest detection hardened for wrapped npm pack JSON output from newer npm versions.
+- Protected publish workflow npm toolchain hardened to avoid unconditional `npm@latest` upgrades after `npm@12.0.0` failed dry-run publish with missing `sigstore`.
 
 Expected npm dist-tag:
 
@@ -344,7 +345,7 @@ Required before publication:
 - Local `npm publish --dry-run --access public --tag beta`: passed.
 - GitHub PSDM workflow: pending for the release commit.
 - CodeQL workflow: pending for the release commit.
-- Protected workflow dry-run: failed before publish at `https://github.com/pablotech80/psdm-framework/actions/runs/29008612310`; fix prepared.
+- Protected workflow dry-run: failed before publish at `https://github.com/pablotech80/psdm-framework/actions/runs/29008612310` and `https://github.com/pablotech80/psdm-framework/actions/runs/29009137911`; fixes prepared.
 - Explicit owner approval: pending.
 - Protected workflow real publish: pending.
 
