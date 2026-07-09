@@ -101,7 +101,7 @@ flowchart TD
 
 ## Status
 
-`1.0.0-beta.3`
+`1.0.0-beta.4`
 
 ## Install
 

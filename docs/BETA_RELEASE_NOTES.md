@@ -2,6 +2,7 @@
 
 Status: `Published`
 Latest Beta Release: `1.0.0-beta.3`
+Next Beta Candidate: `1.0.0-beta.4`
 First Beta Release: `1.0.0-beta.1`
 Project: `psdm-framework`
 
@@ -186,3 +187,35 @@ Known limitations:
 
 - npm dist-tag `beta` points to `1.0.0-beta.3`.
 - npm dist-tag `latest` still points to `1.0.0-beta.1`.
+
+## Beta Candidate - 1.0.0-beta.4
+
+Status: `Prepared`
+
+Prepared: `2026-07-09`
+
+Package: `@ptechsolution/psdm-framework@1.0.0-beta.4`
+
+Git tag: `v1.0.0-beta.4`
+
+Purpose:
+
+- Publish the Knowledge as Code documentation layer to npm beta.
+- Include `docs/KNOWLEDGE_AS_CODE.md`.
+- Clarify that Markdown/YAML and Git are the source of truth for project knowledge.
+- Clarify that Obsidian is optional authoring, while vector databases, graph databases, and GraphRAG are derived runtime paths.
+- Keep CLI behavior, command contracts, JSON output, and runtime dependencies unchanged.
+
+Validation before publication:
+
+- Local `npm run release:check`: passed.
+- Local `npm publish --dry-run --access public --tag beta`: passed.
+- GitHub PSDM workflow on release commit: required.
+- CodeQL workflow on release commit: required.
+- Protected workflow dry-run: required.
+- Protected workflow real publish: requires explicit owner approval and `dry_run=false`.
+
+Known limitations:
+
+- npm dist-tag `latest` still points to `1.0.0-beta.1`.
+- Beta status remains active.

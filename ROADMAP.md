@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is published at `1.0.0-beta.3`.
+PSDM is published at `1.0.0-beta.3`; `1.0.0-beta.4` is prepared as the next beta candidate.
 
 Completed:
 
@@ -83,6 +83,7 @@ Completed:
 - GitHub social preview image asset prepared at `assets/psdm-social-preview.png`.
 - GitHub social preview image configured in repository settings.
 - Knowledge as Code Layer documented as a transversal PSDM method layer without adding runtime or tooling dependencies.
+- `1.0.0-beta.4` candidate prepared to publish Knowledge as Code documentation to npm beta.
 
 ## Active Milestone
 
@@ -239,6 +240,9 @@ Planned outcomes:
 - [x] Prepare GitHub social preview image asset.
 - [x] Upload GitHub social preview image in repository settings.
 - [x] Document Knowledge as Code Layer as optional method guidance.
+- [x] Prepare `1.0.0-beta.4` candidate for Knowledge as Code documentation publication.
+- [ ] Publish `@ptechsolution/psdm-framework@1.0.0-beta.4` through trusted publishing.
+- [ ] Create Git tag and GitHub pre-release `v1.0.0-beta.4`.
 - [ ] Resolve npm `latest` dist-tag `E403` follow-up.
 
 ### `1.0.0`

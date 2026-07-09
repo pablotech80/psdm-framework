@@ -314,3 +314,39 @@ npm registry check:
 Next gate:
 
 - verify npm package page displays provenance for `1.0.0-beta.3`.
+
+## Release Candidate Evidence - 1.0.0-beta.4
+
+Package: `@ptechsolution/psdm-framework`
+
+Version: `1.0.0-beta.4`
+
+Publication status: `prepared`
+
+Prepared date: `2026-07-09`
+
+Scope:
+
+- Knowledge as Code documentation layer.
+- README entrypoint for Knowledge as Code.
+- Architecture and model/tool independence boundary updates.
+- `AGENTS.md` and generated `templates/AGENTS.md` source-of-truth boundary for project knowledge.
+
+Expected npm dist-tag:
+
+- `beta`
+
+Required before publication:
+
+- Local `npm run release:check`: passed.
+- Local `npm publish --dry-run --access public --tag beta`: passed.
+- GitHub PSDM workflow: pending for the release commit.
+- CodeQL workflow: pending for the release commit.
+- Protected workflow dry-run: pending.
+- Explicit owner approval: pending.
+- Protected workflow real publish: pending.
+
+Known limitations:
+
+- npm `latest` still points to `1.0.0-beta.1`.
+- Beta status remains active.

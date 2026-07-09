@@ -12,6 +12,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
+- [ ] Publish `@ptechsolution/psdm-framework@1.0.0-beta.4` after explicit owner approval.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 
 ## Next
@@ -125,6 +126,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Prepared GitHub social preview image asset at `assets/psdm-social-preview.png`.
 - [x] Uploaded GitHub social preview image in repository settings.
 - [x] Documented Knowledge as Code Layer as optional method guidance.
+- [x] Prepared `1.0.0-beta.4` candidate for Knowledge as Code documentation publication.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

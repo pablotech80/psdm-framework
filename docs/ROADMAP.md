@@ -158,6 +158,8 @@
 - [x] verified `1.0.0-beta.3` through protected workflow dry-run.
 - [x] published `1.0.0-beta.3` through protected trusted publishing workflow.
 - [x] Knowledge as Code Layer documented as optional method guidance without adding runtime dependencies.
+- [x] prepared `1.0.0-beta.4` candidate for Knowledge as Code documentation publication.
+- [ ] publish `1.0.0-beta.4` through protected trusted publishing workflow.
 - [ ] npm `latest` dist-tag `E403` follow-up.
 
 ## v1.0
@@ -190,6 +192,7 @@
 - [x] Git tag and GitHub pre-release.
 - [x] npm trusted publishing configured for future releases.
 - [x] Knowledge as Code Layer documentation.
+- [ ] `1.0.0-beta.4` Knowledge as Code beta publication.
 - [ ] npm `latest` dist-tag `E403` follow-up before stable release.
 - [x] Example project fixture coverage.
 - [ ] Runnable example projects.

@@ -1,6 +1,6 @@
 {
   "name": "@ptechsolution/psdm-framework",
-  "version": "1.0.0-beta.3",
+  "version": "1.0.0-beta.4",
   "description": "Specification-first governance for AI-assisted software engineering.",
   "type": "module",
   "bin": {
