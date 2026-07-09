@@ -144,10 +144,10 @@ function assertValidation() {
 function assertPackageContents() {
   const output = capture('Inspect package dry-run contents', 'npm', ['pack', '--dry-run', '--json'])
   const parsed = JSON.parse(output)
-  const pack = Array.isArray(parsed) ? parsed[0] : parsed
+  const pack = findPackManifest(parsed)
 
   if (!pack || !Array.isArray(pack.files)) {
-    throw new Error('Unable to parse npm pack dry-run output.')
+    throw new Error(`Unable to parse npm pack dry-run output: ${describeJsonShape(parsed)}.`)
   }
 
   const files = new Set(pack.files.map((file) => file.path))
@@ -171,6 +171,48 @@ function assertPackageContents() {
     entryCount: pack.entryCount,
     size: pack.size,
   }, null, 2))
+}
+
+function findPackManifest(value) {
+  if (!value || typeof value !== 'object') {
+    return null
+  }
+
+  if (Array.isArray(value)) {
+    for (const item of value) {
+      const found = findPackManifest(item)
+      if (found) {
+        return found
+      }
+    }
+
+    return null
+  }
+
+  if (Array.isArray(value.files)) {
+    return value
+  }
+
+  for (const item of Object.values(value)) {
+    const found = findPackManifest(item)
+    if (found) {
+      return found
+    }
+  }
+
+  return null
+}
+
+function describeJsonShape(value) {
+  if (Array.isArray(value)) {
+    return `array(length=${value.length})`
+  }
+
+  if (value && typeof value === 'object') {
+    return `object(keys=${Object.keys(value).slice(0, 10).join(',')})`
+  }
+
+  return typeof value
 }
 
 function main() {

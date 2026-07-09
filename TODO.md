@@ -128,6 +128,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Documented Knowledge as Code Layer as optional method guidance.
 - [x] Prepared `1.0.0-beta.4` candidate for Knowledge as Code documentation publication.
 - [x] Fixed release checker package dry-run parsing for protected npm workflow.
+- [x] Hardened release checker package manifest detection for wrapped npm pack JSON output in CI.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.
