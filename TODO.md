@@ -12,16 +12,14 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Publish `@ptechsolution/psdm-framework@1.0.0-beta.4` after explicit owner approval.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 
 ## Next
 
-- [ ] Verify npm package page displays provenance for `1.0.0-beta.3`.
+- [ ] Verify npm package page displays provenance for `1.0.0-beta.4`.
 
 ## Later
 
-- [ ] Record explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
 - [ ] Add richer runnable example projects.
 
 ## Done
@@ -131,6 +129,10 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Hardened release checker package manifest detection for wrapped npm pack JSON output in CI.
 - [x] Removed unconditional `npm@latest` upgrade from protected npm workflow.
 - [x] Ran protected npm publish workflow dry-run for `1.0.0-beta.4`.
+- [x] Recorded explicit owner approval with `CONFIRM NPM BETA PUBLISH`.
+- [x] Published `@ptechsolution/psdm-framework@1.0.0-beta.4` through trusted publishing.
+- [x] Created Git tag and GitHub pre-release `v1.0.0-beta.4`.
+- [x] Verified clean install from npm `@beta` for `1.0.0-beta.4`.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

@@ -3,7 +3,7 @@
 Status: `Active`
 Project: `psdm-framework`
 Release Target: `1.0.0-beta.4`
-Latest Published Beta: `1.0.0-beta.3`
+Latest Published Beta: `1.0.0-beta.4`
 
 ## Purpose
 
@@ -375,14 +375,19 @@ Result:
 - npm dist-tag `beta` points to `1.0.0-beta.3`.
 - npm dist-tag `latest` still points to `1.0.0-beta.1`.
 
-## Beta 4 Candidate - 2026-07-09
+## Beta 4 Release - 2026-07-09
 
 Result:
 
-- Prepared `@ptechsolution/psdm-framework@1.0.0-beta.4` for publishing Knowledge as Code documentation to npm beta.
+- Published `@ptechsolution/psdm-framework@1.0.0-beta.4` for Knowledge as Code documentation on npm beta.
 - Scope is limited to method/documentation updates after `1.0.0-beta.3`.
 - Includes `docs/KNOWLEDGE_AS_CODE.md`, README entrypoint, model/tool independence guidance, architecture boundary notes, and generated `AGENTS.md` template boundary.
 - No CLI behavior, command contracts, JSON output, runtime dependencies, or GitHub Action behavior changes are included.
 - Local `npm run release:check -- --allow-dirty`: passed.
 - Local `npm publish --dry-run --access public --tag beta`: passed.
-- Real publication remains blocked until release validation passes and explicit owner approval is recorded.
+- Protected npm workflow dry-run: passed.
+- Explicit owner approval recorded with `CONFIRM NPM BETA PUBLISH`.
+- Protected trusted publishing workflow: passed.
+- Git tag and GitHub pre-release `v1.0.0-beta.4`: created.
+- Clean install from npm `@beta`: passed.
+- npm dist-tag `beta` points to `1.0.0-beta.4`.

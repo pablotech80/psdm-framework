@@ -321,9 +321,25 @@ Package: `@ptechsolution/psdm-framework`
 
 Version: `1.0.0-beta.4`
 
-Publication status: `prepared`
+Publication status: `published`
 
 Prepared date: `2026-07-09`
+
+Published date: `2026-07-09`
+
+npm package: `https://www.npmjs.com/package/@ptechsolution/psdm-framework/v/1.0.0-beta.4`
+
+npm tarball: `https://registry.npmjs.org/@ptechsolution/psdm-framework/-/psdm-framework-1.0.0-beta.4.tgz`
+
+npm integrity: `sha512-tzYW9SK8UoKaRb1t+mttj2ajw//rGr7TfCDOk2OEzYvWT+FaHBcVXNgng6RgI3+7wvNtwyIrezT5iiTZowUNzA==`
+
+npm shasum: `64d5f6e6c954eade038f8d40c0a314b29cd814ca`
+
+Git commit: `6a86b3987d276a3b879e02d86d6c90e2e46acbe8`
+
+Git tag: `v1.0.0-beta.4`
+
+GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.4`
 
 Scope:
 
@@ -343,11 +359,13 @@ Required before publication:
 
 - Local `npm run release:check`: passed.
 - Local `npm publish --dry-run --access public --tag beta`: passed.
-- GitHub PSDM workflow: passed for release commit `b6509f4`.
-- CodeQL workflow: passed for release commit `b6509f4`.
-- Protected workflow dry-run: passed at `https://github.com/pablotech80/psdm-framework/actions/runs/29009415762`.
-- Explicit owner approval: pending.
-- Protected workflow real publish: pending.
+- GitHub PSDM workflow: passed for release commit `6a86b39`.
+- CodeQL workflow: passed for release commit `6a86b39`.
+- Protected workflow dry-run: passed at `https://github.com/pablotech80/psdm-framework/actions/runs/29009934713`.
+- Explicit owner approval: recorded as `CONFIRM NPM BETA PUBLISH`.
+- Protected workflow real publish: passed at `https://github.com/pablotech80/psdm-framework/actions/runs/29010028881`.
+- npm dist-tag verification: `beta` points to `1.0.0-beta.4`.
+- Clean install from npm `@beta`: passed.
 
 Known limitations:
 

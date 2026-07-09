@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is published at `1.0.0-beta.3`; `1.0.0-beta.4` is prepared as the next beta candidate.
+PSDM is published at `1.0.0-beta.4`; npm dist-tag `beta` points to `1.0.0-beta.4`.
 
 Completed:
 
@@ -88,6 +88,9 @@ Completed:
 - Release checker npm pack manifest detection hardened for wrapped JSON output from newer npm versions in CI.
 - Protected npm workflow now uses the runner-provided npm when it satisfies trusted publishing requirements instead of upgrading unconditionally to `npm@latest`.
 - Protected npm publish workflow dry-run passed for `1.0.0-beta.4`.
+- `1.0.0-beta.4` published through protected trusted publishing workflow.
+- Git tag and GitHub pre-release `v1.0.0-beta.4` created.
+- Clean install from npm `@beta` verified for `1.0.0-beta.4`.
 
 ## Active Milestone
 
@@ -249,8 +252,9 @@ Planned outcomes:
 - [x] Harden release checker package manifest detection for protected npm workflow compatibility.
 - [x] Remove unconditional `npm@latest` upgrade from protected npm workflow.
 - [x] Verify protected npm publish workflow dry-run for `1.0.0-beta.4`.
-- [ ] Publish `@ptechsolution/psdm-framework@1.0.0-beta.4` through trusted publishing.
-- [ ] Create Git tag and GitHub pre-release `v1.0.0-beta.4`.
+- [x] Publish `@ptechsolution/psdm-framework@1.0.0-beta.4` through trusted publishing.
+- [x] Create Git tag and GitHub pre-release `v1.0.0-beta.4`.
+- [x] Verify clean install from npm `@beta` for `1.0.0-beta.4`.
 - [ ] Resolve npm `latest` dist-tag `E403` follow-up.
 
 ### `1.0.0`

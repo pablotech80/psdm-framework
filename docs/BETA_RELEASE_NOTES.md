@@ -1,8 +1,8 @@
 # BETA_RELEASE_NOTES.md
 
 Status: `Published`
-Latest Beta Release: `1.0.0-beta.3`
-Next Beta Candidate: `1.0.0-beta.4`
+Latest Beta Release: `1.0.0-beta.4`
+Next Beta Candidate: `TBD`
 First Beta Release: `1.0.0-beta.1`
 Project: `psdm-framework`
 
@@ -185,18 +185,20 @@ Validation:
 
 Known limitations:
 
-- npm dist-tag `beta` points to `1.0.0-beta.3`.
+- npm dist-tag `beta` points to `1.0.0-beta.4`.
 - npm dist-tag `latest` still points to `1.0.0-beta.1`.
 
-## Beta Candidate - 1.0.0-beta.4
+## Beta Release - 1.0.0-beta.4
 
-Status: `Prepared`
+Status: `Published`
 
-Prepared: `2026-07-09`
+Published: `2026-07-09`
 
 Package: `@ptechsolution/psdm-framework@1.0.0-beta.4`
 
 Git tag: `v1.0.0-beta.4`
+
+GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.4`
 
 Purpose:
 
@@ -206,16 +208,18 @@ Purpose:
 - Clarify that Obsidian is optional authoring, while vector databases, graph databases, and GraphRAG are derived runtime paths.
 - Keep CLI behavior, command contracts, JSON output, and runtime dependencies unchanged.
 
-Validation before publication:
+Validation:
 
 - Local `npm run release:check`: passed.
 - Local `npm publish --dry-run --access public --tag beta`: passed.
-- GitHub PSDM workflow on release commit: required.
-- CodeQL workflow on release commit: required.
-- Protected workflow dry-run: required.
-- Protected workflow real publish: requires explicit owner approval and `dry_run=false`.
+- GitHub PSDM workflow on release commit: passed.
+- CodeQL workflow on release commit: passed.
+- Protected workflow dry-run: passed.
+- Protected workflow real publish: passed after explicit owner approval.
+- Clean install from npm `@beta`: passed.
 
 Known limitations:
 
+- npm dist-tag `beta` points to `1.0.0-beta.4`.
 - npm dist-tag `latest` still points to `1.0.0-beta.1`.
 - Beta status remains active.
