@@ -40,6 +40,7 @@ Agents must not implement product changes without required PSDM artifacts for th
 
 - Preserve existing Claude, Cursor, Copilot, Codex, skill, prompt, and assistant instruction files.
 - Treat PSDM governance as the source of truth for change level, approval, security, data, deployment, and release rules.
+- Treat Git-backed Markdown and YAML as the source of truth for project knowledge; runtime indexes, agent memories, vector stores, and graph stores are derived artifacts.
 - Use tool-specific files as adapters for a specific assistant, not as replacements for PSDM governance.
 - Stop when a tool-specific instruction conflicts with PSDM governance and ask the owner to resolve the conflict.
 

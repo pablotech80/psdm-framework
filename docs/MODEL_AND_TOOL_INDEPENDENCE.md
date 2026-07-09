@@ -21,6 +21,7 @@ Examples:
 - `docs/TOOL_REGISTRY.md` defines AI-accessible tool boundaries.
 - `docs/PSDM_ADOPTION.md` records how existing AI instructions are integrated.
 - `CLAUDE.md`, `.cursor/rules`, `.github/copilot-instructions.md`, `.codex`, `.windsurfrules`, prompts, and skills may adapt those rules for a specific tool.
+- `docs/KNOWLEDGE_AS_CODE.md` defines how repository knowledge can remain portable while tools such as Obsidian, RAG, Knowledge Graphs, GraphRAG, and agent runtimes consume it.
 
 Tool-specific rules may add local instructions, but they should not weaken PSDM change-level, security, data, deployment, approval, or tool-use boundaries.
 
@@ -33,7 +34,22 @@ Project teams should customize PSDM through repository-owned artifacts:
 3. Edit `docs/CHANGE_GOVERNANCE.md` for team process, approvals, and change-level expectations.
 4. Edit `docs/TOOL_REGISTRY.md` for AI-accessible tools, permissions, forbidden operations, and human approval rules.
 5. Edit `docs/AI_AGENT_SECURITY.md` when AI agents, prompts, tools, RAG, memory, evals, or automation are part of the project.
-6. Use tool-specific files only as adapters that point back to PSDM governance.
+6. Edit `docs/KNOWLEDGE_AS_CODE.md` guidance when the project needs a formal `knowledge/` structure, frontmatter, stable IDs, or derived runtime indexes.
+7. Use tool-specific files only as adapters that point back to PSDM governance.
+
+## Knowledge Tool Boundaries
+
+PSDM does not require a specific knowledge toolchain.
+
+- Obsidian can help teams author, link, and review notes, but it is optional.
+- Markdown and YAML are the portable base format for governed knowledge.
+- Git is the versioned source of truth.
+- Indexers may transform repository knowledge into embeddings, metadata, or relationship records.
+- Vector databases support semantic retrieval.
+- Graph databases support explicit relationships.
+- Agent runtimes consume governed knowledge, but do not replace the repository record.
+
+RAG retrieves semantically similar text fragments. A Knowledge Graph connects explicit entities and relationships. GraphRAG is an advanced runtime pattern that can be added later, not a PSDM prerequisite.
 
 ## Example Risk Rules
 

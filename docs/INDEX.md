@@ -13,6 +13,7 @@ Use it to find the right document by task: adopting PSDM in an existing project,
 
 - `README.md`: quick start, CLI overview, configuration example, GitHub Action usage.
 - `docs/PSDM_OVERVIEW.md`: method overview and governance model.
+- `docs/KNOWLEDGE_AS_CODE.md`: optional Knowledge as Code Layer for versioning intent, decisions, rules, prompts, workflows, verification criteria, and evolution notes.
 - `docs/PROJECT_BRIEF.md`: project purpose, audience, and success criteria.
 - `docs/BETA_RELEASE_NOTES.md`: beta release scope, validation, limitations, and exit criteria.
 - `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md`: public collaboration and reporting expectations.
@@ -22,6 +23,7 @@ Use it to find the right document by task: adopting PSDM in an existing project,
 - `README.md`: local installation and basic commands.
 - `docs/PSDM_OVERVIEW.md`: why PSDM exists and how governance scales by risk.
 - `docs/MODEL_AND_TOOL_INDEPENDENCE.md`: how PSDM coexists with Claude, Cursor, Copilot, Codex, skills, prompts, and other AI tooling.
+- `docs/KNOWLEDGE_AS_CODE.md`: how Git-backed Markdown/YAML remains the knowledge source of truth while RAG, Knowledge Graphs, GraphRAG, Obsidian, and runtime indexes stay optional.
 - `docs/CHANGE_LEVELS.md`: Level 0 through Level 4 definitions.
 - `docs/RISK_PATHS.md`: path-aware classification rules.
 - `examples/nextjs-saas/README.md`: downstream-like SaaS/AI fixture coverage.
@@ -81,6 +83,7 @@ Key policy concepts:
 - `docs/AI_AGENT_SECURITY.md`: AI-agent and tool-use security expectations.
 - `docs/AI_READINESS_AUDIT.md`: `psdm audit --json` contract for AI readiness signals and governance gaps.
 - `docs/MODEL_AND_TOOL_INDEPENDENCE.md`: model-neutral governance and tool-specific adapter guidance.
+- `docs/KNOWLEDGE_AS_CODE.md`: source-of-truth and runtime-index boundaries for governed project knowledge.
 - `docs/TOOL_REGISTRY.md`: tool registry direction.
 - `ADRs/README.md`: ADR usage guidance.
 

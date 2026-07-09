@@ -49,6 +49,7 @@ psdm audit
 - [CLI](#cli)
 - [Quick Start](#quick-start)
 - [Model And Tool Independence](#model-and-tool-independence)
+- [Knowledge As Code Layer](#knowledge-as-code-layer)
 - [Common Workflows](#common-workflows)
 - [Local Validation](#local-validation)
 - [Contributing And Security](#contributing-and-security)
@@ -94,6 +95,7 @@ flowchart TD
 - CI enforcement for maximum allowed change level.
 - AI readiness checks for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
 - AI-agent governance templates for projects using LLMs, tools, prompts, RAG, or automation.
+- Knowledge as Code guidance for versioning intent, decisions, rules, prompts, workflows, verification criteria, and evolution notes.
 - JSON output for automation and GitHub Action workflows.
 - Public beta release gates for package contents, docs, and repository readiness.
 
@@ -190,6 +192,16 @@ PSDM is independent from any specific model, provider, coding assistant, or init
 Teams customize PSDM through `psdm.config.json`, `AGENTS.md`, `docs/CHANGE_GOVERNANCE.md`, `docs/TOOL_REGISTRY.md`, and AI guardrail docs. Tool-specific files should adapt those rules for a given assistant, but must not weaken PSDM change-level, security, data, deployment, approval, or release boundaries.
 
 See `docs/MODEL_AND_TOOL_INDEPENDENCE.md` for customization examples.
+
+## Knowledge As Code Layer
+
+PSDM treats knowledge as a first-class artifact. A project should not preserve only source code, but also intent, specifications, architectural decisions, business rules, agent instructions, workflows, prompts, verification criteria, and evolution notes as versioned knowledge assets.
+
+Knowledge as Code is a transversal layer, not a new mandatory phase. Markdown and YAML in Git remain the source of truth. Obsidian can be used as an optional authoring tool; vector databases and graph databases are derived runtime indexes, not the primary record.
+
+RAG retrieves semantically similar text fragments. A Knowledge Graph connects explicit entities and relationships such as rules, workflows, agents, systems, owners, and decisions. GraphRAG is an advanced evolution path, not a starting requirement.
+
+See `docs/KNOWLEDGE_AS_CODE.md` for structure, tool roles, maturity levels, and an example knowledge note.
 
 ## Common Workflows
 
@@ -426,6 +438,7 @@ The action writes `psdm-enforcement.json` and fails when the classified change e
 
 - Risk-scaled governance.
 - Specification before significant implementation.
+- Knowledge as a versioned project asset.
 - Explicit AI-agent boundaries.
 - Security-sensitive work requires security context.
 - Deployment-sensitive work requires rollback context.

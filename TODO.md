@@ -2,7 +2,7 @@
 
 Status: `Active`
 Repository: `psdm-framework`
-Last Updated: `2026-07-08`
+Last Updated: `2026-07-09`
 
 ## Purpose
 
@@ -124,6 +124,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Promoted npm `@beta` as the primary public install command in README.
 - [x] Prepared GitHub social preview image asset at `assets/psdm-social-preview.png`.
 - [x] Uploaded GitHub social preview image in repository settings.
+- [x] Documented Knowledge as Code Layer as optional method guidance.
 - [x] Bumped package status to `0.16.0-alpha`.
 - [x] Bumped package status to `0.15.0-alpha`.
 - [x] Bumped package status to `0.14.0-alpha`.

@@ -2,7 +2,7 @@
 
 Status: `Active`
 Repository: `psdm-framework`
-Last Updated: `2026-07-08`
+Last Updated: `2026-07-09`
 
 ## Purpose
 
@@ -82,6 +82,7 @@ Completed:
 - Public README install path now promotes npm `@beta` first, with local checkout installation kept as the development path.
 - GitHub social preview image asset prepared at `assets/psdm-social-preview.png`.
 - GitHub social preview image configured in repository settings.
+- Knowledge as Code Layer documented as a transversal PSDM method layer without adding runtime or tooling dependencies.
 
 ## Active Milestone
 
@@ -237,6 +238,7 @@ Planned outcomes:
 - [x] Promote npm `@beta` as the primary public install command in README.
 - [x] Prepare GitHub social preview image asset.
 - [x] Upload GitHub social preview image in repository settings.
+- [x] Document Knowledge as Code Layer as optional method guidance.
 - [ ] Resolve npm `latest` dist-tag `E403` follow-up.
 
 ### `1.0.0`

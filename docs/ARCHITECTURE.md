@@ -21,6 +21,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/config.mjs` also applies validation profile presets and exposes the supported profile list.
 - `src/lib/artifacts.mjs` defines baseline artifact contracts.
 - AI guardrail templates are profile-scoped through `ai-agent` so PSDM can govern AI runtime risk without imposing those artifacts on non-AI projects.
+- The Knowledge as Code Layer is documented as a transversal method layer. It does not add CLI dependencies, generated artifacts, or runtime infrastructure requirements.
 - `src/lib/risk-paths.mjs` validates and evaluates file path risk rules.
 - `src/lib/git.mjs` inspects repository state.
 - `src/validator/validate-method.mjs` evaluates method compliance.
@@ -31,6 +32,8 @@ The architecture favors explicit modules over framework abstractions:
 - Use JSON output as a stable automation contract while preserving human-readable output.
 - Keep configuration local to the target repository through `psdm.config.json`.
 - Keep PSDM as a governance layer, not an AI observability platform; runtime traces, dashboards, hosted evals, token telemetry, cost reports, and latency measurements should come from external tools or project-owned scripts.
+- Treat Git-backed Markdown and YAML as the source of truth for project knowledge. Vector databases, graph databases, GraphRAG indexes, and agent memories are derived runtime indexes or caches.
+- Treat Obsidian as an optional authoring environment, not as a PSDM dependency or as proof that an operational Knowledge Graph exists.
 - Treat unsupported profile values as invalid local policy rather than silently relying on default behavior.
 - Treat malformed risk path rules as invalid local policy and ignore them during path matching.
 - Treat risk classification as advisory unless CI enforcement is explicitly configured through `psdm enforce` or the composite Action.
@@ -64,3 +67,4 @@ Changes require architecture review when they affect:
 - GitHub Action behavior;
 - governance semantics for high-risk change levels.
 - the boundary between PSDM governance and external runtime observability.
+- Knowledge as Code semantics, required artifacts, source-of-truth boundaries, or runtime index expectations.

@@ -4,6 +4,8 @@ PSDM is a spec-driven governance framework for real software delivery with AI as
 
 Although the CLI can run in any repository, PSDM's strongest controls are aimed at backend and platform boundaries: auth, data, payments, AI agents, deployment, infrastructure, and operations.
 
+PSDM also treats project knowledge as a first-class artifact. Intent, specifications, architecture decisions, business rules, agent instructions, workflows, prompts, verification criteria, and evolution notes should be versioned knowledge assets, not scattered context that disappears after implementation.
+
 It exists to prevent two common failures:
 
 - AI agents shipping changes without enough context.
@@ -23,6 +25,8 @@ Project Brief
   -> ADRs
 ```
 
+The Knowledge as Code Layer runs across this flow. It is not a mandatory new phase; it keeps the intent, decisions, rules, workflows, verification criteria, and evolution learning behind each phase durable and reviewable.
+
 ## Operating Model
 
 Every change is classified by impact:
@@ -35,6 +39,8 @@ Every change is classified by impact:
 
 Agents can help inspect, design, implement, and validate work, but must stay inside explicit scope and stop when required context is missing.
 
+Agents may consume PSDM-managed knowledge through files, prompts, retrieval, or derived indexes. Git-backed Markdown and YAML remain the source of truth; vector stores, graph databases, and agent memory are runtime indexes or caches.
+
 ## Model And Tool Independence
 
 PSDM is independent from any specific AI model, coding assistant, agent runtime, or vendor-specific init command.
@@ -42,3 +48,5 @@ PSDM is independent from any specific AI model, coding assistant, agent runtime,
 Claude, Cursor, Copilot, Codex, custom skills, prompts, and local or hosted agents can all be used in a PSDM-managed repository. Their tool-specific files should adapt PSDM governance, not replace it.
 
 Use `psdm.config.json`, `AGENTS.md`, `docs/CHANGE_GOVERNANCE.md`, and `docs/TOOL_REGISTRY.md` as the source of truth for project governance. Use assistant-specific files such as `CLAUDE.md`, `.cursor/rules`, `.github/copilot-instructions.md`, or Codex instructions as adapters that point back to those rules.
+
+See `docs/KNOWLEDGE_AS_CODE.md` for the optional Knowledge as Code Layer, including the boundary between Markdown/YAML, Git, RAG, Knowledge Graphs, GraphRAG, Obsidian, and runtime indexes.
