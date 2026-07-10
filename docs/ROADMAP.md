@@ -179,6 +179,7 @@
 - [x] Level 3 default classification for approval, action-record, replay-enforcement, and Git-hook modules.
 - [x] Ptech cyan terminal identity with TTY-safe ANSI output and monochrome fallback.
 - [x] Interactive slash command palette with filtered keyboard navigation.
+- [x] Consistent fixed-width result panels for shell status, inspection, help, and next-action guidance.
 - [ ] Trusted owner key enrollment, hook activation, and protected remote enforcement.
 - [x] Full documentation index.
 - [ ] Tested fixtures.

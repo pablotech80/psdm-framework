@@ -85,6 +85,23 @@ Interaction contract:
 
 The palette exists only for a real interactive TTY. Pipes and automation continue to use line-oriented input and receive no cursor-control or ANSI sequences.
 
+## Command Results
+
+Read-only commands share one result-panel grammar instead of emitting unrelated text shapes:
+
+```text
+╭─ INSPECT ──────────────────────────────────────────────────────────╮
+│  State      No staged changes found.                               │
+│  Next       Stage the intended files, then run /inspect again.     │
+╰────────────────────────────────────────────────────────────────────╯
+```
+
+- the title identifies the command result;
+- labels stay aligned across `/status`, `/inspect`, and `/help`;
+- long evidence wraps inside the panel instead of being silently truncated;
+- semantic color highlights state but does not change the monochrome text contract;
+- `Next` explains the useful follow-up without executing or authorizing it.
+
 ## Commands
 
 | Command | Behavior |

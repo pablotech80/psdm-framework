@@ -6,6 +6,7 @@ import { inspectStagedChange } from './inspect.mjs'
 import { terminalTheme } from './terminal-style.mjs'
 
 const CARD_WIDTH = 68
+const ROW_LABEL_WIDTH = 10
 
 function projectName(target) {
   const manifestPath = `${target}/package.json`
@@ -76,7 +77,7 @@ function policyLabel(context) {
 
 function cardRow(label, value, options = {}) {
   const theme = terminalTheme(options.color)
-  const prefix = `  ${label.padEnd(10)} `
+  const prefix = `  ${label.padEnd(ROW_LABEL_WIDTH)} `
   const available = CARD_WIDTH - prefix.length
   const rendered = value.length > available
     ? `${value.slice(0, Math.max(0, available - 1))}…`
@@ -85,6 +86,86 @@ function cardRow(label, value, options = {}) {
   const valueStyle = options.valueStyle || ((item) => item)
 
   return `${theme.cyan('│')}${theme.dim(prefix)}${valueStyle(paddedValue)}${theme.cyan('│')}`
+}
+
+function wrapText(value, width) {
+  const words = String(value).trim().split(/\s+/).filter(Boolean)
+  const lines = []
+  let current = ''
+
+  for (let word of words) {
+    if (current && current.length + word.length + 1 <= width) {
+      current = `${current} ${word}`
+      continue
+    }
+
+    if (current) {
+      lines.push(current)
+      current = ''
+    }
+
+    while (word.length > width) {
+      lines.push(word.slice(0, width))
+      word = word.slice(width)
+    }
+
+    current = word
+  }
+
+  if (current || lines.length === 0) {
+    lines.push(current)
+  }
+
+  return lines
+}
+
+function cardRows(label, value, options = {}) {
+  const available = CARD_WIDTH - `  ${''.padEnd(ROW_LABEL_WIDTH)} `.length
+
+  return wrapText(value, available).map((line, index) => cardRow(
+    index === 0 ? label : '',
+    line,
+    options,
+  ))
+}
+
+function panelRule(kind, title, options = {}) {
+  const theme = terminalTheme(options.color)
+
+  if (kind === 'top') {
+    const segment = `─ ${title} `
+    return theme.cyan(`╭${segment}${'─'.repeat(CARD_WIDTH - segment.length)}╮`)
+  }
+
+  if (kind === 'middle') {
+    return theme.cyan(`├${'─'.repeat(CARD_WIDTH)}┤`)
+  }
+
+  return theme.cyan(`╰${'─'.repeat(CARD_WIDTH)}╯`)
+}
+
+function renderPanel(title, rows, options = {}) {
+  return [
+    panelRule('top', title, options),
+    ...rows,
+    panelRule('bottom', title, options),
+  ].join('\n')
+}
+
+function renderStatusRows(context, options = {}) {
+  const theme = terminalTheme(options.color)
+  const changesStyle = !context.git.isRepository
+    ? theme.red
+    : context.git.isDirty
+      ? theme.yellow
+      : theme.green
+
+  return [
+    cardRow('Project', context.project, { ...options, valueStyle: theme.bold }),
+    cardRow('Branch', context.git.branch || (context.git.isRepository ? 'detached HEAD' : 'n/a'), options),
+    cardRow('Changes', changesLabel(context), { ...options, valueStyle: changesStyle }),
+    cardRow('Policy', policyLabel(context), options),
+  ]
 }
 
 export function buildShellContext({ target, configPath = null }) {
@@ -105,19 +186,7 @@ export function buildShellContext({ target, configPath = null }) {
 }
 
 export function renderShellStatus(context, options = {}) {
-  const theme = terminalTheme(options.color)
-  const changesStyle = !context.git.isRepository
-    ? theme.red
-    : context.git.isDirty
-      ? theme.yellow
-      : theme.green
-
-  return [
-    cardRow('Project', context.project, { ...options, valueStyle: theme.bold }),
-    cardRow('Branch', context.git.branch || (context.git.isRepository ? 'detached HEAD' : 'n/a'), options),
-    cardRow('Changes', changesLabel(context), { ...options, valueStyle: changesStyle }),
-    cardRow('Policy', policyLabel(context), options),
-  ].join('\n')
+  return renderPanel('STATUS', renderStatusRows(context, options), options)
 }
 
 export function renderShellBanner(context, options = {}) {
@@ -131,9 +200,9 @@ export function renderShellBanner(context, options = {}) {
       ...options,
       valueStyle: theme.cyanLight,
     }),
-    theme.cyan('├────────────────────────────────────────────────────────────────────┤'),
-    renderShellStatus(context, options),
-    theme.cyan('╰────────────────────────────────────────────────────────────────────╯'),
+    panelRule('middle', '', options),
+    ...renderStatusRows(context, options),
+    panelRule('bottom', '', options),
     `${theme.dim('Powered by PSDM')} · ${theme.dim('Type')} ${theme.cyan('/')} ${theme.dim('for commands')} · ${theme.cyan('/inspect')} ${theme.dim('staged')} · ${theme.cyan('/exit')} ${theme.dim('close')}`,
   ].join('\n')
 }
@@ -143,44 +212,72 @@ export function renderShellPrompt(options = {}) {
   return `${theme.cyan('riscala')} ${theme.cyanLight('❯')} `
 }
 
-export function renderShellHelp() {
-  return `Read-only commands:
-  /help      Show this command reference.
-  /status    Refresh repository, branch, changes, and policy context.
-  /inspect   Inspect staged changes and their governance level.
-  /exit      Close the Riscala shell.
+export function renderShellHelp(options = {}) {
+  const theme = terminalTheme(options.color)
+  const rows = [
+    cardRow('/help', 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/status', 'Refresh repository and policy context.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/inspect', 'Inspect staged changes and governance level.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/exit', 'Close the Riscala shell.', { ...options, valueStyle: theme.cyanLight }),
+    panelRule('middle', '', options),
+    ...cardRows('Safety', 'Read only. Mutating commands remain blocked until independent approval enforcement is configured.', {
+      ...options,
+      valueStyle: theme.yellow,
+    }),
+  ]
 
-Mutating commands such as /commit, /push, /pr, /publish, and /deploy are blocked
-until trusted approvers and independent enforcement hooks are configured.`
+  return renderPanel('COMMANDS', rows, options)
 }
 
-function renderInspection(report) {
+function renderInspection(report, options = {}) {
+  const theme = terminalTheme(options.color)
+
   if (report.decision === 'NOT_A_GIT_REPOSITORY') {
-    return `Cannot inspect staged changes: ${report.target} is not a Git repository.`
+    return renderPanel('INSPECT', [
+      ...cardRows('State', 'Cannot inspect staged changes.', { ...options, valueStyle: theme.red }),
+      ...cardRows('Target', `${report.target} is not a Git repository.`, options),
+      ...cardRows('Next', 'Run Riscala from a Git repository or select another target.', { ...options, valueStyle: theme.cyanLight }),
+    ], options)
   }
 
   if (report.decision === 'NO_STAGED_CHANGES') {
-    return 'No staged changes found.'
+    return renderPanel('INSPECT', [
+      ...cardRows('State', 'No staged changes found.', { ...options, valueStyle: theme.green }),
+      ...cardRows('Next', 'Stage the intended files, then run /inspect again.', { ...options, valueStyle: theme.cyanLight }),
+    ], options)
   }
 
-  const lines = [
+  const levelStyle = ['Level 3', 'Level 4'].includes(report.classification.estimatedLevel)
+    ? theme.yellow
+    : theme.cyanLight
+  const rows = cardRows(
+    'Summary',
     `Staged inspection · ${report.files.length} file(s) · ${report.classification.estimatedLevel}`,
-  ]
+    { ...options, valueStyle: levelStyle },
+  )
 
-  for (const change of report.git.changes) {
+  report.git.changes.forEach((change, index) => {
     const path = change.previousPath
       ? `${change.previousPath} -> ${change.path}`
       : change.path
-    lines.push(`  ${change.status.padEnd(3)} ${path}`)
-  }
+    rows.push(...cardRows(index === 0 ? 'Files' : '', `${change.status.padEnd(3)} ${path}`, options))
+  })
 
-  lines.push(`Reason: ${report.classification.classificationReason}`)
+  rows.push(...cardRows('Reason', report.classification.classificationReason, options))
 
   for (const match of report.classification.pathMatches) {
-    lines.push(`Risk: ${match.file} matches ${match.pattern} -> ${match.minimumLevel}`)
+    rows.push(...cardRows('Risk', `${match.file} matches ${match.pattern} -> ${match.minimumLevel}`, {
+      ...options,
+      valueStyle: theme.yellow,
+    }))
   }
 
-  return lines.join('\n')
+  rows.push(...cardRows('Next', 'Review this evidence before choosing the next governed action.', {
+    ...options,
+    valueStyle: theme.cyanLight,
+  }))
+
+  return renderPanel('INSPECT', rows, options)
 }
 
 const MUTATING_COMMANDS = new Set([
@@ -217,7 +314,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
   }
 
   if (command === '/help') {
-    return { output: renderShellHelp(), exit: false }
+    return { output: renderShellHelp({ color }), exit: false }
   }
 
   if (command === '/status') {
@@ -229,7 +326,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
 
   if (command === '/inspect') {
     return {
-      output: renderInspection(inspectStagedChange({ target, configPath })),
+      output: renderInspection(inspectStagedChange({ target, configPath }), { color }),
       exit: false,
     }
   }

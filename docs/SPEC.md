@@ -41,6 +41,7 @@ Project: `psdm-framework`
 - Open an allowlisted command palette when `/` is typed at the start of an interactive TTY prompt.
 - Support prefix filtering, arrow navigation, Enter execution, Tab completion, Escape dismissal, and basic cursor editing without changing command authorization.
 - Restore terminal raw mode on normal exit, `/exit`, `Ctrl+C`, and `Ctrl+D` paths.
+- Render `/status`, `/inspect`, and `/help` through a consistent fixed-width result-panel grammar with wrapped evidence and contextual next actions.
 - Generate a machine-readable `git.commit` action record bound to repository identity, branch, full staged diff hash, and change classification.
 - Require Level 3 and Level 4 approval policy and fail action preparation closed when trusted approvers are missing or policy is invalid.
 - Verify signed receipts against live staged content, pinned public-key fingerprints, allowed strong approval modes, and configured expiry limits.
@@ -91,6 +92,7 @@ Project: `psdm-framework`
 - Colored and monochrome shell rendering have identical visible text after ANSI removal, and piped shell sessions contain no ANSI escape sequences.
 - The slash palette exposes only `/help`, `/status`, `/inspect`, and `/exit`; navigation wraps and filtered selection executes through the existing command router.
 - Non-interactive shell sessions retain the existing newline-driven contract without cursor-control sequences.
+- Shell result panels preserve their visible layout with and without ANSI color and keep long inspection evidence inside the panel boundary.
 - `node bin/psdm.mjs action prepare git.commit --json` emits `ACTION_RECORD_READY`, `APPROVAL_POLICY_INCOMPLETE`, or `APPROVAL_POLICY_INVALID` without changing the repository.
 - `node bin/psdm.mjs approval verify git.commit --receipt <path> --json` rebuilds the live binding and accepts only an unexpired detached signature from a configured approver.
 - Modifying the staged diff, branch, repository, action, approver, key fingerprint, approval mode, or receipt lifetime invalidates approval.

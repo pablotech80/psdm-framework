@@ -72,6 +72,7 @@ node bin/psdm.mjs validate . --json
 - Verify shell fixtures report target-specific context, distinguish staged/unstaged/untracked changes, reuse staged governance classification, and block mutating slash commands.
 - Verify Ptech cyan uses `#00A8E8`, colored output preserves plain layout after ANSI removal, and color is disabled for non-TTY, `TERM=dumb`, and `NO_COLOR`.
 - Verify slash-menu filtering, wrapped selection, fixed-width ANSI layout, arrow navigation, Enter execution, terminal raw-mode restoration, and unchanged piped behavior.
+- Verify `/status`, `/inspect`, and `/help` use complete result panels, wrap evidence, and expose contextual next actions without changing command authorization.
 - Verify approval fixtures with real detached signatures: valid Ed25519 receipt, unsupported phrase mode, changed staged content, missing approver trust, and invalid policy.
 - Verify enforcement consumes an approval once, rejects replay, permits lower-risk commits, blocks Level 3 without trust, respects Git hook paths, and preserves unmanaged hooks.
 - Run staged inspection fixtures for changes to Git parsing, classification floors, risk-path evidence, or inspect output.

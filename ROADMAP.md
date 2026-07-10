@@ -109,6 +109,7 @@ Completed:
 - Approval, action-record, replay, and Git-hook implementation paths classified as Level 3 by default.
 - Riscala shell visual identity aligned with Ptech cyan, semantic TTY colors, `NO_COLOR`, and a branded prompt without installation scripts.
 - Dependency-free slash command palette added with filtering, keyboard navigation, completion, and TTY-safe raw-mode restoration.
+- Shell command results unified into fixed-width product panels with wrapped evidence, semantic states, and contextual next actions.
 
 ## Active Milestone
 
