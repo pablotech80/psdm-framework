@@ -5,6 +5,7 @@ import { loadConfig } from './config.mjs'
 import { inspectGit } from './git.mjs'
 import { inspectStagedChange } from './inspect.mjs'
 import { terminalTheme } from './terminal-style.mjs'
+import { validateMethod } from '../validator/validate-method.mjs'
 
 const CARD_WIDTH = 68
 const ROW_LABEL_WIDTH = 10
@@ -220,6 +221,7 @@ export function renderShellHelp(options = {}) {
     cardRow('/help', 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/status', 'Refresh repository and policy context.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/audit', 'Assess governance adoption and readiness.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/validate', 'Validate the governance baseline.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/inspect', 'Inspect staged changes and governance level.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/exit', 'Close the Riscala shell.', { ...options, valueStyle: theme.cyanLight }),
     panelRule('middle', '', options),
@@ -306,6 +308,52 @@ function renderAudit(report, options = {}) {
   ]
 
   return renderPanel('AUDIT', rows, options)
+}
+
+function countLabel(count, singular, plural) {
+  return `${count} ${count === 1 ? singular : plural}`
+}
+
+function renderValidation(report, options = {}) {
+  const theme = terminalTheme(options.color)
+  const passed = report.results.filter((item) => item.status === 'PASS').length
+  const failed = report.failures
+  const warned = report.warnings
+  const findings = report.results.filter((item) => item.status !== 'PASS')
+  const focusArtifacts = Array.from(new Set(findings.map((item) => item.artifact)))
+  const focus = focusArtifacts.slice(0, 2).join(' · ')
+  const remainingFocus = Math.max(0, focusArtifacts.length - 2)
+  const decision = {
+    METHOD_BASELINE_APPROVED: 'Baseline approved',
+    METHOD_BASELINE_REVIEW_REQUIRED: 'Review required',
+    NEEDS_CORRECTION: 'Needs correction',
+  }[report.decision] || report.decision.replaceAll('_', ' ')
+  const decisionStyle = failed > 0
+    ? theme.red
+    : warned > 0
+      ? theme.yellow
+      : theme.green
+  const next = failed > 0
+    ? 'Fix the failing governance checks, then run /validate again.'
+    : warned > 0
+      ? 'Review warnings before accepting the governance baseline.'
+      : 'Governance baseline validated. Run /inspect before delivery.'
+  const rows = [
+    cardRow('Policy', report.config.profile.name, { ...options, valueStyle: theme.cyanLight }),
+    cardRow('Decision', decision, { ...options, valueStyle: decisionStyle }),
+    cardRow('Checks', `${countLabel(passed, 'passed', 'passed')} · ${countLabel(failed, 'failed', 'failed')} · ${countLabel(warned, 'warning', 'warnings')}`, {
+      ...options,
+      valueStyle: decisionStyle,
+    }),
+    ...(focusArtifacts.length > 0 ? cardRows('Focus', `${focus}${remainingFocus > 0 ? ` · +${remainingFocus} more` : ''}`, {
+      ...options,
+      valueStyle: decisionStyle,
+    }) : []),
+    panelRule('middle', '', options),
+    ...cardRows('Next', next, { ...options, valueStyle: theme.cyanLight }),
+  ]
+
+  return renderPanel('VALIDATE', rows, options)
 }
 
 function renderInspection(report, options = {}) {
@@ -406,6 +454,13 @@ export function executeShellCommand(input, { target, configPath = null, color = 
   if (command === '/audit') {
     return {
       output: renderAudit(buildAudit(target, { configPath }), { color }),
+      exit: false,
+    }
+  }
+
+  if (command === '/validate') {
+    return {
+      output: renderValidation(validateMethod(target, { configPath }), { color }),
       exit: false,
     }
   }

@@ -113,6 +113,7 @@ Completed:
 - Read-only `/audit` added to the shell by reusing the existing adoption and AI-readiness audit engine.
 - Shell audit copy refined from internal field values into current-state, product-facing Riscala language.
 - Incomplete AI-project audit output now surfaces priority gaps while preserving stable PSDM artifact names.
+- Read-only `/validate` added to the shell by reusing the existing validator and prioritizing failed artifacts.
 
 ## Active Milestone
 

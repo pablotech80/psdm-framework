@@ -19,7 +19,7 @@ node bin/psdm.mjs audit . --json
 node bin/psdm.mjs adr "Adopt CI change level enforcement" --target "$(mktemp -d)" --date 2026-07-08 --json
 node bin/psdm.mjs classify "small cleanup" --file src/validator/validate-method.mjs --json
 node bin/psdm.mjs inspect --staged --json
-printf '/help\n/status\n/audit\n/inspect\n/exit\n' | node bin/psdm.mjs shell .
+printf '/help\n/status\n/audit\n/validate\n/inspect\n/exit\n' | node bin/psdm.mjs shell .
 node bin/psdm.mjs action prepare git.commit --json
 node bin/psdm.mjs hook status pre-commit --json
 node bin/psdm.mjs enforce "small cleanup" --file src/validator/validate-method.mjs --max-level "Level 3" --json
@@ -72,10 +72,11 @@ node bin/psdm.mjs validate . --json
 - Verify shell fixtures report target-specific context, summarize the existing audit contract, distinguish staged/unstaged/untracked changes, reuse staged governance classification, and block mutating slash commands.
 - Verify Ptech cyan uses `#00A8E8`, colored output preserves plain layout after ANSI removal, and color is disabled for non-TTY, `TERM=dumb`, and `NO_COLOR`.
 - Verify slash-menu filtering, wrapped selection, fixed-width ANSI layout, arrow navigation, Enter execution, terminal raw-mode restoration, and unchanged piped behavior.
-- Verify `/status`, `/audit`, `/inspect`, and `/help` use complete result panels, wrap evidence, and expose contextual next actions without changing command authorization.
+- Verify `/status`, `/audit`, `/validate`, `/inspect`, and `/help` use complete result panels, wrap evidence, and expose contextual next actions without changing command authorization.
 - Verify shell audit copy reports present/missing/empty artifacts, expanded adoption state, pluralized AI signals, specific Git changes, and `riscala` next commands.
 - Verify every fixed-width result row preserves one trailing interior column before the right border.
 - Verify an incomplete SaaS/AI example exposes prioritized gap focus, recommends `riscala init`, and preserves the `psdm.config.json` compatibility filename.
+- Verify shell validation matches the existing validator decision, prioritizes failing artifacts, and creates no target files.
 - Verify approval fixtures with real detached signatures: valid Ed25519 receipt, unsupported phrase mode, changed staged content, missing approver trust, and invalid policy.
 - Verify enforcement consumes an approval once, rejects replay, permits lower-risk commits, blocks Level 3 without trust, respects Git hook paths, and preserves unmanaged hooks.
 - Run staged inspection fixtures for changes to Git parsing, classification floors, risk-path evidence, or inspect output.

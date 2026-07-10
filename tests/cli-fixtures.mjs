@@ -111,7 +111,7 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   writeFileSync(resolve(target, 'package.json'), '{"name":"shell-fixture","private":true}\n')
   writeFileSync(resolve(target, 'notes.txt'), 'untracked\n')
 
-  const output = runShell([target], '/help\n/status\n/audit\n/inspect\n/commit\n/exit\n')
+  const output = runShell([target], '/help\n/status\n/audit\n/validate\n/inspect\n/commit\n/exit\n')
 
   assert.match(output, /RISCALA/)
   assert.match(output, /READ ONLY · governance shell/)
@@ -121,15 +121,20 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.match(output, /╭─ COMMANDS /)
   assert.match(output, /╭─ STATUS /)
   assert.match(output, /╭─ AUDIT /)
+  assert.match(output, /╭─ VALIDATE /)
   assert.match(output, /╭─ INSPECT /)
   assert.match(output, /\/status\s+Refresh repository/)
   assert.match(output, /\/audit\s+Assess governance adoption/)
+  assert.match(output, /\/validate\s+Validate the governance baseline/)
   assert.match(output, /Artifacts\s+\d+ present · \d+ missing · \d+ empty/)
   assert.match(output, /Adoption\s+Initialize governance baseline/)
   assert.match(output, /AI\s+0 surfaces · Not detected/)
   assert.match(output, /Git\s+1 staged · 1 unstaged · 1 untracked/)
   assert.match(output, /Next\s+Run riscala init/)
   assert.doesNotMatch(output, /Run psdm (?:init|validate)/)
+  assert.match(output, /Decision\s+Needs correction/)
+  assert.match(output, /Checks\s+\d+ passed · \d+ failed · \d+ warning/)
+  assert.match(output, /Next\s+Fix the failing governance checks/)
   assert.match(output, /Staged inspection · 1 file\(s\) · Level 2/)
   assert.match(output, /src\/tracked\.mjs matches src\/\*\* -> Level 2/)
   assert.match(output, /Next\s+Review this evidence before choosing the next/)
@@ -172,13 +177,14 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
     '/help',
     '/status',
     '/audit',
+    '/validate',
     '/inspect',
     '/exit',
   ])
   assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
   assert.deepEqual(filterShellMenuCommands('status'), [])
-  assert.equal(moveShellMenuSelection(0, 'previous', 5), 4)
-  assert.equal(moveShellMenuSelection(4, 'next', 5), 0)
+  assert.equal(moveShellMenuSelection(0, 'previous', 6), 5)
+  assert.equal(moveShellMenuSelection(5, 'next', 6), 0)
   assert.match(plainMenu, /Commands/)
   assert.match(plainMenu, /❯ \/status/)
   assert.equal(plainMenu.split('\n').every((line) => line.length === 70), true)
@@ -1272,13 +1278,16 @@ function testExampleProjectCoverage() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-example-nextjs-'))
   cpSync(source, target, { recursive: true })
 
-  const shellAudit = runShell([target], '/audit\n/exit\n')
+  const shellAudit = runShell([target], '/audit\n/validate\n/exit\n')
   assert.match(shellAudit, /AI\s+\d+ surfaces · Gaps detected/)
   assert.match(shellAudit, /Gaps\s+6 governance gaps/)
   assert.match(shellAudit, /Focus\s+guardrails · data classification · \+4 more/)
   assert.match(shellAudit, /Run riscala init only after reviewing/)
   assert.match(shellAudit, /psdm\.config\.json policy/)
   assert.doesNotMatch(shellAudit, /riscala\.config\.json/)
+  assert.match(shellAudit, /╭─ VALIDATE /)
+  assert.match(shellAudit, /Decision\s+Needs correction/)
+  assert.match(shellAudit, /Focus\s+AGENTS\.md · docs\/PROJECT_BRIEF\.md · \+\d+ more/)
 
   const audit = runJson(['audit', target, '--json'])
   assert.equal(audit.projectSignals.packageManager, true)

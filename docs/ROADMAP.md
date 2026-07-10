@@ -183,6 +183,7 @@
 - [x] Read-only shell audit summary backed by the existing repository audit engine.
 - [x] Product-facing shell audit semantics without changing the stable JSON contract.
 - [x] Priority gap focus for incomplete AI projects with stable config-name preservation.
+- [x] Read-only shell validation summary backed by the existing validator.
 - [ ] Trusted owner key enrollment, hook activation, and protected remote enforcement.
 - [x] Full documentation index.
 - [ ] Tested fixtures.
