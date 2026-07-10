@@ -12,12 +12,12 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Activate the managed pre-commit hook and add protected remote enforcement.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 
 ## Next
 
 - [ ] Verify npm package page displays provenance for `1.0.0-beta.5`.
+- [ ] Add a required remote approval check for content-bound Level 3/4 actions.
 
 ## Later
 
@@ -39,6 +39,8 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Created Git tag and GitHub pre-release `v1.0.0-beta.5`.
 - [x] Verified clean install from npm `@beta` for `1.0.0-beta.5`.
 - [x] Enrolled the first owner public key for content-bound Level 3/4 approval verification.
+- [x] Activated the local managed pre-commit hook for this checkout.
+- [x] Enabled GitHub branch protection on `main` with required PR review, strict status checks, admin enforcement, and blocked force pushes/deletions.
 - [x] Implemented managed pre-commit receipt enforcement with exclusive locking and one-time local consumption.
 - [x] Added hook install, status, and removal commands that preserve unmanaged hooks and respect Git hook paths.
 - [x] Added fixtures proving low-risk allow, high-risk denial, replay rejection, and existing-hook preservation.
