@@ -20,6 +20,8 @@ Operational signals:
 - issue reports from downstream users;
 - installed availability of both `riscala` and `psdm`;
 - divergent output or behavior between executable aliases;
+- pre-commit hook status and managed/unmanaged ownership;
+- approval consumption ledger parse failures, lock conflicts, and replay denials;
 - roadmap and task drift.
 
 Maintenance expectations:
@@ -29,6 +31,7 @@ Maintenance expectations:
 - validate package contents before release;
 - keep dependency count minimal;
 - treat config schema changes as compatibility-sensitive.
+- treat `.git/riscala/` as local enforcement state that must never contain private keys or signatures.
 
 ## Operations Gate
 
@@ -43,5 +46,6 @@ Operational review is required when changes affect:
 - repository governance baseline;
 - release or rollback assumptions.
 - Riscala/PSDM executable parity or compatibility removal.
+- approval hook installation, replay state, or remote enforcement behavior.
 
 Rollback for the initial brand migration is a Git revert of the alias and presentation increment. No registry rollback is required until a Riscala-branded package is explicitly published.

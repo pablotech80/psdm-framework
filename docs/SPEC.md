@@ -28,6 +28,7 @@ Project: `psdm-framework`
 - Support feature-scoped artifacts under `docs/features/<feature>/`.
 - Classify changes using textual signals and configured risk paths.
 - Classify root `AGENTS.md` changes as at least Level 3 by default.
+- Classify approval, action-record, receipt, replay-enforcement, and Git-hook modules as at least Level 3 by default.
 - Inspect staged Git changes without requiring a manual description or file list.
 - Treat any staged file change as at least Level 1 and preserve configured risk paths as the deterministic elevation mechanism.
 - Emit staged file status, risk-path evidence, and classification in human-readable and JSON output.
@@ -38,6 +39,8 @@ Project: `psdm-framework`
 - Require Level 3 and Level 4 approval policy and fail action preparation closed when trusted approvers are missing or policy is invalid.
 - Verify signed receipts against live staged content, pinned public-key fingerprints, allowed strong approval modes, and configured expiry limits.
 - Provide no receipt-signing command inside Riscala.
+- Enforce verified Git commit receipts through a managed pre-commit hook and consume each approval ID once in local state.
+- Refuse to overwrite existing unmanaged pre-commit hooks and support removal only for Riscala-managed hooks.
 - Enforce maximum allowed change level for CI policy gates.
 - Generate ADR scaffolds under `ADRs/` for durable architecture and governance decisions.
 - Create `ADRs/README.md` during baseline init so the ADR directory is versionable in Git.
@@ -83,6 +86,8 @@ Project: `psdm-framework`
 - `node bin/psdm.mjs approval verify git.commit --receipt <path> --json` rebuilds the live binding and accepts only an unexpired detached signature from a configured approver.
 - Modifying the staged diff, branch, repository, action, approver, key fingerprint, approval mode, or receipt lifetime invalidates approval.
 - A cryptographically signed `phrase` approval is rejected because the mode does not establish the required human-presence boundary.
+- `riscala approval enforce git.commit` allows unregulated lower-level changes, consumes one valid required receipt, and rejects local replay.
+- `riscala hook install pre-commit` installs an executable managed hook at Git's resolved hook path and reports conflicts without overwriting existing content.
 - `node bin/psdm.mjs enforce "<description>" --file <path> --max-level "Level 2" --json` exits non-zero when the estimated level exceeds the allowed level.
 - `node bin/psdm.mjs pr-checklist "<description>" --file <path>` emits a Markdown checklist derived from change level and risk paths.
 - `npm test` runs dependency-free CLI fixtures for the interactive shell, audit, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, staged inspection, enforce, PR checklist, validate, custom config, AI policy validation, AI guardrail templates, validation profiles, invalid risk paths, and feature artifact behavior.
@@ -100,5 +105,5 @@ Project: `psdm-framework`
 - Full policy-as-code semantics.
 - Remote service dependencies.
 - Automatic production deployment.
-- Receipt signing, hardware-key ceremony integration, remote approval service, hook enforcement, replay persistence, or mutating slash commands until separately implemented and validated.
+- Receipt signing, hardware-key ceremony integration, remote approval service, remote replay persistence, protected required-check enforcement, or mutating slash commands until separately implemented and validated.
 - Replacement for security review, architecture review, or owner approval on high-risk changes.

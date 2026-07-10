@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process'
+import { resolve } from 'node:path'
 
 function git(targetDir, args, options = {}) {
   const output = execFileSync('git', ['-C', targetDir, ...args], {
@@ -133,5 +134,27 @@ export function inspectRepositoryIdentity(targetDir) {
     root,
     origin,
     branch: repository.branch,
+  }
+}
+
+export function resolveGitDirectory(targetDir) {
+  try {
+    const path = git(targetDir, ['rev-parse', '--absolute-git-dir'])
+    return resolve(path)
+  } catch {
+    return null
+  }
+}
+
+export function resolveGitPath(targetDir, path) {
+  try {
+    return git(targetDir, [
+      'rev-parse',
+      '--path-format=absolute',
+      '--git-path',
+      path,
+    ])
+  } catch {
+    return null
   }
 }

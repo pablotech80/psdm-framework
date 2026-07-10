@@ -165,7 +165,8 @@ The minimum non-secret event shape is:
 - Detached public-key signature and fingerprint verification: implemented.
 - Hardware signing ceremony: external and not implemented by Riscala.
 - Remote approval: not implemented.
-- Hook and CI enforcement: not implemented.
+- Managed local pre-commit enforcement and replay ledger: implemented but not yet activated in this repository.
+- Protected remote required-check enforcement: not implemented.
 - Mutating Riscala slash commands: not authorized.
 
 Until enforcement exists, Riscala may provide read-only shell commands and advisory intent confirmation, but must not describe them as agent-resistant approval.

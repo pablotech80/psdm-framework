@@ -39,7 +39,7 @@ Agents must justify meaningful mutations before execution and report evidence, d
 
 For configured high-risk mutations, approval must be issued through a trusted human-presence boundary and bound to the exact content and target. A phrase available to the same terminal is not proof of human identity. See `docs/AGENT_DECISION_PROTOCOL.md`.
 
-For staged Git commits, `riscala action prepare git.commit --json` creates the proposed binding and `riscala approval verify git.commit --receipt <path> --json` verifies a detached receipt. These commands are read-only; commit enforcement remains unavailable until a protected pre-commit boundary is installed.
+For staged Git commits, `riscala action prepare git.commit --json` creates the proposed binding and `riscala approval verify git.commit --receipt <path> --json` verifies a detached receipt. `riscala hook install pre-commit` can activate local enforcement and one-time consumption after trust enrollment. Protected remote checks are still required against unrestricted local agents.
 
 ## Stop Conditions
 

@@ -104,6 +104,9 @@ Completed:
 - Git porcelain parsing corrected so the first unstaged record is not misreported as staged in shell status.
 - Git commit action records implemented with repository, branch, binary staged diff, classification, and approval-policy binding.
 - Detached approval receipt verification implemented with trusted approver fingerprints, strong modes, expiry, and live-content invalidation.
+- Managed pre-commit enforcement implemented with one-time local receipt consumption, exclusive locking, and unmanaged-hook preservation.
+- Local hook enforcement explicitly bounded as defense in depth; protected remote checks remain required against unrestricted agents.
+- Approval, action-record, replay, and Git-hook implementation paths classified as Level 3 by default.
 
 ## Active Milestone
 
@@ -279,7 +282,8 @@ Planned outcomes:
 - [x] Design and implement the dependency-free `riscala shell` MVP.
 - [x] Define agent decision and human-presence approval architecture.
 - [x] Implement machine-readable action records and receipt verification before mutating slash commands.
-- [ ] Enroll a real owner public key and enforce Git commit receipts through an independent pre-commit hook.
+- [x] Implement managed pre-commit receipt enforcement with local replay protection.
+- [ ] Enroll a real owner public key, activate the hook, and add protected remote enforcement.
 - [ ] Stable config schema.
 - [x] Public package release checklist.
 - [x] Decide package metadata gaps before beta.

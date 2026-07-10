@@ -12,7 +12,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Enroll a real owner public key and add pre-commit receipt enforcement with replay protection.
+- [ ] Enroll a real owner public key, activate the managed pre-commit hook, and add protected remote enforcement.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 
 ## Next
@@ -25,6 +25,10 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Done
 
+- [x] Implemented managed pre-commit receipt enforcement with exclusive locking and one-time local consumption.
+- [x] Added hook install, status, and removal commands that preserve unmanaged hooks and respect Git hook paths.
+- [x] Added fixtures proving low-risk allow, high-risk denial, replay rejection, and existing-hook preservation.
+- [x] Classified approval, action-record, replay-enforcement, and Git-hook modules as Level 3 by default.
 - [x] Implemented machine-readable `git.commit` action records bound to repository, branch, staged diff, and classification.
 - [x] Added fail-closed approval policy with required Level 3/4 approval and pinned trusted approvers.
 - [x] Implemented detached signature, key fingerprint, strong-mode, expiry, and live-content receipt verification.

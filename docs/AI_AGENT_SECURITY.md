@@ -53,7 +53,9 @@ Agents may request approval and report its status. They must not enter, derive, 
 
 See `docs/AGENT_DECISION_PROTOCOL.md` for the justification contract, receipt shape, content bindings, and enforcement layers.
 
-Riscala implements read-only `git.commit` action-record generation and detached receipt verification. The verifier reconstructs the live staged binding and rejects untrusted keys, weak approval modes, expired receipts, invalid signatures, and changed content. It does not sign receipts or yet enforce commits through an independent hook.
+Riscala implements read-only `git.commit` action-record generation and detached receipt verification. The verifier reconstructs the live staged binding and rejects untrusted keys, weak approval modes, expired receipts, invalid signatures, and changed content. It does not sign receipts.
+
+Riscala now provides an optional managed pre-commit hook with local one-time receipt consumption. This reduces accidental and cooperative-agent bypass, but it is not sufficient against an unrestricted agent because Git hooks and `.git` state remain locally mutable. Use protected branches and trusted required checks for the independent boundary.
 
 ## Stop Conditions
 

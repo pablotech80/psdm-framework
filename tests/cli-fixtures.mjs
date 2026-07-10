@@ -253,6 +253,143 @@ function testActionRecordAndApprovalReceiptVerification() {
   assert.ok(changedContent.violations.some((item) => item.includes('contentHash')))
 }
 
+function testApprovalEnforcementConsumesReceiptOnce() {
+  const { target, privateKey, fingerprint } = approvalFixture()
+  const record = runJson(['action', 'prepare', 'git.commit', '--target', target, '--json'])
+  const stateDirectory = resolve(target, '.git', 'riscala')
+  const receiptPath = resolve(stateDirectory, 'approval-receipt.json')
+  mkdirSync(stateDirectory, { recursive: true })
+  writeFileSync(receiptPath, `${JSON.stringify(signedReceipt(
+    record,
+    privateKey,
+    fingerprint,
+  ), null, 2)}\n`)
+
+  const first = runJson([
+    'approval',
+    'enforce',
+    'git.commit',
+    '--target',
+    target,
+    '--json',
+  ])
+  const replay = runJson([
+    'approval',
+    'enforce',
+    'git.commit',
+    '--target',
+    target,
+    '--json',
+  ], { allowFailure: true })
+  const ledger = JSON.parse(readFileSync(
+    resolve(stateDirectory, 'consumed-approvals.json'),
+    'utf8',
+  ))
+
+  assert.equal(first.decision, 'COMMIT_APPROVAL_CONSUMED')
+  assert.equal(first.allowed, true)
+  assert.equal(first.consumption.consumed, true)
+  assert.equal(replay.decision, 'COMMIT_APPROVAL_DENIED')
+  assert.equal(replay.allowed, false)
+  assert.ok(replay.violations.some((item) => item.includes('already been consumed')))
+  assert.equal(ledger.consumptions.length, 1)
+  assert.equal(ledger.consumptions[0].approvalId, 'approval_test_owner_presence')
+  assert.equal(JSON.stringify(ledger).includes('signature'), false)
+}
+
+function testManagedPreCommitHookAllowsLowRiskAndBlocksHighRisk() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-hook-'))
+  writeFileSync(resolve(target, 'README.md'), '# Hook fixture\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', 'README.md'])
+  git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'baseline',
+  ])
+
+  const installed = runJson(['hook', 'install', 'pre-commit', '--target', target, '--json'])
+  const status = runJson(['hook', 'status', 'pre-commit', '--target', target, '--json'])
+
+  assert.equal(installed.decision, 'HOOK_INSTALLED')
+  assert.equal(installed.managed, true)
+  assert.equal(status.installed, true)
+  assert.equal(status.managed, true)
+
+  writeFileSync(resolve(target, 'README.md'), '# Hook fixture updated\n')
+  git(target, ['add', 'README.md'])
+  git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'low-risk allowed',
+  ])
+
+  writeFileSync(resolve(target, 'AGENTS.md'), '# High-risk agent policy\n')
+  git(target, ['add', 'AGENTS.md'])
+  assert.throws(() => git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'high-risk blocked',
+  ]))
+
+  const removed = runJson(['hook', 'remove', 'pre-commit', '--target', target, '--json'])
+  assert.equal(removed.decision, 'HOOK_REMOVED')
+  assert.equal(existsSync(resolve(target, '.git', 'hooks', 'pre-commit')), false)
+}
+
+function testHookInstallerPreservesUnmanagedHook() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-hook-conflict-'))
+  git(target, ['init', '--quiet'])
+  writeFileSync(resolve(target, '.git', 'hooks', 'pre-commit'), '#!/bin/sh\nexit 0\n')
+
+  const report = runJson([
+    'hook',
+    'install',
+    'pre-commit',
+    '--target',
+    target,
+    '--json',
+  ], { allowFailure: true })
+
+  assert.equal(report.decision, 'EXISTING_HOOK_CONFLICT')
+  assert.equal(report.changed, false)
+  assert.equal(readFileSync(report.path, 'utf8'), '#!/bin/sh\nexit 0\n')
+}
+
+function testHookInstallerRespectsConfiguredHooksPath() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-hook-path-'))
+  git(target, ['init', '--quiet'])
+  git(target, ['config', 'core.hooksPath', 'governance-hooks'])
+
+  const report = runJson([
+    'hook',
+    'install',
+    'pre-commit',
+    '--target',
+    target,
+    '--json',
+  ])
+
+  assert.equal(report.decision, 'HOOK_INSTALLED')
+  assert.equal(report.path.endsWith('/governance-hooks/pre-commit'), true)
+  assert.equal(existsSync(report.path), true)
+}
+
 function testActionRecordFailsClosedWithoutTrustedApprover() {
   const target = mkdtempSync(resolve(tmpdir(), 'riscala-approval-incomplete-'))
   git(target, ['init', '--quiet'])
@@ -513,6 +650,24 @@ function testClassifyAgentInstructionsAsLevelThree() {
 
   assert.equal(report.estimatedLevel, 'Level 3')
   assert.equal(report.pathMatches[0].pattern, 'AGENTS.md')
+  assert.ok(report.requiredArtifacts.includes('docs/SECURITY.md'))
+  assert.ok(report.requiredArtifacts.includes('docs/ARCHITECTURE.md'))
+}
+
+function testClassifyApprovalEnforcementAsLevelThree() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-approval-policy-classify-'))
+  const report = runJson([
+    'classify',
+    'small cleanup',
+    '--target',
+    target,
+    '--file',
+    'src/lib/approval-enforcement.mjs',
+    '--json',
+  ])
+
+  assert.equal(report.estimatedLevel, 'Level 3')
+  assert.equal(report.pathMatches[0].pattern, 'src/lib/*approval*.mjs')
   assert.ok(report.requiredArtifacts.includes('docs/SECURITY.md'))
   assert.ok(report.requiredArtifacts.includes('docs/ARCHITECTURE.md'))
 }
@@ -1028,6 +1183,10 @@ const tests = [
   testRiscalaExecutableAliasContract,
   testReadOnlyShellRoutesCommandsAndReportsContext,
   testActionRecordAndApprovalReceiptVerification,
+  testApprovalEnforcementConsumesReceiptOnce,
+  testManagedPreCommitHookAllowsLowRiskAndBlocksHighRisk,
+  testHookInstallerPreservesUnmanagedHook,
+  testHookInstallerRespectsConfiguredHooksPath,
   testActionRecordFailsClosedWithoutTrustedApprover,
   testInvalidApprovalPolicyFailsClosed,
   testAuditExistingProject,
@@ -1040,6 +1199,7 @@ const tests = [
   testAdrRejectsInvalidDate,
   testClassifyRiskPathJson,
   testClassifyAgentInstructionsAsLevelThree,
+  testClassifyApprovalEnforcementAsLevelThree,
   testInspectStagedRiskPathJson,
   testInspectStagedUsesLevelOneFloor,
   testInspectReportsNoStagedChanges,

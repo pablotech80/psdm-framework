@@ -23,6 +23,8 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/shell.mjs` builds target-specific project context and renders the dependency-free read-only terminal UI.
 - `src/lib/action-record.mjs` binds proposed Git commits to repository identity, branch, binary staged diff, classification, and approval policy.
 - `src/lib/approval-receipt.mjs` canonicalizes receipt payloads, pins public-key fingerprints, and verifies detached signatures against the live action.
+- `src/lib/approval-enforcement.mjs` consumes verified receipts under an exclusive lock and persists a non-secret local replay ledger.
+- `src/lib/git-hook.mjs` installs, inspects, and removes only Riscala-managed pre-commit hooks while preserving existing hooks.
 - `src/lib/enforcement.mjs` owns CI-oriented maximum change-level enforcement.
 - `src/lib/pr-checklist.mjs` generates pull request checklist content from classification output.
 - `src/lib/config.mjs` loads PSDM configuration and validates optional AI policy declarations.
@@ -59,6 +61,7 @@ The architecture favors explicit modules over framework abstractions:
 - Keep the first interactive shell read-only and allowlist-routed; it must not execute arbitrary shell input or expose mutating slash commands before approval enforcement exists.
 - Never provide receipt signing inside the agent-accessible CLI; Riscala verifies authority created through an external trusted channel.
 - Fail action preparation closed when approval policy is invalid, required trust is missing, or the staged binding cannot be calculated.
+- Treat local hook and replay state as defense in depth, not as an agent-resistant boundary; protected remote enforcement remains required.
 
 ## Architecture Gate
 
@@ -91,3 +94,4 @@ Changes require architecture review when they affect:
 - agent justification, approval receipts, human presence, content binding, or enforcement boundaries.
 - interactive shell routing, permitted commands, project-context rendering, or mutation boundaries.
 - action-record bindings, approval trust policy, receipt canonicalization, signature verification, expiry, or replay semantics.
+- Git hook installation, existing-hook preservation, receipt consumption, local locks, or enforcement bypass boundaries.

@@ -39,6 +39,9 @@ Security posture:
 - Git commit action records hash the binary staged diff plus repository and branch binding without exposing remote credentials;
 - receipt verification pins project-approved public-key fingerprints, strong approval modes, and short expiry windows;
 - Riscala deliberately has no receipt-signing command, so an agent cannot obtain authority from the verifier itself;
+- managed pre-commit enforcement consumes receipt IDs through an exclusive lock and atomic local ledger without persisting signatures;
+- existing unmanaged hooks are never overwritten or removed;
+- local hooks and `.git` replay state are bypassable by an agent with unrestricted Git/filesystem control, so protected remote checks remain required;
 - no production mutation commands;
 - simple secret-like pattern detection in validator;
 - explicit production confirmation policy in generated governance docs;
@@ -77,6 +80,7 @@ Security review is required when a change:
 - affects AI-agent tool governance.
 - changes approval receipt, human-presence, content-binding, or agent decision semantics.
 - changes trusted approver configuration, canonical receipt payloads, signature algorithms, or action-record hashes.
+- changes hook installation, receipt consumption, replay state, lock handling, or remote-enforcement assumptions.
 
 ## Automated Security Checks
 

@@ -175,7 +175,9 @@
 - [x] Agent Decision Protocol and human-presence approval architecture.
 - [x] Level 3 default risk classification for root `AGENTS.md`.
 - [x] Machine-readable Git commit action records and signed receipt verification before mutating slash commands.
-- [ ] Trusted owner key enrollment, replay persistence, and independent Git hook enforcement.
+- [x] Managed Git pre-commit enforcement with local replay persistence.
+- [x] Level 3 default classification for approval, action-record, replay-enforcement, and Git-hook modules.
+- [ ] Trusted owner key enrollment, hook activation, and protected remote enforcement.
 - [x] Full documentation index.
 - [ ] Tested fixtures.
 - [x] Public package release checklist.

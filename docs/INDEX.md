@@ -61,6 +61,8 @@ Current commands:
 - `riscala shell`
 - `riscala action prepare git.commit`
 - `riscala approval verify git.commit`
+- `riscala approval enforce git.commit`
+- `riscala hook install pre-commit`
 - `riscala classify`
 - `riscala enforce`
 - `riscala pr-checklist`

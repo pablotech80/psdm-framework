@@ -6,6 +6,8 @@ This is the main backend and platform governance mechanism. Small frontend copy 
 
 Root `AGENTS.md` is a default Level 3 risk path because instruction changes can alter autonomous behavior, approval boundaries, and tool use even when no application source file changes.
 
+Riscala approval commands, action records, receipt verification, replay enforcement, and Git hook modules are also default Level 3 paths because changes there can weaken human authority or alter what content an approval authorizes.
+
 ## Configuration
 
 Define rules in `psdm.config.json`:

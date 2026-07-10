@@ -155,6 +155,8 @@ riscala inspect --staged [--json] [--target <path>] [--config <path>]
 riscala shell [target] [--config <path>]
 riscala action prepare git.commit [--target <path>] [--config <path>] [--json]
 riscala approval verify git.commit --receipt <path> [--target <path>] [--config <path>] [--json]
+riscala approval enforce git.commit [--receipt <path>] [--target <path>] [--config <path>] [--json]
+riscala hook <install|remove|status> pre-commit [--target <path>] [--json]
 ```
 
 The dependency-free shell shows the selected project's name, branch, working-tree counts, and active PSDM policy. Its first release is intentionally read-only and supports `/help`, `/status`, `/inspect`, and `/exit`.
@@ -299,6 +301,14 @@ riscala approval verify git.commit --receipt ./approval-receipt.json --json
 ```
 
 Riscala does not sign receipts. Signing must happen through a hardware-backed or separately authenticated channel. See `docs/ACTION_RECORDS_AND_APPROVAL_RECEIPTS.md`.
+
+Install the local pre-commit enforcement hook after a trusted approver is configured:
+
+```bash
+riscala hook install pre-commit
+```
+
+The hook consumes a valid receipt once and blocks invalid or missing Level 3/4 approval. It preserves existing unmanaged hooks instead of overwriting them. Local hooks can still be bypassed with Git options or filesystem control, so protected branches and remote required checks remain necessary for agent-resistant enforcement.
 
 ### Generate A PR Checklist
 

@@ -105,6 +105,33 @@ riscala approval verify git.commit \
 
 Keep the receipt outside the staged change. Staging a receipt would change the content hash it is meant to approve and creates a circular binding.
 
+## Enforce A Commit Locally
+
+Place the signed receipt at `.git/riscala/approval-receipt.json`, or pass an explicit path, then enforce and consume it:
+
+```bash
+riscala approval enforce git.commit --json
+```
+
+Install the managed pre-commit hook:
+
+```bash
+riscala hook install pre-commit
+riscala hook status pre-commit
+```
+
+Remove only the Riscala-managed hook:
+
+```bash
+riscala hook remove pre-commit
+```
+
+The installer respects Git's resolved hook path, including `core.hooksPath`, and refuses to overwrite an unmanaged `pre-commit` hook.
+
+Consumed approval IDs are written atomically under `.git/riscala/consumed-approvals.json`. An exclusive lock prevents two local verification processes from consuming the same receipt concurrently. The ledger contains identifiers, action binding, and consumption time; it does not store signatures, keys, or receipt payloads.
+
+This ledger and hook are local defense in depth. An agent with unrestricted Git or filesystem control can use `--no-verify`, replace a hook, or delete local state. Agent-resistant enforcement therefore also requires protected branches, trusted CI, or a remote approval service with durable replay state.
+
 Verification rebuilds the live action record and denies the receipt when:
 
 - repository, branch, action ID, action, or staged diff hash changed;
@@ -124,7 +151,7 @@ This core does not yet authorize `/commit` or other mutating slash commands.
 Before mutation is enabled, Riscala still needs:
 
 1. real owner public-key enrollment;
-2. a protected policy-change path;
-3. a pre-commit hook that rebuilds the live action and consumes a valid receipt;
-4. replay protection and audit-event persistence;
+2. activation of the implemented pre-commit hook after trust enrollment;
+3. a protected policy-change path;
+4. remote replay protection and required-check enforcement that cannot be bypassed locally;
 5. equivalent bindings for push, pull request, merge, publication, and deployment.

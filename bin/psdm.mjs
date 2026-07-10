@@ -13,6 +13,7 @@ import { inspectCommand } from '../src/commands/inspect.mjs'
 import { shellCommand } from '../src/commands/shell.mjs'
 import { actionCommand } from '../src/commands/action.mjs'
 import { approvalCommand } from '../src/commands/approval.mjs'
+import { hookCommand } from '../src/commands/hook.mjs'
 import {
   COMPATIBILITY_EXECUTABLE,
   PRIMARY_EXECUTABLE,
@@ -35,6 +36,7 @@ const commands = {
   shell: shellCommand,
   action: actionCommand,
   approval: approvalCommand,
+  hook: hookCommand,
 }
 
 function printHelp() {
@@ -50,6 +52,8 @@ Usage:
   ${PRIMARY_EXECUTABLE} shell [target] [--config path]
   ${PRIMARY_EXECUTABLE} action prepare git.commit [--target path] [--config path] [--json]
   ${PRIMARY_EXECUTABLE} approval verify git.commit --receipt path [--target path] [--config path] [--json]
+  ${PRIMARY_EXECUTABLE} approval enforce git.commit [--receipt path] [--target path] [--config path] [--json]
+  ${PRIMARY_EXECUTABLE} hook <install|remove|status> pre-commit [--target path] [--json]
   ${PRIMARY_EXECUTABLE} classify "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
   ${PRIMARY_EXECUTABLE} enforce "<change description>" [--json] [--max-level "Level 2"] [--file path] [--files path,path] [--target path] [--config path]
   ${PRIMARY_EXECUTABLE} pr-checklist "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
@@ -68,6 +72,7 @@ Commands:
   shell      Open the read-only interactive governance shell.
   action     Build a content-bound record for a proposed action.
   approval   Verify a signed approval receipt against the live action.
+  hook       Manage the Riscala pre-commit enforcement hook.
   classify   Estimate change level from a short description.
   enforce    Fail when a classified change exceeds the allowed maximum level.
   pr-checklist Generate a pull request checklist for a change.
