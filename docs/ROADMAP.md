@@ -177,6 +177,13 @@
 - [x] Machine-readable Git commit action records and signed receipt verification before mutating slash commands.
 - [x] Managed Git pre-commit enforcement with local replay persistence.
 - [x] Level 3 default classification for approval, action-record, replay-enforcement, and Git-hook modules.
+- [x] Ptech cyan terminal identity with TTY-safe ANSI output and monochrome fallback.
+- [x] Interactive slash command palette with filtered keyboard navigation.
+- [x] Consistent fixed-width result panels for shell status, inspection, help, and next-action guidance.
+- [x] Read-only shell audit summary backed by the existing repository audit engine.
+- [x] Product-facing shell audit semantics without changing the stable JSON contract.
+- [x] Priority gap focus for incomplete AI projects with stable config-name preservation.
+- [x] Read-only shell validation summary backed by the existing validator.
 - [ ] Trusted owner key enrollment, hook activation, and protected remote enforcement.
 - [x] Full documentation index.
 - [ ] Tested fixtures.

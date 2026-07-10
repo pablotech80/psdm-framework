@@ -26,17 +26,83 @@ The project name, branch, working-tree counts, profile, and config source are ca
 
 ```text
 ╭─ RISCALA ──────────────────────────────────────────────────────────╮
-│  Mode       Read-only governance shell                             │
+│  Mode       READ ONLY · governance shell                           │
 ├────────────────────────────────────────────────────────────────────┤
 │  Project    payments-api                                          │
 │  Branch     feature/session-hardening                              │
 │  Changes    2 staged · 1 unstaged                                  │
 │  Policy     backend-api · psdm.config.json                         │
 ╰────────────────────────────────────────────────────────────────────╯
-Powered by PSDM · Type /help to see available commands.
+Powered by PSDM · Type / for commands · /inspect staged · /exit close
 
-riscala ›
+riscala ❯
 ```
+
+## Visual Identity
+
+Riscala uses the cyan already present in Ptech's repository assets:
+
+| Token | Value | Use |
+|---|---|---|
+| Ptech cyan | `#00A8E8` | Frame, brand name, commands, and primary prompt. |
+| Ptech cyan light | `#38BDF8` | Prompt chevron and read-only mode accent. |
+| Green | terminal semantic color | Clean repository state. |
+| Yellow | terminal semantic color | Staged, unstaged, or untracked changes. |
+| Red | terminal semantic color | Missing repository or blocking state. |
+
+ANSI color is presentation only. It is enabled exclusively for interactive TTY output and disabled when output is piped, `TERM=dumb`, or `NO_COLOR` is present. JSON and automation contracts remain free of ANSI escape sequences.
+
+The prompt is:
+
+```text
+riscala ❯
+```
+
+Riscala does not add an npm `postinstall` animation or artificial startup delay. npm owns installation progress, lifecycle scripts increase the package trust surface, and the sub-second dependency-free installation is treated as a product advantage. Future spinners are reserved for operations that genuinely wait on external state.
+
+## Slash Command Palette
+
+Typing `/` as the first prompt character opens the command palette immediately:
+
+```text
+╭─ Commands ─────────────────────────────────────────────────────────╮
+│ ❯ /help      Show available commands and safety boundaries.        │
+│   /status    Refresh repository and policy context.                │
+│   /audit     Assess governance adoption and readiness.             │
+│   /validate  Validate the governance baseline.                     │
+│   /inspect   Inspect staged changes and governance level.          │
+│   /exit      Close the Riscala shell.                              │
+╰─ ↑/↓ navigate · Enter run · Tab complete · Esc close ──────────────╯
+```
+
+Interaction contract:
+
+- typing filters commands by prefix;
+- `↑` and `↓` cycle through filtered commands;
+- `Enter` selects and executes the highlighted command;
+- `Tab` completes the highlighted command without executing it;
+- `Esc` closes the palette and clears the current input;
+- Backspace, Delete, Home, End, Left, and Right preserve normal line editing;
+- `Ctrl+C` and `Ctrl+D` close the interactive session safely.
+
+The palette exists only for a real interactive TTY. Pipes and automation continue to use line-oriented input and receive no cursor-control or ANSI sequences.
+
+## Command Results
+
+Read-only commands share one result-panel grammar instead of emitting unrelated text shapes:
+
+```text
+╭─ INSPECT ──────────────────────────────────────────────────────────╮
+│  State      No staged changes found.                               │
+│  Next       Stage the intended files, then run /inspect again.     │
+╰────────────────────────────────────────────────────────────────────╯
+```
+
+- the title identifies the command result;
+- labels stay aligned across `/status`, `/audit`, `/validate`, `/inspect`, and `/help`;
+- long evidence wraps inside the panel instead of being silently truncated;
+- semantic color highlights state but does not change the monochrome text contract;
+- `Next` explains the useful follow-up without executing or authorizing it.
 
 ## Commands
 
@@ -44,16 +110,20 @@ riscala ›
 |---|---|
 | `/help` | Show the available shell commands and safety boundary. |
 | `/status` | Refresh repository, branch, working-tree, and policy context. |
+| `/audit` | Reuse the non-destructive audit engine and summarize governance adoption, artifacts, AI readiness, gaps, Git state, and the next recommendation. |
+| `/validate` | Reuse the read-only validator and summarize its decision, passed/failed/warning counts, priority artifacts, and next action. |
 | `/inspect` | Inspect staged Git changes and calculate their governance level. |
 | `/exit` | Close the session. `/quit` is also accepted. |
 
 Commands do not accept arbitrary shell fragments or arguments in this MVP.
 
+Human-facing audit copy describes current state rather than internal init operations: artifacts are `present`, `missing`, or `empty`; adoption modes are expanded into actions; AI surfaces and readiness are reported separately; and recommendations use the `riscala` executable name. When gaps exist, `Focus` names the first two and summarizes the remainder. Product-name normalization applies only to executable commands; stable artifacts such as `psdm.config.json` keep their compatibility names. The underlying JSON audit contract remains unchanged.
+
 ## Security Boundary
 
 The shell is an allowlist router, not a general terminal or agent runtime.
 
-The MVP explicitly blocks `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy`. The action-record and receipt-verification core now exists for `git.commit`, but those commands remain blocked until a trusted owner key is enrolled and independent hooks enforce the receipt.
+The MVP explicitly blocks `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy`. `/audit` remains read-only and never delegates to `riscala init`; `/validate` only reads configuration, artifacts, and Git state. The action-record and receipt-verification core now exists for `git.commit`, but mutating commands remain blocked until a trusted owner key is enrolled and independent hooks enforce the receipt.
 
 A confirmation phrase entered through an agent-controlled terminal is not sufficient human-presence evidence. The approval architecture remains defined in `docs/AGENT_DECISION_PROTOCOL.md`.
 

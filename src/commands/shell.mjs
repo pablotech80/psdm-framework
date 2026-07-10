@@ -4,10 +4,11 @@ import {
   buildShellContext,
   executeShellCommand,
   renderShellBanner,
+  renderShellPrompt,
 } from '../lib/shell.mjs'
 import { resolveTarget } from '../lib/paths.mjs'
-
-const PROMPT = 'riscala › '
+import { supportsTerminalColor } from '../lib/terminal-style.mjs'
+import { runInteractiveShellSession } from '../lib/shell-session.mjs'
 
 function invalidOptions(options, positional) {
   return positional.length > 1
@@ -34,15 +35,31 @@ export async function shellCommand(args, streams = {}) {
   const target = resolveTarget(positional)
   const input = streams.input || process.stdin
   const output = streams.output || process.stdout
+  const env = streams.env || process.env
+  const color = supportsTerminalColor(output, env)
   const context = buildShellContext({ target, configPath: options.configPath })
-  const readline = createInterface({ input, output, terminal: Boolean(output.isTTY) })
+  const prompt = renderShellPrompt({ color })
 
-  output.write(`${renderShellBanner(context)}\n\n${PROMPT}`)
+  output.write(`${renderShellBanner(context, { color })}\n\n${prompt}`)
+
+  if (input.isTTY && output.isTTY && typeof input.setRawMode === 'function') {
+    return runInteractiveShellSession({
+      input,
+      output,
+      target,
+      configPath: options.configPath,
+      color,
+      prompt,
+    })
+  }
+
+  const readline = createInterface({ input, output, terminal: false })
 
   for await (const line of readline) {
     const result = executeShellCommand(line, {
       target,
       configPath: options.configPath,
+      color,
     })
 
     if (result.output) {
@@ -53,7 +70,7 @@ export async function shellCommand(args, streams = {}) {
       break
     }
 
-    output.write(`\n${PROMPT}`)
+    output.write(`\n${prompt}`)
   }
 
   readline.close()

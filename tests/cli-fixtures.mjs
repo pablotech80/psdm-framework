@@ -5,10 +5,26 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync
 import { dirname, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
+import { PassThrough } from 'node:stream'
 import {
   canonicalReceiptPayload,
   publicKeyFingerprint,
 } from '../src/lib/approval-receipt.mjs'
+import {
+  buildShellContext,
+  renderShellBanner,
+  renderShellPrompt,
+} from '../src/lib/shell.mjs'
+import {
+  PTECH_CYAN,
+  supportsTerminalColor,
+} from '../src/lib/terminal-style.mjs'
+import {
+  filterShellMenuCommands,
+  moveShellMenuSelection,
+  renderShellMenu,
+} from '../src/lib/shell-menu.mjs'
+import { shellCommand } from '../src/commands/shell.mjs'
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const cli = resolve(repoRoot, 'bin/psdm.mjs')
@@ -63,6 +79,7 @@ function testRiscalaExecutableAliasContract() {
 
   assert.equal(packageJson.bin.riscala, 'bin/psdm.mjs')
   assert.equal(packageJson.bin.psdm, packageJson.bin.riscala)
+  assert.equal(packageJson.scripts.postinstall, undefined)
   assert.match(help, /^Riscala/m)
   assert.match(help, /AI Code Governance for Software Delivery/)
   assert.match(help, /Powered by PSDM/)
@@ -94,19 +111,118 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   writeFileSync(resolve(target, 'package.json'), '{"name":"shell-fixture","private":true}\n')
   writeFileSync(resolve(target, 'notes.txt'), 'untracked\n')
 
-  const output = runShell([target], '/help\n/status\n/inspect\n/commit\n/exit\n')
+  const output = runShell([target], '/help\n/status\n/audit\n/validate\n/inspect\n/commit\n/exit\n')
 
   assert.match(output, /RISCALA/)
-  assert.match(output, /Read-only governance shell/)
+  assert.match(output, /READ ONLY · governance shell/)
   assert.match(output, /Project\s+shell-fixture/)
   assert.match(output, /Changes\s+1 staged · 1 unstaged · 1 untracked/)
   assert.match(output, /Policy\s+framework · psdm\.config\.json/)
+  assert.match(output, /╭─ COMMANDS /)
+  assert.match(output, /╭─ STATUS /)
+  assert.match(output, /╭─ AUDIT /)
+  assert.match(output, /╭─ VALIDATE /)
+  assert.match(output, /╭─ INSPECT /)
   assert.match(output, /\/status\s+Refresh repository/)
+  assert.match(output, /\/audit\s+Assess governance adoption/)
+  assert.match(output, /\/validate\s+Validate the governance baseline/)
+  assert.match(output, /Artifacts\s+\d+ present · \d+ missing · \d+ empty/)
+  assert.match(output, /Adoption\s+Initialize governance baseline/)
+  assert.match(output, /AI\s+0 surfaces · Not detected/)
+  assert.match(output, /Git\s+1 staged · 1 unstaged · 1 untracked/)
+  assert.match(output, /Next\s+Run riscala init/)
+  assert.doesNotMatch(output, /Run psdm (?:init|validate)/)
+  assert.match(output, /Decision\s+Needs correction/)
+  assert.match(output, /Checks\s+\d+ passed · \d+ failed · \d+ warning/)
+  assert.match(output, /Next\s+Fix the failing governance checks/)
   assert.match(output, /Staged inspection · 1 file\(s\) · Level 2/)
   assert.match(output, /src\/tracked\.mjs matches src\/\*\* -> Level 2/)
+  assert.match(output, /Next\s+Review this evidence before choosing the next/)
   assert.match(output, /Blocked: \/commit is not available in the read-only shell/)
   assert.match(output, /Riscala shell closed/)
+  assert.doesNotMatch(output, /\u001b\[/)
+  assert.equal(output.split('\n').filter((line) => line.startsWith('│')).every((line) => (
+    line.length === 70 && line.at(-2) === ' '
+  )), true)
+  assert.equal(existsSync(resolve(target, 'AGENTS.md')), false)
+  assert.equal(existsSync(resolve(target, 'ROADMAP.md')), false)
   assert.equal(git(target, ['rev-list', '--count', 'HEAD']).trim(), '1')
+}
+
+function testShellUsesPtechCyanOnlyForInteractiveTerminals() {
+  const context = buildShellContext({ target: repoRoot })
+  const plainBanner = renderShellBanner(context)
+  const coloredBanner = renderShellBanner(context, { color: true })
+  const coloredPrompt = renderShellPrompt({ color: true })
+  const stripAnsi = (value) => value.replace(/\u001b\[[0-9;]*m/g, '')
+
+  assert.deepEqual(PTECH_CYAN, { red: 0, green: 168, blue: 232 })
+  assert.match(coloredBanner, /\u001b\[38;2;0;168;232m/)
+  assert.equal(stripAnsi(coloredBanner), plainBanner)
+  assert.equal(stripAnsi(coloredPrompt), 'riscala ❯ ')
+  assert.equal(supportsTerminalColor({ isTTY: true }, { TERM: 'xterm-256color' }), true)
+  assert.equal(supportsTerminalColor({ isTTY: false }, { TERM: 'xterm-256color' }), false)
+  assert.equal(supportsTerminalColor({ isTTY: true }, { TERM: 'dumb' }), false)
+  assert.equal(supportsTerminalColor({ isTTY: true }, { TERM: 'xterm', NO_COLOR: '' }), false)
+}
+
+function testShellMenuFiltersNavigatesAndPreservesLayout() {
+  const allCommands = filterShellMenuCommands('/')
+  const statusCommand = filterShellMenuCommands('/st')
+  const plainMenu = renderShellMenu('/', 1)
+  const coloredMenu = renderShellMenu('/', 1, { color: true })
+  const stripAnsi = (value) => value.replace(/\u001b\[[0-9;]*m/g, '')
+
+  assert.deepEqual(allCommands.map((item) => item.name), [
+    '/help',
+    '/status',
+    '/audit',
+    '/validate',
+    '/inspect',
+    '/exit',
+  ])
+  assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
+  assert.deepEqual(filterShellMenuCommands('status'), [])
+  assert.equal(moveShellMenuSelection(0, 'previous', 6), 5)
+  assert.equal(moveShellMenuSelection(5, 'next', 6), 0)
+  assert.match(plainMenu, /Commands/)
+  assert.match(plainMenu, /❯ \/status/)
+  assert.equal(plainMenu.split('\n').every((line) => line.length === 70), true)
+  assert.equal(stripAnsi(coloredMenu), plainMenu)
+}
+
+async function testInteractiveShellOpensSlashMenuAndNavigates() {
+  const input = new PassThrough()
+  const output = new PassThrough()
+  let captured = ''
+  input.isTTY = true
+  input.isRaw = false
+  input.setRawMode = (value) => {
+    input.isRaw = value
+  }
+  output.isTTY = true
+  output.on('data', (chunk) => {
+    captured += chunk.toString()
+  })
+
+  const session = shellCommand([repoRoot], {
+    input,
+    output,
+    env: { TERM: 'xterm-256color' },
+  })
+  input.write('/')
+  input.write('\u001b[B')
+  input.write('\r')
+  input.write('/e')
+  input.write('\r')
+  await session
+
+  const visible = captured.replace(/\u001b\[[0-9;?]*[A-Za-z]/g, '')
+  assert.match(visible, /Commands/)
+  assert.match(visible, /❯ \/status/)
+  assert.match(visible, /Project\s+@ptechsolution\/psdm-framework/)
+  assert.match(visible, /Riscala shell closed/)
+  assert.equal(input.isRaw, false)
 }
 
 function approvalFixture() {
@@ -1162,6 +1278,17 @@ function testExampleProjectCoverage() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-example-nextjs-'))
   cpSync(source, target, { recursive: true })
 
+  const shellAudit = runShell([target], '/audit\n/validate\n/exit\n')
+  assert.match(shellAudit, /AI\s+\d+ surfaces · Gaps detected/)
+  assert.match(shellAudit, /Gaps\s+6 governance gaps/)
+  assert.match(shellAudit, /Focus\s+guardrails · data classification · \+4 more/)
+  assert.match(shellAudit, /Run riscala init only after reviewing/)
+  assert.match(shellAudit, /psdm\.config\.json policy/)
+  assert.doesNotMatch(shellAudit, /riscala\.config\.json/)
+  assert.match(shellAudit, /╭─ VALIDATE /)
+  assert.match(shellAudit, /Decision\s+Needs correction/)
+  assert.match(shellAudit, /Focus\s+AGENTS\.md · docs\/PROJECT_BRIEF\.md · \+\d+ more/)
+
   const audit = runJson(['audit', target, '--json'])
   assert.equal(audit.projectSignals.packageManager, true)
   assert.equal(audit.aiGovernance.adoptionMode, 'integrate')
@@ -1182,6 +1309,9 @@ function testExampleProjectCoverage() {
 const tests = [
   testRiscalaExecutableAliasContract,
   testReadOnlyShellRoutesCommandsAndReportsContext,
+  testShellUsesPtechCyanOnlyForInteractiveTerminals,
+  testShellMenuFiltersNavigatesAndPreservesLayout,
+  testInteractiveShellOpensSlashMenuAndNavigates,
   testActionRecordAndApprovalReceiptVerification,
   testApprovalEnforcementConsumesReceiptOnce,
   testManagedPreCommitHookAllowsLowRiskAndBlocksHighRisk,
@@ -1222,6 +1352,6 @@ const tests = [
 ]
 
 for (const test of tests) {
-  test()
+  await test()
   console.log(`PASS ${test.name}`)
 }

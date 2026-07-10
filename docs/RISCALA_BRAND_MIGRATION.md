@@ -31,6 +31,8 @@ This plan prevents a branding decision from breaking existing CLI users, reposit
 | Initial config source of truth | `psdm.config.json` |
 | JSON contracts | Stable, untranslated, and unchanged by branding |
 
+Terminal identity uses Ptech cyan `#00A8E8` with `#38BDF8` as its light accent. These tokens come from the existing public repository visual assets and must degrade cleanly to monochrome output.
+
 ## Non-Negotiable Compatibility Rules
 
 - Do not remove or silently change the `psdm` executable during the initial migration.

@@ -32,9 +32,20 @@ Project: `psdm-framework`
 - Inspect staged Git changes without requiring a manual description or file list.
 - Treat any staged file change as at least Level 1 and preserve configured risk paths as the deterministic elevation mechanism.
 - Emit staged file status, risk-path evidence, and classification in human-readable and JSON output.
-- Provide a dependency-free read-only interactive shell with `/help`, `/status`, `/inspect`, and `/exit` routing.
+- Provide a dependency-free read-only interactive shell with `/help`, `/status`, `/audit`, `/validate`, `/inspect`, and `/exit` routing.
 - Calculate shell project, branch, change counts, and active policy from the selected target instead of hardcoding repository context.
 - Reject arbitrary input and mutating slash commands until content-bound approval verification is implemented.
+- Render the interactive shell with Ptech cyan `#00A8E8`, light accent `#38BDF8`, and semantic repository-state colors when the output is a capable TTY.
+- Emit monochrome output for pipes, non-TTY streams, `TERM=dumb`, and `NO_COLOR` without changing visible text or layout.
+- Preserve dependency-free, sub-second installation without a visual-only npm `postinstall` script.
+- Open an allowlisted command palette when `/` is typed at the start of an interactive TTY prompt.
+- Support prefix filtering, arrow navigation, Enter execution, Tab completion, Escape dismissal, and basic cursor editing without changing command authorization.
+- Restore terminal raw mode on normal exit, `/exit`, `Ctrl+C`, and `Ctrl+D` paths.
+- Render `/status`, `/audit`, `/validate`, `/inspect`, and `/help` through a consistent fixed-width result-panel grammar with wrapped evidence and contextual next actions.
+- Reuse the existing non-destructive audit engine for `/audit`; do not duplicate detection logic or invoke initialization.
+- Translate internal audit fields into product-facing shell copy without changing the stable audit JSON contract, and recommend the `riscala` executable rather than its `psdm` compatibility alias.
+- Preserve stable compatibility artifact names such as `psdm.config.json` when normalizing executable recommendations, and summarize the highest-priority AI gaps in the shell panel.
+- Reuse the existing read-only validator for `/validate`, summarize its decision and findings, and never create or update target artifacts.
 - Generate a machine-readable `git.commit` action record bound to repository identity, branch, full staged diff hash, and change classification.
 - Require Level 3 and Level 4 approval policy and fail action preparation closed when trusted approvers are missing or policy is invalid.
 - Verify signed receipts against live staged content, pinned public-key fingerprints, allowed strong approval modes, and configured expiry limits.
@@ -79,9 +90,15 @@ Project: `psdm-framework`
 - `node bin/psdm.mjs inspect --staged --json` reads only the Git index and emits `decision`, `git.changes`, `files`, `evidence`, and `classification`.
 - Staged files with no matching risk path classify as at least Level 1; matching risk paths can raise the result to Level 2, Level 3, or Level 4.
 - Staged inspection reports `NO_STAGED_CHANGES` without failure and exits non-zero with `NOT_A_GIT_REPOSITORY` when the target is not a Git repository.
-- `node bin/psdm.mjs shell <target>` renders target-specific context and routes `/help`, `/status`, `/inspect`, and `/exit` through an allowlist.
+- `node bin/psdm.mjs shell <target>` renders target-specific context and routes `/help`, `/status`, `/audit`, `/validate`, `/inspect`, and `/exit` through an allowlist.
 - The shell distinguishes staged, unstaged, and untracked Git changes without mutating the repository.
 - `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy` are blocked in the read-only shell.
+- Colored and monochrome shell rendering have identical visible text after ANSI removal, and piped shell sessions contain no ANSI escape sequences.
+- The slash palette exposes only `/help`, `/status`, `/audit`, `/validate`, `/inspect`, and `/exit`; navigation wraps and filtered selection executes through the existing command router.
+- `/audit` reports the same underlying adoption and AI-readiness state as `riscala audit` without modifying the target.
+- `/validate` reports the same underlying decision and counts as `riscala validate` without modifying the target.
+- Non-interactive shell sessions retain the existing newline-driven contract without cursor-control sequences.
+- Shell result panels preserve their visible layout with and without ANSI color and keep long inspection evidence inside the panel boundary.
 - `node bin/psdm.mjs action prepare git.commit --json` emits `ACTION_RECORD_READY`, `APPROVAL_POLICY_INCOMPLETE`, or `APPROVAL_POLICY_INVALID` without changing the repository.
 - `node bin/psdm.mjs approval verify git.commit --receipt <path> --json` rebuilds the live binding and accepts only an unexpired detached signature from a configured approver.
 - Modifying the staged diff, branch, repository, action, approver, key fingerprint, approval mode, or receipt lifetime invalidates approval.

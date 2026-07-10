@@ -107,6 +107,13 @@ Completed:
 - Managed pre-commit enforcement implemented with one-time local receipt consumption, exclusive locking, and unmanaged-hook preservation.
 - Local hook enforcement explicitly bounded as defense in depth; protected remote checks remain required against unrestricted agents.
 - Approval, action-record, replay, and Git-hook implementation paths classified as Level 3 by default.
+- Riscala shell visual identity aligned with Ptech cyan, semantic TTY colors, `NO_COLOR`, and a branded prompt without installation scripts.
+- Dependency-free slash command palette added with filtering, keyboard navigation, completion, and TTY-safe raw-mode restoration.
+- Shell command results unified into fixed-width product panels with wrapped evidence, semantic states, and contextual next actions.
+- Read-only `/audit` added to the shell by reusing the existing adoption and AI-readiness audit engine.
+- Shell audit copy refined from internal field values into current-state, product-facing Riscala language.
+- Incomplete AI-project audit output now surfaces priority gaps while preserving stable PSDM artifact names.
+- Read-only `/validate` added to the shell by reusing the existing validator and prioritizing failed artifacts.
 
 ## Active Milestone
 
