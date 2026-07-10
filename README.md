@@ -39,7 +39,7 @@ npm install -g @ptechsolution/psdm-framework@beta
 psdm audit
 ```
 
-The `riscala` executable is implemented in the repository and is planned for the next explicitly approved beta; it is not part of the already published `1.0.0-beta.4` tarball.
+The `riscala` executable is implemented in the repository and prepared for `1.0.0-beta.5`; publishing it to npm still requires the protected release workflow and explicit owner approval.
 
 ## Table Of Contents
 
@@ -105,7 +105,7 @@ flowchart TD
 
 ## Status
 
-`1.0.0-beta.4`
+`1.0.0-beta.5` candidate. Latest published beta: `1.0.0-beta.4`.
 
 ## Install
 
@@ -121,7 +121,7 @@ Then run:
 psdm help
 ```
 
-The existing `psdm` executable remains supported with identical commands and behavior during the Riscala migration. After the next Riscala-enabled beta is published, both `riscala help` and `psdm help` will work from npm installation.
+The existing `psdm` executable remains supported with identical commands and behavior during the Riscala migration. After the Riscala-enabled beta is published, both `riscala help` and `psdm help` will work from npm installation.
 
 For development from this checkout:
 
@@ -135,7 +135,7 @@ Then run:
 riscala help
 ```
 
-The command reference below uses the new primary executable available from this checkout. Use `psdm` with the published `1.0.0-beta.4`; command behavior is identical.
+The command reference below uses the new primary executable available from this checkout and from the prepared `1.0.0-beta.5` package candidate. Use `psdm` with the currently published `1.0.0-beta.4`; command behavior is identical.
 
 ## CLI
 

@@ -12,7 +12,8 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Enroll a real owner public key, activate the managed pre-commit hook, and add protected remote enforcement.
+- [ ] Complete `1.0.0-beta.5` release candidate validation and protected workflow dry-run.
+- [ ] Activate the managed pre-commit hook and add protected remote enforcement.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 
 ## Next
@@ -34,6 +35,8 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Added prioritized AI gap focus and prevented executable-brand normalization from renaming `psdm.config.json`.
 - [x] Added read-only `/validate` to the shell with decision, check counts, focus artifacts, and contextual next action.
 - [x] Expanded the read-only shell into a fuller governance console with check, report, classify, PR checklist, init preview, hook status, action record, and approval-boundary commands.
+- [x] Prepared `1.0.0-beta.5` release candidate metadata for publishing Riscala shell after explicit owner approval.
+- [x] Enrolled the first owner public key for content-bound Level 3/4 approval verification.
 - [x] Implemented managed pre-commit receipt enforcement with exclusive locking and one-time local consumption.
 - [x] Added hook install, status, and removal commands that preserve unmanaged hooks and respect Git hook paths.
 - [x] Added fixtures proving low-risk allow, high-risk denial, replay rejection, and existing-hook preservation.

@@ -58,10 +58,22 @@
     }
   },
   "approval": {
-    "requiredLevels": ["Level 3", "Level 4"],
-    "requiredActions": [],
     "maxReceiptAgeSeconds": 600,
-    "trustedApprovers": []
+    "requiredActions": [],
+    "requiredLevels": [
+      "Level 3",
+      "Level 4"
+    ],
+    "trustedApprovers": [
+      {
+        "id": "ptech-owner",
+        "publicKeyPath": "governance/keys/ptech-owner-public.pem",
+        "publicKeyFingerprint": "sha256:0b0ccfe3d85df230f8d63a2178137c05d7ae3cfd457a1a97d43af1270c50a0c5",
+        "approvalModes": [
+          "hardware-signature"
+        ]
+      }
+    ]
   },
   "riskPaths": [
     {
