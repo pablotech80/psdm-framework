@@ -5,6 +5,7 @@ import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync
 import { dirname, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
+import { PassThrough } from 'node:stream'
 import {
   canonicalReceiptPayload,
   publicKeyFingerprint,
@@ -18,6 +19,12 @@ import {
   PTECH_CYAN,
   supportsTerminalColor,
 } from '../src/lib/terminal-style.mjs'
+import {
+  filterShellMenuCommands,
+  moveShellMenuSelection,
+  renderShellMenu,
+} from '../src/lib/shell-menu.mjs'
+import { shellCommand } from '../src/commands/shell.mjs'
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const cli = resolve(repoRoot, 'bin/psdm.mjs')
@@ -135,6 +142,63 @@ function testShellUsesPtechCyanOnlyForInteractiveTerminals() {
   assert.equal(supportsTerminalColor({ isTTY: false }, { TERM: 'xterm-256color' }), false)
   assert.equal(supportsTerminalColor({ isTTY: true }, { TERM: 'dumb' }), false)
   assert.equal(supportsTerminalColor({ isTTY: true }, { TERM: 'xterm', NO_COLOR: '' }), false)
+}
+
+function testShellMenuFiltersNavigatesAndPreservesLayout() {
+  const allCommands = filterShellMenuCommands('/')
+  const statusCommand = filterShellMenuCommands('/st')
+  const plainMenu = renderShellMenu('/', 1)
+  const coloredMenu = renderShellMenu('/', 1, { color: true })
+  const stripAnsi = (value) => value.replace(/\u001b\[[0-9;]*m/g, '')
+
+  assert.deepEqual(allCommands.map((item) => item.name), [
+    '/help',
+    '/status',
+    '/inspect',
+    '/exit',
+  ])
+  assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
+  assert.deepEqual(filterShellMenuCommands('status'), [])
+  assert.equal(moveShellMenuSelection(0, 'previous', 4), 3)
+  assert.equal(moveShellMenuSelection(3, 'next', 4), 0)
+  assert.match(plainMenu, /Commands/)
+  assert.match(plainMenu, /❯ \/status/)
+  assert.equal(plainMenu.split('\n').every((line) => line.length === 70), true)
+  assert.equal(stripAnsi(coloredMenu), plainMenu)
+}
+
+async function testInteractiveShellOpensSlashMenuAndNavigates() {
+  const input = new PassThrough()
+  const output = new PassThrough()
+  let captured = ''
+  input.isTTY = true
+  input.isRaw = false
+  input.setRawMode = (value) => {
+    input.isRaw = value
+  }
+  output.isTTY = true
+  output.on('data', (chunk) => {
+    captured += chunk.toString()
+  })
+
+  const session = shellCommand([repoRoot], {
+    input,
+    output,
+    env: { TERM: 'xterm-256color' },
+  })
+  input.write('/')
+  input.write('\u001b[B')
+  input.write('\r')
+  input.write('/e')
+  input.write('\r')
+  await session
+
+  const visible = captured.replace(/\u001b\[[0-9;?]*[A-Za-z]/g, '')
+  assert.match(visible, /Commands/)
+  assert.match(visible, /❯ \/status/)
+  assert.match(visible, /Project\s+@ptechsolution\/psdm-framework/)
+  assert.match(visible, /Riscala shell closed/)
+  assert.equal(input.isRaw, false)
 }
 
 function approvalFixture() {
@@ -1211,6 +1275,8 @@ const tests = [
   testRiscalaExecutableAliasContract,
   testReadOnlyShellRoutesCommandsAndReportsContext,
   testShellUsesPtechCyanOnlyForInteractiveTerminals,
+  testShellMenuFiltersNavigatesAndPreservesLayout,
+  testInteractiveShellOpensSlashMenuAndNavigates,
   testActionRecordAndApprovalReceiptVerification,
   testApprovalEnforcementConsumesReceiptOnce,
   testManagedPreCommitHookAllowsLowRiskAndBlocksHighRisk,
@@ -1251,6 +1317,6 @@ const tests = [
 ]
 
 for (const test of tests) {
-  test()
+  await test()
   console.log(`PASS ${test.name}`)
 }

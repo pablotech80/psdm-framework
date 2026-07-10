@@ -163,6 +163,8 @@ The dependency-free shell shows the selected project's name, branch, working-tre
 
 Interactive terminals use Ptech cyan (`#00A8E8`) with a light accent (`#38BDF8`) for the Riscala frame and prompt. Color is automatically disabled for pipes, non-TTY output, `TERM=dumb`, and the `NO_COLOR` convention.
 
+Type `/` at the interactive prompt to open the dependency-free command palette. Filter by typing, navigate with `↑`/`↓`, run with `Enter`, complete with `Tab`, and dismiss with `Esc`. Piped sessions preserve the original line-oriented behavior.
+
 ### Initialization
 
 ```bash

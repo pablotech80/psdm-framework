@@ -27,6 +27,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 - [x] Applied Ptech cyan `#00A8E8` and light accent `#38BDF8` to the interactive shell and `riscala ❯` prompt.
 - [x] Added TTY, `NO_COLOR`, `TERM=dumb`, pipe, and ANSI-layout regression coverage without npm lifecycle scripts.
+- [x] Added a dependency-free slash command palette with filtering, arrow navigation, Tab completion, Enter execution, and raw-mode restoration.
 - [x] Implemented managed pre-commit receipt enforcement with exclusive locking and one-time local consumption.
 - [x] Added hook install, status, and removal commands that preserve unmanaged hooks and respect Git hook paths.
 - [x] Added fixtures proving low-risk allow, high-risk denial, replay rejection, and existing-hook preservation.

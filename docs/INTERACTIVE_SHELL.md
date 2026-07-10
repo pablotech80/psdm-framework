@@ -33,7 +33,7 @@ The project name, branch, working-tree counts, profile, and config source are ca
 │  Changes    2 staged · 1 unstaged                                  │
 │  Policy     backend-api · psdm.config.json                         │
 ╰────────────────────────────────────────────────────────────────────╯
-Powered by PSDM · /help commands · /inspect staged · /exit close
+Powered by PSDM · Type / for commands · /inspect staged · /exit close
 
 riscala ❯
 ```
@@ -59,6 +59,31 @@ riscala ❯
 ```
 
 Riscala does not add an npm `postinstall` animation or artificial startup delay. npm owns installation progress, lifecycle scripts increase the package trust surface, and the sub-second dependency-free installation is treated as a product advantage. Future spinners are reserved for operations that genuinely wait on external state.
+
+## Slash Command Palette
+
+Typing `/` as the first prompt character opens the command palette immediately:
+
+```text
+╭─ Commands ─────────────────────────────────────────────────────────╮
+│ ❯ /help      Show available commands and safety boundaries.        │
+│   /status    Refresh repository and policy context.                │
+│   /inspect   Inspect staged changes and governance level.          │
+│   /exit      Close the Riscala shell.                              │
+╰─ ↑/↓ navigate · Enter run · Tab complete · Esc close ──────────────╯
+```
+
+Interaction contract:
+
+- typing filters commands by prefix;
+- `↑` and `↓` cycle through filtered commands;
+- `Enter` selects and executes the highlighted command;
+- `Tab` completes the highlighted command without executing it;
+- `Esc` closes the palette and clears the current input;
+- Backspace, Delete, Home, End, Left, and Right preserve normal line editing;
+- `Ctrl+C` and `Ctrl+D` close the interactive session safely.
+
+The palette exists only for a real interactive TTY. Pipes and automation continue to use line-oriented input and receive no cursor-control or ANSI sequences.
 
 ## Commands
 

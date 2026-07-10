@@ -134,7 +134,7 @@ export function renderShellBanner(context, options = {}) {
     theme.cyan('├────────────────────────────────────────────────────────────────────┤'),
     renderShellStatus(context, options),
     theme.cyan('╰────────────────────────────────────────────────────────────────────╯'),
-    `${theme.dim('Powered by PSDM')} · ${theme.cyan('/help')} ${theme.dim('commands')} · ${theme.cyan('/inspect')} ${theme.dim('staged')} · ${theme.cyan('/exit')} ${theme.dim('close')}`,
+    `${theme.dim('Powered by PSDM')} · ${theme.dim('Type')} ${theme.cyan('/')} ${theme.dim('for commands')} · ${theme.cyan('/inspect')} ${theme.dim('staged')} · ${theme.cyan('/exit')} ${theme.dim('close')}`,
   ].join('\n')
 }
 

@@ -38,6 +38,9 @@ Project: `psdm-framework`
 - Render the interactive shell with Ptech cyan `#00A8E8`, light accent `#38BDF8`, and semantic repository-state colors when the output is a capable TTY.
 - Emit monochrome output for pipes, non-TTY streams, `TERM=dumb`, and `NO_COLOR` without changing visible text or layout.
 - Preserve dependency-free, sub-second installation without a visual-only npm `postinstall` script.
+- Open an allowlisted command palette when `/` is typed at the start of an interactive TTY prompt.
+- Support prefix filtering, arrow navigation, Enter execution, Tab completion, Escape dismissal, and basic cursor editing without changing command authorization.
+- Restore terminal raw mode on normal exit, `/exit`, `Ctrl+C`, and `Ctrl+D` paths.
 - Generate a machine-readable `git.commit` action record bound to repository identity, branch, full staged diff hash, and change classification.
 - Require Level 3 and Level 4 approval policy and fail action preparation closed when trusted approvers are missing or policy is invalid.
 - Verify signed receipts against live staged content, pinned public-key fingerprints, allowed strong approval modes, and configured expiry limits.
@@ -86,6 +89,8 @@ Project: `psdm-framework`
 - The shell distinguishes staged, unstaged, and untracked Git changes without mutating the repository.
 - `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy` are blocked in the read-only shell.
 - Colored and monochrome shell rendering have identical visible text after ANSI removal, and piped shell sessions contain no ANSI escape sequences.
+- The slash palette exposes only `/help`, `/status`, `/inspect`, and `/exit`; navigation wraps and filtered selection executes through the existing command router.
+- Non-interactive shell sessions retain the existing newline-driven contract without cursor-control sequences.
 - `node bin/psdm.mjs action prepare git.commit --json` emits `ACTION_RECORD_READY`, `APPROVAL_POLICY_INCOMPLETE`, or `APPROVAL_POLICY_INVALID` without changing the repository.
 - `node bin/psdm.mjs approval verify git.commit --receipt <path> --json` rebuilds the live binding and accepts only an unexpired detached signature from a configured approver.
 - Modifying the staged diff, branch, repository, action, approver, key fingerprint, approval mode, or receipt lifetime invalidates approval.
