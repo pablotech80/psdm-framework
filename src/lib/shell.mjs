@@ -269,9 +269,15 @@ function renderAudit(report, options = {}) {
       : theme.dim
   const surfaceCount = report.aiReadiness.detectedSurfaceCount
   const gapCount = report.aiReadiness.gaps.length
+  const gapFocus = report.aiReadiness.gaps
+    .slice(0, 2)
+    .map((gap) => gap.key.replaceAll('-', ' '))
+    .join(' · ')
+  const remainingGaps = Math.max(0, gapCount - 2)
   const recommendation = report.summary.wouldCreate === 0
     ? 'Run riscala validate to verify the governance baseline.'
-    : (report.recommendations[0] || 'Review the audit evidence.').replaceAll('psdm', 'riscala')
+    : (report.recommendations[0] || 'Review the audit evidence.')
+      .replace(/\bpsdm (?=(?:init|validate)\b)/g, 'riscala ')
   const rows = [
     cardRow('Policy', report.config.profile.name, { ...options, valueStyle: theme.cyanLight }),
     cardRow('Artifacts', `${presentArtifacts} present · ${report.summary.wouldCreate} missing · ${report.summary.existingEmpty} empty`, {
@@ -287,6 +293,10 @@ function renderAudit(report, options = {}) {
       ...options,
       valueStyle: gapCount > 0 ? theme.yellow : theme.green,
     }),
+    ...(gapCount > 0 ? cardRows('Focus', `${gapFocus}${remainingGaps > 0 ? ` · +${remainingGaps} more` : ''}`, {
+      ...options,
+      valueStyle: theme.yellow,
+    }) : []),
     cardRow('Git', gitState, { ...options, valueStyle: gitStyle }),
     panelRule('middle', '', options),
     ...cardRows('Next', recommendation, {

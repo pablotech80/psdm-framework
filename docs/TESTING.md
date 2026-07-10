@@ -75,6 +75,7 @@ node bin/psdm.mjs validate . --json
 - Verify `/status`, `/audit`, `/inspect`, and `/help` use complete result panels, wrap evidence, and expose contextual next actions without changing command authorization.
 - Verify shell audit copy reports present/missing/empty artifacts, expanded adoption state, pluralized AI signals, specific Git changes, and `riscala` next commands.
 - Verify every fixed-width result row preserves one trailing interior column before the right border.
+- Verify an incomplete SaaS/AI example exposes prioritized gap focus, recommends `riscala init`, and preserves the `psdm.config.json` compatibility filename.
 - Verify approval fixtures with real detached signatures: valid Ed25519 receipt, unsupported phrase mode, changed staged content, missing approver trust, and invalid policy.
 - Verify enforcement consumes an approval once, rejects replay, permits lower-risk commits, blocks Level 3 without trust, respects Git hook paths, and preserves unmanaged hooks.
 - Run staged inspection fixtures for changes to Git parsing, classification floors, risk-path evidence, or inspect output.

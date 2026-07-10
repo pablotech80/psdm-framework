@@ -115,7 +115,7 @@ Read-only commands share one result-panel grammar instead of emitting unrelated 
 
 Commands do not accept arbitrary shell fragments or arguments in this MVP.
 
-Human-facing audit copy describes current state rather than internal init operations: artifacts are `present`, `missing`, or `empty`; adoption modes are expanded into actions; AI surfaces and readiness are reported separately; and recommendations use the `riscala` executable name. The underlying JSON audit contract remains unchanged.
+Human-facing audit copy describes current state rather than internal init operations: artifacts are `present`, `missing`, or `empty`; adoption modes are expanded into actions; AI surfaces and readiness are reported separately; and recommendations use the `riscala` executable name. When gaps exist, `Focus` names the first two and summarizes the remainder. Product-name normalization applies only to executable commands; stable artifacts such as `psdm.config.json` keep their compatibility names. The underlying JSON audit contract remains unchanged.
 
 ## Security Boundary
 

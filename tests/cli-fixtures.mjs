@@ -1272,6 +1272,14 @@ function testExampleProjectCoverage() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-example-nextjs-'))
   cpSync(source, target, { recursive: true })
 
+  const shellAudit = runShell([target], '/audit\n/exit\n')
+  assert.match(shellAudit, /AI\s+\d+ surfaces · Gaps detected/)
+  assert.match(shellAudit, /Gaps\s+6 governance gaps/)
+  assert.match(shellAudit, /Focus\s+guardrails · data classification · \+4 more/)
+  assert.match(shellAudit, /Run riscala init only after reviewing/)
+  assert.match(shellAudit, /psdm\.config\.json policy/)
+  assert.doesNotMatch(shellAudit, /riscala\.config\.json/)
+
   const audit = runJson(['audit', target, '--json'])
   assert.equal(audit.projectSignals.packageManager, true)
   assert.equal(audit.aiGovernance.adoptionMode, 'integrate')

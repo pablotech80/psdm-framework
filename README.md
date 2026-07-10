@@ -165,7 +165,7 @@ Interactive terminals use Ptech cyan (`#00A8E8`) with a light accent (`#38BDF8`)
 
 Type `/` at the interactive prompt to open the dependency-free command palette. Filter by typing, navigate with `↑`/`↓`, run with `Enter`, complete with `Tab`, and dismiss with `Esc`. Piped sessions preserve the original line-oriented behavior.
 
-`/status`, `/audit`, `/inspect`, and `/help` use the same fixed-width result panels. Each result has a clear title, semantic state, and a contextual next action where useful, so repeated commands remain visually consistent without changing the read-only security boundary. `/audit` reuses the existing non-destructive audit engine to summarize current artifacts, adoption, AI readiness, gaps, Git state, and the highest-priority recommendation using the Riscala product vocabulary.
+`/status`, `/audit`, `/inspect`, and `/help` use the same fixed-width result panels. Each result has a clear title, semantic state, and a contextual next action where useful, so repeated commands remain visually consistent without changing the read-only security boundary. `/audit` reuses the existing non-destructive audit engine to summarize current artifacts, adoption, AI readiness, gaps, priority focus, Git state, and the highest-priority recommendation using the Riscala product vocabulary.
 
 ### Initialization
 
