@@ -54,6 +54,7 @@ Current commands:
 - `psdm init`
 - `psdm check`
 - `psdm validate`
+- `psdm inspect --staged`
 - `psdm classify`
 - `psdm enforce`
 - `psdm pr-checklist`

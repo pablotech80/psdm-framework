@@ -18,6 +18,7 @@ node bin/psdm.mjs help
 node bin/psdm.mjs audit . --json
 node bin/psdm.mjs adr "Adopt CI change level enforcement" --target "$(mktemp -d)" --date 2026-07-08 --json
 node bin/psdm.mjs classify "small cleanup" --file src/validator/validate-method.mjs --json
+node bin/psdm.mjs inspect --staged --json
 node bin/psdm.mjs enforce "small cleanup" --file src/validator/validate-method.mjs --max-level "Level 3" --json
 node bin/psdm.mjs adr "Validate beta release readiness" --target "$(mktemp -d)" --date 2026-07-08 --json
 node bin/psdm.mjs pr-checklist "small cleanup" --file src/validator/validate-method.mjs
@@ -57,7 +58,8 @@ node bin/psdm.mjs validate . --json
 - Run CLI smoke validation for command, parser, config, AI policy, classifier, or validator changes.
 - Run audit validation for changes that affect init, config, required artifacts, AI governance detection, AI readiness output, or AI surface detection.
 - Run PR checklist validation for changes that affect classification, risk paths, or PR workflow output.
-- Run `npm test` for CLI regression coverage around audit, AI readiness contract, AI surface detection, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, enforce, PR checklist, validate, custom config, AI policy validation, AI guardrail templates, validation profiles, unsupported profile validation, invalid risk path validation, feature artifact behavior, and example project coverage.
+- Run `npm test` for CLI regression coverage around audit, AI readiness contract, AI surface detection, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, staged inspection, enforce, PR checklist, validate, custom config, AI policy validation, AI guardrail templates, validation profiles, unsupported profile validation, invalid risk path validation, feature artifact behavior, and example project coverage.
+- Run staged inspection fixtures for changes to Git parsing, classification floors, risk-path evidence, or inspect output.
 - Run initialized project validation for template, config, AI guardrail, artifact, or Action bootstrap changes.
 - Run package validation before distribution-related changes.
 - Treat unexpected validation failures as blocking unless explicitly documented as pre-existing.

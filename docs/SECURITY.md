@@ -18,6 +18,8 @@ Relevant sensitive surfaces:
 
 - `src/validator/**`
 - `src/lib/config.mjs`
+- `src/lib/classifier.mjs`
+- `src/lib/git.mjs`
 - `src/lib/risk-paths.mjs`
 - `templates/**`
 - `action.yml`
@@ -28,6 +30,7 @@ Security posture:
 
 - dependency-free CLI by default;
 - local file inspection only;
+- staged inspection invokes Git with fixed arguments through `execFileSync`, reads file-status metadata rather than file contents, and never mutates the index;
 - no production mutation commands;
 - simple secret-like pattern detection in validator;
 - explicit production confirmation policy in generated governance docs;
