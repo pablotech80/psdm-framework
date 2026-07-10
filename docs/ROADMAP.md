@@ -177,6 +177,7 @@
 - [x] Machine-readable Git commit action records and signed receipt verification before mutating slash commands.
 - [x] Managed Git pre-commit enforcement with local replay persistence.
 - [x] Level 3 default classification for approval, action-record, replay-enforcement, and Git-hook modules.
+- [x] Ptech cyan terminal identity with TTY-safe ANSI output and monochrome fallback.
 - [ ] Trusted owner key enrollment, hook activation, and protected remote enforcement.
 - [x] Full documentation index.
 - [ ] Tested fixtures.

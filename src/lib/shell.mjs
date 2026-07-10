@@ -3,6 +3,7 @@ import { basename, relative } from 'node:path'
 import { loadConfig } from './config.mjs'
 import { inspectGit } from './git.mjs'
 import { inspectStagedChange } from './inspect.mjs'
+import { terminalTheme } from './terminal-style.mjs'
 
 const CARD_WIDTH = 68
 
@@ -73,14 +74,17 @@ function policyLabel(context) {
   return `${context.config.profile.name} · ${source}`
 }
 
-function cardRow(label, value) {
+function cardRow(label, value, options = {}) {
+  const theme = terminalTheme(options.color)
   const prefix = `  ${label.padEnd(10)} `
   const available = CARD_WIDTH - prefix.length
   const rendered = value.length > available
     ? `${value.slice(0, Math.max(0, available - 1))}…`
     : value
+  const paddedValue = rendered.padEnd(available)
+  const valueStyle = options.valueStyle || ((item) => item)
 
-  return `│${prefix}${rendered.padEnd(available)}│`
+  return `${theme.cyan('│')}${theme.dim(prefix)}${valueStyle(paddedValue)}${theme.cyan('│')}`
 }
 
 export function buildShellContext({ target, configPath = null }) {
@@ -100,27 +104,43 @@ export function buildShellContext({ target, configPath = null }) {
   }
 }
 
-export function renderShellStatus(context) {
+export function renderShellStatus(context, options = {}) {
+  const theme = terminalTheme(options.color)
+  const changesStyle = !context.git.isRepository
+    ? theme.red
+    : context.git.isDirty
+      ? theme.yellow
+      : theme.green
+
   return [
-    cardRow('Project', context.project),
-    cardRow('Branch', context.git.branch || (context.git.isRepository ? 'detached HEAD' : 'n/a')),
-    cardRow('Changes', changesLabel(context)),
-    cardRow('Policy', policyLabel(context)),
+    cardRow('Project', context.project, { ...options, valueStyle: theme.bold }),
+    cardRow('Branch', context.git.branch || (context.git.isRepository ? 'detached HEAD' : 'n/a'), options),
+    cardRow('Changes', changesLabel(context), { ...options, valueStyle: changesStyle }),
+    cardRow('Policy', policyLabel(context), options),
   ].join('\n')
 }
 
-export function renderShellBanner(context) {
+export function renderShellBanner(context, options = {}) {
+  const theme = terminalTheme(options.color)
   const title = '─ RISCALA '
   const top = `╭${title}${'─'.repeat(CARD_WIDTH - title.length)}╮`
 
   return [
-    top,
-    cardRow('Mode', 'Read-only governance shell'),
-    '├────────────────────────────────────────────────────────────────────┤',
-    renderShellStatus(context),
-    '╰────────────────────────────────────────────────────────────────────╯',
-    'Powered by PSDM · Type /help to see available commands.',
+    theme.cyan(top),
+    cardRow('Mode', 'READ ONLY · governance shell', {
+      ...options,
+      valueStyle: theme.cyanLight,
+    }),
+    theme.cyan('├────────────────────────────────────────────────────────────────────┤'),
+    renderShellStatus(context, options),
+    theme.cyan('╰────────────────────────────────────────────────────────────────────╯'),
+    `${theme.dim('Powered by PSDM')} · ${theme.cyan('/help')} ${theme.dim('commands')} · ${theme.cyan('/inspect')} ${theme.dim('staged')} · ${theme.cyan('/exit')} ${theme.dim('close')}`,
   ].join('\n')
+}
+
+export function renderShellPrompt(options = {}) {
+  const theme = terminalTheme(options.color)
+  return `${theme.cyan('riscala')} ${theme.cyanLight('❯')} `
 }
 
 export function renderShellHelp() {
@@ -173,7 +193,7 @@ const MUTATING_COMMANDS = new Set([
   '/release',
 ])
 
-export function executeShellCommand(input, { target, configPath = null }) {
+export function executeShellCommand(input, { target, configPath = null, color = false }) {
   const trimmed = input.trim()
 
   if (!trimmed) {
@@ -202,7 +222,7 @@ export function executeShellCommand(input, { target, configPath = null }) {
 
   if (command === '/status') {
     return {
-      output: renderShellStatus(buildShellContext({ target, configPath })),
+      output: renderShellStatus(buildShellContext({ target, configPath }), { color }),
       exit: false,
     }
   }

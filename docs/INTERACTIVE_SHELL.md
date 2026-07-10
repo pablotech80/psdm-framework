@@ -26,17 +26,39 @@ The project name, branch, working-tree counts, profile, and config source are ca
 
 ```text
 ╭─ RISCALA ──────────────────────────────────────────────────────────╮
-│  Mode       Read-only governance shell                             │
+│  Mode       READ ONLY · governance shell                           │
 ├────────────────────────────────────────────────────────────────────┤
 │  Project    payments-api                                          │
 │  Branch     feature/session-hardening                              │
 │  Changes    2 staged · 1 unstaged                                  │
 │  Policy     backend-api · psdm.config.json                         │
 ╰────────────────────────────────────────────────────────────────────╯
-Powered by PSDM · Type /help to see available commands.
+Powered by PSDM · /help commands · /inspect staged · /exit close
 
-riscala ›
+riscala ❯
 ```
+
+## Visual Identity
+
+Riscala uses the cyan already present in Ptech's repository assets:
+
+| Token | Value | Use |
+|---|---|---|
+| Ptech cyan | `#00A8E8` | Frame, brand name, commands, and primary prompt. |
+| Ptech cyan light | `#38BDF8` | Prompt chevron and read-only mode accent. |
+| Green | terminal semantic color | Clean repository state. |
+| Yellow | terminal semantic color | Staged, unstaged, or untracked changes. |
+| Red | terminal semantic color | Missing repository or blocking state. |
+
+ANSI color is presentation only. It is enabled exclusively for interactive TTY output and disabled when output is piped, `TERM=dumb`, or `NO_COLOR` is present. JSON and automation contracts remain free of ANSI escape sequences.
+
+The prompt is:
+
+```text
+riscala ❯
+```
+
+Riscala does not add an npm `postinstall` animation or artificial startup delay. npm owns installation progress, lifecycle scripts increase the package trust surface, and the sub-second dependency-free installation is treated as a product advantage. Future spinners are reserved for operations that genuinely wait on external state.
 
 ## Commands
 

@@ -9,6 +9,15 @@ import {
   canonicalReceiptPayload,
   publicKeyFingerprint,
 } from '../src/lib/approval-receipt.mjs'
+import {
+  buildShellContext,
+  renderShellBanner,
+  renderShellPrompt,
+} from '../src/lib/shell.mjs'
+import {
+  PTECH_CYAN,
+  supportsTerminalColor,
+} from '../src/lib/terminal-style.mjs'
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const cli = resolve(repoRoot, 'bin/psdm.mjs')
@@ -63,6 +72,7 @@ function testRiscalaExecutableAliasContract() {
 
   assert.equal(packageJson.bin.riscala, 'bin/psdm.mjs')
   assert.equal(packageJson.bin.psdm, packageJson.bin.riscala)
+  assert.equal(packageJson.scripts.postinstall, undefined)
   assert.match(help, /^Riscala/m)
   assert.match(help, /AI Code Governance for Software Delivery/)
   assert.match(help, /Powered by PSDM/)
@@ -97,7 +107,7 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   const output = runShell([target], '/help\n/status\n/inspect\n/commit\n/exit\n')
 
   assert.match(output, /RISCALA/)
-  assert.match(output, /Read-only governance shell/)
+  assert.match(output, /READ ONLY · governance shell/)
   assert.match(output, /Project\s+shell-fixture/)
   assert.match(output, /Changes\s+1 staged · 1 unstaged · 1 untracked/)
   assert.match(output, /Policy\s+framework · psdm\.config\.json/)
@@ -106,7 +116,25 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.match(output, /src\/tracked\.mjs matches src\/\*\* -> Level 2/)
   assert.match(output, /Blocked: \/commit is not available in the read-only shell/)
   assert.match(output, /Riscala shell closed/)
+  assert.doesNotMatch(output, /\u001b\[/)
   assert.equal(git(target, ['rev-list', '--count', 'HEAD']).trim(), '1')
+}
+
+function testShellUsesPtechCyanOnlyForInteractiveTerminals() {
+  const context = buildShellContext({ target: repoRoot })
+  const plainBanner = renderShellBanner(context)
+  const coloredBanner = renderShellBanner(context, { color: true })
+  const coloredPrompt = renderShellPrompt({ color: true })
+  const stripAnsi = (value) => value.replace(/\u001b\[[0-9;]*m/g, '')
+
+  assert.deepEqual(PTECH_CYAN, { red: 0, green: 168, blue: 232 })
+  assert.match(coloredBanner, /\u001b\[38;2;0;168;232m/)
+  assert.equal(stripAnsi(coloredBanner), plainBanner)
+  assert.equal(stripAnsi(coloredPrompt), 'riscala ❯ ')
+  assert.equal(supportsTerminalColor({ isTTY: true }, { TERM: 'xterm-256color' }), true)
+  assert.equal(supportsTerminalColor({ isTTY: false }, { TERM: 'xterm-256color' }), false)
+  assert.equal(supportsTerminalColor({ isTTY: true }, { TERM: 'dumb' }), false)
+  assert.equal(supportsTerminalColor({ isTTY: true }, { TERM: 'xterm', NO_COLOR: '' }), false)
 }
 
 function approvalFixture() {
@@ -1182,6 +1210,7 @@ function testExampleProjectCoverage() {
 const tests = [
   testRiscalaExecutableAliasContract,
   testReadOnlyShellRoutesCommandsAndReportsContext,
+  testShellUsesPtechCyanOnlyForInteractiveTerminals,
   testActionRecordAndApprovalReceiptVerification,
   testApprovalEnforcementConsumesReceiptOnce,
   testManagedPreCommitHookAllowsLowRiskAndBlocksHighRisk,

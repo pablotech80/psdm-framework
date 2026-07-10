@@ -107,6 +107,7 @@ Completed:
 - Managed pre-commit enforcement implemented with one-time local receipt consumption, exclusive locking, and unmanaged-hook preservation.
 - Local hook enforcement explicitly bounded as defense in depth; protected remote checks remain required against unrestricted agents.
 - Approval, action-record, replay, and Git-hook implementation paths classified as Level 3 by default.
+- Riscala shell visual identity aligned with Ptech cyan, semantic TTY colors, `NO_COLOR`, and a branded prompt without installation scripts.
 
 ## Active Milestone
 

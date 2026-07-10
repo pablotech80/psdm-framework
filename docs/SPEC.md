@@ -35,6 +35,9 @@ Project: `psdm-framework`
 - Provide a dependency-free read-only interactive shell with `/help`, `/status`, `/inspect`, and `/exit` routing.
 - Calculate shell project, branch, change counts, and active policy from the selected target instead of hardcoding repository context.
 - Reject arbitrary input and mutating slash commands until content-bound approval verification is implemented.
+- Render the interactive shell with Ptech cyan `#00A8E8`, light accent `#38BDF8`, and semantic repository-state colors when the output is a capable TTY.
+- Emit monochrome output for pipes, non-TTY streams, `TERM=dumb`, and `NO_COLOR` without changing visible text or layout.
+- Preserve dependency-free, sub-second installation without a visual-only npm `postinstall` script.
 - Generate a machine-readable `git.commit` action record bound to repository identity, branch, full staged diff hash, and change classification.
 - Require Level 3 and Level 4 approval policy and fail action preparation closed when trusted approvers are missing or policy is invalid.
 - Verify signed receipts against live staged content, pinned public-key fingerprints, allowed strong approval modes, and configured expiry limits.
@@ -82,6 +85,7 @@ Project: `psdm-framework`
 - `node bin/psdm.mjs shell <target>` renders target-specific context and routes `/help`, `/status`, `/inspect`, and `/exit` through an allowlist.
 - The shell distinguishes staged, unstaged, and untracked Git changes without mutating the repository.
 - `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy` are blocked in the read-only shell.
+- Colored and monochrome shell rendering have identical visible text after ANSI removal, and piped shell sessions contain no ANSI escape sequences.
 - `node bin/psdm.mjs action prepare git.commit --json` emits `ACTION_RECORD_READY`, `APPROVAL_POLICY_INCOMPLETE`, or `APPROVAL_POLICY_INVALID` without changing the repository.
 - `node bin/psdm.mjs approval verify git.commit --receipt <path> --json` rebuilds the live binding and accepts only an unexpired detached signature from a configured approver.
 - Modifying the staged diff, branch, repository, action, approver, key fingerprint, approval mode, or receipt lifetime invalidates approval.
