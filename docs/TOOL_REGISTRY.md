@@ -41,6 +41,8 @@ Human approval is required when a tool can:
 
 An AI agent is never an allowed approval issuer for its own action. A phrase accessible through the agent's terminal is not a strong identity boundary. High-risk approvals must be validated against the exact action and invalidated when bound content changes.
 
+The current Riscala verification core supports `git.commit` action records and detached public-key receipt validation. It does not expose signing authority or enforce the resulting decision through Git hooks yet.
+
 ## Audit Event Shape
 
 Minimum audit fields:

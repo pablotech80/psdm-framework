@@ -1,9 +1,14 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
+import { generateKeyPairSync, sign } from 'node:crypto'
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
+import {
+  canonicalReceiptPayload,
+  publicKeyFingerprint,
+} from '../src/lib/approval-receipt.mjs'
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const cli = resolve(repoRoot, 'bin/psdm.mjs')
@@ -102,6 +107,206 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.match(output, /Blocked: \/commit is not available in the read-only shell/)
   assert.match(output, /Riscala shell closed/)
   assert.equal(git(target, ['rev-list', '--count', 'HEAD']).trim(), '1')
+}
+
+function approvalFixture() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-approval-'))
+  const keyDirectory = resolve(target, 'governance', 'keys')
+  mkdirSync(keyDirectory, { recursive: true })
+  const { publicKey, privateKey } = generateKeyPairSync('ed25519')
+  const publicKeyPem = publicKey.export({ type: 'spki', format: 'pem' })
+  const fingerprint = publicKeyFingerprint(publicKeyPem)
+  writeFileSync(resolve(keyDirectory, 'owner-public.pem'), publicKeyPem)
+  writeFileSync(resolve(target, 'psdm.config.json'), `${JSON.stringify({
+    version: 1,
+    profile: 'standard',
+    approval: {
+      requiredLevels: ['Level 3', 'Level 4'],
+      requiredActions: ['git.commit'],
+      maxReceiptAgeSeconds: 600,
+      trustedApprovers: [
+        {
+          id: 'owner',
+          publicKeyPath: 'governance/keys/owner-public.pem',
+          publicKeyFingerprint: fingerprint,
+          approvalModes: ['hardware-signature'],
+        },
+      ],
+    },
+  }, null, 2)}\n`)
+  writeFileSync(resolve(target, 'README.md'), '# Approval fixture\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', '.'])
+  git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'baseline',
+  ])
+  writeFileSync(resolve(target, 'AGENTS.md'), '# Governed agent policy\n')
+  git(target, ['add', 'AGENTS.md'])
+
+  return { target, privateKey, fingerprint }
+}
+
+function signedReceipt(record, privateKey, fingerprint, overrides = {}) {
+  const issuedAt = new Date(Date.now() - 1000)
+  const receipt = {
+    version: 1,
+    approvalId: 'approval_test_owner_presence',
+    actionId: record.actionId,
+    action: record.binding.action,
+    repository: record.binding.repository,
+    branch: record.binding.branch,
+    contentHash: record.binding.contentHash,
+    approver: 'owner',
+    approverKeyFingerprint: fingerprint,
+    issuedAt: issuedAt.toISOString(),
+    expiresAt: new Date(issuedAt.getTime() + 5 * 60 * 1000).toISOString(),
+    approvalMode: 'hardware-signature',
+    ...overrides,
+  }
+  receipt.signature = sign(
+    null,
+    Buffer.from(canonicalReceiptPayload(receipt)),
+    privateKey,
+  ).toString('base64')
+  return receipt
+}
+
+function testActionRecordAndApprovalReceiptVerification() {
+  const { target, privateKey, fingerprint } = approvalFixture()
+  const record = runJson(['action', 'prepare', 'git.commit', '--target', target, '--json'])
+
+  assert.equal(record.decision, 'ACTION_RECORD_READY')
+  assert.equal(record.ready, true)
+  assert.equal(record.action, 'git.commit')
+  assert.equal(record.classification.estimatedLevel, 'Level 3')
+  assert.equal(record.approval.required, true)
+  assert.match(record.binding.contentHash, /^sha256:[a-f0-9]{64}$/)
+  assert.equal(record.approval.policy.trustedApprovers[0].id, 'owner')
+  assert.equal(record.approval.policy.trustedApprovers[0].publicKeyPath, undefined)
+
+  const receiptPath = resolve(target, 'approval-receipt.json')
+  writeFileSync(receiptPath, `${JSON.stringify(signedReceipt(
+    record,
+    privateKey,
+    fingerprint,
+  ), null, 2)}\n`)
+  const valid = runJson([
+    'approval',
+    'verify',
+    'git.commit',
+    '--target',
+    target,
+    '--receipt',
+    receiptPath,
+    '--json',
+  ])
+
+  assert.equal(valid.decision, 'APPROVAL_RECEIPT_VALID')
+  assert.equal(valid.valid, true)
+  assert.deepEqual(valid.violations, [])
+
+  const phraseReceipt = signedReceipt(record, privateKey, fingerprint, {
+    approvalId: 'approval_test_phrase',
+    approvalMode: 'phrase',
+  })
+  writeFileSync(receiptPath, `${JSON.stringify(phraseReceipt, null, 2)}\n`)
+  const phraseRejected = runJson([
+    'approval',
+    'verify',
+    'git.commit',
+    '--target',
+    target,
+    '--receipt',
+    receiptPath,
+    '--json',
+  ], { allowFailure: true })
+
+  assert.equal(phraseRejected.valid, false)
+  assert.ok(phraseRejected.violations.some((item) => item.includes('approvalMode must be')))
+
+  writeFileSync(resolve(target, 'AGENTS.md'), '# Modified after approval\n')
+  git(target, ['add', 'AGENTS.md'])
+  writeFileSync(receiptPath, `${JSON.stringify(signedReceipt(
+    record,
+    privateKey,
+    fingerprint,
+  ), null, 2)}\n`)
+  const changedContent = runJson([
+    'approval',
+    'verify',
+    'git.commit',
+    '--target',
+    target,
+    '--receipt',
+    receiptPath,
+    '--json',
+  ], { allowFailure: true })
+
+  assert.equal(changedContent.valid, false)
+  assert.ok(changedContent.violations.some((item) => item.includes('contentHash')))
+}
+
+function testActionRecordFailsClosedWithoutTrustedApprover() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-approval-incomplete-'))
+  git(target, ['init', '--quiet'])
+  writeFileSync(resolve(target, 'AGENTS.md'), '# High-risk policy change\n')
+  git(target, ['add', 'AGENTS.md'])
+
+  const record = runJson([
+    'action',
+    'prepare',
+    'git.commit',
+    '--target',
+    target,
+    '--json',
+  ], { allowFailure: true })
+
+  assert.equal(record.decision, 'APPROVAL_POLICY_INCOMPLETE')
+  assert.equal(record.ready, false)
+  assert.equal(record.approval.required, true)
+  assert.deepEqual(record.approval.policy.trustedApprovers, [])
+}
+
+function testInvalidApprovalPolicyFailsClosed() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-approval-invalid-'))
+  writeFileSync(resolve(target, 'psdm.config.json'), `${JSON.stringify({
+    version: 1,
+    approval: {
+      requiredLevels: ['Level 1'],
+      maxReceiptAgeSeconds: 10,
+      trustedApprovers: [{}],
+    },
+  })}\n`)
+  writeFileSync(resolve(target, 'AGENTS.md'), '# High-risk policy change\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', 'AGENTS.md'])
+
+  const validation = runJson(['validate', target, '--json'], { allowFailure: true })
+  const record = runJson([
+    'action',
+    'prepare',
+    'git.commit',
+    '--target',
+    target,
+    '--json',
+  ], { allowFailure: true })
+
+  assert.ok(validation.results.some((item) => (
+    item.artifact === 'psdm.config.json'
+    && item.message === 'approval.requiredLevels must include Level 3 and Level 4.'
+  )))
+  assert.ok(validation.results.some((item) => item.message.includes('maxReceiptAgeSeconds')))
+  assert.ok(validation.results.some((item) => item.message.includes('publicKeyFingerprint')))
+  assert.equal(record.decision, 'APPROVAL_POLICY_INVALID')
+  assert.equal(record.ready, false)
+  assert.ok(record.approval.policyIssues.length > 0)
 }
 
 function testAuditExistingProject() {
@@ -499,6 +704,8 @@ function testValidateInitializedProject() {
   assert.equal(report.config.exists, true)
   assert.equal(report.config.ai.pii.allowedInPrompts, false)
   assert.equal(report.config.ai.tools.registryRequired, true)
+  assert.deepEqual(report.config.approval.requiredLevels, ['Level 3', 'Level 4'])
+  assert.deepEqual(report.config.approval.trustedApprovers, [])
   assert.equal(existsSync(resolve(target, 'ADRs', 'README.md')), true)
   assert.ok(report.results.some((item) => item.artifact === 'AGENTS.md' && item.status === 'PASS'))
   const agentRules = readFileSync(resolve(target, 'AGENTS.md'), 'utf8')
@@ -820,6 +1027,9 @@ function testExampleProjectCoverage() {
 const tests = [
   testRiscalaExecutableAliasContract,
   testReadOnlyShellRoutesCommandsAndReportsContext,
+  testActionRecordAndApprovalReceiptVerification,
+  testActionRecordFailsClosedWithoutTrustedApprover,
+  testInvalidApprovalPolicyFailsClosed,
   testAuditExistingProject,
   testAuditDetectsExistingAiGovernance,
   testAuditDetectsAiRuntimeSurfaces,

@@ -153,6 +153,8 @@ riscala inspect --staged [--json] [--target <path>] [--config <path>]
 
 ```bash
 riscala shell [target] [--config <path>]
+riscala action prepare git.commit [--target <path>] [--config <path>] [--json]
+riscala approval verify git.commit --receipt <path> [--target <path>] [--config <path>] [--json]
 ```
 
 The dependency-free shell shows the selected project's name, branch, working-tree counts, and active PSDM policy. Its first release is intentionally read-only and supports `/help`, `/status`, `/inspect`, and `/exit`.
@@ -280,7 +282,23 @@ Open the read-only terminal UI in the current project:
 riscala shell
 ```
 
-Use `/status` to refresh project context and `/inspect` to review staged changes. Mutating slash commands remain blocked until content-bound approval verification is implemented. See `docs/INTERACTIVE_SHELL.md` for the interface and safety contract.
+Use `/status` to refresh project context and `/inspect` to review staged changes. Mutating slash commands remain blocked until trusted approvers and independent enforcement hooks are configured. See `docs/INTERACTIVE_SHELL.md` for the interface and safety contract.
+
+### Prepare And Verify Approval
+
+Create a machine-readable record for the exact staged diff:
+
+```bash
+riscala action prepare git.commit --json
+```
+
+After a trusted external signer returns a receipt, verify it against the live Git index:
+
+```bash
+riscala approval verify git.commit --receipt ./approval-receipt.json --json
+```
+
+Riscala does not sign receipts. Signing must happen through a hardware-backed or separately authenticated channel. See `docs/ACTION_RECORDS_AND_APPROVAL_RECEIPTS.md`.
 
 ### Generate A PR Checklist
 
@@ -501,7 +519,7 @@ This beta does not yet provide:
 - Deep code-level semantic AI readiness detection.
 - SBOM or supply-chain scanning.
 - Deep semantic validation of specs.
-- Runtime signed approval receipts, hardware-presence verification, and remote approval enforcement.
+- Independent Git-hook enforcement, receipt replay persistence, hardware signing ceremony integration, and remote approval service.
 
 Freshly initialized templates intentionally contain placeholders. `riscala validate` reports them as warnings and returns `METHOD_BASELINE_REVIEW_REQUIRED` until the artifacts are filled with project-specific content.
 

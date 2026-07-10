@@ -17,6 +17,7 @@ Use it to find the right document by task: adopting PSDM in an existing project,
 - `docs/PROJECT_BRIEF.md`: project purpose, audience, and success criteria.
 - `docs/RISCALA_BRAND_MIGRATION.md`: accepted Riscala product identity and staged compatibility plan.
 - `docs/INTERACTIVE_SHELL.md`: read-only terminal UI, slash commands, and mutation boundary.
+- `docs/ACTION_RECORDS_AND_APPROVAL_RECEIPTS.md`: content-bound Git commit records, trust policy, detached signatures, and verification limits.
 - `docs/BETA_RELEASE_NOTES.md`: beta release scope, validation, limitations, and exit criteria.
 - `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md`: public collaboration and reporting expectations.
 
@@ -58,6 +59,8 @@ Current commands:
 - `riscala validate`
 - `riscala inspect --staged`
 - `riscala shell`
+- `riscala action prepare git.commit`
+- `riscala approval verify git.commit`
 - `riscala classify`
 - `riscala enforce`
 - `riscala pr-checklist`

@@ -36,6 +36,9 @@ Security posture:
 - local file inspection only;
 - staged inspection invokes Git with fixed arguments through `execFileSync`, reads file-status metadata rather than file contents, and never mutates the index;
 - the interactive shell routes an explicit read-only command allowlist, rejects arbitrary terminal input, and blocks mutating slash commands;
+- Git commit action records hash the binary staged diff plus repository and branch binding without exposing remote credentials;
+- receipt verification pins project-approved public-key fingerprints, strong approval modes, and short expiry windows;
+- Riscala deliberately has no receipt-signing command, so an agent cannot obtain authority from the verifier itself;
 - no production mutation commands;
 - simple secret-like pattern detection in validator;
 - explicit production confirmation policy in generated governance docs;
@@ -73,6 +76,7 @@ Security review is required when a change:
 - introduces dependencies;
 - affects AI-agent tool governance.
 - changes approval receipt, human-presence, content-binding, or agent decision semantics.
+- changes trusted approver configuration, canonical receipt payloads, signature algorithms, or action-record hashes.
 
 ## Automated Security Checks
 

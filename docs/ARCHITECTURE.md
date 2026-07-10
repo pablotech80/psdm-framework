@@ -21,6 +21,8 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/inspect.mjs` composes staged Git evidence with reusable change classification.
 - `src/commands/shell.mjs` owns the interactive readline lifecycle and delegates slash commands to an allowlist router.
 - `src/lib/shell.mjs` builds target-specific project context and renders the dependency-free read-only terminal UI.
+- `src/lib/action-record.mjs` binds proposed Git commits to repository identity, branch, binary staged diff, classification, and approval policy.
+- `src/lib/approval-receipt.mjs` canonicalizes receipt payloads, pins public-key fingerprints, and verifies detached signatures against the live action.
 - `src/lib/enforcement.mjs` owns CI-oriented maximum change-level enforcement.
 - `src/lib/pr-checklist.mjs` generates pull request checklist content from classification output.
 - `src/lib/config.mjs` loads PSDM configuration and validates optional AI policy declarations.
@@ -55,6 +57,8 @@ The architecture favors explicit modules over framework abstractions:
 - Bind high-risk approval receipts to deterministic action content and invalidate them when any bound value changes.
 - Treat `AGENTS.md` as a governance adapter, not as the enforcement boundary; hooks, required checks, protected environments, and signature verification provide enforcement.
 - Keep the first interactive shell read-only and allowlist-routed; it must not execute arbitrary shell input or expose mutating slash commands before approval enforcement exists.
+- Never provide receipt signing inside the agent-accessible CLI; Riscala verifies authority created through an external trusted channel.
+- Fail action preparation closed when approval policy is invalid, required trust is missing, or the staged binding cannot be calculated.
 
 ## Architecture Gate
 
@@ -86,3 +90,4 @@ Changes require architecture review when they affect:
 - Riscala/PSDM naming boundaries, executable compatibility, package transition, or brand migration semantics.
 - agent justification, approval receipts, human presence, content binding, or enforcement boundaries.
 - interactive shell routing, permitted commands, project-context rendering, or mutation boundaries.
+- action-record bindings, approval trust policy, receipt canonicalization, signature verification, expiry, or replay semantics.

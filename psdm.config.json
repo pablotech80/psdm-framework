@@ -57,6 +57,12 @@
       "promptInjectionTestsRequired": true
     }
   },
+  "approval": {
+    "requiredLevels": ["Level 3", "Level 4"],
+    "requiredActions": [],
+    "maxReceiptAgeSeconds": 600,
+    "trustedApprovers": []
+  },
   "riskPaths": [
     {
       "pattern": "bin/**",

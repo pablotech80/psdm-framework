@@ -104,3 +104,34 @@ export function inspectStagedGit(targetDir) {
     changes: parseNameStatus(output),
   }
 }
+
+export function readStagedDiff(targetDir) {
+  return git(targetDir, [
+    'diff',
+    '--cached',
+    '--binary',
+    '--full-index',
+    '--no-ext-diff',
+  ], { raw: true })
+}
+
+export function inspectRepositoryIdentity(targetDir) {
+  const repository = inspectGit(targetDir)
+  if (!repository.isRepository) {
+    return null
+  }
+
+  const root = git(targetDir, ['rev-parse', '--show-toplevel'])
+  let origin = null
+  try {
+    origin = git(targetDir, ['remote', 'get-url', 'origin']) || null
+  } catch {
+    // A local repository without an origin still has a stable identity on this machine.
+  }
+
+  return {
+    root,
+    origin,
+    branch: repository.branch,
+  }
+}

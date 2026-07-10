@@ -26,6 +26,7 @@ const requiredPackageFiles = [
   'docs/INDEX.md',
   'docs/CONFIG_SCHEMA.md',
   'docs/AGENT_DECISION_PROTOCOL.md',
+  'docs/ACTION_RECORDS_AND_APPROVAL_RECEIPTS.md',
   'docs/INTERACTIVE_SHELL.md',
   'docs/BETA_RELEASE_NOTES.md',
   'docs/MODEL_AND_TOOL_INDEPENDENCE.md',

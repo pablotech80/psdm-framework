@@ -161,8 +161,9 @@ The minimum non-secret event shape is:
 
 - Agent instruction contract: documented.
 - Repository and generated `AGENTS.md` rules: required.
-- Receipt schema: architecture contract only.
-- Hardware signature verification: not implemented.
+- Git commit action record and receipt schema: implemented.
+- Detached public-key signature and fingerprint verification: implemented.
+- Hardware signing ceremony: external and not implemented by Riscala.
 - Remote approval: not implemented.
 - Hook and CI enforcement: not implemented.
 - Mutating Riscala slash commands: not authorized.

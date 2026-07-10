@@ -1,7 +1,12 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { requiredSectionsForArtifact } from '../lib/artifacts.mjs'
-import { loadConfig, SUPPORTED_PROFILES, validateAiPolicy } from '../lib/config.mjs'
+import {
+  loadConfig,
+  SUPPORTED_PROFILES,
+  validateAiPolicy,
+  validateApprovalPolicy,
+} from '../lib/config.mjs'
 import { inspectGit } from '../lib/git.mjs'
 import { validateRiskPathRules } from '../lib/risk-paths.mjs'
 
@@ -101,6 +106,12 @@ function validateConfigAiPolicy(configState, results) {
   }
 }
 
+function validateConfigApprovalPolicy(configState, results) {
+  for (const issue of validateApprovalPolicy(configState.rawConfig.approval)) {
+    record(results, 'FAIL', 'psdm.config.json', issue.message, issue.priority)
+  }
+}
+
 export function validateMethod(targetDir, options = {}) {
   const configState = options.configState || loadConfig(targetDir, options.configPath)
   const { config } = configState
@@ -112,6 +123,7 @@ export function validateMethod(targetDir, options = {}) {
   validateConfigProfile(configState, results)
   validateConfigRiskPaths(configState, results)
   validateConfigAiPolicy(configState, results)
+  validateConfigApprovalPolicy(configState, results)
   validateArtifacts(targetDir, baselineArtifacts, results)
   validateArtifacts(targetDir, scopedFeatureArtifacts, results)
 
@@ -137,6 +149,7 @@ export function validateMethod(targetDir, options = {}) {
       exists: configState.exists,
       profile: configState.profile,
       ai: config.ai,
+      approval: config.approval,
     },
     feature: options.feature || null,
     git,

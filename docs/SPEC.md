@@ -5,7 +5,7 @@ Project: `psdm-framework`
 
 ## Functional Requirements
 
-- Provide a `psdm` CLI with `adr`, `init`, `audit`, `check`, `validate`, `inspect`, `shell`, `classify`, `enforce`, `pr-checklist`, and `report` commands.
+- Provide a `psdm` CLI with `action`, `approval`, `adr`, `init`, `audit`, `check`, `validate`, `inspect`, `shell`, `classify`, `enforce`, `pr-checklist`, and `report` commands.
 - Provide a non-destructive `audit` command that previews repository state and `init` impact.
 - Detect existing AI governance files during audit and recommend integration without overwrite.
 - Emit an `aiReadiness` contract from `riscala audit --json` and its `psdm` compatibility equivalent for AI surface and governance gap reporting.
@@ -34,6 +34,10 @@ Project: `psdm-framework`
 - Provide a dependency-free read-only interactive shell with `/help`, `/status`, `/inspect`, and `/exit` routing.
 - Calculate shell project, branch, change counts, and active policy from the selected target instead of hardcoding repository context.
 - Reject arbitrary input and mutating slash commands until content-bound approval verification is implemented.
+- Generate a machine-readable `git.commit` action record bound to repository identity, branch, full staged diff hash, and change classification.
+- Require Level 3 and Level 4 approval policy and fail action preparation closed when trusted approvers are missing or policy is invalid.
+- Verify signed receipts against live staged content, pinned public-key fingerprints, allowed strong approval modes, and configured expiry limits.
+- Provide no receipt-signing command inside Riscala.
 - Enforce maximum allowed change level for CI policy gates.
 - Generate ADR scaffolds under `ADRs/` for durable architecture and governance decisions.
 - Create `ADRs/README.md` during baseline init so the ADR directory is versionable in Git.
@@ -75,6 +79,10 @@ Project: `psdm-framework`
 - `node bin/psdm.mjs shell <target>` renders target-specific context and routes `/help`, `/status`, `/inspect`, and `/exit` through an allowlist.
 - The shell distinguishes staged, unstaged, and untracked Git changes without mutating the repository.
 - `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy` are blocked in the read-only shell.
+- `node bin/psdm.mjs action prepare git.commit --json` emits `ACTION_RECORD_READY`, `APPROVAL_POLICY_INCOMPLETE`, or `APPROVAL_POLICY_INVALID` without changing the repository.
+- `node bin/psdm.mjs approval verify git.commit --receipt <path> --json` rebuilds the live binding and accepts only an unexpired detached signature from a configured approver.
+- Modifying the staged diff, branch, repository, action, approver, key fingerprint, approval mode, or receipt lifetime invalidates approval.
+- A cryptographically signed `phrase` approval is rejected because the mode does not establish the required human-presence boundary.
 - `node bin/psdm.mjs enforce "<description>" --file <path> --max-level "Level 2" --json` exits non-zero when the estimated level exceeds the allowed level.
 - `node bin/psdm.mjs pr-checklist "<description>" --file <path>` emits a Markdown checklist derived from change level and risk paths.
 - `npm test` runs dependency-free CLI fixtures for the interactive shell, audit, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, staged inspection, enforce, PR checklist, validate, custom config, AI policy validation, AI guardrail templates, validation profiles, invalid risk paths, and feature artifact behavior.
@@ -92,5 +100,5 @@ Project: `psdm-framework`
 - Full policy-as-code semantics.
 - Remote service dependencies.
 - Automatic production deployment.
-- Runtime approval receipt signing, hardware-key integration, remote approval, or mutating slash commands until separately implemented and validated.
+- Receipt signing, hardware-key ceremony integration, remote approval service, hook enforcement, replay persistence, or mutating slash commands until separately implemented and validated.
 - Replacement for security review, architecture review, or owner approval on high-risk changes.

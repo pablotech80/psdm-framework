@@ -174,7 +174,8 @@
 - [x] Dependency-free interactive `riscala shell` MVP.
 - [x] Agent Decision Protocol and human-presence approval architecture.
 - [x] Level 3 default risk classification for root `AGENTS.md`.
-- [ ] Machine-readable action records and signed receipt verification before mutating slash commands.
+- [x] Machine-readable Git commit action records and signed receipt verification before mutating slash commands.
+- [ ] Trusted owner key enrollment, replay persistence, and independent Git hook enforcement.
 - [x] Full documentation index.
 - [ ] Tested fixtures.
 - [x] Public package release checklist.

@@ -11,6 +11,8 @@ import { prChecklistCommand } from '../src/commands/pr-checklist.mjs'
 import { reportCommand } from '../src/commands/report.mjs'
 import { inspectCommand } from '../src/commands/inspect.mjs'
 import { shellCommand } from '../src/commands/shell.mjs'
+import { actionCommand } from '../src/commands/action.mjs'
+import { approvalCommand } from '../src/commands/approval.mjs'
 import {
   COMPATIBILITY_EXECUTABLE,
   PRIMARY_EXECUTABLE,
@@ -31,6 +33,8 @@ const commands = {
   report: reportCommand,
   inspect: inspectCommand,
   shell: shellCommand,
+  action: actionCommand,
+  approval: approvalCommand,
 }
 
 function printHelp() {
@@ -44,6 +48,8 @@ Usage:
   ${PRIMARY_EXECUTABLE} validate [target] [--json] [--feature name] [--config path]
   ${PRIMARY_EXECUTABLE} inspect --staged [--json] [--target path] [--config path]
   ${PRIMARY_EXECUTABLE} shell [target] [--config path]
+  ${PRIMARY_EXECUTABLE} action prepare git.commit [--target path] [--config path] [--json]
+  ${PRIMARY_EXECUTABLE} approval verify git.commit --receipt path [--target path] [--config path] [--json]
   ${PRIMARY_EXECUTABLE} classify "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
   ${PRIMARY_EXECUTABLE} enforce "<change description>" [--json] [--max-level "Level 2"] [--file path] [--files path,path] [--target path] [--config path]
   ${PRIMARY_EXECUTABLE} pr-checklist "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
@@ -60,6 +66,8 @@ Commands:
   validate   Validate PSDM baseline structure and required sections.
   inspect    Inspect staged Git changes and explain their minimum governance level.
   shell      Open the read-only interactive governance shell.
+  action     Build a content-bound record for a proposed action.
+  approval   Verify a signed approval receipt against the live action.
   classify   Estimate change level from a short description.
   enforce    Fail when a classified change exceeds the allowed maximum level.
   pr-checklist Generate a pull request checklist for a change.

@@ -12,7 +12,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Implement machine-readable action records and signed receipt verification before adding mutating slash commands.
+- [ ] Enroll a real owner public key and add pre-commit receipt enforcement with replay protection.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 
 ## Next
@@ -25,6 +25,10 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Done
 
+- [x] Implemented machine-readable `git.commit` action records bound to repository, branch, staged diff, and classification.
+- [x] Added fail-closed approval policy with required Level 3/4 approval and pinned trusted approvers.
+- [x] Implemented detached signature, key fingerprint, strong-mode, expiry, and live-content receipt verification.
+- [x] Added real Ed25519 fixtures for valid approval, phrase rejection, changed content, missing trust, and invalid policy.
 - [x] Implemented the read-only dependency-free `riscala shell` MVP with `/help`, `/status`, `/inspect`, and `/exit`.
 - [x] Added target-specific shell context and staged/unstaged/untracked working-tree counts.
 - [x] Blocked mutating slash commands until content-bound approval enforcement exists.

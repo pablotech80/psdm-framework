@@ -53,7 +53,7 @@ Commands do not accept arbitrary shell fragments or arguments in this MVP.
 
 The shell is an allowlist router, not a general terminal or agent runtime.
 
-The MVP explicitly blocks `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy`. Those commands must not be added until Riscala implements and validates machine-readable action records and content-bound approval receipts.
+The MVP explicitly blocks `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy`. The action-record and receipt-verification core now exists for `git.commit`, but those commands remain blocked until a trusted owner key is enrolled and independent hooks enforce the receipt.
 
 A confirmation phrase entered through an agent-controlled terminal is not sufficient human-presence evidence. The approval architecture remains defined in `docs/AGENT_DECISION_PROTOCOL.md`.
 

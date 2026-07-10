@@ -7,7 +7,7 @@ Project: `psdm-framework`
 
 This document defines the stability contract for `psdm.config.json`.
 
-The config file is the local policy surface for PSDM. It controls required governance artifacts, validation profiles, feature artifact layout, git dirty-state warnings, AI policy declarations, and risk path classification. The CLI must keep this schema predictable because users can depend on it from local scripts, GitHub Actions, and repository automation.
+The config file is the local policy surface for PSDM. It controls required governance artifacts, validation profiles, feature artifact layout, git dirty-state warnings, AI policy declarations, approval trust, and risk path classification. The CLI must keep this schema predictable because users can depend on it from local scripts, GitHub Actions, and repository automation.
 
 ## Schema Version
 
@@ -79,6 +79,48 @@ The `version` field identifies the config format. Version `1` supports additive 
 - Default: backend, platform, AI, and CI risk rules.
 - Stability: stable object shape.
 - Meaning: raises the minimum change level when touched files match configured path patterns.
+
+`approval`
+
+- Type: object.
+- Default: Level 3 and Level 4 require approval, 600-second maximum receipt lifetime, no action-specific requirements, and no trusted approvers.
+- Stability: additive version `1` object shape.
+- Meaning: declares when signed approval is required and pins the public trust material allowed to verify it.
+
+## Approval Policy Object
+
+`approval.requiredLevels`
+
+- Type: change-level string array.
+- Must include: `Level 3` and `Level 4`.
+- Meaning: change classifications that require signed approval. Lower levels may be added for stricter projects.
+
+`approval.requiredActions`
+
+- Type: non-empty string array.
+- Default: empty array.
+- Meaning: actions that always require approval regardless of classified level. The implemented action identifier is `git.commit`.
+
+`approval.maxReceiptAgeSeconds`
+
+- Type: integer from `60` through `86400`.
+- Default: `600`.
+- Meaning: maximum permitted interval between receipt issue and expiry.
+
+`approval.trustedApprovers`
+
+- Type: object array.
+- Default: empty array.
+- Meaning: public identities permitted to approve configured actions. An empty collection makes a required approval policy incomplete and action preparation fails closed.
+
+Each trusted approver requires:
+
+- `id`: unique non-empty identifier;
+- `publicKeyPath`: PEM public-key path relative to the config file or absolute;
+- `publicKeyFingerprint`: `sha256:` followed by 64 lowercase hexadecimal characters;
+- `approvalModes`: non-empty array containing `hardware-signature` or `remote-approval`.
+
+The `phrase` mode is intentionally unsupported for signed high-risk receipts.
 
 ## Risk Path Object
 
@@ -203,5 +245,6 @@ Validation JSON must keep the following config metadata:
 - `config.profile.requiredArtifacts`
 - `config.profile.riskPaths`
 - `config.ai`
+- `config.approval`
 
 Additional fields may be added when they do not alter existing field meaning.

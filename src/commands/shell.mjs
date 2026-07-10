@@ -20,6 +20,7 @@ function invalidOptions(options, positional) {
     || options.date !== null
     || options.dryRun
     || options.staged
+    || options.receiptPath !== null
 }
 
 export async function shellCommand(args, streams = {}) {

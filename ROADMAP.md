@@ -102,6 +102,8 @@ Completed:
 - Root `AGENTS.md` added as a default Level 3 risk path with regression coverage.
 - Dependency-free `riscala shell` MVP implemented with target-specific context, read-only slash-command routing, and explicit mutation blocking.
 - Git porcelain parsing corrected so the first unstaged record is not misreported as staged in shell status.
+- Git commit action records implemented with repository, branch, binary staged diff, classification, and approval-policy binding.
+- Detached approval receipt verification implemented with trusted approver fingerprints, strong modes, expiry, and live-content invalidation.
 
 ## Active Milestone
 
@@ -276,7 +278,8 @@ Planned outcomes:
 - [x] Add the `riscala` executable alias with `psdm` parity before interactive CLI work.
 - [x] Design and implement the dependency-free `riscala shell` MVP.
 - [x] Define agent decision and human-presence approval architecture.
-- [ ] Implement machine-readable action records and receipt verification before mutating slash commands.
+- [x] Implement machine-readable action records and receipt verification before mutating slash commands.
+- [ ] Enroll a real owner public key and enforce Git commit receipts through an independent pre-commit hook.
 - [ ] Stable config schema.
 - [x] Public package release checklist.
 - [x] Decide package metadata gaps before beta.

@@ -131,7 +131,7 @@ export function renderShellHelp() {
   /exit      Close the Riscala shell.
 
 Mutating commands such as /commit, /push, /pr, /publish, and /deploy are blocked
-until content-bound approval receipt verification is implemented.`
+until trusted approvers and independent enforcement hooks are configured.`
 }
 
 function renderInspection(report) {
