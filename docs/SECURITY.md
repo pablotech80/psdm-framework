@@ -13,6 +13,8 @@ Primary security concerns:
 - allowing config changes to bypass required review;
 - creating misleading JSON output that downstream automation trusts incorrectly;
 - expanding dependencies and supply-chain surface without clear need.
+- allowing an AI agent to satisfy or reuse its own human-approval gate.
+- executing modified content after approval was issued for a different hash or target.
 
 Relevant sensitive surfaces:
 
@@ -30,6 +32,7 @@ Security posture:
 
 - dependency-free CLI by default;
 - `riscala` and `psdm` resolve to the same reviewed entrypoint and do not create separate execution paths;
+- agent instructions forbid self-approval, while future strong enforcement requires content-bound hardware or remote approval;
 - local file inspection only;
 - staged inspection invokes Git with fixed arguments through `execFileSync`, reads file-status metadata rather than file contents, and never mutates the index;
 - no production mutation commands;
@@ -68,6 +71,7 @@ Security review is required when a change:
 - changes either executable mapping or allows Riscala/PSDM behavior to diverge;
 - introduces dependencies;
 - affects AI-agent tool governance.
+- changes approval receipt, human-presence, content-binding, or agent decision semantics.
 
 ## Automated Security Checks
 

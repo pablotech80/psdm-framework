@@ -245,6 +245,24 @@ function testClassifyRiskPathJson() {
   assert.equal(report.pathMatches[0].pattern, 'backend/auth/**')
 }
 
+function testClassifyAgentInstructionsAsLevelThree() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-agent-policy-classify-'))
+  const report = runJson([
+    'classify',
+    'small cleanup',
+    '--target',
+    target,
+    '--file',
+    'AGENTS.md',
+    '--json',
+  ])
+
+  assert.equal(report.estimatedLevel, 'Level 3')
+  assert.equal(report.pathMatches[0].pattern, 'AGENTS.md')
+  assert.ok(report.requiredArtifacts.includes('docs/SECURITY.md'))
+  assert.ok(report.requiredArtifacts.includes('docs/ARCHITECTURE.md'))
+}
+
 function testInspectStagedRiskPathJson() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-inspect-'))
   mkdirSync(resolve(target, 'backend', 'auth'), { recursive: true })
@@ -434,6 +452,10 @@ function testValidateInitializedProject() {
   assert.equal(report.config.ai.tools.registryRequired, true)
   assert.equal(existsSync(resolve(target, 'ADRs', 'README.md')), true)
   assert.ok(report.results.some((item) => item.artifact === 'AGENTS.md' && item.status === 'PASS'))
+  const agentRules = readFileSync(resolve(target, 'AGENTS.md'), 'utf8')
+  assert.match(agentRules, /## 8\. Agent Decision Protocol/)
+  assert.match(agentRules, /must never approve its own action/)
+  assert.match(agentRules, /why that action should come next/)
 }
 
 function testCustomConfigArtifact() {
@@ -757,6 +779,7 @@ const tests = [
   testAdrCreatesDecisionRecord,
   testAdrRejectsInvalidDate,
   testClassifyRiskPathJson,
+  testClassifyAgentInstructionsAsLevelThree,
   testInspectStagedRiskPathJson,
   testInspectStagedUsesLevelOneFloor,
   testInspectReportsNoStagedChanges,

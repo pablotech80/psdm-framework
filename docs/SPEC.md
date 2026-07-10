@@ -27,6 +27,7 @@ Project: `psdm-framework`
 - Document the stable config schema contract in `docs/CONFIG_SCHEMA.md`.
 - Support feature-scoped artifacts under `docs/features/<feature>/`.
 - Classify changes using textual signals and configured risk paths.
+- Classify root `AGENTS.md` changes as at least Level 3 by default.
 - Inspect staged Git changes without requiring a manual description or file list.
 - Treat any staged file change as at least Level 1 and preserve configured risk paths as the deterministic elevation mechanism.
 - Emit staged file status, risk-path evidence, and classification in human-readable and JSON output.
@@ -36,6 +37,9 @@ Project: `psdm-framework`
 - Validate required artifacts, required sections, non-empty files, draft-marker wording, and simple secret-like values.
 - Provide templates for newly initialized projects.
 - Provide a GitHub Action entrypoint for repository validation.
+- Define a model-independent Agent Decision Protocol for meaningful mutating actions.
+- Require generated agent rules to prohibit self-approval and require why, expected improvement, risk, validation, evidence, and next-action rationale.
+- Treat confirmation phrases as intent signals rather than proof of human identity.
 - Maintain at least one downstream-like example fixture that exercises audit, init, and validate behavior.
 
 ## Acceptance Criteria
@@ -61,6 +65,7 @@ Project: `psdm-framework`
 - Invalid AI policy fields produce validation failures on `psdm.config.json`.
 - `profile: "ai-agent"` creates guardrail artifacts for AI behavior, data classification, cost/latency budgets, prompt-injection tests, and eval governance.
 - `node bin/psdm.mjs classify "<description>" --file <path> --json` includes matched keywords, matched risk paths, required artifacts, and estimated level.
+- `AGENTS.md` path classification returns at least Level 3 and requires architecture, security, specification, and testing artifacts.
 - `node bin/psdm.mjs inspect --staged --json` reads only the Git index and emits `decision`, `git.changes`, `files`, `evidence`, and `classification`.
 - Staged files with no matching risk path classify as at least Level 1; matching risk paths can raise the result to Level 2, Level 3, or Level 4.
 - Staged inspection reports `NO_STAGED_CHANGES` without failure and exits non-zero with `NOT_A_GIT_REPOSITORY` when the target is not a Git repository.
@@ -69,6 +74,7 @@ Project: `psdm-framework`
 - `npm test` runs dependency-free CLI fixtures for audit, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, staged inspection, enforce, PR checklist, validate, custom config, AI policy validation, AI guardrail templates, validation profiles, invalid risk paths, and feature artifact behavior.
 - `npm test` covers the `examples/nextjs-saas` fixture by auditing, initializing, and validating a temporary copy.
 - The release check installs the local package and verifies both executable aliases from `node_modules/.bin`.
+- Initialized `AGENTS.md` includes the Agent Decision Protocol and self-approval prohibition.
 - A clean repository with filled PSDM artifacts can reach `METHOD_BASELINE_APPROVED`.
 
 ## Out of Scope
@@ -80,4 +86,5 @@ Project: `psdm-framework`
 - Full policy-as-code semantics.
 - Remote service dependencies.
 - Automatic production deployment.
+- Runtime approval receipt signing, hardware-key integration, remote approval, or mutating slash commands until separately implemented and validated.
 - Replacement for security review, architecture review, or owner approval on high-risk changes.

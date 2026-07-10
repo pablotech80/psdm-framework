@@ -12,7 +12,8 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Design and implement the dependency-free `riscala shell` MVP with slash-command routing.
+- [ ] Design and implement the read-only dependency-free `riscala shell` MVP with slash-command routing.
+- [ ] Implement machine-readable action records and signed receipt verification before adding mutating slash commands.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 
 ## Next
@@ -25,6 +26,10 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Done
 
+- [x] Accepted the Agent Decision Protocol and prohibition on agent self-approval.
+- [x] Defined content-bound approval receipts and hardware/remote human-presence boundaries.
+- [x] Added before/after decision requirements to repository and generated `AGENTS.md` rules.
+- [x] Classified root `AGENTS.md` changes as Level 3 by default.
 - [x] Implemented Riscala Phase 1 with dual executable aliases and human-facing product headers.
 - [x] Added installed-package parity validation for `riscala` and `psdm`.
 - [x] Accepted Riscala as the product identity while preserving PSDM as the governance method.

@@ -4,6 +4,8 @@ Risk paths let PSDM classify a change by the files it touches, not only by the w
 
 This is the main backend and platform governance mechanism. Small frontend copy edits can stay lightweight, while changes under authentication, payments, migrations, infrastructure, AI agents, RAG, and CI/CD receive stronger controls.
 
+Root `AGENTS.md` is a default Level 3 risk path because instruction changes can alter autonomous behavior, approval boundaries, and tool use even when no application source file changes.
+
 ## Configuration
 
 Define rules in `psdm.config.json`:

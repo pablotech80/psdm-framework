@@ -31,7 +31,13 @@ Use `psdm adr "<decision title>"` when a Level 3 or Level 4 change creates or re
 
 `psdm enforce` blocks a change when its classified level exceeds the configured maximum level. The GitHub Action can run this gate with `enforce-change-level: 'true'`, a change description, touched files, and a maximum allowed level.
 
-Before commit or PR preparation, `psdm inspect --staged` can derive the touched file list directly from the Git index and explain the minimum level and matching risk-path evidence. It is advisory and does not stage, modify, approve, or commit files.
+Before commit or PR preparation, `riscala inspect --staged` can derive the touched file list directly from the Git index and explain the minimum level and matching risk-path evidence. It is advisory and does not stage, modify, approve, or commit files.
+
+## Agent Decision Governance
+
+Agents must justify meaningful mutations before execution and report evidence, deviations, next action, and next-action rationale afterward. An agent cannot approve its own action.
+
+For configured high-risk mutations, approval must be issued through a trusted human-presence boundary and bound to the exact content and target. A phrase available to the same terminal is not proof of human identity. See `docs/AGENT_DECISION_PROTOCOL.md`.
 
 ## Stop Conditions
 
@@ -44,3 +50,4 @@ Stop before implementation when:
 - a command may mutate production or external systems;
 - secrets or private data may be exposed;
 - required owner approval is missing for Level 3 or Level 4 work.
+- an agent would need to generate, enter, or reuse its own approval.

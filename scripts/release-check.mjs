@@ -25,6 +25,7 @@ const requiredPackageFiles = [
   'SECURITY.md',
   'docs/INDEX.md',
   'docs/CONFIG_SCHEMA.md',
+  'docs/AGENT_DECISION_PROTOCOL.md',
   'docs/BETA_RELEASE_NOTES.md',
   'docs/MODEL_AND_TOOL_INDEPENDENCE.md',
   'docs/KNOWLEDGE_AS_CODE.md',

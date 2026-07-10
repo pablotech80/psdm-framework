@@ -173,6 +173,12 @@ export const DEFAULT_CONFIG = {
       reason: 'Infrastructure changes can affect deployment, availability, and runtime security.',
     },
     {
+      pattern: 'AGENTS.md',
+      minimumLevel: 'Level 3',
+      requiredArtifacts: ['docs/SPEC.md', 'docs/ARCHITECTURE.md', 'docs/SECURITY.md', 'docs/TESTING.md'],
+      reason: 'Agent instruction changes can alter autonomous behavior, approval boundaries, and tool use.',
+    },
+    {
       pattern: 'agents/**',
       minimumLevel: 'Level 3',
       requiredArtifacts: ['docs/SPEC.md', 'docs/ARCHITECTURE.md', 'docs/SECURITY.md'],

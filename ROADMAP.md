@@ -96,6 +96,10 @@ Completed:
 - Riscala accepted as the product-facing identity, with AI Code Governance for Software Delivery as the category and PSDM preserved as the method.
 - Staged Riscala brand migration plan documented without changing runtime, package, config, or JSON contracts.
 - Riscala Phase 1 implemented with dual executable aliases, shared entrypoint, product headers, and installed-package parity validation.
+- Agent Decision Protocol accepted: agents must justify meaningful mutations and cannot authorize their own high-risk actions.
+- Content-bound approval receipt and human-presence architecture documented before mutating shell commands.
+- Repository and generated `AGENTS.md` rules updated with why, expected improvement, evidence, and next-action rationale requirements.
+- Root `AGENTS.md` added as a default Level 3 risk path with regression coverage.
 
 ## Active Milestone
 
@@ -269,6 +273,8 @@ Planned outcomes:
 - [x] Accept Riscala product identity and compatibility boundaries.
 - [x] Add the `riscala` executable alias with `psdm` parity before interactive CLI work.
 - [ ] Design and implement the dependency-free `riscala shell` MVP.
+- [x] Define agent decision and human-presence approval architecture.
+- [ ] Implement machine-readable action records and receipt verification before mutating slash commands.
 - [ ] Stable config schema.
 - [x] Public package release checklist.
 - [x] Decide package metadata gaps before beta.

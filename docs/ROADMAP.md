@@ -172,6 +172,9 @@
 - [x] Riscala product identity and PSDM compatibility boundary accepted.
 - [x] Dual `riscala` and `psdm` executable compatibility.
 - [ ] Dependency-free interactive `riscala shell` MVP.
+- [x] Agent Decision Protocol and human-presence approval architecture.
+- [x] Level 3 default risk classification for root `AGENTS.md`.
+- [ ] Machine-readable action records and signed receipt verification before mutating slash commands.
 - [x] Full documentation index.
 - [ ] Tested fixtures.
 - [x] Public package release checklist.

@@ -98,6 +98,7 @@ Must include:
 - [x] `LICENSE`
 - [x] `docs/INDEX.md`
 - [x] `docs/CONFIG_SCHEMA.md`
+- [x] `docs/AGENT_DECISION_PROTOCOL.md`
 - [x] `docs/BETA_RELEASE_NOTES.md`
 - [x] `docs/MODEL_AND_TOOL_INDEPENDENCE.md`
 - [x] `docs/PUBLICATION_CHECKLIST.md`

@@ -98,6 +98,7 @@ flowchart TD
 - CI enforcement for maximum allowed change level.
 - AI readiness checks for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
 - AI-agent governance templates for projects using LLMs, tools, prompts, RAG, or automation.
+- Agent Decision Protocol separating agent justification and execution from content-bound human approval.
 - Knowledge as Code guidance for versioning intent, decisions, rules, prompts, workflows, verification criteria, and evolution notes.
 - JSON output for automation and GitHub Action workflows.
 - Public beta release gates for package contents, docs, and repository readiness.
@@ -468,6 +469,7 @@ The action writes `psdm-enforcement.json` and fails when the classified change e
 - Specification before significant implementation.
 - Knowledge as a versioned project asset.
 - Explicit AI-agent boundaries.
+- Agents justify meaningful mutations but cannot authorize their own high-risk actions.
 - Security-sensitive work requires security context.
 - Deployment-sensitive work requires rollback context.
 - Documentation must support delivery, not replace it.
@@ -481,6 +483,7 @@ This beta does not yet provide:
 - Deep code-level semantic AI readiness detection.
 - SBOM or supply-chain scanning.
 - Deep semantic validation of specs.
+- Runtime signed approval receipts, hardware-presence verification, and remote approval enforcement.
 
 Freshly initialized templates intentionally contain placeholders. `riscala validate` reports them as warnings and returns `METHOD_BASELINE_REVIEW_REQUIRED` until the artifacts are filled with project-specific content.
 

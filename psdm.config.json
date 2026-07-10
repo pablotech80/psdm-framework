@@ -113,6 +113,18 @@
       "reason": "Risk path logic affects change-level classification."
     },
     {
+      "pattern": "AGENTS.md",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/ARCHITECTURE.md", "docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Agent instruction changes can alter autonomous behavior, approval boundaries, and tool use."
+    },
+    {
+      "pattern": "templates/AGENTS.md",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/ARCHITECTURE.md", "docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Generated agent instruction changes alter downstream autonomous behavior and approval boundaries."
+    },
+    {
       "pattern": "templates/**",
       "minimumLevel": "Level 2",
       "requiredArtifacts": ["docs/SPEC.md", "docs/TESTING.md"],

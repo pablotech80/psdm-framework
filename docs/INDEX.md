@@ -85,11 +85,13 @@ Key policy concepts:
 - `docs/ARCHITECTURE.md`: module boundaries and architecture gate.
 - `docs/SECURITY.md`: threat model and security gate.
 - `docs/AI_AGENT_SECURITY.md`: AI-agent and tool-use security expectations.
+- `docs/AGENT_DECISION_PROTOCOL.md`: agent justification, human-presence approval, content binding, and enforcement contract.
 - `docs/AI_READINESS_AUDIT.md`: `riscala audit --json` contract for AI readiness signals and governance gaps.
 - `docs/MODEL_AND_TOOL_INDEPENDENCE.md`: model-neutral governance and tool-specific adapter guidance.
 - `docs/KNOWLEDGE_AS_CODE.md`: source-of-truth and runtime-index boundaries for governed project knowledge.
 - `docs/RISCALA_BRAND_MIGRATION.md`: boundary between the Riscala product and PSDM method.
 - `docs/TOOL_REGISTRY.md`: tool registry direction.
+- `ADRs/2026-07-10-require-human-presence-for-agent-approvals.md`: accepted separation of agent execution and human approval.
 - `ADRs/README.md`: ADR usage guidance.
 
 Use `riscala adr "<decision title>"` when a Level 3 or Level 4 change creates or reverses a durable architecture, security, CI, deployment, config, or governance decision.

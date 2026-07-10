@@ -23,6 +23,7 @@ Near-term framework tasks:
 - Keep pre-init audit useful for existing projects adopting PSDM.
 - Keep PR checklist generation aligned with classifier and risk path behavior.
 - Keep staged change inspection aligned with Git and classifier contracts.
+- Keep agent decision records, approval bindings, and AGENTS adapters aligned with `docs/AGENT_DECISION_PROTOCOL.md`.
 - Add example project coverage.
 - Validate the GitHub Action in a downstream repository workflow.
 - Keep fixtures current as CLI behavior changes.

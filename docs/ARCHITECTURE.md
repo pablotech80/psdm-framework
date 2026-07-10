@@ -49,6 +49,9 @@ The architecture favors explicit modules over framework abstractions:
 - Keep generated artifacts separate from framework docs where possible.
 - Separate product branding from method contracts: Riscala may change human-facing identity, while PSDM config, artifacts, and automation remain stable unless explicitly versioned.
 - Map both executable names to one entrypoint so compatibility cannot drift into a second implementation.
+- Separate agent proposal and execution from human approval; an agent must never issue its own authority.
+- Bind high-risk approval receipts to deterministic action content and invalidate them when any bound value changes.
+- Treat `AGENTS.md` as a governance adapter, not as the enforcement boundary; hooks, required checks, protected environments, and signature verification provide enforcement.
 
 ## Architecture Gate
 
@@ -78,3 +81,4 @@ Changes require architecture review when they affect:
 - the boundary between PSDM governance and external runtime observability.
 - Knowledge as Code semantics, required artifacts, source-of-truth boundaries, or runtime index expectations.
 - Riscala/PSDM naming boundaries, executable compatibility, package transition, or brand migration semantics.
+- agent justification, approval receipts, human presence, content binding, or enforcement boundaries.

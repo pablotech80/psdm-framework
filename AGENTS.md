@@ -62,6 +62,38 @@ Agents must preserve PSDM's tool-neutral governance boundary:
 6. Update docs when the public CLI, config, templates, or governance model changes.
 7. Commit and push when the user asks to proceed with implementation.
 
+## Agent Decision Protocol
+
+Follow `docs/AGENT_DECISION_PROTOCOL.md` for every meaningful mutating action.
+
+Before the mutation, state:
+
+- the exact action;
+- why it is necessary;
+- the expected project improvement;
+- the affected scope;
+- the PSDM change level and relevant risks;
+- the validation that will demonstrate success;
+- whether human approval is required.
+
+After the mutation, report:
+
+- the actual result;
+- validation evidence;
+- any deviation from the proposal;
+- the next recommended action;
+- why that action should come next.
+
+Agents must never:
+
+- approve their own action;
+- enter, derive, retrieve, expose, or simulate a human confirmation;
+- treat a phrase as proof of human identity;
+- reuse an approval after content, target, branch, environment, or action changes;
+- bypass an available Riscala enforcement boundary or required approval by invoking Git, GitHub, npm, cloud, messaging, or another tool directly.
+
+Routine reads and non-mutating diagnostics may be summarized instead of justified individually. Approval instructions do not constitute enforcement; configured high-risk mutations require an independent, valid, content-bound human approval.
+
 ## Validation
 
 Use relevant commands for the touched surface:
