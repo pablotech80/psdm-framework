@@ -372,15 +372,31 @@ Known limitations:
 - npm `latest` still points to `1.0.0-beta.1`.
 - Beta status remains active.
 
-## Release Candidate Evidence - 1.0.0-beta.5
+## Release Evidence - 1.0.0-beta.5
 
 Package: `@ptechsolution/psdm-framework`
 
 Version: `1.0.0-beta.5`
 
-Publication status: `prepared, not published`
+Publication status: `published through trusted publishing`
 
 Prepared date: `2026-07-10`
+
+Published date: `2026-07-10`
+
+npm package: `https://www.npmjs.com/package/@ptechsolution/psdm-framework/v/1.0.0-beta.5`
+
+npm tarball: `https://registry.npmjs.org/@ptechsolution/psdm-framework/-/psdm-framework-1.0.0-beta.5.tgz`
+
+npm integrity: `sha512-NMIgIiQdViUUAPR4LdCGNNgo/TYo4dPbA5IkzUSGCXWSX68wGqDFmXFfErSSVKDc4vux2BQJpYCIlZ9Y09zThQ==`
+
+npm shasum: `658b73ec3e8604f0bac132945be0895505e91799`
+
+Git commit: `3c2f6a8778c9ff685a2ff1d366c11af6ef0a8321`
+
+Git tag: `v1.0.0-beta.5`
+
+GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.5`
 
 Scope:
 
@@ -390,21 +406,22 @@ Scope:
 - First owner public key enrolled for content-bound Level 3/4 approval verification.
 - Mutating slash commands remain blocked until managed hook activation and protected remote enforcement are configured.
 
-Expected npm dist-tag:
+npm dist-tags after publication:
 
-- `beta`
+- `beta`: `1.0.0-beta.5`
+- `latest`: `1.0.0-beta.1`
 
-Required before publication:
+Validation:
 
 - Local `npm run release:check -- --allow-dirty`: passed.
 - Local `npm publish --dry-run --access public --tag beta`: passed.
-- GitHub PSDM workflow: pending after release candidate commit.
-- CodeQL workflow: pending after release candidate commit.
-- Protected workflow dry-run: pending.
-- Explicit owner approval: pending as `CONFIRM NPM BETA PUBLISH`.
-- Protected workflow real publish: pending.
-- npm dist-tag verification: pending.
-- Clean install from npm `@beta`: pending.
+- Protected workflow dry-run: passed at `https://github.com/pablotech80/psdm-framework/actions/runs/29124267013`.
+- Explicit owner approval: recorded as `CONFIRM NPM BETA PUBLISH`.
+- Protected workflow real publish: passed at `https://github.com/pablotech80/psdm-framework/actions/runs/29124670741`.
+- npm dist-tag verification: `beta` points to `1.0.0-beta.5`.
+- Clean install from npm `@beta`: passed.
+- Installed executable parity for `riscala help` and `psdm help`: passed.
+- Installed `riscala shell` command palette smoke: passed.
 
 Known limitations:
 

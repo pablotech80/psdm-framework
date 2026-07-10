@@ -1,18 +1,24 @@
 # BETA_RELEASE_NOTES.md
 
 Status: `Published`
-Latest Beta Release: `1.0.0-beta.4`
-Next Beta Candidate: `1.0.0-beta.5`
+Latest Beta Release: `1.0.0-beta.5`
+Next Beta Candidate: `Not scheduled`
 First Beta Release: `1.0.0-beta.1`
 Project: `psdm-framework`
 
-## Release Candidate - 1.0.0-beta.5
+## Beta Release - 1.0.0-beta.5
 
-Status: `Prepared, not published`
+Status: `Published`
 
 Prepared: `2026-07-10`
 
+Published: `2026-07-10`
+
 Package: `@ptechsolution/psdm-framework@1.0.0-beta.5`
+
+Git tag: `v1.0.0-beta.5`
+
+GitHub Release: `https://github.com/pablotech80/psdm-framework/releases/tag/v1.0.0-beta.5`
 
 Purpose:
 
@@ -23,16 +29,17 @@ Purpose:
 - Preserve JSON output contracts, `psdm.config.json`, package name, GitHub Action behavior, and dependency-free runtime.
 - Enroll the first owner public key for content-bound Level 3/4 approval verification.
 
-Required before publication:
+Validation:
 
 - Local `npm run release:check -- --allow-dirty`: passed.
 - Local `npm publish --dry-run --access public --tag beta`: passed.
-- GitHub PSDM workflow: pending after release candidate commit.
-- CodeQL workflow: pending after release candidate commit.
-- Protected workflow dry-run: pending.
-- Explicit owner approval: pending, must use `CONFIRM NPM BETA PUBLISH`.
-- Protected workflow real publish: pending.
-- Clean install from npm `@beta`: pending after publication.
+- Protected workflow dry-run: passed.
+- Explicit owner approval: recorded as `CONFIRM NPM BETA PUBLISH`.
+- Protected workflow real publish with provenance: passed.
+- npm dist-tag verification: `beta` points to `1.0.0-beta.5`.
+- Clean install from npm `@beta`: passed.
+- Installed `riscala help` and `psdm help` parity: passed.
+- Installed `riscala shell`: passed.
 
 Known limitations:
 

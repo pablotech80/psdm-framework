@@ -117,6 +117,7 @@ Completed:
 - Riscala shell expanded into a fuller read-only governance console with `/check`, `/report`, `/classify`, `/pr-checklist`, `/init-preview`, `/hook-status`, `/action`, and `/approval`.
 - `1.0.0-beta.5` release candidate preparation started to publish the Riscala executable and complete interactive shell through npm beta.
 - First owner public key enrolled for content-bound Level 3/4 approval verification.
+- `1.0.0-beta.5` published through protected trusted publishing and verified with clean npm install.
 
 ## Active Milestone
 
