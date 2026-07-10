@@ -7,6 +7,8 @@ Project: `psdm-framework`
 
 PSDM is currently a local CLI and GitHub Action package, so operations focus on repository health and release quality rather than runtime service monitoring.
 
+During the Riscala transition, operations must monitor executable parity: `riscala` is the primary product presentation, while `psdm` remains a compatibility path to the same entrypoint.
+
 Operational signals:
 
 - GitHub Actions validation status;
@@ -16,6 +18,8 @@ Operational signals:
 - JSON output compatibility;
 - reported validator decisions;
 - issue reports from downstream users;
+- installed availability of both `riscala` and `psdm`;
+- divergent output or behavior between executable aliases;
 - roadmap and task drift.
 
 Maintenance expectations:
@@ -38,3 +42,6 @@ Operational review is required when changes affect:
 - report or JSON output consumed by automation;
 - repository governance baseline;
 - release or rollback assumptions.
+- Riscala/PSDM executable parity or compatibility removal.
+
+Rollback for the initial brand migration is a Git revert of the alias and presentation increment. No registry rollback is required until a Riscala-branded package is explicitly published.

@@ -145,7 +145,8 @@ export function validateMethod(targetDir, options = {}) {
 }
 
 export function printValidationReport(report) {
-  console.log('PSDM Method Validation')
+  console.log('Riscala Validation')
+  console.log('Method: PSDM')
   console.log('')
 
   for (const result of report.results) {

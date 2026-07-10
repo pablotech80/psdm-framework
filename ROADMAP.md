@@ -95,6 +95,7 @@ Completed:
 - Staged inspection fixture coverage added for risk elevation, the Level 1 floor, renames, an empty Git index, and non-Git targets.
 - Riscala accepted as the product-facing identity, with AI Code Governance for Software Delivery as the category and PSDM preserved as the method.
 - Staged Riscala brand migration plan documented without changing runtime, package, config, or JSON contracts.
+- Riscala Phase 1 implemented with dual executable aliases, shared entrypoint, product headers, and installed-package parity validation.
 
 ## Active Milestone
 
@@ -266,7 +267,8 @@ Planned outcomes:
 - [ ] Stable CLI API.
 - [x] Staged Git change inspection with explainable risk-path evidence.
 - [x] Accept Riscala product identity and compatibility boundaries.
-- [ ] Add the `riscala` executable alias with `psdm` parity before interactive CLI work.
+- [x] Add the `riscala` executable alias with `psdm` parity before interactive CLI work.
+- [ ] Design and implement the dependency-free `riscala shell` MVP.
 - [ ] Stable config schema.
 - [x] Public package release checklist.
 - [x] Decide package metadata gaps before beta.

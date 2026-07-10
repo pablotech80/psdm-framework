@@ -13,6 +13,7 @@ const allowDirty = process.argv.includes('--allow-dirty')
 
 const requiredPackageFiles = [
   'bin/psdm.mjs',
+  'src/lib/branding.mjs',
   'src/lib/config.mjs',
   'templates/psdm.config.json',
   'action.yml',
@@ -117,6 +118,10 @@ function assertPackageMetadata() {
     throw new Error('package.json bin.psdm must point to bin/psdm.mjs.')
   }
 
+  if (packageJson.bin?.riscala !== packageJson.bin.psdm) {
+    throw new Error('package.json bin.riscala must match the psdm compatibility entrypoint.')
+  }
+
   if (packageJson.publishConfig?.access !== 'public') {
     throw new Error('package.json publishConfig.access must be public.')
   }
@@ -171,6 +176,31 @@ function assertPackageContents() {
     entryCount: pack.entryCount,
     size: pack.size,
   }, null, 2))
+}
+
+function assertExecutableParity() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-package-check-'))
+  run('Install local package for executable parity', 'npm', [
+    'install',
+    '--prefix',
+    target,
+    '--ignore-scripts',
+    '--no-audit',
+    '--no-fund',
+    repoRoot,
+  ])
+
+  const binDir = resolve(target, 'node_modules', '.bin')
+  const riscalaHelp = execFileSync(resolve(binDir, 'riscala'), ['help'], { encoding: 'utf8' })
+  const psdmHelp = execFileSync(resolve(binDir, 'psdm'), ['help'], { encoding: 'utf8' })
+
+  if (riscalaHelp !== psdmHelp) {
+    throw new Error('riscala and psdm help output must remain identical during compatibility migration.')
+  }
+
+  if (!riscalaHelp.includes('Riscala') || !riscalaHelp.includes('Powered by PSDM')) {
+    throw new Error('Installed executable help must present the Riscala product and PSDM method.')
+  }
 }
 
 function findPackManifest(value) {
@@ -233,6 +263,7 @@ function main() {
   run('Run CLI regression fixtures', 'npm', ['test'])
   assertValidation()
   run('Render CLI help', process.execPath, [cli, 'help'])
+  assertExecutableParity()
   capture('Audit repository JSON', process.execPath, [cli, 'audit', '.', '--json'])
   capture('Classify release smoke change', process.execPath, [
     cli,

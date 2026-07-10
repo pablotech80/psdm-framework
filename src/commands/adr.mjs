@@ -7,7 +7,7 @@ export async function adrCommand(args) {
   const title = positional.join(' ').trim()
 
   if (!title) {
-    console.error('Usage: psdm adr "<decision title>" [--target path] [--date YYYY-MM-DD] [--status Proposed] [--json]')
+    console.error('Usage: riscala adr "<decision title>" [--target path] [--date YYYY-MM-DD] [--status Proposed] [--json]')
     return { exitCode: 1 }
   }
 

@@ -74,6 +74,7 @@ Verify `package.json`:
 - [x] `description` is clear and public-safe.
 - [x] `license` is correct.
 - [x] `bin.psdm` points to `bin/psdm.mjs`.
+- [x] `bin.riscala` points to the same `bin/psdm.mjs` compatibility entrypoint.
 - [x] `engines.node` matches supported runtime.
 - [x] `keywords` are useful for discovery.
 - [x] `publishConfig.access` is set to `public` for scoped package publication.
@@ -87,6 +88,7 @@ Inspect `npm pack --dry-run` output.
 Must include:
 
 - [x] `bin/psdm.mjs`
+- [x] `src/lib/branding.mjs`
 - [x] `src/**`
 - [x] `templates/**`
 - [x] `action.yml`
@@ -162,6 +164,7 @@ After publication:
 - [ ] Confirm package appears under the expected npm name.
 - [ ] Install in a clean temp directory.
 - [ ] Run `psdm help`.
+- [ ] Run `riscala help` and confirm it matches `psdm help` from a clean installed package.
 - [ ] Run `psdm init`, `psdm validate`, and `psdm audit --json` in a temp project.
 - [ ] Confirm GitHub release/tag points to the intended commit.
 - [ ] Record package URL, tag URL, version, and validation result in release notes.

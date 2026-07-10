@@ -72,7 +72,8 @@ export async function checkCommand(args) {
     return { exitCode: failures === 0 ? 0 : 1 }
   }
 
-  console.log(`PSDM check: ${target}`)
+  console.log(`Riscala check: ${target}`)
+  console.log('Method: PSDM')
   console.log('')
 
   for (const result of results) {

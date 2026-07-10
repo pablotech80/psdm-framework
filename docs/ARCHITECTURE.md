@@ -11,9 +11,10 @@ Riscala is the accepted product-facing identity for the CLI. PSDM remains the me
 
 The architecture favors explicit modules over framework abstractions:
 
-- `bin/psdm.mjs` dispatches commands.
+- `bin/psdm.mjs` dispatches commands for both the `riscala` primary executable and `psdm` compatibility executable.
 - `src/commands/*.mjs` owns user-facing command behavior.
 - `src/lib/args.mjs` parses CLI options.
+- `src/lib/branding.mjs` centralizes the product, category, method, and executable names used by human-facing entrypoint presentation.
 - `src/lib/adr.mjs` owns ADR filename generation and scaffold rendering.
 - `src/lib/audit.mjs` builds the non-destructive repository adoption preview, detects existing AI governance files, detects AI runtime surfaces from paths and manifests, and emits the AI readiness audit contract.
 - `src/lib/classifier.mjs` owns reusable change classification.
@@ -47,6 +48,7 @@ The architecture favors explicit modules over framework abstractions:
 - Keep templates plain Markdown so teams can adapt them without special tooling.
 - Keep generated artifacts separate from framework docs where possible.
 - Separate product branding from method contracts: Riscala may change human-facing identity, while PSDM config, artifacts, and automation remain stable unless explicitly versioned.
+- Map both executable names to one entrypoint so compatibility cannot drift into a second implementation.
 
 ## Architecture Gate
 

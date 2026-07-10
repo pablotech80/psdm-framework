@@ -5,7 +5,7 @@ Project: `psdm-framework`
 
 ## Purpose
 
-This index is the public documentation entrypoint for PSDM Framework.
+This index is the public documentation entrypoint for Riscala and its PSDM governance method.
 
 Use it to find the right document by task: adopting PSDM in an existing project, configuring governance policy, using the CLI, adding CI enforcement, understanding risk levels, or preparing a release.
 
@@ -32,15 +32,15 @@ Use it to find the right document by task: adopting PSDM in an existing project,
 Recommended adoption flow:
 
 ```bash
-psdm audit
-psdm init
-psdm check
-psdm validate
+riscala audit
+riscala init
+riscala check
+riscala validate
 ```
 
-Use `psdm audit` first for existing repositories because it previews files that would be created or skipped.
+Use `riscala audit` first for existing repositories because it previews files that would be created or skipped.
 
-When `psdm audit` detects existing AI governance files, `psdm init` creates `docs/PSDM_ADOPTION.md` from `templates/PSDM_ADOPTION.md` instead of overwriting existing instructions.
+When `riscala audit` detects existing AI governance files, `riscala init` creates `docs/PSDM_ADOPTION.md` from `templates/PSDM_ADOPTION.md` instead of overwriting existing instructions.
 
 ## CLI Reference
 
@@ -50,16 +50,18 @@ When `psdm audit` detects existing AI governance files, `psdm init` creates `doc
 
 Current commands:
 
-- `psdm audit`
-- `psdm adr`
-- `psdm init`
-- `psdm check`
-- `psdm validate`
-- `psdm inspect --staged`
-- `psdm classify`
-- `psdm enforce`
-- `psdm pr-checklist`
-- `psdm report`
+- `riscala audit`
+- `riscala adr`
+- `riscala init`
+- `riscala check`
+- `riscala validate`
+- `riscala inspect --staged`
+- `riscala classify`
+- `riscala enforce`
+- `riscala pr-checklist`
+- `riscala report`
+
+The `psdm` compatibility executable supports the same commands. The already published `1.0.0-beta.4` contains only `psdm`; `riscala` becomes installable after a later beta is explicitly approved and published.
 
 ## Configuration
 
@@ -83,14 +85,14 @@ Key policy concepts:
 - `docs/ARCHITECTURE.md`: module boundaries and architecture gate.
 - `docs/SECURITY.md`: threat model and security gate.
 - `docs/AI_AGENT_SECURITY.md`: AI-agent and tool-use security expectations.
-- `docs/AI_READINESS_AUDIT.md`: `psdm audit --json` contract for AI readiness signals and governance gaps.
+- `docs/AI_READINESS_AUDIT.md`: `riscala audit --json` contract for AI readiness signals and governance gaps.
 - `docs/MODEL_AND_TOOL_INDEPENDENCE.md`: model-neutral governance and tool-specific adapter guidance.
 - `docs/KNOWLEDGE_AS_CODE.md`: source-of-truth and runtime-index boundaries for governed project knowledge.
 - `docs/RISCALA_BRAND_MIGRATION.md`: boundary between the Riscala product and PSDM method.
 - `docs/TOOL_REGISTRY.md`: tool registry direction.
 - `ADRs/README.md`: ADR usage guidance.
 
-Use `psdm adr "<decision title>"` when a Level 3 or Level 4 change creates or reverses a durable architecture, security, CI, deployment, config, or governance decision.
+Use `riscala adr "<decision title>"` when a Level 3 or Level 4 change creates or reverses a durable architecture, security, CI, deployment, config, or governance decision.
 
 ## CI And Release
 
@@ -108,8 +110,8 @@ Use `psdm adr "<decision title>"` when a Level 3 or Level 4 change creates or re
 CI policy flow:
 
 ```bash
-psdm validate . --json
-psdm enforce "change description" --files "src/index.mjs" --max-level "Level 2" --json
+riscala validate . --json
+riscala enforce "change description" --files "src/index.mjs" --max-level "Level 2" --json
 ```
 
 ## Artifact Templates

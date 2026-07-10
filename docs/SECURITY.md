@@ -29,6 +29,7 @@ Relevant sensitive surfaces:
 Security posture:
 
 - dependency-free CLI by default;
+- `riscala` and `psdm` resolve to the same reviewed entrypoint and do not create separate execution paths;
 - local file inspection only;
 - staged inspection invokes Git with fixed arguments through `execFileSync`, reads file-status metadata rather than file contents, and never mutates the index;
 - no production mutation commands;
@@ -64,6 +65,7 @@ Security review is required when a change:
 - changes config loading or defaults;
 - changes GitHub Action behavior;
 - changes package distribution contents;
+- changes either executable mapping or allows Riscala/PSDM behavior to diverge;
 - introduces dependencies;
 - affects AI-agent tool governance.
 

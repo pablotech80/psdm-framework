@@ -12,7 +12,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Implement Phase 1 of the Riscala migration: dual executable, parity fixtures, and human-facing product headers.
+- [ ] Design and implement the dependency-free `riscala shell` MVP with slash-command routing.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 
 ## Next
@@ -25,6 +25,8 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Done
 
+- [x] Implemented Riscala Phase 1 with dual executable aliases and human-facing product headers.
+- [x] Added installed-package parity validation for `riscala` and `psdm`.
 - [x] Accepted Riscala as the product identity while preserving PSDM as the governance method.
 - [x] Added the Riscala brand migration plan and compatibility boundaries.
 - [x] Added dependency-free `psdm inspect --staged` with deterministic Git evidence and JSON output.

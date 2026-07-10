@@ -6,6 +6,17 @@ Next Beta Candidate: `TBD`
 First Beta Release: `1.0.0-beta.1`
 Project: `psdm-framework`
 
+## Unreleased - Riscala Phase 1
+
+Status: `Implemented, not published`
+
+- Adds `riscala` as the primary product executable while retaining `psdm` as a compatibility alias.
+- Maps both executable names to `bin/psdm.mjs` so behavior and exit codes cannot diverge.
+- Presents Riscala in human-readable headers while preserving PSDM as the method.
+- Keeps JSON fields, decision codes, `psdm.config.json`, package name, GitHub Action behavior, and repository identity unchanged.
+- Adds local installed-package parity validation to the release gate.
+- Requires a separate version decision, protected dry-run, explicit owner approval, publication, and clean-install verification before npm users receive `riscala`.
+
 Published: `2026-07-08`
 Package: `@ptechsolution/psdm-framework@1.0.0-beta.1`
 Git tag: `v1.0.0-beta.1`

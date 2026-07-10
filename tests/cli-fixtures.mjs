@@ -43,6 +43,18 @@ function git(target, args) {
   })
 }
 
+function testRiscalaExecutableAliasContract() {
+  const packageJson = JSON.parse(readFileSync(resolve(repoRoot, 'package.json'), 'utf8'))
+  const help = run(['help'])
+
+  assert.equal(packageJson.bin.riscala, 'bin/psdm.mjs')
+  assert.equal(packageJson.bin.psdm, packageJson.bin.riscala)
+  assert.match(help, /^Riscala/m)
+  assert.match(help, /AI Code Governance for Software Delivery/)
+  assert.match(help, /Powered by PSDM/)
+  assert.match(help, /psdm remains supported with identical commands and behavior/)
+}
+
 function testAuditExistingProject() {
   const target = existingProject()
   const report = runJson(['audit', target, '--json'])
@@ -160,7 +172,7 @@ function testInitDryRunDoesNotWrite() {
   const output = run(['init', target, '--dry-run'])
 
   assert.match(output, /Before/)
-  assert.match(output, /After psdm init/)
+  assert.match(output, /After riscala init/)
   assert.match(output, /AGENTS\.md: create/)
   assert.equal(existsSync(resolve(target, 'AGENTS.md')), false)
 }
@@ -263,7 +275,7 @@ function testInspectStagedRiskPathJson() {
   assert.equal(report.classification.pathMatches[0].pattern, 'backend/auth/**')
   assert.ok(report.evidence.some((item) => item.kind === 'staged-file'))
   assert.ok(report.evidence.some((item) => item.kind === 'risk-path' && item.level === 'Level 3'))
-  assert.match(output, /PSDM Staged Change Inspection/)
+  assert.match(output, /Riscala Staged Change Inspection/)
   assert.match(output, /backend\/auth\/session\.py matches backend\/auth\/\*\*/)
 }
 
@@ -735,6 +747,7 @@ function testExampleProjectCoverage() {
 }
 
 const tests = [
+  testRiscalaExecutableAliasContract,
   testAuditExistingProject,
   testAuditDetectsExistingAiGovernance,
   testAuditDetectsAiRuntimeSurfaces,

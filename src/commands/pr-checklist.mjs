@@ -7,7 +7,7 @@ export async function prChecklistCommand(args) {
   const description = positional.join(' ').trim()
 
   if (!description) {
-    console.error('Usage: psdm pr-checklist "<change description>" [--file path] [--files path,path] [--json]')
+    console.error('Usage: riscala pr-checklist "<change description>" [--file path] [--files path,path] [--json]')
     return { exitCode: 1 }
   }
 

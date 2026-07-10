@@ -7,7 +7,7 @@ export async function classifyCommand(args) {
   const description = positional.join(' ').trim()
 
   if (!description) {
-    console.error('Usage: psdm classify "<change description>"')
+    console.error('Usage: riscala classify "<change description>"')
     return { exitCode: 1 }
   }
 

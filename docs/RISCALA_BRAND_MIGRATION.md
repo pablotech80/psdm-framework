@@ -51,14 +51,14 @@ Status: `Complete`
 
 ## Phase 1 - Dual Executable And Human Presentation
 
-Status: `Planned`
+Status: `Complete`
 
-- Add `riscala` as a second executable pointing to the same dependency-free entrypoint.
-- Retain `psdm` with identical command behavior and exit codes.
-- Add fixture coverage proving parity between both executables.
-- Change only human-facing product headers to `Riscala`, with `Powered by PSDM` context.
-- Keep JSON payload fields and command identifiers stable.
-- Add `riscala shell` only after executable parity is validated.
+- [x] Add `riscala` as a second executable pointing to the same dependency-free entrypoint.
+- [x] Retain `psdm` with identical command behavior and exit codes.
+- [x] Add fixture and release-gate coverage proving parity between both executables.
+- [x] Change only human-facing product headers to `Riscala`, with `Powered by PSDM` context.
+- [x] Keep JSON payload fields and command identifiers stable.
+- [x] Defer `riscala shell` until executable parity is validated.
 
 Exit criteria:
 
@@ -116,4 +116,4 @@ These items are deferred so the product identity and compatibility contract are 
 
 ## Next Gate
 
-Implement Phase 1 as a focused, separately reviewed increment: add the `riscala` executable alias, prove parity, and update human-facing headers without changing JSON, config, package publication, or repository identity.
+Design and implement `riscala shell` as a focused interactive CLI increment. Reuse existing use cases and keep non-interactive commands, JSON, config, package publication, and repository identity unchanged.

@@ -24,6 +24,13 @@ node bin/psdm.mjs adr "Validate beta release readiness" --target "$(mktemp -d)" 
 node bin/psdm.mjs pr-checklist "small cleanup" --file src/validator/validate-method.mjs
 ```
 
+Installed executable parity is validated by `npm run release:check`. It installs the local package in a temporary directory, runs both commands, and requires identical output:
+
+```bash
+riscala help
+psdm help
+```
+
 CLI fixture validation:
 
 ```bash
@@ -60,6 +67,7 @@ node bin/psdm.mjs validate . --json
 - Run PR checklist validation for changes that affect classification, risk paths, or PR workflow output.
 - Run `npm test` for CLI regression coverage around audit, AI readiness contract, AI surface detection, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, staged inspection, enforce, PR checklist, validate, custom config, AI policy validation, AI guardrail templates, validation profiles, unsupported profile validation, invalid risk path validation, feature artifact behavior, and example project coverage.
 - Run staged inspection fixtures for changes to Git parsing, classification floors, risk-path evidence, or inspect output.
+- Run executable alias fixtures and the release check for changes to Riscala branding, `package.json` bin mappings, or help output.
 - Run initialized project validation for template, config, AI guardrail, artifact, or Action bootstrap changes.
 - Run package validation before distribution-related changes.
 - Treat unexpected validation failures as blocking unless explicitly documented as pre-existing.

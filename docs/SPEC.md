@@ -8,11 +8,13 @@ Project: `psdm-framework`
 - Provide a `psdm` CLI with `adr`, `init`, `audit`, `check`, `validate`, `inspect`, `classify`, `enforce`, `pr-checklist`, and `report` commands.
 - Provide a non-destructive `audit` command that previews repository state and `init` impact.
 - Detect existing AI governance files during audit and recommend integration without overwrite.
-- Emit an `aiReadiness` contract from `psdm audit --json` for AI surface and governance gap reporting.
+- Emit an `aiReadiness` contract from `riscala audit --json` and its `psdm` compatibility equivalent for AI surface and governance gap reporting.
 - Detect AI readiness surfaces from common folders and manifests for agents, RAG, prompts, embeddings, tools, provider SDKs, vector stores, and automation.
 - Create `docs/PSDM_ADOPTION.md` during init when existing AI governance files are detected.
 - Do not create an adoption plan only because a repository already contains PSDM-managed `AGENTS.md`.
 - Keep the CLI dependency-free and runnable on Node.js 20 or newer.
+- Present Riscala as the product-facing CLI identity while preserving PSDM as the governance method.
+- Expose `riscala` and `psdm` as compatible executables backed by the same entrypoint.
 - Support human-readable command output by default.
 - Support JSON output for automation where applicable.
 - Read optional `psdm.config.json` policy from the target repository.
@@ -40,6 +42,7 @@ Project: `psdm-framework`
 
 - `npm pack --dry-run` includes the CLI, source, templates, docs, and root governance files.
 - `node bin/psdm.mjs help` documents supported commands and options.
+- Installed `riscala help` and `psdm help` produce identical output, with Riscala as the product and PSDM as the method.
 - `node bin/psdm.mjs audit <target> --json` emits current artifact state, planned init actions, pros, cons, and recommendations.
 - Audit JSON includes existing AI governance detection and an adoption mode of `initialize` or `integrate`.
 - Audit JSON includes `aiReadiness.version`, `status`, `surfaces`, `governanceArtifacts`, `gaps`, and `recommendations`.
@@ -65,6 +68,7 @@ Project: `psdm-framework`
 - `node bin/psdm.mjs pr-checklist "<description>" --file <path>` emits a Markdown checklist derived from change level and risk paths.
 - `npm test` runs dependency-free CLI fixtures for audit, existing AI governance detection, adoption plan creation, ADR generation, init dry-run, classify, staged inspection, enforce, PR checklist, validate, custom config, AI policy validation, AI guardrail templates, validation profiles, invalid risk paths, and feature artifact behavior.
 - `npm test` covers the `examples/nextjs-saas` fixture by auditing, initializing, and validating a temporary copy.
+- The release check installs the local package and verifies both executable aliases from `node_modules/.bin`.
 - A clean repository with filled PSDM artifacts can reach `METHOD_BASELINE_APPROVED`.
 
 ## Out of Scope

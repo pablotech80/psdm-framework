@@ -17,7 +17,9 @@ export async function reportCommand(args) {
     return { exitCode: report.failures === 0 ? 0 : 1 }
   }
 
-  console.log(`# PSDM Compliance Report
+  console.log(`# Riscala Compliance Report
+
+Method: \`PSDM\`
 
 Target: \`${target}\`
 
