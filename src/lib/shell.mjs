@@ -1,9 +1,13 @@
-import { existsSync, readFileSync } from 'node:fs'
-import { basename, relative } from 'node:path'
+import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
+import { basename, join, relative } from 'node:path'
+import { buildGitCommitActionRecord } from './action-record.mjs'
 import { buildAudit } from './audit.mjs'
+import { classifyChange } from './classifier.mjs'
 import { loadConfig } from './config.mjs'
 import { inspectGit } from './git.mjs'
+import { inspectPreCommitHook } from './git-hook.mjs'
 import { inspectStagedChange } from './inspect.mjs'
+import { buildPrChecklist } from './pr-checklist.mjs'
 import { terminalTheme } from './terminal-style.mjs'
 import { validateMethod } from '../validator/validate-method.mjs'
 
@@ -171,6 +175,59 @@ function renderStatusRows(context, options = {}) {
   ]
 }
 
+function featureArtifacts(target, config) {
+  const featureRoot = join(target, config.features.root)
+  if (!existsSync(featureRoot)) {
+    return []
+  }
+
+  return readdirSync(featureRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory())
+    .flatMap((entry) =>
+      config.features.requiredArtifacts.map((artifact) =>
+        join(config.features.root, entry.name, artifact),
+      ),
+    )
+}
+
+function inspectArtifact(target, artifact) {
+  const fullPath = join(target, artifact)
+
+  if (!existsSync(fullPath)) {
+    return { artifact, status: 'MISSING', message: 'Missing required artifact.' }
+  }
+
+  const stat = statSync(fullPath)
+  if (stat.isFile() && stat.size === 0) {
+    return { artifact, status: 'EMPTY', message: 'Artifact is empty.' }
+  }
+
+  return { artifact, status: 'OK', message: stat.isDirectory() ? 'Directory exists.' : 'Artifact exists.' }
+}
+
+function buildCheckReport({ target, configPath = null }) {
+  const configState = loadConfig(target, configPath)
+  const artifacts = [
+    ...configState.config.requiredArtifacts,
+    ...featureArtifacts(target, configState.config),
+  ]
+  const results = artifacts.map((artifact) => inspectArtifact(target, artifact))
+  const failures = results.filter((item) => item.status !== 'OK').length
+
+  return {
+    target,
+    config: {
+      path: configState.path,
+      exists: configState.exists,
+      profile: configState.profile,
+    },
+    status: failures === 0 ? 'complete' : 'incomplete',
+    failures,
+    git: inspectGit(target),
+    results,
+  }
+}
+
 export function buildShellContext({ target, configPath = null }) {
   const git = inspectGit(target)
   const configState = loadConfig(target, configPath)
@@ -221,8 +278,16 @@ export function renderShellHelp(options = {}) {
     cardRow('/help', 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/status', 'Refresh repository and policy context.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/audit', 'Assess governance adoption and readiness.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/check', 'Check required artifacts exist.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/validate', 'Validate the governance baseline.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/inspect', 'Inspect staged changes and governance level.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/report', 'Summarize compliance report readiness.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/classify', 'Classify a described change.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/pr-checklist', 'Build a PR checklist for a described change.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/init-preview', 'Preview governance files without writing.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/hook-status', 'Inspect managed pre-commit hook status.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/action', 'Prepare a git.commit action record.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/approval', 'Show approval receipt boundary.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/exit', 'Close the Riscala shell.', { ...options, valueStyle: theme.cyanLight }),
     panelRule('middle', '', options),
     ...cardRows('Safety', 'Read only. Mutating commands remain blocked until independent approval enforcement is configured.', {
@@ -310,6 +375,62 @@ function renderAudit(report, options = {}) {
   return renderPanel('AUDIT', rows, options)
 }
 
+function renderInitPreview(report, options = {}) {
+  const theme = terminalTheme(options.color)
+  const presentArtifacts = Math.max(0, report.summary.wouldSkip - report.summary.existingEmpty)
+  const next = report.summary.wouldCreate === 0
+    ? 'Nothing to create. Run /validate to verify the baseline.'
+    : 'Run riscala init outside the shell when you are ready to write files.'
+  const rows = [
+    cardRow('Policy', report.config.profile.name, { ...options, valueStyle: theme.cyanLight }),
+    cardRow('Create', `${report.summary.wouldCreate} artifact(s)`, {
+      ...options,
+      valueStyle: report.summary.wouldCreate > 0 ? theme.yellow : theme.green,
+    }),
+    cardRow('Keep', `${presentArtifacts} artifact(s)`, { ...options, valueStyle: theme.green }),
+    cardRow('Empty', `${report.summary.existingEmpty} artifact(s)`, {
+      ...options,
+      valueStyle: report.summary.existingEmpty > 0 ? theme.yellow : theme.green,
+    }),
+    panelRule('middle', '', options),
+    ...cardRows('Next', next, { ...options, valueStyle: theme.cyanLight }),
+  ]
+
+  return renderPanel('INIT PREVIEW', rows, options)
+}
+
+function renderCheck(report, options = {}) {
+  const theme = terminalTheme(options.color)
+  const ok = report.results.filter((item) => item.status === 'OK').length
+  const missing = report.results.filter((item) => item.status === 'MISSING').length
+  const empty = report.results.filter((item) => item.status === 'EMPTY').length
+  const problemArtifacts = report.results.filter((item) => item.status !== 'OK')
+  const focus = problemArtifacts.slice(0, 2).map((item) => item.artifact).join(' · ')
+  const remainingFocus = Math.max(0, problemArtifacts.length - 2)
+  const statusStyle = report.failures > 0 ? theme.yellow : theme.green
+  const rows = [
+    cardRow('Policy', report.config.profile.name, { ...options, valueStyle: theme.cyanLight }),
+    cardRow('Status', report.status, { ...options, valueStyle: statusStyle }),
+    cardRow('Artifacts', `${ok} ok · ${missing} missing · ${empty} empty`, {
+      ...options,
+      valueStyle: statusStyle,
+    }),
+    ...(problemArtifacts.length > 0 ? cardRows('Focus', `${focus}${remainingFocus > 0 ? ` · +${remainingFocus} more` : ''}`, {
+      ...options,
+      valueStyle: theme.yellow,
+    }) : []),
+    panelRule('middle', '', options),
+    ...cardRows('Next', report.failures > 0
+      ? 'Run /init-preview to see what Riscala would add.'
+      : 'Artifacts exist. Run /validate for section-level checks.', {
+      ...options,
+      valueStyle: theme.cyanLight,
+    }),
+  ]
+
+  return renderPanel('CHECK', rows, options)
+}
+
 function countLabel(count, singular, plural) {
   return `${count} ${count === 1 ? singular : plural}`
 }
@@ -354,6 +475,87 @@ function renderValidation(report, options = {}) {
   ]
 
   return renderPanel('VALIDATE', rows, options)
+}
+
+function renderComplianceReport(report, options = {}) {
+  const theme = terminalTheme(options.color)
+  const failed = report.failures
+  const warned = report.warnings
+  const findings = report.results.filter((item) => item.status !== 'PASS')
+  const topFindings = findings.slice(0, 2).map((item) => item.artifact).join(' · ')
+  const remainingFindings = Math.max(0, findings.length - 2)
+  const decisionStyle = failed > 0
+    ? theme.red
+    : warned > 0
+      ? theme.yellow
+      : theme.green
+  const rows = [
+    cardRow('Decision', report.decision.replaceAll('_', ' '), {
+      ...options,
+      valueStyle: decisionStyle,
+    }),
+    cardRow('Findings', `${failed} failure(s) · ${warned} warning(s)`, {
+      ...options,
+      valueStyle: decisionStyle,
+    }),
+    ...(findings.length > 0 ? cardRows('Focus', `${topFindings}${remainingFindings > 0 ? ` · +${remainingFindings} more` : ''}`, {
+      ...options,
+      valueStyle: decisionStyle,
+    }) : []),
+    panelRule('middle', '', options),
+    ...cardRows('Next', 'Run riscala report outside the shell when you need the full markdown report.', {
+      ...options,
+      valueStyle: theme.cyanLight,
+    }),
+  ]
+
+  return renderPanel('REPORT', rows, options)
+}
+
+function renderClassification(report, options = {}) {
+  const theme = terminalTheme(options.color)
+  const levelStyle = ['Level 3', 'Level 4'].includes(report.estimatedLevel)
+    ? theme.yellow
+    : theme.cyanLight
+  const rows = [
+    cardRow('Level', report.estimatedLevel, { ...options, valueStyle: levelStyle }),
+    ...cardRows('Govern', report.minimumRequiredGovernance, options),
+    ...(report.matchedKeywords.length > 0 ? cardRows('Signals', report.matchedKeywords.join(' · '), options) : []),
+    ...(report.pathMatches.length > 0 ? cardRows('Risk', report.pathMatches.map((item) => `${item.file} -> ${item.minimumLevel}`).join(' · '), {
+      ...options,
+      valueStyle: theme.yellow,
+    }) : []),
+    panelRule('middle', '', options),
+    ...cardRows('Reason', report.classificationReason, options),
+  ]
+
+  return renderPanel('CLASSIFY', rows, options)
+}
+
+function renderPrChecklistSummary(report, options = {}) {
+  const theme = terminalTheme(options.color)
+  const levelStyle = ['Level 3', 'Level 4'].includes(report.classification.estimatedLevel)
+    ? theme.yellow
+    : theme.cyanLight
+  const artifacts = report.requiredArtifacts.length > 0
+    ? report.requiredArtifacts.slice(0, 2).join(' · ')
+    : 'none'
+  const remainingArtifacts = Math.max(0, report.requiredArtifacts.length - 2)
+  const rows = [
+    cardRow('Level', report.classification.estimatedLevel, { ...options, valueStyle: levelStyle }),
+    cardRow('Checks', `${report.checks.length} checklist item(s)`, options),
+    ...cardRows('Artifacts', `${artifacts}${remainingArtifacts > 0 ? ` · +${remainingArtifacts} more` : ''}`, {
+      ...options,
+      valueStyle: report.requiredArtifacts.length > 0 ? theme.yellow : theme.green,
+    }),
+    panelRule('middle', '', options),
+    ...cardRows('Next', 'Run riscala pr-checklist outside the shell to copy the full markdown checklist.', {
+      ...options,
+      valueStyle: theme.cyanLight,
+    }),
+  ]
+
+  return renderPanel('PR CHECKLIST', rows, options)
 }
 
 function renderInspection(report, options = {}) {
@@ -407,9 +609,105 @@ function renderInspection(report, options = {}) {
   return renderPanel('INSPECT', rows, options)
 }
 
+function renderHookStatus(report, target, options = {}) {
+  const theme = terminalTheme(options.color)
+  const state = report.decision === 'NOT_A_GIT_REPOSITORY'
+    ? 'not a Git repository'
+    : report.installed
+      ? (report.managed ? 'managed hook installed' : 'unmanaged hook present')
+      : 'not installed'
+  const stateStyle = report.decision === 'NOT_A_GIT_REPOSITORY'
+    ? theme.red
+    : report.installed && report.managed
+      ? theme.green
+      : theme.yellow
+  const hookPath = report.path ? relative(target, report.path) || basename(report.path) : 'n/a'
+  const rows = [
+    cardRow('State', state, { ...options, valueStyle: stateStyle }),
+    ...cardRows('Path', hookPath, options),
+    panelRule('middle', '', options),
+    ...cardRows('Next', report.installed && report.managed
+      ? 'Pre-commit enforcement is locally active for managed commits.'
+      : 'Use riscala hook install pre-commit outside the shell when approval enforcement is ready.', {
+      ...options,
+      valueStyle: theme.cyanLight,
+    }),
+  ]
+
+  return renderPanel('HOOK STATUS', rows, options)
+}
+
+function renderActionRecord(record, options = {}) {
+  const theme = terminalTheme(options.color)
+
+  if (!record.binding) {
+    return renderPanel('ACTION', [
+      cardRow('Action', record.action, { ...options, valueStyle: theme.cyanLight }),
+      cardRow('Decision', record.decision.replaceAll('_', ' '), { ...options, valueStyle: theme.yellow }),
+      panelRule('middle', '', options),
+      ...cardRows('Next', 'Stage the intended files, then run /action again.', {
+        ...options,
+        valueStyle: theme.cyanLight,
+      }),
+    ], options)
+  }
+
+  const decisionStyle = record.ready ? theme.green : theme.yellow
+  const rows = [
+    cardRow('Action', record.action, { ...options, valueStyle: theme.cyanLight }),
+    cardRow('Decision', record.decision.replaceAll('_', ' '), {
+      ...options,
+      valueStyle: decisionStyle,
+    }),
+    cardRow('Level', record.classification.estimatedLevel, options),
+    cardRow('Approval', record.approval.required ? 'required' : 'not required', {
+      ...options,
+      valueStyle: record.approval.required ? theme.yellow : theme.green,
+    }),
+    ...cardRows('ActionId', record.actionId, options),
+    ...cardRows('Content', record.binding.contentHash, options),
+    panelRule('middle', '', options),
+    ...cardRows('Next', record.approval.required
+      ? 'Send this content-bound action record to an independent approver.'
+      : record.ready
+        ? 'Review this content-bound action record before committing.'
+        : 'Complete approval policy before committing high-risk changes.', {
+      ...options,
+      valueStyle: theme.cyanLight,
+    }),
+  ]
+
+  return renderPanel('ACTION', rows, options)
+}
+
+function renderApprovalBoundary(options = {}) {
+  const theme = terminalTheme(options.color)
+  return renderPanel('APPROVAL', [
+    cardRow('Mode', 'external receipt required', { ...options, valueStyle: theme.yellow }),
+    ...cardRows('Verify', 'Use riscala approval verify git.commit --receipt <path> outside the shell.', options),
+    ...cardRows('Enforce', 'The managed pre-commit hook enforces receipts before git commit.', options),
+    panelRule('middle', '', options),
+    ...cardRows('Boundary', 'The shell cannot create, type, or simulate human approval.', {
+      ...options,
+      valueStyle: theme.cyanLight,
+    }),
+  ], options)
+}
+
+function renderUsage(command, usage, options = {}) {
+  const theme = terminalTheme(options.color)
+  return renderPanel('USAGE', [
+    cardRow('Command', command, { ...options, valueStyle: theme.cyanLight }),
+    ...cardRows('Usage', usage, options),
+  ], options)
+}
+
 const MUTATING_COMMANDS = new Set([
   '/commit',
   '/deploy',
+  '/hook-install',
+  '/hook-remove',
+  '/init',
   '/merge',
   '/pr',
   '/publish',
@@ -425,6 +723,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
   }
 
   const [command, ...parameters] = trimmed.split(/\s+/)
+  const description = parameters.join(' ').trim()
 
   if (MUTATING_COMMANDS.has(command)) {
     return {
@@ -433,7 +732,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     }
   }
 
-  if (parameters.length > 0) {
+  if (!['/classify', '/pr-checklist'].includes(command) && parameters.length > 0) {
     return {
       output: `Usage error: ${command} does not accept arguments in this shell.`,
       exit: false,
@@ -458,6 +757,13 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     }
   }
 
+  if (command === '/check') {
+    return {
+      output: renderCheck(buildCheckReport({ target, configPath }), { color }),
+      exit: false,
+    }
+  }
+
   if (command === '/validate') {
     return {
       output: renderValidation(validateMethod(target, { configPath }), { color }),
@@ -465,9 +771,76 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     }
   }
 
+  if (command === '/report') {
+    return {
+      output: renderComplianceReport(validateMethod(target, { configPath }), { color }),
+      exit: false,
+    }
+  }
+
   if (command === '/inspect') {
     return {
       output: renderInspection(inspectStagedChange({ target, configPath }), { color }),
+      exit: false,
+    }
+  }
+
+  if (command === '/classify') {
+    if (!description) {
+      return {
+        output: renderUsage('/classify', '/classify <change description>', { color }),
+        exit: false,
+      }
+    }
+
+    return {
+      output: renderClassification(classifyChange({ description, target, configPath }), { color }),
+      exit: false,
+    }
+  }
+
+  if (command === '/pr-checklist') {
+    if (!description) {
+      return {
+        output: renderUsage('/pr-checklist', '/pr-checklist <change description>', { color }),
+        exit: false,
+      }
+    }
+
+    return {
+      output: renderPrChecklistSummary(buildPrChecklist({
+        description,
+        target,
+        configPath,
+      }), { color }),
+      exit: false,
+    }
+  }
+
+  if (command === '/init-preview') {
+    return {
+      output: renderInitPreview(buildAudit(target, { configPath }), { color }),
+      exit: false,
+    }
+  }
+
+  if (command === '/hook-status') {
+    return {
+      output: renderHookStatus(inspectPreCommitHook(target), target, { color }),
+      exit: false,
+    }
+  }
+
+  if (command === '/action') {
+    return {
+      output: renderActionRecord(buildGitCommitActionRecord({ target, configPath }), { color }),
+      exit: false,
+    }
+  }
+
+  if (command === '/approval') {
+    return {
+      output: renderApprovalBoundary({ color }),
       exit: false,
     }
   }

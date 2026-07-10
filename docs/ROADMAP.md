@@ -184,6 +184,7 @@
 - [x] Product-facing shell audit semantics without changing the stable JSON contract.
 - [x] Priority gap focus for incomplete AI projects with stable config-name preservation.
 - [x] Read-only shell validation summary backed by the existing validator.
+- [x] Full read-only shell command palette for diagnostics, reports, classification, PR checklist preparation, init preview, hook status, action records, and approval-boundary visibility.
 - [ ] Trusted owner key enrollment, hook activation, and protected remote enforcement.
 - [x] Full documentation index.
 - [ ] Tested fixtures.
