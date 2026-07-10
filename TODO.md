@@ -12,7 +12,6 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Design and implement the read-only dependency-free `riscala shell` MVP with slash-command routing.
 - [ ] Implement machine-readable action records and signed receipt verification before adding mutating slash commands.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 
@@ -26,6 +25,10 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Done
 
+- [x] Implemented the read-only dependency-free `riscala shell` MVP with `/help`, `/status`, `/inspect`, and `/exit`.
+- [x] Added target-specific shell context and staged/unstaged/untracked working-tree counts.
+- [x] Blocked mutating slash commands until content-bound approval enforcement exists.
+- [x] Fixed first-record Git porcelain whitespace handling and added shell regression coverage.
 - [x] Accepted the Agent Decision Protocol and prohibition on agent self-approval.
 - [x] Defined content-bound approval receipts and hardware/remote human-presence boundaries.
 - [x] Added before/after decision requirements to repository and generated `AGENTS.md` rules.

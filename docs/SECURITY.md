@@ -35,6 +35,7 @@ Security posture:
 - agent instructions forbid self-approval, while future strong enforcement requires content-bound hardware or remote approval;
 - local file inspection only;
 - staged inspection invokes Git with fixed arguments through `execFileSync`, reads file-status metadata rather than file contents, and never mutates the index;
+- the interactive shell routes an explicit read-only command allowlist, rejects arbitrary terminal input, and blocks mutating slash commands;
 - no production mutation commands;
 - simple secret-like pattern detection in validator;
 - explicit production confirmation policy in generated governance docs;

@@ -28,6 +28,15 @@ function runJson(args, options = {}) {
   return JSON.parse(run(args, options))
 }
 
+function runShell(args, input) {
+  return execFileSync(process.execPath, [cli, 'shell', ...args], {
+    cwd: repoRoot,
+    encoding: 'utf8',
+    input,
+    stdio: ['pipe', 'pipe', 'pipe'],
+  })
+}
+
 function existingProject() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-existing-'))
   mkdirSync(resolve(target, 'docs'))
@@ -53,6 +62,46 @@ function testRiscalaExecutableAliasContract() {
   assert.match(help, /AI Code Governance for Software Delivery/)
   assert.match(help, /Powered by PSDM/)
   assert.match(help, /psdm remains supported with identical commands and behavior/)
+  assert.match(help, /riscala shell \[target\]/)
+}
+
+function testReadOnlyShellRoutesCommandsAndReportsContext() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-'))
+  mkdirSync(resolve(target, 'src'), { recursive: true })
+  writeFileSync(resolve(target, 'package.json'), '{"name":"shell-fixture"}\n')
+  writeFileSync(resolve(target, 'psdm.config.json'), '{"version":1,"profile":"framework"}\n')
+  writeFileSync(resolve(target, 'src', 'tracked.mjs'), 'export const value = 1\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', '.'])
+  git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'baseline',
+  ])
+
+  writeFileSync(resolve(target, 'src', 'tracked.mjs'), 'export const value = 2\n')
+  git(target, ['add', 'src/tracked.mjs'])
+  writeFileSync(resolve(target, 'package.json'), '{"name":"shell-fixture","private":true}\n')
+  writeFileSync(resolve(target, 'notes.txt'), 'untracked\n')
+
+  const output = runShell([target], '/help\n/status\n/inspect\n/commit\n/exit\n')
+
+  assert.match(output, /RISCALA/)
+  assert.match(output, /Read-only governance shell/)
+  assert.match(output, /Project\s+shell-fixture/)
+  assert.match(output, /Changes\s+1 staged · 1 unstaged · 1 untracked/)
+  assert.match(output, /Policy\s+framework · psdm\.config\.json/)
+  assert.match(output, /\/status\s+Refresh repository/)
+  assert.match(output, /Staged inspection · 1 file\(s\) · Level 2/)
+  assert.match(output, /src\/tracked\.mjs matches src\/\*\* -> Level 2/)
+  assert.match(output, /Blocked: \/commit is not available in the read-only shell/)
+  assert.match(output, /Riscala shell closed/)
+  assert.equal(git(target, ['rev-list', '--count', 'HEAD']).trim(), '1')
 }
 
 function testAuditExistingProject() {
@@ -770,6 +819,7 @@ function testExampleProjectCoverage() {
 
 const tests = [
   testRiscalaExecutableAliasContract,
+  testReadOnlyShellRoutesCommandsAndReportsContext,
   testAuditExistingProject,
   testAuditDetectsExistingAiGovernance,
   testAuditDetectsAiRuntimeSurfaces,

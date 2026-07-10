@@ -16,6 +16,7 @@ Use it to find the right document by task: adopting PSDM in an existing project,
 - `docs/KNOWLEDGE_AS_CODE.md`: optional Knowledge as Code Layer for versioning intent, decisions, rules, prompts, workflows, verification criteria, and evolution notes.
 - `docs/PROJECT_BRIEF.md`: project purpose, audience, and success criteria.
 - `docs/RISCALA_BRAND_MIGRATION.md`: accepted Riscala product identity and staged compatibility plan.
+- `docs/INTERACTIVE_SHELL.md`: read-only terminal UI, slash commands, and mutation boundary.
 - `docs/BETA_RELEASE_NOTES.md`: beta release scope, validation, limitations, and exit criteria.
 - `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md`: public collaboration and reporting expectations.
 
@@ -56,6 +57,7 @@ Current commands:
 - `riscala check`
 - `riscala validate`
 - `riscala inspect --staged`
+- `riscala shell`
 - `riscala classify`
 - `riscala enforce`
 - `riscala pr-checklist`

@@ -10,6 +10,7 @@ import { enforceCommand } from '../src/commands/enforce.mjs'
 import { prChecklistCommand } from '../src/commands/pr-checklist.mjs'
 import { reportCommand } from '../src/commands/report.mjs'
 import { inspectCommand } from '../src/commands/inspect.mjs'
+import { shellCommand } from '../src/commands/shell.mjs'
 import {
   COMPATIBILITY_EXECUTABLE,
   PRIMARY_EXECUTABLE,
@@ -29,6 +30,7 @@ const commands = {
   'pr-checklist': prChecklistCommand,
   report: reportCommand,
   inspect: inspectCommand,
+  shell: shellCommand,
 }
 
 function printHelp() {
@@ -41,6 +43,7 @@ Usage:
   ${PRIMARY_EXECUTABLE} check [target] [--json] [--feature name] [--config path]
   ${PRIMARY_EXECUTABLE} validate [target] [--json] [--feature name] [--config path]
   ${PRIMARY_EXECUTABLE} inspect --staged [--json] [--target path] [--config path]
+  ${PRIMARY_EXECUTABLE} shell [target] [--config path]
   ${PRIMARY_EXECUTABLE} classify "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
   ${PRIMARY_EXECUTABLE} enforce "<change description>" [--json] [--max-level "Level 2"] [--file path] [--files path,path] [--target path] [--config path]
   ${PRIMARY_EXECUTABLE} pr-checklist "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
@@ -56,6 +59,7 @@ Commands:
   check      Check required artifacts exist and are non-empty.
   validate   Validate PSDM baseline structure and required sections.
   inspect    Inspect staged Git changes and explain their minimum governance level.
+  shell      Open the read-only interactive governance shell.
   classify   Estimate change level from a short description.
   enforce    Fail when a classified change exceeds the allowed maximum level.
   pr-checklist Generate a pull request checklist for a change.

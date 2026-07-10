@@ -149,6 +149,14 @@ riscala report [target] [--json] [--feature <name>] [--config <path>]
 riscala inspect --staged [--json] [--target <path>] [--config <path>]
 ```
 
+### Interactive Shell
+
+```bash
+riscala shell [target] [--config <path>]
+```
+
+The dependency-free shell shows the selected project's name, branch, working-tree counts, and active PSDM policy. Its first release is intentionally read-only and supports `/help`, `/status`, `/inspect`, and `/exit`.
+
 ### Initialization
 
 ```bash
@@ -263,6 +271,16 @@ riscala inspect --staged --json
 ```
 
 The JSON contract includes `decision`, `git.changes`, `files`, `evidence`, and `classification`. `NO_STAGED_CHANGES` is a successful no-op; `NOT_A_GIT_REPOSITORY` exits non-zero.
+
+### Open The Interactive Shell
+
+Open the read-only terminal UI in the current project:
+
+```bash
+riscala shell
+```
+
+Use `/status` to refresh project context and `/inspect` to review staged changes. Mutating slash commands remain blocked until content-bound approval verification is implemented. See `docs/INTERACTIVE_SHELL.md` for the interface and safety contract.
 
 ### Generate A PR Checklist
 

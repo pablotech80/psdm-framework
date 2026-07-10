@@ -100,6 +100,8 @@ Completed:
 - Content-bound approval receipt and human-presence architecture documented before mutating shell commands.
 - Repository and generated `AGENTS.md` rules updated with why, expected improvement, evidence, and next-action rationale requirements.
 - Root `AGENTS.md` added as a default Level 3 risk path with regression coverage.
+- Dependency-free `riscala shell` MVP implemented with target-specific context, read-only slash-command routing, and explicit mutation blocking.
+- Git porcelain parsing corrected so the first unstaged record is not misreported as staged in shell status.
 
 ## Active Milestone
 
@@ -272,7 +274,7 @@ Planned outcomes:
 - [x] Staged Git change inspection with explainable risk-path evidence.
 - [x] Accept Riscala product identity and compatibility boundaries.
 - [x] Add the `riscala` executable alias with `psdm` parity before interactive CLI work.
-- [ ] Design and implement the dependency-free `riscala shell` MVP.
+- [x] Design and implement the dependency-free `riscala shell` MVP.
 - [x] Define agent decision and human-presence approval architecture.
 - [ ] Implement machine-readable action records and receipt verification before mutating slash commands.
 - [ ] Stable config schema.
