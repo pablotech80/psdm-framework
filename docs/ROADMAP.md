@@ -185,8 +185,9 @@
 - [x] Priority gap focus for incomplete AI projects with stable config-name preservation.
 - [x] Read-only shell validation summary backed by the existing validator.
 - [x] Full read-only shell command palette for diagnostics, reports, classification, PR checklist preparation, init preview, hook status, action records, and approval-boundary visibility.
-- [ ] `1.0.0-beta.5` release candidate validation and protected publishing dry-run for the Riscala shell.
-- [ ] Trusted owner key enrollment, hook activation, and protected remote enforcement.
+- [x] `1.0.0-beta.5` protected publishing dry-run and real trusted publish for the Riscala shell.
+- [x] Trusted owner public key enrollment.
+- [ ] Managed hook activation and protected remote enforcement.
 - [x] Full documentation index.
 - [ ] Tested fixtures.
 - [x] Public package release checklist.

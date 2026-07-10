@@ -3,7 +3,7 @@
 Status: `Active`
 Project: `psdm-framework`
 Release Target: `1.0.0-beta.5`
-Latest Published Beta: `1.0.0-beta.4`
+Latest Published Beta: `1.0.0-beta.5`
 
 ## Purpose
 
@@ -18,7 +18,7 @@ Before release, confirm:
 - [x] Target version is agreed and written in `package.json`: `1.0.0-beta.5`.
 - [x] Release type is agreed: `beta`.
 - [x] Release channel is agreed: npm public package and GitHub tag after approval.
-- [ ] Owner approval is recorded for public publication with explicit `CONFIRM NPM BETA PUBLISH`.
+- [x] Owner approval is recorded for public publication with explicit `CONFIRM NPM BETA PUBLISH`.
 - [x] No production deployment is implied by this release.
 
 ## Repository Preflight
@@ -30,7 +30,7 @@ Before release, confirm:
 - [x] `ROADMAP.md` and `TODO.md` reflect the current release state and next action.
 - [ ] `docs/DOWNSTREAM_ACTION_VALIDATION.md` has current downstream Action evidence.
 - [ ] `docs/PUBLIC_REPOSITORY_READINESS.md` has no blocking public-readiness findings.
-- [ ] `docs/RELEASE_EVIDENCE.md` defines required release evidence for the target.
+- [x] `docs/RELEASE_EVIDENCE.md` defines required release evidence for the target.
 - [x] Public collaboration files are present: `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md`, issue templates, and PR template.
 
 ## Validation Commands
@@ -162,14 +162,14 @@ For trusted publishing, use `.github/workflows/npm-publish.yml`, follow `docs/NP
 
 After publication:
 
-- [ ] Confirm package appears under the expected npm name.
-- [ ] Install in a clean temp directory.
-- [ ] Run `psdm help`.
-- [ ] Run `riscala help` and confirm it matches `psdm help` from a clean installed package.
+- [x] Confirm package appears under the expected npm name.
+- [x] Install in a clean temp directory.
+- [x] Run `psdm help`.
+- [x] Run `riscala help` and confirm it matches `psdm help` from a clean installed package.
 - [ ] Run `psdm init`, `psdm validate`, and `psdm audit --json` in a temp project.
-- [ ] Confirm GitHub release/tag points to the intended commit.
-- [ ] Record package URL, tag URL, version, and validation result in release notes.
-- [ ] Record release evidence using `docs/RELEASE_EVIDENCE.md`.
+- [x] Confirm GitHub release/tag points to the intended commit.
+- [x] Record package URL, tag URL, version, and validation result in release notes.
+- [x] Record release evidence using `docs/RELEASE_EVIDENCE.md`.
 
 ## Rollback
 
