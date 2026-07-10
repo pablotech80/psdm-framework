@@ -168,6 +168,7 @@
 ## v1.0
 
 - [ ] Stable CLI API.
+- [x] Staged Git change inspection with deterministic file and risk-path evidence.
 - [x] Full documentation index.
 - [ ] Tested fixtures.
 - [x] Public package release checklist.

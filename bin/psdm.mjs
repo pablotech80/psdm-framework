@@ -9,6 +9,7 @@ import { classifyCommand } from '../src/commands/classify.mjs'
 import { enforceCommand } from '../src/commands/enforce.mjs'
 import { prChecklistCommand } from '../src/commands/pr-checklist.mjs'
 import { reportCommand } from '../src/commands/report.mjs'
+import { inspectCommand } from '../src/commands/inspect.mjs'
 
 const [command, ...args] = process.argv.slice(2)
 
@@ -22,6 +23,7 @@ const commands = {
   enforce: enforceCommand,
   'pr-checklist': prChecklistCommand,
   report: reportCommand,
+  inspect: inspectCommand,
 }
 
 function printHelp() {
@@ -33,6 +35,7 @@ Usage:
   psdm init [target] [--feature name] [--dry-run]
   psdm check [target] [--json] [--feature name] [--config path]
   psdm validate [target] [--json] [--feature name] [--config path]
+  psdm inspect --staged [--json] [--target path] [--config path]
   psdm classify "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
   psdm enforce "<change description>" [--json] [--max-level "Level 2"] [--file path] [--files path,path] [--target path] [--config path]
   psdm pr-checklist "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
@@ -44,6 +47,7 @@ Commands:
   init       Create PSDM governance artifacts in a project.
   check      Check required artifacts exist and are non-empty.
   validate   Validate PSDM baseline structure and required sections.
+  inspect    Inspect staged Git changes and explain their minimum governance level.
   classify   Estimate change level from a short description.
   enforce    Fail when a classified change exceeds the allowed maximum level.
   pr-checklist Generate a pull request checklist for a change.

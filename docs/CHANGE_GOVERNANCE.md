@@ -31,6 +31,8 @@ Use `psdm adr "<decision title>"` when a Level 3 or Level 4 change creates or re
 
 `psdm enforce` blocks a change when its classified level exceeds the configured maximum level. The GitHub Action can run this gate with `enforce-change-level: 'true'`, a change description, touched files, and a maximum allowed level.
 
+Before commit or PR preparation, `psdm inspect --staged` can derive the touched file list directly from the Git index and explain the minimum level and matching risk-path evidence. It is advisory and does not stage, modify, approve, or commit files.
+
 ## Stop Conditions
 
 Stop before implementation when:

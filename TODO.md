@@ -2,7 +2,7 @@
 
 Status: `Active`
 Repository: `psdm-framework`
-Last Updated: `2026-07-09`
+Last Updated: `2026-07-10`
 
 ## Purpose
 
@@ -24,6 +24,8 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Done
 
+- [x] Added dependency-free `psdm inspect --staged` with deterministic Git evidence and JSON output.
+- [x] Added staged inspection fixtures for risk-path elevation, the Level 1 floor, renames, no staged changes, and non-Git targets.
 - [x] MVP CLI scaffold.
 - [x] PSDM templates.
 - [x] JSON output mode.

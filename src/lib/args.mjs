@@ -9,6 +9,7 @@ export function parseArgs(args) {
     status: null,
     date: null,
     dryRun: false,
+    staged: false,
   }
   const positional = []
 
@@ -22,6 +23,11 @@ export function parseArgs(args) {
 
     if (arg === '--dry-run') {
       options.dryRun = true
+      continue
+    }
+
+    if (arg === '--staged') {
+      options.staged = true
       continue
     }
 

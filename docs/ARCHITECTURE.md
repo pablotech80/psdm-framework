@@ -15,6 +15,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/adr.mjs` owns ADR filename generation and scaffold rendering.
 - `src/lib/audit.mjs` builds the non-destructive repository adoption preview, detects existing AI governance files, detects AI runtime surfaces from paths and manifests, and emits the AI readiness audit contract.
 - `src/lib/classifier.mjs` owns reusable change classification.
+- `src/lib/inspect.mjs` composes staged Git evidence with reusable change classification.
 - `src/lib/enforcement.mjs` owns CI-oriented maximum change-level enforcement.
 - `src/lib/pr-checklist.mjs` generates pull request checklist content from classification output.
 - `src/lib/config.mjs` loads PSDM configuration and validates optional AI policy declarations.
@@ -23,7 +24,7 @@ The architecture favors explicit modules over framework abstractions:
 - AI guardrail templates are profile-scoped through `ai-agent` so PSDM can govern AI runtime risk without imposing those artifacts on non-AI projects.
 - The Knowledge as Code Layer is documented as a transversal method layer. It does not add CLI dependencies, generated artifacts, or runtime infrastructure requirements.
 - `src/lib/risk-paths.mjs` validates and evaluates file path risk rules.
-- `src/lib/git.mjs` inspects repository state.
+- `src/lib/git.mjs` inspects repository state and parses staged file status using NUL-delimited Git output so path handling remains deterministic.
 - `src/validator/validate-method.mjs` evaluates method compliance.
 
 ## Architecture Decisions
@@ -37,6 +38,8 @@ The architecture favors explicit modules over framework abstractions:
 - Treat unsupported profile values as invalid local policy rather than silently relying on default behavior.
 - Treat malformed risk path rules as invalid local policy and ignore them during path matching.
 - Treat risk classification as advisory unless CI enforcement is explicitly configured through `psdm enforce` or the composite Action.
+- Treat Git as the source of staged change evidence; staged inspection must not infer content semantics or silently include unstaged and untracked files.
+- Apply a Level 1 floor to staged file changes, then allow deterministic description and risk-path signals to elevate but never lower the result.
 - Make adoption audit non-destructive so existing repositories can evaluate impact before initialization.
 - Preserve existing agent, assistant, skill, prompt, and Copilot-style instructions during adoption, and create a separate PSDM adoption plan when integration is needed.
 - Keep templates plain Markdown so teams can adapt them without special tooling.
@@ -54,6 +57,7 @@ Changes require architecture review when they affect:
 - adoption plan creation;
 - ADR scaffold semantics;
 - change classification and PR checklist semantics;
+- staged inspection scope, evidence, decisions, or JSON output;
 - change-level enforcement semantics;
 - JSON output shape;
 - config schema or defaults;

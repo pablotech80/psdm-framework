@@ -92,6 +92,7 @@ flowchart TD
 - Repository audit before adoption.
 - Governance templates for specs, architecture, security, testing, deployment, operations, and ADRs.
 - Change-level classification from descriptions and touched paths.
+- Staged Git change inspection with deterministic file and risk-path evidence.
 - CI enforcement for maximum allowed change level.
 - AI readiness checks for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
 - AI-agent governance templates for projects using LLMs, tools, prompts, RAG, or automation.
@@ -138,6 +139,7 @@ psdm audit [target] [--json] [--feature <name>] [--config <path>]
 psdm check [target] [--json] [--feature <name>] [--config <path>]
 psdm validate [target] [--json] [--feature <name>] [--config <path>]
 psdm report [target] [--json] [--feature <name>] [--config <path>]
+psdm inspect --staged [--json] [--target <path>] [--config <path>]
 ```
 
 ### Initialization
@@ -236,6 +238,24 @@ Configured risk paths can raise the level even when the description is vague:
 ```text
 Estimated level: Level 3
 ```
+
+### Inspect Staged Changes
+
+Inspect the Git index without writing files or requiring a change description:
+
+```bash
+psdm inspect --staged
+```
+
+The command reports staged file status, applies a Level 1 minimum to any real file change, and raises the result when a configured `riskPath` matches. It does not inspect unstaged or untracked files.
+
+Use JSON output for automation:
+
+```bash
+psdm inspect --staged --json
+```
+
+The JSON contract includes `decision`, `git.changes`, `files`, `evidence`, and `classification`. `NO_STAGED_CHANGES` is a successful no-op; `NOT_A_GIT_REPOSITORY` exits non-zero.
 
 ### Generate A PR Checklist
 
@@ -379,6 +399,8 @@ PSDM governs the whole repository, but its strongest controls usually apply to b
 - CI/CD workflows.
 
 These controls live in `riskPaths`. A matching path raises the minimum change level even when the textual change description looks low risk.
+
+`psdm inspect --staged` obtains touched paths directly from the Git index, so developers do not need to repeat them through `--file` or `--files` before review.
 
 `psdm validate` fails when `riskPaths` contains malformed rules. Invalid risk path rules are ignored by classification so a broken local policy does not crash the CLI.
 

@@ -2,7 +2,7 @@
 
 Status: `Active`
 Repository: `psdm-framework`
-Last Updated: `2026-07-09`
+Last Updated: `2026-07-10`
 
 ## Purpose
 
@@ -91,6 +91,8 @@ Completed:
 - `1.0.0-beta.4` published through protected trusted publishing workflow.
 - Git tag and GitHub pre-release `v1.0.0-beta.4` created.
 - Clean install from npm `@beta` verified for `1.0.0-beta.4`.
+- Dependency-free `psdm inspect --staged` added with deterministic Git evidence, a Level 1 floor, risk-path elevation, and JSON output.
+- Staged inspection fixture coverage added for risk elevation, the Level 1 floor, renames, an empty Git index, and non-Git targets.
 
 ## Active Milestone
 
@@ -260,6 +262,7 @@ Planned outcomes:
 ### `1.0.0`
 
 - [ ] Stable CLI API.
+- [x] Staged Git change inspection with explainable risk-path evidence.
 - [ ] Stable config schema.
 - [x] Public package release checklist.
 - [x] Decide package metadata gaps before beta.

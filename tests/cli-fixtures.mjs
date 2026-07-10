@@ -36,6 +36,13 @@ function existingProject() {
   return target
 }
 
+function git(target, args) {
+  return execFileSync('git', ['-C', target, ...args], {
+    encoding: 'utf8',
+    stdio: ['ignore', 'pipe', 'pipe'],
+  })
+}
+
 function testAuditExistingProject() {
   const target = existingProject()
   const report = runJson(['audit', target, '--json'])
@@ -224,6 +231,104 @@ function testClassifyRiskPathJson() {
   assert.equal(report.estimatedLevel, 'Level 3')
   assert.equal(report.classificationReason, 'Configured risk path raised the estimated level.')
   assert.equal(report.pathMatches[0].pattern, 'backend/auth/**')
+}
+
+function testInspectStagedRiskPathJson() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-inspect-'))
+  mkdirSync(resolve(target, 'backend', 'auth'), { recursive: true })
+  writeFileSync(resolve(target, 'backend', 'auth', 'session.py'), 'def validate_session():\n    return True\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', 'backend/auth/session.py'])
+
+  const report = runJson([
+    'inspect',
+    '--staged',
+    '--target',
+    target,
+    '--json',
+  ])
+  const output = run([
+    'inspect',
+    '--staged',
+    '--target',
+    target,
+  ])
+
+  assert.equal(report.command, 'inspect')
+  assert.equal(report.source, 'staged')
+  assert.equal(report.decision, 'CHANGE_REVIEW_REQUIRED')
+  assert.deepEqual(report.files, ['backend/auth/session.py'])
+  assert.equal(report.git.changes[0].type, 'added')
+  assert.equal(report.classification.estimatedLevel, 'Level 3')
+  assert.equal(report.classification.pathMatches[0].pattern, 'backend/auth/**')
+  assert.ok(report.evidence.some((item) => item.kind === 'staged-file'))
+  assert.ok(report.evidence.some((item) => item.kind === 'risk-path' && item.level === 'Level 3'))
+  assert.match(output, /PSDM Staged Change Inspection/)
+  assert.match(output, /backend\/auth\/session\.py matches backend\/auth\/\*\*/)
+}
+
+function testInspectStagedUsesLevelOneFloor() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-inspect-floor-'))
+  writeFileSync(resolve(target, 'notes.txt'), 'local change\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', 'notes.txt'])
+
+  const report = runJson(['inspect', '--staged', '--target', target, '--json'])
+
+  assert.equal(report.classification.estimatedLevel, 'Level 1')
+  assert.equal(
+    report.classification.classificationReason,
+    'Staged file changes require at least Level 1 governance.',
+  )
+}
+
+function testInspectReportsNoStagedChanges() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-inspect-empty-'))
+  git(target, ['init', '--quiet'])
+
+  const report = runJson(['inspect', '--staged', '--target', target, '--json'])
+
+  assert.equal(report.decision, 'NO_STAGED_CHANGES')
+  assert.deepEqual(report.files, [])
+  assert.equal(report.classification, null)
+}
+
+function testInspectRejectsNonGitTarget() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-inspect-non-git-'))
+
+  const report = runJson(['inspect', '--staged', '--target', target, '--json'], {
+    allowFailure: true,
+  })
+
+  assert.equal(report.decision, 'NOT_A_GIT_REPOSITORY')
+  assert.equal(report.git.isRepository, false)
+  assert.equal(report.classification, null)
+}
+
+function testInspectParsesStagedRename() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-inspect-rename-'))
+  mkdirSync(resolve(target, 'src'), { recursive: true })
+  writeFileSync(resolve(target, 'src', 'old.mjs'), 'export const value = 1\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', 'src/old.mjs'])
+  git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'baseline',
+  ])
+  git(target, ['mv', 'src/old.mjs', 'src/new.mjs'])
+
+  const report = runJson(['inspect', '--staged', '--target', target, '--json'])
+
+  assert.equal(report.git.changes[0].type, 'renamed')
+  assert.equal(report.git.changes[0].previousPath, 'src/old.mjs')
+  assert.equal(report.git.changes[0].path, 'src/new.mjs')
+  assert.deepEqual(report.files, ['src/old.mjs', 'src/new.mjs'])
 }
 
 function testPrChecklistJson() {
@@ -639,6 +744,11 @@ const tests = [
   testAdrCreatesDecisionRecord,
   testAdrRejectsInvalidDate,
   testClassifyRiskPathJson,
+  testInspectStagedRiskPathJson,
+  testInspectStagedUsesLevelOneFloor,
+  testInspectReportsNoStagedChanges,
+  testInspectRejectsNonGitTarget,
+  testInspectParsesStagedRename,
   testPrChecklistJson,
   testPrChecklistMarkdownLevel4,
   testEnforceAllowsConfiguredLevel,

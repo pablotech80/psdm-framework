@@ -97,7 +97,14 @@ const DEFAULT_MATCH = {
   required: 'Clear scope, diff review, no source-critical/security/data/deployment impact.',
 }
 
-export function classifyChange({ description, files = [], target, configPath = null }) {
+export function classifyChange({
+  description,
+  files = [],
+  target,
+  configPath = null,
+  minimumLevel = 'Level 0',
+  minimumLevelReason = null,
+}) {
   const normalized = description.toLowerCase()
   const configState = loadConfig(target, configPath)
   const pathMatches = matchRiskPaths(files, configState.config.riskPaths)
@@ -110,13 +117,16 @@ export function classifyChange({ description, files = [], target, configPath = n
 
   const match = matches[0] || DEFAULT_MATCH
   const pathLevel = highestLevel(pathMatches.map((item) => item.minimumLevel))
-  const estimatedLevel = highestLevel([match.level, pathLevel])
+  const estimatedLevel = highestLevel([match.level, pathLevel, minimumLevel])
   const levelRule = LEVEL_RULES.find((rule) => rule.level === estimatedLevel)
   const requiredArtifacts = Array.from(new Set(pathMatches.flatMap((item) => item.requiredArtifacts)))
   const minimumRequiredGovernance = levelRule?.required || match.required
-  const classificationReason = levelPriority(pathLevel) > levelPriority(match.level)
-    ? 'Configured risk path raised the estimated level.'
-    : 'Description keywords determined the estimated level.'
+  let classificationReason = 'Description keywords determined the estimated level.'
+  if (levelPriority(minimumLevel) > levelPriority(match.level) && levelPriority(minimumLevel) > levelPriority(pathLevel)) {
+    classificationReason = minimumLevelReason || 'A caller-provided minimum raised the estimated level.'
+  } else if (levelPriority(pathLevel) > levelPriority(match.level)) {
+    classificationReason = 'Configured risk path raised the estimated level.'
+  }
 
   return {
     description,

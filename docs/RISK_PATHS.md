@@ -58,11 +58,21 @@ JSON output:
 psdm classify "refactor service layer" --files backend/auth/session.py,backend/migrations/001_add_index.sql --json
 ```
 
+Inspect files already staged in Git without repeating the path list:
+
+```bash
+psdm inspect --staged --json
+```
+
+Staged inspection assigns at least Level 1 when the index contains file changes. Matching risk paths then raise that minimum using the same rules as `psdm classify`. Unstaged and untracked files are outside this command's explicit scope.
+
 ## Decision Model
 
 PSDM calculates the highest level from:
 
 - description keyword signals;
 - configured risk path matches.
+
+For `psdm inspect --staged`, the existence of staged file changes also provides a Level 1 minimum.
 
 The final classification still requires human confirmation because file paths do not capture full business impact.
