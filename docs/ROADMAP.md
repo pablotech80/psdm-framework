@@ -187,7 +187,8 @@
 - [x] Full read-only shell command palette for diagnostics, reports, classification, PR checklist preparation, init preview, hook status, action records, and approval-boundary visibility.
 - [x] `1.0.0-beta.5` protected publishing dry-run and real trusted publish for the Riscala shell.
 - [x] Trusted owner public key enrollment.
-- [ ] Managed hook activation and protected remote enforcement.
+- [x] Local managed hook activation and protected branch enforcement.
+- [ ] Required remote approval check for content-bound Level 3/4 actions.
 - [x] Full documentation index.
 - [ ] Tested fixtures.
 - [x] Public package release checklist.

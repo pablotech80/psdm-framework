@@ -53,6 +53,7 @@ Security posture:
 - CodeQL workflow for JavaScript analysis;
 - dependency review workflow for pull requests;
 - Dependabot update configuration for npm and GitHub Actions.
+- `main` branch protection requires pull requests, one approving review, strict `validate-framework` and `Analyze JavaScript` checks, conversation resolution, admin enforcement, and blocks force pushes and deletions.
 
 ## Public Vulnerability Reporting
 
@@ -100,3 +101,4 @@ GitHub repository settings:
 - secret scanning push protection: enabled;
 - Dependabot security updates: enabled;
 - private vulnerability reporting: enabled.
+- branch protection on `main`: enabled with required review and required checks.

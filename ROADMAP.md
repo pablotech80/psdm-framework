@@ -118,6 +118,8 @@ Completed:
 - `1.0.0-beta.5` release candidate preparation started to publish the Riscala executable and complete interactive shell through npm beta.
 - First owner public key enrolled for content-bound Level 3/4 approval verification.
 - `1.0.0-beta.5` published through protected trusted publishing and verified with clean npm install.
+- Local managed pre-commit hook activated for this checkout.
+- GitHub branch protection enabled for `main` with required PR review, strict `validate-framework` and `Analyze JavaScript` checks, admin enforcement, conversation resolution, and blocked force pushes/deletions.
 
 ## Active Milestone
 
@@ -295,7 +297,8 @@ Planned outcomes:
 - [x] Implement machine-readable action records and receipt verification before mutating slash commands.
 - [x] Implement managed pre-commit receipt enforcement with local replay protection.
 - [x] Enroll a real owner public key.
-- [ ] Activate the hook and add protected remote enforcement.
+- [x] Activate local hook and protected branch enforcement.
+- [ ] Add a required remote approval check for content-bound Level 3/4 actions.
 - [ ] Stable config schema.
 - [x] Public package release checklist.
 - [x] Decide package metadata gaps before beta.
