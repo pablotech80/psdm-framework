@@ -457,7 +457,8 @@ export function buildAudit(target, options = {}) {
 }
 
 export function printAuditReport(report) {
-  console.log(`PSDM audit: ${report.target}`)
+  console.log(`Riscala audit: ${report.target}`)
+  console.log('Method: PSDM')
   console.log('')
   console.log(`Config: ${report.config.exists ? report.config.path : 'default policy; psdm.config.json would be created'}`)
   console.log(`Git: ${report.git.isRepository ? report.git.branch || 'repository' : 'not a git repository'}${report.git.isDirty ? `, dirty (${report.git.changes.length} change/s)` : ''}`)
@@ -470,7 +471,7 @@ export function printAuditReport(report) {
   }
 
   console.log('')
-  console.log('After psdm init')
+  console.log('After riscala init')
   for (const item of report.after) {
     console.log(`- ${item.artifact}: ${item.installAction}`)
   }

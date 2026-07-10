@@ -1,9 +1,14 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
+import { generateKeyPairSync, sign } from 'node:crypto'
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
+import {
+  canonicalReceiptPayload,
+  publicKeyFingerprint,
+} from '../src/lib/approval-receipt.mjs'
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const cli = resolve(repoRoot, 'bin/psdm.mjs')
@@ -28,6 +33,15 @@ function runJson(args, options = {}) {
   return JSON.parse(run(args, options))
 }
 
+function runShell(args, input) {
+  return execFileSync(process.execPath, [cli, 'shell', ...args], {
+    cwd: repoRoot,
+    encoding: 'utf8',
+    input,
+    stdio: ['pipe', 'pipe', 'pipe'],
+  })
+}
+
 function existingProject() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-existing-'))
   mkdirSync(resolve(target, 'docs'))
@@ -41,6 +55,395 @@ function git(target, args) {
     encoding: 'utf8',
     stdio: ['ignore', 'pipe', 'pipe'],
   })
+}
+
+function testRiscalaExecutableAliasContract() {
+  const packageJson = JSON.parse(readFileSync(resolve(repoRoot, 'package.json'), 'utf8'))
+  const help = run(['help'])
+
+  assert.equal(packageJson.bin.riscala, 'bin/psdm.mjs')
+  assert.equal(packageJson.bin.psdm, packageJson.bin.riscala)
+  assert.match(help, /^Riscala/m)
+  assert.match(help, /AI Code Governance for Software Delivery/)
+  assert.match(help, /Powered by PSDM/)
+  assert.match(help, /psdm remains supported with identical commands and behavior/)
+  assert.match(help, /riscala shell \[target\]/)
+}
+
+function testReadOnlyShellRoutesCommandsAndReportsContext() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-'))
+  mkdirSync(resolve(target, 'src'), { recursive: true })
+  writeFileSync(resolve(target, 'package.json'), '{"name":"shell-fixture"}\n')
+  writeFileSync(resolve(target, 'psdm.config.json'), '{"version":1,"profile":"framework"}\n')
+  writeFileSync(resolve(target, 'src', 'tracked.mjs'), 'export const value = 1\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', '.'])
+  git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'baseline',
+  ])
+
+  writeFileSync(resolve(target, 'src', 'tracked.mjs'), 'export const value = 2\n')
+  git(target, ['add', 'src/tracked.mjs'])
+  writeFileSync(resolve(target, 'package.json'), '{"name":"shell-fixture","private":true}\n')
+  writeFileSync(resolve(target, 'notes.txt'), 'untracked\n')
+
+  const output = runShell([target], '/help\n/status\n/inspect\n/commit\n/exit\n')
+
+  assert.match(output, /RISCALA/)
+  assert.match(output, /Read-only governance shell/)
+  assert.match(output, /Project\s+shell-fixture/)
+  assert.match(output, /Changes\s+1 staged · 1 unstaged · 1 untracked/)
+  assert.match(output, /Policy\s+framework · psdm\.config\.json/)
+  assert.match(output, /\/status\s+Refresh repository/)
+  assert.match(output, /Staged inspection · 1 file\(s\) · Level 2/)
+  assert.match(output, /src\/tracked\.mjs matches src\/\*\* -> Level 2/)
+  assert.match(output, /Blocked: \/commit is not available in the read-only shell/)
+  assert.match(output, /Riscala shell closed/)
+  assert.equal(git(target, ['rev-list', '--count', 'HEAD']).trim(), '1')
+}
+
+function approvalFixture() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-approval-'))
+  const keyDirectory = resolve(target, 'governance', 'keys')
+  mkdirSync(keyDirectory, { recursive: true })
+  const { publicKey, privateKey } = generateKeyPairSync('ed25519')
+  const publicKeyPem = publicKey.export({ type: 'spki', format: 'pem' })
+  const fingerprint = publicKeyFingerprint(publicKeyPem)
+  writeFileSync(resolve(keyDirectory, 'owner-public.pem'), publicKeyPem)
+  writeFileSync(resolve(target, 'psdm.config.json'), `${JSON.stringify({
+    version: 1,
+    profile: 'standard',
+    approval: {
+      requiredLevels: ['Level 3', 'Level 4'],
+      requiredActions: ['git.commit'],
+      maxReceiptAgeSeconds: 600,
+      trustedApprovers: [
+        {
+          id: 'owner',
+          publicKeyPath: 'governance/keys/owner-public.pem',
+          publicKeyFingerprint: fingerprint,
+          approvalModes: ['hardware-signature'],
+        },
+      ],
+    },
+  }, null, 2)}\n`)
+  writeFileSync(resolve(target, 'README.md'), '# Approval fixture\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', '.'])
+  git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'baseline',
+  ])
+  writeFileSync(resolve(target, 'AGENTS.md'), '# Governed agent policy\n')
+  git(target, ['add', 'AGENTS.md'])
+
+  return { target, privateKey, fingerprint }
+}
+
+function signedReceipt(record, privateKey, fingerprint, overrides = {}) {
+  const issuedAt = new Date(Date.now() - 1000)
+  const receipt = {
+    version: 1,
+    approvalId: 'approval_test_owner_presence',
+    actionId: record.actionId,
+    action: record.binding.action,
+    repository: record.binding.repository,
+    branch: record.binding.branch,
+    contentHash: record.binding.contentHash,
+    approver: 'owner',
+    approverKeyFingerprint: fingerprint,
+    issuedAt: issuedAt.toISOString(),
+    expiresAt: new Date(issuedAt.getTime() + 5 * 60 * 1000).toISOString(),
+    approvalMode: 'hardware-signature',
+    ...overrides,
+  }
+  receipt.signature = sign(
+    null,
+    Buffer.from(canonicalReceiptPayload(receipt)),
+    privateKey,
+  ).toString('base64')
+  return receipt
+}
+
+function testActionRecordAndApprovalReceiptVerification() {
+  const { target, privateKey, fingerprint } = approvalFixture()
+  const record = runJson(['action', 'prepare', 'git.commit', '--target', target, '--json'])
+
+  assert.equal(record.decision, 'ACTION_RECORD_READY')
+  assert.equal(record.ready, true)
+  assert.equal(record.action, 'git.commit')
+  assert.equal(record.classification.estimatedLevel, 'Level 3')
+  assert.equal(record.approval.required, true)
+  assert.match(record.binding.contentHash, /^sha256:[a-f0-9]{64}$/)
+  assert.equal(record.approval.policy.trustedApprovers[0].id, 'owner')
+  assert.equal(record.approval.policy.trustedApprovers[0].publicKeyPath, undefined)
+
+  const receiptPath = resolve(target, 'approval-receipt.json')
+  writeFileSync(receiptPath, `${JSON.stringify(signedReceipt(
+    record,
+    privateKey,
+    fingerprint,
+  ), null, 2)}\n`)
+  const valid = runJson([
+    'approval',
+    'verify',
+    'git.commit',
+    '--target',
+    target,
+    '--receipt',
+    receiptPath,
+    '--json',
+  ])
+
+  assert.equal(valid.decision, 'APPROVAL_RECEIPT_VALID')
+  assert.equal(valid.valid, true)
+  assert.deepEqual(valid.violations, [])
+
+  const phraseReceipt = signedReceipt(record, privateKey, fingerprint, {
+    approvalId: 'approval_test_phrase',
+    approvalMode: 'phrase',
+  })
+  writeFileSync(receiptPath, `${JSON.stringify(phraseReceipt, null, 2)}\n`)
+  const phraseRejected = runJson([
+    'approval',
+    'verify',
+    'git.commit',
+    '--target',
+    target,
+    '--receipt',
+    receiptPath,
+    '--json',
+  ], { allowFailure: true })
+
+  assert.equal(phraseRejected.valid, false)
+  assert.ok(phraseRejected.violations.some((item) => item.includes('approvalMode must be')))
+
+  writeFileSync(resolve(target, 'AGENTS.md'), '# Modified after approval\n')
+  git(target, ['add', 'AGENTS.md'])
+  writeFileSync(receiptPath, `${JSON.stringify(signedReceipt(
+    record,
+    privateKey,
+    fingerprint,
+  ), null, 2)}\n`)
+  const changedContent = runJson([
+    'approval',
+    'verify',
+    'git.commit',
+    '--target',
+    target,
+    '--receipt',
+    receiptPath,
+    '--json',
+  ], { allowFailure: true })
+
+  assert.equal(changedContent.valid, false)
+  assert.ok(changedContent.violations.some((item) => item.includes('contentHash')))
+}
+
+function testApprovalEnforcementConsumesReceiptOnce() {
+  const { target, privateKey, fingerprint } = approvalFixture()
+  const record = runJson(['action', 'prepare', 'git.commit', '--target', target, '--json'])
+  const stateDirectory = resolve(target, '.git', 'riscala')
+  const receiptPath = resolve(stateDirectory, 'approval-receipt.json')
+  mkdirSync(stateDirectory, { recursive: true })
+  writeFileSync(receiptPath, `${JSON.stringify(signedReceipt(
+    record,
+    privateKey,
+    fingerprint,
+  ), null, 2)}\n`)
+
+  const first = runJson([
+    'approval',
+    'enforce',
+    'git.commit',
+    '--target',
+    target,
+    '--json',
+  ])
+  const replay = runJson([
+    'approval',
+    'enforce',
+    'git.commit',
+    '--target',
+    target,
+    '--json',
+  ], { allowFailure: true })
+  const ledger = JSON.parse(readFileSync(
+    resolve(stateDirectory, 'consumed-approvals.json'),
+    'utf8',
+  ))
+
+  assert.equal(first.decision, 'COMMIT_APPROVAL_CONSUMED')
+  assert.equal(first.allowed, true)
+  assert.equal(first.consumption.consumed, true)
+  assert.equal(replay.decision, 'COMMIT_APPROVAL_DENIED')
+  assert.equal(replay.allowed, false)
+  assert.ok(replay.violations.some((item) => item.includes('already been consumed')))
+  assert.equal(ledger.consumptions.length, 1)
+  assert.equal(ledger.consumptions[0].approvalId, 'approval_test_owner_presence')
+  assert.equal(JSON.stringify(ledger).includes('signature'), false)
+}
+
+function testManagedPreCommitHookAllowsLowRiskAndBlocksHighRisk() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-hook-'))
+  writeFileSync(resolve(target, 'README.md'), '# Hook fixture\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', 'README.md'])
+  git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'baseline',
+  ])
+
+  const installed = runJson(['hook', 'install', 'pre-commit', '--target', target, '--json'])
+  const status = runJson(['hook', 'status', 'pre-commit', '--target', target, '--json'])
+
+  assert.equal(installed.decision, 'HOOK_INSTALLED')
+  assert.equal(installed.managed, true)
+  assert.equal(status.installed, true)
+  assert.equal(status.managed, true)
+
+  writeFileSync(resolve(target, 'README.md'), '# Hook fixture updated\n')
+  git(target, ['add', 'README.md'])
+  git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'low-risk allowed',
+  ])
+
+  writeFileSync(resolve(target, 'AGENTS.md'), '# High-risk agent policy\n')
+  git(target, ['add', 'AGENTS.md'])
+  assert.throws(() => git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'high-risk blocked',
+  ]))
+
+  const removed = runJson(['hook', 'remove', 'pre-commit', '--target', target, '--json'])
+  assert.equal(removed.decision, 'HOOK_REMOVED')
+  assert.equal(existsSync(resolve(target, '.git', 'hooks', 'pre-commit')), false)
+}
+
+function testHookInstallerPreservesUnmanagedHook() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-hook-conflict-'))
+  git(target, ['init', '--quiet'])
+  writeFileSync(resolve(target, '.git', 'hooks', 'pre-commit'), '#!/bin/sh\nexit 0\n')
+
+  const report = runJson([
+    'hook',
+    'install',
+    'pre-commit',
+    '--target',
+    target,
+    '--json',
+  ], { allowFailure: true })
+
+  assert.equal(report.decision, 'EXISTING_HOOK_CONFLICT')
+  assert.equal(report.changed, false)
+  assert.equal(readFileSync(report.path, 'utf8'), '#!/bin/sh\nexit 0\n')
+}
+
+function testHookInstallerRespectsConfiguredHooksPath() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-hook-path-'))
+  git(target, ['init', '--quiet'])
+  git(target, ['config', 'core.hooksPath', 'governance-hooks'])
+
+  const report = runJson([
+    'hook',
+    'install',
+    'pre-commit',
+    '--target',
+    target,
+    '--json',
+  ])
+
+  assert.equal(report.decision, 'HOOK_INSTALLED')
+  assert.equal(report.path.endsWith('/governance-hooks/pre-commit'), true)
+  assert.equal(existsSync(report.path), true)
+}
+
+function testActionRecordFailsClosedWithoutTrustedApprover() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-approval-incomplete-'))
+  git(target, ['init', '--quiet'])
+  writeFileSync(resolve(target, 'AGENTS.md'), '# High-risk policy change\n')
+  git(target, ['add', 'AGENTS.md'])
+
+  const record = runJson([
+    'action',
+    'prepare',
+    'git.commit',
+    '--target',
+    target,
+    '--json',
+  ], { allowFailure: true })
+
+  assert.equal(record.decision, 'APPROVAL_POLICY_INCOMPLETE')
+  assert.equal(record.ready, false)
+  assert.equal(record.approval.required, true)
+  assert.deepEqual(record.approval.policy.trustedApprovers, [])
+}
+
+function testInvalidApprovalPolicyFailsClosed() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-approval-invalid-'))
+  writeFileSync(resolve(target, 'psdm.config.json'), `${JSON.stringify({
+    version: 1,
+    approval: {
+      requiredLevels: ['Level 1'],
+      maxReceiptAgeSeconds: 10,
+      trustedApprovers: [{}],
+    },
+  })}\n`)
+  writeFileSync(resolve(target, 'AGENTS.md'), '# High-risk policy change\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', 'AGENTS.md'])
+
+  const validation = runJson(['validate', target, '--json'], { allowFailure: true })
+  const record = runJson([
+    'action',
+    'prepare',
+    'git.commit',
+    '--target',
+    target,
+    '--json',
+  ], { allowFailure: true })
+
+  assert.ok(validation.results.some((item) => (
+    item.artifact === 'psdm.config.json'
+    && item.message === 'approval.requiredLevels must include Level 3 and Level 4.'
+  )))
+  assert.ok(validation.results.some((item) => item.message.includes('maxReceiptAgeSeconds')))
+  assert.ok(validation.results.some((item) => item.message.includes('publicKeyFingerprint')))
+  assert.equal(record.decision, 'APPROVAL_POLICY_INVALID')
+  assert.equal(record.ready, false)
+  assert.ok(record.approval.policyIssues.length > 0)
 }
 
 function testAuditExistingProject() {
@@ -160,7 +563,7 @@ function testInitDryRunDoesNotWrite() {
   const output = run(['init', target, '--dry-run'])
 
   assert.match(output, /Before/)
-  assert.match(output, /After psdm init/)
+  assert.match(output, /After riscala init/)
   assert.match(output, /AGENTS\.md: create/)
   assert.equal(existsSync(resolve(target, 'AGENTS.md')), false)
 }
@@ -233,6 +636,42 @@ function testClassifyRiskPathJson() {
   assert.equal(report.pathMatches[0].pattern, 'backend/auth/**')
 }
 
+function testClassifyAgentInstructionsAsLevelThree() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-agent-policy-classify-'))
+  const report = runJson([
+    'classify',
+    'small cleanup',
+    '--target',
+    target,
+    '--file',
+    'AGENTS.md',
+    '--json',
+  ])
+
+  assert.equal(report.estimatedLevel, 'Level 3')
+  assert.equal(report.pathMatches[0].pattern, 'AGENTS.md')
+  assert.ok(report.requiredArtifacts.includes('docs/SECURITY.md'))
+  assert.ok(report.requiredArtifacts.includes('docs/ARCHITECTURE.md'))
+}
+
+function testClassifyApprovalEnforcementAsLevelThree() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-approval-policy-classify-'))
+  const report = runJson([
+    'classify',
+    'small cleanup',
+    '--target',
+    target,
+    '--file',
+    'src/lib/approval-enforcement.mjs',
+    '--json',
+  ])
+
+  assert.equal(report.estimatedLevel, 'Level 3')
+  assert.equal(report.pathMatches[0].pattern, 'src/lib/*approval*.mjs')
+  assert.ok(report.requiredArtifacts.includes('docs/SECURITY.md'))
+  assert.ok(report.requiredArtifacts.includes('docs/ARCHITECTURE.md'))
+}
+
 function testInspectStagedRiskPathJson() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-inspect-'))
   mkdirSync(resolve(target, 'backend', 'auth'), { recursive: true })
@@ -263,7 +702,7 @@ function testInspectStagedRiskPathJson() {
   assert.equal(report.classification.pathMatches[0].pattern, 'backend/auth/**')
   assert.ok(report.evidence.some((item) => item.kind === 'staged-file'))
   assert.ok(report.evidence.some((item) => item.kind === 'risk-path' && item.level === 'Level 3'))
-  assert.match(output, /PSDM Staged Change Inspection/)
+  assert.match(output, /Riscala Staged Change Inspection/)
   assert.match(output, /backend\/auth\/session\.py matches backend\/auth\/\*\*/)
 }
 
@@ -420,8 +859,14 @@ function testValidateInitializedProject() {
   assert.equal(report.config.exists, true)
   assert.equal(report.config.ai.pii.allowedInPrompts, false)
   assert.equal(report.config.ai.tools.registryRequired, true)
+  assert.deepEqual(report.config.approval.requiredLevels, ['Level 3', 'Level 4'])
+  assert.deepEqual(report.config.approval.trustedApprovers, [])
   assert.equal(existsSync(resolve(target, 'ADRs', 'README.md')), true)
   assert.ok(report.results.some((item) => item.artifact === 'AGENTS.md' && item.status === 'PASS'))
+  const agentRules = readFileSync(resolve(target, 'AGENTS.md'), 'utf8')
+  assert.match(agentRules, /## 8\. Agent Decision Protocol/)
+  assert.match(agentRules, /must never approve its own action/)
+  assert.match(agentRules, /why that action should come next/)
 }
 
 function testCustomConfigArtifact() {
@@ -735,6 +1180,15 @@ function testExampleProjectCoverage() {
 }
 
 const tests = [
+  testRiscalaExecutableAliasContract,
+  testReadOnlyShellRoutesCommandsAndReportsContext,
+  testActionRecordAndApprovalReceiptVerification,
+  testApprovalEnforcementConsumesReceiptOnce,
+  testManagedPreCommitHookAllowsLowRiskAndBlocksHighRisk,
+  testHookInstallerPreservesUnmanagedHook,
+  testHookInstallerRespectsConfiguredHooksPath,
+  testActionRecordFailsClosedWithoutTrustedApprover,
+  testInvalidApprovalPolicyFailsClosed,
   testAuditExistingProject,
   testAuditDetectsExistingAiGovernance,
   testAuditDetectsAiRuntimeSurfaces,
@@ -744,6 +1198,8 @@ const tests = [
   testAdrCreatesDecisionRecord,
   testAdrRejectsInvalidDate,
   testClassifyRiskPathJson,
+  testClassifyAgentInstructionsAsLevelThree,
+  testClassifyApprovalEnforcementAsLevelThree,
   testInspectStagedRiskPathJson,
   testInspectStagedUsesLevelOneFloor,
   testInspectReportsNoStagedChanges,

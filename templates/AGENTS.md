@@ -56,7 +56,31 @@ Agents must not implement product changes without required PSDM artifacts for th
 
 Stop when scope, security impact, deployment impact, owner approval, or validation is unclear.
 
-## 8. Approval Policy
+## 8. Agent Decision Protocol
+
+Before every meaningful mutating action, the agent must state:
+
+- the exact action;
+- why it is necessary;
+- the expected project improvement;
+- the affected scope;
+- the PSDM change level and relevant risks;
+- the validation that will demonstrate success;
+- whether human approval is required.
+
+After the action, the agent must report:
+
+- the actual result;
+- validation evidence;
+- any deviation from the proposal;
+- the next recommended action;
+- why that action should come next.
+
+An agent must never approve its own action, enter or derive a human confirmation, reuse approval after content changes, or use direct tool access to bypass an available governance boundary or required approval.
+
+Routine reads and non-mutating diagnostics may be summarized instead of justified individually. See `docs/AGENT_DECISION_PROTOCOL.md` when the project includes that extended contract.
+
+## 9. Approval Policy
 
 Production execution requires:
 
@@ -64,19 +88,21 @@ Production execution requires:
 CONFIRM PRODUCTION DEPLOY
 ```
 
-## 9. Failure Behaviour
+This phrase is an intent signal, not proof of human identity. An AI agent must never enter it. Agent-controlled Level 3 or Level 4 actions require independent human approval when the project policy provides an out-of-band or hardware-backed approval mechanism.
+
+## 10. Failure Behaviour
 
 Report failures directly. Do not hide validation errors.
 
-## 10. Security Assumptions
+## 11. Security Assumptions
 
 Secrets, credentials, private data, logs, and production values must never be copied into documentation or prompts.
 
-## 11. Communication Between Agents
+## 12. Communication Between Agents
 
 Agents must communicate changed files, validation, risks, open questions, and handoff state.
 
-## 12. Capability Matrix
+## 13. Capability Matrix
 
 | Capability | Allowed By Default | Conditions |
 |---|---|---|
@@ -85,6 +111,6 @@ Agents must communicate changed files, validation, risks, open questions, and ha
 | Run tests | Yes | Only relevant, non-destructive commands. |
 | Deploy | No | Requires explicit production confirmation. |
 
-## 13. Final Rule
+## 14. Final Rule
 
 Make the smallest safe change that satisfies the documented requirement.

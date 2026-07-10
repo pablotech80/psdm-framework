@@ -51,6 +51,12 @@
       "promptInjectionTestsRequired": true
     }
   },
+  "approval": {
+    "requiredLevels": ["Level 3", "Level 4"],
+    "requiredActions": [],
+    "maxReceiptAgeSeconds": 600,
+    "trustedApprovers": []
+  },
   "riskPaths": [
     {
       "pattern": "backend/auth/**",
@@ -75,6 +81,42 @@
       "minimumLevel": "Level 4",
       "requiredArtifacts": ["docs/DEPLOYMENT.md", "docs/OPERATIONS.md"],
       "reason": "Infrastructure changes can affect deployment, availability, and runtime security."
+    },
+    {
+      "pattern": "AGENTS.md",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/ARCHITECTURE.md", "docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Agent instruction changes can alter autonomous behavior, approval boundaries, and tool use."
+    },
+    {
+      "pattern": "src/commands/approval.mjs",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/ARCHITECTURE.md", "docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Approval command changes can alter human-authority and commit enforcement boundaries."
+    },
+    {
+      "pattern": "src/commands/hook.mjs",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/ARCHITECTURE.md", "docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Hook command changes can alter local Git enforcement boundaries."
+    },
+    {
+      "pattern": "src/lib/*approval*.mjs",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/ARCHITECTURE.md", "docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Approval library changes can alter signature, trust, expiry, or replay decisions."
+    },
+    {
+      "pattern": "src/lib/action-record.mjs",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/ARCHITECTURE.md", "docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Action record changes can alter the content bound to human approval."
+    },
+    {
+      "pattern": "src/lib/git-hook.mjs",
+      "minimumLevel": "Level 3",
+      "requiredArtifacts": ["docs/SPEC.md", "docs/ARCHITECTURE.md", "docs/SECURITY.md", "docs/TESTING.md"],
+      "reason": "Git hook changes can weaken or bypass local approval enforcement."
     },
     {
       "pattern": "agents/**",

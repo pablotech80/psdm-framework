@@ -7,15 +7,24 @@ Project: `psdm-framework`
 
 PSDM is a small Node.js CLI package. The executable entrypoint is `bin/psdm.mjs`; command implementations live under `src/commands`; shared helpers live under `src/lib`; validation logic lives under `src/validator`; project templates live under `templates`.
 
+Riscala is the accepted product-facing identity for the CLI. PSDM remains the method and governance compatibility boundary. The staged migration is defined in `docs/RISCALA_BRAND_MIGRATION.md`; current runtime and package names remain unchanged until their respective migration phases are implemented and validated.
+
 The architecture favors explicit modules over framework abstractions:
 
-- `bin/psdm.mjs` dispatches commands.
+- `bin/psdm.mjs` dispatches commands for both the `riscala` primary executable and `psdm` compatibility executable.
 - `src/commands/*.mjs` owns user-facing command behavior.
 - `src/lib/args.mjs` parses CLI options.
+- `src/lib/branding.mjs` centralizes the product, category, method, and executable names used by human-facing entrypoint presentation.
 - `src/lib/adr.mjs` owns ADR filename generation and scaffold rendering.
 - `src/lib/audit.mjs` builds the non-destructive repository adoption preview, detects existing AI governance files, detects AI runtime surfaces from paths and manifests, and emits the AI readiness audit contract.
 - `src/lib/classifier.mjs` owns reusable change classification.
 - `src/lib/inspect.mjs` composes staged Git evidence with reusable change classification.
+- `src/commands/shell.mjs` owns the interactive readline lifecycle and delegates slash commands to an allowlist router.
+- `src/lib/shell.mjs` builds target-specific project context and renders the dependency-free read-only terminal UI.
+- `src/lib/action-record.mjs` binds proposed Git commits to repository identity, branch, binary staged diff, classification, and approval policy.
+- `src/lib/approval-receipt.mjs` canonicalizes receipt payloads, pins public-key fingerprints, and verifies detached signatures against the live action.
+- `src/lib/approval-enforcement.mjs` consumes verified receipts under an exclusive lock and persists a non-secret local replay ledger.
+- `src/lib/git-hook.mjs` installs, inspects, and removes only Riscala-managed pre-commit hooks while preserving existing hooks.
 - `src/lib/enforcement.mjs` owns CI-oriented maximum change-level enforcement.
 - `src/lib/pr-checklist.mjs` generates pull request checklist content from classification output.
 - `src/lib/config.mjs` loads PSDM configuration and validates optional AI policy declarations.
@@ -44,6 +53,15 @@ The architecture favors explicit modules over framework abstractions:
 - Preserve existing agent, assistant, skill, prompt, and Copilot-style instructions during adoption, and create a separate PSDM adoption plan when integration is needed.
 - Keep templates plain Markdown so teams can adapt them without special tooling.
 - Keep generated artifacts separate from framework docs where possible.
+- Separate product branding from method contracts: Riscala may change human-facing identity, while PSDM config, artifacts, and automation remain stable unless explicitly versioned.
+- Map both executable names to one entrypoint so compatibility cannot drift into a second implementation.
+- Separate agent proposal and execution from human approval; an agent must never issue its own authority.
+- Bind high-risk approval receipts to deterministic action content and invalidate them when any bound value changes.
+- Treat `AGENTS.md` as a governance adapter, not as the enforcement boundary; hooks, required checks, protected environments, and signature verification provide enforcement.
+- Keep the first interactive shell read-only and allowlist-routed; it must not execute arbitrary shell input or expose mutating slash commands before approval enforcement exists.
+- Never provide receipt signing inside the agent-accessible CLI; Riscala verifies authority created through an external trusted channel.
+- Fail action preparation closed when approval policy is invalid, required trust is missing, or the staged binding cannot be calculated.
+- Treat local hook and replay state as defense in depth, not as an agent-resistant boundary; protected remote enforcement remains required.
 
 ## Architecture Gate
 
@@ -72,3 +90,8 @@ Changes require architecture review when they affect:
 - governance semantics for high-risk change levels.
 - the boundary between PSDM governance and external runtime observability.
 - Knowledge as Code semantics, required artifacts, source-of-truth boundaries, or runtime index expectations.
+- Riscala/PSDM naming boundaries, executable compatibility, package transition, or brand migration semantics.
+- agent justification, approval receipts, human presence, content binding, or enforcement boundaries.
+- interactive shell routing, permitted commands, project-context rendering, or mutation boundaries.
+- action-record bindings, approval trust policy, receipt canonicalization, signature verification, expiry, or replay semantics.
+- Git hook installation, existing-hook preservation, receipt consumption, local locks, or enforcement bypass boundaries.

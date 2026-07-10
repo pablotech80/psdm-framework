@@ -101,7 +101,8 @@ export async function initCommand(args) {
   }
 
   console.log('')
-  console.log(`PSDM init complete. Created: ${created}. Skipped: ${skipped}.`)
+  console.log(`Riscala init complete. Created: ${created}. Skipped: ${skipped}.`)
+  console.log('Method: PSDM')
 
   return { exitCode: 0 }
 }

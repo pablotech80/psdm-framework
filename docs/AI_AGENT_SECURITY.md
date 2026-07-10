@@ -14,6 +14,9 @@ Production-grade AI systems should define:
 - Output validation.
 - Risk scoring.
 - Human approval for high-risk actions.
+- Agent self-approval prohibition.
+- Approval binding to the exact content, target, and action.
+- Approval invalidation when bound content changes.
 - Context isolation.
 - Memory boundaries.
 - Audit logging.
@@ -40,6 +43,20 @@ See `docs/TOOL_REGISTRY.md` for the draft registry contract covering permissions
 
 AI tools should be deny-by-default. A tool is available only when the project explicitly grants it for the current change level and scope.
 
+## Human Approval Boundary
+
+A confirmation phrase typed through the same terminal controlled by an agent is not proof of human presence. For configured high-risk agent actions, approval must be hardware-backed or issued through a separate authenticated channel.
+
+The approval must be bound to the exact staged diff, commit, pull-request head, package tarball, deployment artifact, target, and environment that it authorizes. Any bound value change invalidates the approval.
+
+Agents may request approval and report its status. They must not enter, derive, retrieve, expose, simulate, or reuse human confirmation material.
+
+See `docs/AGENT_DECISION_PROTOCOL.md` for the justification contract, receipt shape, content bindings, and enforcement layers.
+
+Riscala implements read-only `git.commit` action-record generation and detached receipt verification. The verifier reconstructs the live staged binding and rejects untrusted keys, weak approval modes, expired receipts, invalid signatures, and changed content. It does not sign receipts.
+
+Riscala now provides an optional managed pre-commit hook with local one-time receipt consumption. This reduces accidental and cooperative-agent bypass, but it is not sufficient against an unrestricted agent because Git hooks and `.git` state remain locally mutable. Use protected branches and trusted required checks for the independent boundary.
+
 ## Stop Conditions
 
 An AI agent must stop when:
@@ -49,3 +66,5 @@ An AI agent must stop when:
 - The action may expose private data.
 - The action may mutate production.
 - The user request conflicts with governance.
+- The agent would need to approve its own action.
+- A required approval is missing, expired, invalid, or bound to different content.

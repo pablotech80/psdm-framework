@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process'
+import { resolve } from 'node:path'
 
 function git(targetDir, args, options = {}) {
   const output = execFileSync('git', ['-C', targetDir, ...args], {
@@ -22,7 +23,7 @@ export function inspectGit(targetDir) {
   }
 
   const branch = git(targetDir, ['branch', '--show-current']) || null
-  const changes = git(targetDir, ['status', '--porcelain'])
+  const changes = git(targetDir, ['status', '--porcelain'], { raw: true })
     .split('\n')
     .map((line) => line.trimEnd())
     .filter(Boolean)
@@ -102,5 +103,58 @@ export function inspectStagedGit(targetDir) {
     isRepository: true,
     branch: repository.branch,
     changes: parseNameStatus(output),
+  }
+}
+
+export function readStagedDiff(targetDir) {
+  return git(targetDir, [
+    'diff',
+    '--cached',
+    '--binary',
+    '--full-index',
+    '--no-ext-diff',
+  ], { raw: true })
+}
+
+export function inspectRepositoryIdentity(targetDir) {
+  const repository = inspectGit(targetDir)
+  if (!repository.isRepository) {
+    return null
+  }
+
+  const root = git(targetDir, ['rev-parse', '--show-toplevel'])
+  let origin = null
+  try {
+    origin = git(targetDir, ['remote', 'get-url', 'origin']) || null
+  } catch {
+    // A local repository without an origin still has a stable identity on this machine.
+  }
+
+  return {
+    root,
+    origin,
+    branch: repository.branch,
+  }
+}
+
+export function resolveGitDirectory(targetDir) {
+  try {
+    const path = git(targetDir, ['rev-parse', '--absolute-git-dir'])
+    return resolve(path)
+  } catch {
+    return null
+  }
+}
+
+export function resolveGitPath(targetDir, path) {
+  try {
+    return git(targetDir, [
+      'rev-parse',
+      '--path-format=absolute',
+      '--git-path',
+      path,
+    ])
+  } catch {
+    return null
   }
 }

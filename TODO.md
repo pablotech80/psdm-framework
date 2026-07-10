@@ -12,6 +12,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
+- [ ] Enroll a real owner public key, activate the managed pre-commit hook, and add protected remote enforcement.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 
 ## Next
@@ -24,6 +25,26 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Done
 
+- [x] Implemented managed pre-commit receipt enforcement with exclusive locking and one-time local consumption.
+- [x] Added hook install, status, and removal commands that preserve unmanaged hooks and respect Git hook paths.
+- [x] Added fixtures proving low-risk allow, high-risk denial, replay rejection, and existing-hook preservation.
+- [x] Classified approval, action-record, replay-enforcement, and Git-hook modules as Level 3 by default.
+- [x] Implemented machine-readable `git.commit` action records bound to repository, branch, staged diff, and classification.
+- [x] Added fail-closed approval policy with required Level 3/4 approval and pinned trusted approvers.
+- [x] Implemented detached signature, key fingerprint, strong-mode, expiry, and live-content receipt verification.
+- [x] Added real Ed25519 fixtures for valid approval, phrase rejection, changed content, missing trust, and invalid policy.
+- [x] Implemented the read-only dependency-free `riscala shell` MVP with `/help`, `/status`, `/inspect`, and `/exit`.
+- [x] Added target-specific shell context and staged/unstaged/untracked working-tree counts.
+- [x] Blocked mutating slash commands until content-bound approval enforcement exists.
+- [x] Fixed first-record Git porcelain whitespace handling and added shell regression coverage.
+- [x] Accepted the Agent Decision Protocol and prohibition on agent self-approval.
+- [x] Defined content-bound approval receipts and hardware/remote human-presence boundaries.
+- [x] Added before/after decision requirements to repository and generated `AGENTS.md` rules.
+- [x] Classified root `AGENTS.md` changes as Level 3 by default.
+- [x] Implemented Riscala Phase 1 with dual executable aliases and human-facing product headers.
+- [x] Added installed-package parity validation for `riscala` and `psdm`.
+- [x] Accepted Riscala as the product identity while preserving PSDM as the governance method.
+- [x] Added the Riscala brand migration plan and compatibility boundaries.
 - [x] Added dependency-free `psdm inspect --staged` with deterministic Git evidence and JSON output.
 - [x] Added staged inspection fixtures for risk-path elevation, the Level 1 floor, renames, no staged changes, and non-Git targets.
 - [x] MVP CLI scaffold.

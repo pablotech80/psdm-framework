@@ -93,6 +93,20 @@ Completed:
 - Clean install from npm `@beta` verified for `1.0.0-beta.4`.
 - Dependency-free `psdm inspect --staged` added with deterministic Git evidence, a Level 1 floor, risk-path elevation, and JSON output.
 - Staged inspection fixture coverage added for risk elevation, the Level 1 floor, renames, an empty Git index, and non-Git targets.
+- Riscala accepted as the product-facing identity, with AI Code Governance for Software Delivery as the category and PSDM preserved as the method.
+- Staged Riscala brand migration plan documented without changing runtime, package, config, or JSON contracts.
+- Riscala Phase 1 implemented with dual executable aliases, shared entrypoint, product headers, and installed-package parity validation.
+- Agent Decision Protocol accepted: agents must justify meaningful mutations and cannot authorize their own high-risk actions.
+- Content-bound approval receipt and human-presence architecture documented before mutating shell commands.
+- Repository and generated `AGENTS.md` rules updated with why, expected improvement, evidence, and next-action rationale requirements.
+- Root `AGENTS.md` added as a default Level 3 risk path with regression coverage.
+- Dependency-free `riscala shell` MVP implemented with target-specific context, read-only slash-command routing, and explicit mutation blocking.
+- Git porcelain parsing corrected so the first unstaged record is not misreported as staged in shell status.
+- Git commit action records implemented with repository, branch, binary staged diff, classification, and approval-policy binding.
+- Detached approval receipt verification implemented with trusted approver fingerprints, strong modes, expiry, and live-content invalidation.
+- Managed pre-commit enforcement implemented with one-time local receipt consumption, exclusive locking, and unmanaged-hook preservation.
+- Local hook enforcement explicitly bounded as defense in depth; protected remote checks remain required against unrestricted agents.
+- Approval, action-record, replay, and Git-hook implementation paths classified as Level 3 by default.
 
 ## Active Milestone
 
@@ -263,6 +277,13 @@ Planned outcomes:
 
 - [ ] Stable CLI API.
 - [x] Staged Git change inspection with explainable risk-path evidence.
+- [x] Accept Riscala product identity and compatibility boundaries.
+- [x] Add the `riscala` executable alias with `psdm` parity before interactive CLI work.
+- [x] Design and implement the dependency-free `riscala shell` MVP.
+- [x] Define agent decision and human-presence approval architecture.
+- [x] Implement machine-readable action records and receipt verification before mutating slash commands.
+- [x] Implement managed pre-commit receipt enforcement with local replay protection.
+- [ ] Enroll a real owner public key, activate the hook, and add protected remote enforcement.
 - [ ] Stable config schema.
 - [x] Public package release checklist.
 - [x] Decide package metadata gaps before beta.

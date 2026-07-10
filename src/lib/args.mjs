@@ -10,6 +10,7 @@ export function parseArgs(args) {
     date: null,
     dryRun: false,
     staged: false,
+    receiptPath: null,
   }
   const positional = []
 
@@ -28,6 +29,12 @@ export function parseArgs(args) {
 
     if (arg === '--staged') {
       options.staged = true
+      continue
+    }
+
+    if (arg === '--receipt') {
+      options.receiptPath = args[index + 1] || null
+      index += 1
       continue
     }
 

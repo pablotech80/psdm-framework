@@ -10,6 +10,15 @@ import { enforceCommand } from '../src/commands/enforce.mjs'
 import { prChecklistCommand } from '../src/commands/pr-checklist.mjs'
 import { reportCommand } from '../src/commands/report.mjs'
 import { inspectCommand } from '../src/commands/inspect.mjs'
+import { shellCommand } from '../src/commands/shell.mjs'
+import { actionCommand } from '../src/commands/action.mjs'
+import { approvalCommand } from '../src/commands/approval.mjs'
+import { hookCommand } from '../src/commands/hook.mjs'
+import {
+  COMPATIBILITY_EXECUTABLE,
+  PRIMARY_EXECUTABLE,
+  productHeader,
+} from '../src/lib/branding.mjs'
 
 const [command, ...args] = process.argv.slice(2)
 
@@ -24,30 +33,46 @@ const commands = {
   'pr-checklist': prChecklistCommand,
   report: reportCommand,
   inspect: inspectCommand,
+  shell: shellCommand,
+  action: actionCommand,
+  approval: approvalCommand,
+  hook: hookCommand,
 }
 
 function printHelp() {
-  console.log(`PSDM Framework
+  console.log(`${productHeader()}
 
 Usage:
-  psdm audit [target] [--json] [--feature name] [--config path]
-  psdm adr "<decision title>" [--json] [--target path] [--date YYYY-MM-DD] [--status Proposed]
-  psdm init [target] [--feature name] [--dry-run]
-  psdm check [target] [--json] [--feature name] [--config path]
-  psdm validate [target] [--json] [--feature name] [--config path]
-  psdm inspect --staged [--json] [--target path] [--config path]
-  psdm classify "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
-  psdm enforce "<change description>" [--json] [--max-level "Level 2"] [--file path] [--files path,path] [--target path] [--config path]
-  psdm pr-checklist "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
-  psdm report [target] [--json] [--feature name] [--config path]
+  ${PRIMARY_EXECUTABLE} audit [target] [--json] [--feature name] [--config path]
+  ${PRIMARY_EXECUTABLE} adr "<decision title>" [--json] [--target path] [--date YYYY-MM-DD] [--status Proposed]
+  ${PRIMARY_EXECUTABLE} init [target] [--feature name] [--dry-run]
+  ${PRIMARY_EXECUTABLE} check [target] [--json] [--feature name] [--config path]
+  ${PRIMARY_EXECUTABLE} validate [target] [--json] [--feature name] [--config path]
+  ${PRIMARY_EXECUTABLE} inspect --staged [--json] [--target path] [--config path]
+  ${PRIMARY_EXECUTABLE} shell [target] [--config path]
+  ${PRIMARY_EXECUTABLE} action prepare git.commit [--target path] [--config path] [--json]
+  ${PRIMARY_EXECUTABLE} approval verify git.commit --receipt path [--target path] [--config path] [--json]
+  ${PRIMARY_EXECUTABLE} approval enforce git.commit [--receipt path] [--target path] [--config path] [--json]
+  ${PRIMARY_EXECUTABLE} hook <install|remove|status> pre-commit [--target path] [--json]
+  ${PRIMARY_EXECUTABLE} classify "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
+  ${PRIMARY_EXECUTABLE} enforce "<change description>" [--json] [--max-level "Level 2"] [--file path] [--files path,path] [--target path] [--config path]
+  ${PRIMARY_EXECUTABLE} pr-checklist "<change description>" [--json] [--file path] [--files path,path] [--target path] [--config path]
+  ${PRIMARY_EXECUTABLE} report [target] [--json] [--feature name] [--config path]
+
+Compatibility:
+  ${COMPATIBILITY_EXECUTABLE} remains supported with identical commands and behavior.
 
 Commands:
   adr        Create a new Architecture Decision Record under ADRs/.
-  audit      Preview repository state and what PSDM init would change.
+  audit      Preview repository state and what Riscala init would change.
   init       Create PSDM governance artifacts in a project.
   check      Check required artifacts exist and are non-empty.
   validate   Validate PSDM baseline structure and required sections.
   inspect    Inspect staged Git changes and explain their minimum governance level.
+  shell      Open the read-only interactive governance shell.
+  action     Build a content-bound record for a proposed action.
+  approval   Verify a signed approval receipt against the live action.
+  hook       Manage the Riscala pre-commit enforcement hook.
   classify   Estimate change level from a short description.
   enforce    Fail when a classified change exceeds the allowed maximum level.
   pr-checklist Generate a pull request checklist for a change.

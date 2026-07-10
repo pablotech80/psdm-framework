@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="./assets/psdm-logo.png" alt="PSDM Framework by Ptech" width="180" />
+  <img src="./assets/psdm-logo.png" alt="PSDM method mark by Ptech" width="180" />
 </p>
 
-<h1 align="center">PSDM Framework</h1>
+<h1 align="center">Riscala</h1>
 
 <p align="center">
-  <strong>Specification-first governance for AI-assisted software engineering.</strong>
+  <strong>AI Code Governance for Software Delivery</strong>
 </p>
 
 <p align="center">
@@ -17,27 +17,29 @@
 </p>
 
 <p align="center">
-  <strong>AI writes code. PSDM governs it.</strong>
+  <strong>Govern every change at the right level.</strong>
 </p>
 
 <p align="center">
   Govern AI-assisted software delivery with specification, architecture, risk-based controls, and production-ready governance.
 </p>
 
-PSDM Framework helps repositories, teams, developers, AI agents, technical leads, and product teams keep delivery controlled while moving quickly.
+Riscala is the product-facing CLI powered by the PSDM governance method. It helps repositories, teams, developers, AI agents, technical leads, and product teams keep delivery controlled while moving quickly.
 
 AI-assisted development is fast, but speed without governance creates risk.
 
-PSDM helps teams decide how much process a change needs based on risk: small safe changes stay fast; security, data, AI, infrastructure, and production-sensitive changes get stronger governance.
+Riscala uses PSDM to decide how much process a change needs based on risk: small safe changes stay fast; security, data, AI, infrastructure, and production-sensitive changes get stronger governance.
 
-PSDM is currently beta software. It is a local CLI and GitHub Action, not a hosted platform.
+Riscala is currently beta software and is still distributed through the compatibility package `@ptechsolution/psdm-framework`. It is a local CLI and GitHub Action, not a hosted platform.
 
-Try the published beta:
+Try the currently published beta with the compatibility executable:
 
 ```bash
 npm install -g @ptechsolution/psdm-framework@beta
 psdm audit
 ```
+
+The `riscala` executable is implemented in the repository and is planned for the next explicitly approved beta; it is not part of the already published `1.0.0-beta.4` tarball.
 
 ## Table Of Contents
 
@@ -96,6 +98,7 @@ flowchart TD
 - CI enforcement for maximum allowed change level.
 - AI readiness checks for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
 - AI-agent governance templates for projects using LLMs, tools, prompts, RAG, or automation.
+- Agent Decision Protocol separating agent justification and execution from content-bound human approval.
 - Knowledge as Code guidance for versioning intent, decisions, rules, prompts, workflows, verification criteria, and evolution notes.
 - JSON output for automation and GitHub Action workflows.
 - Public beta release gates for package contents, docs, and repository readiness.
@@ -118,6 +121,8 @@ Then run:
 psdm help
 ```
 
+The existing `psdm` executable remains supported with identical commands and behavior during the Riscala migration. After the next Riscala-enabled beta is published, both `riscala help` and `psdm help` will work from npm installation.
+
 For development from this checkout:
 
 ```bash
@@ -127,41 +132,55 @@ npm install -g .
 Then run:
 
 ```bash
-psdm help
+riscala help
 ```
+
+The command reference below uses the new primary executable available from this checkout. Use `psdm` with the published `1.0.0-beta.4`; command behavior is identical.
 
 ## CLI
 
 ### Repository
 
 ```bash
-psdm audit [target] [--json] [--feature <name>] [--config <path>]
-psdm check [target] [--json] [--feature <name>] [--config <path>]
-psdm validate [target] [--json] [--feature <name>] [--config <path>]
-psdm report [target] [--json] [--feature <name>] [--config <path>]
-psdm inspect --staged [--json] [--target <path>] [--config <path>]
+riscala audit [target] [--json] [--feature <name>] [--config <path>]
+riscala check [target] [--json] [--feature <name>] [--config <path>]
+riscala validate [target] [--json] [--feature <name>] [--config <path>]
+riscala report [target] [--json] [--feature <name>] [--config <path>]
+riscala inspect --staged [--json] [--target <path>] [--config <path>]
 ```
+
+### Interactive Shell
+
+```bash
+riscala shell [target] [--config <path>]
+riscala action prepare git.commit [--target <path>] [--config <path>] [--json]
+riscala approval verify git.commit --receipt <path> [--target <path>] [--config <path>] [--json]
+riscala approval enforce git.commit [--receipt <path>] [--target <path>] [--config <path>] [--json]
+riscala hook <install|remove|status> pre-commit [--target <path>] [--json]
+```
+
+The dependency-free shell shows the selected project's name, branch, working-tree counts, and active PSDM policy. Its first release is intentionally read-only and supports `/help`, `/status`, `/inspect`, and `/exit`.
 
 ### Initialization
 
 ```bash
-psdm init [target]
-psdm init [target] --dry-run
-psdm init [target] --feature <name>
+riscala init [target]
+riscala init [target] --dry-run
+riscala init [target] --feature <name>
 ```
 
 ### Governance
 
 ```bash
-psdm classify "<change description>" [--json] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
-psdm enforce "<change description>" [--json] [--max-level "Level 2"] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
-psdm pr-checklist "<change description>" [--json] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
+riscala classify "<change description>" [--json] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
+riscala enforce "<change description>" [--json] [--max-level "Level 2"] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
+riscala pr-checklist "<change description>" [--json] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>]
 ```
 
 ### Architecture
 
 ```bash
-psdm adr "<decision title>" [--json] [--target <path>] [--date YYYY-MM-DD] [--status Proposed]
+riscala adr "<decision title>" [--json] [--target <path>] [--date YYYY-MM-DD] [--status Proposed]
 ```
 
 ## Quick Start
@@ -169,23 +188,23 @@ psdm adr "<decision title>" [--json] [--target <path>] [--date YYYY-MM-DD] [--st
 Inside a project:
 
 ```bash
-psdm audit
+riscala audit
 # Analyze repository readiness before writing files.
 
-psdm init
+riscala init
 # Bootstrap PSDM governance artifacts.
 
-psdm validate
+riscala validate
 # Validate the governance baseline.
 ```
 
-Use `psdm audit` before initializing PSDM in an existing project. It does not modify files; it shows current state, what `psdm init` would create or skip, pros, cons, and recommendations.
+Use `riscala audit` before initializing PSDM in an existing project. It does not modify files; it shows current state, what `riscala init` would create or skip, pros, cons, and recommendations.
 
-If the repository already has `AGENTS.md`, Copilot, Cursor, Claude, Codex, skills, prompts, or AI instruction files, `psdm audit` reports adoption mode `integrate` and recommends preserving those files. During `psdm init`, PSDM creates `docs/PSDM_ADOPTION.md` so the integration plan is explicit.
+If the repository already has `AGENTS.md`, Copilot, Cursor, Claude, Codex, skills, prompts, or AI instruction files, `riscala audit` reports adoption mode `integrate` and recommends preserving those files. During `riscala init`, PSDM creates `docs/PSDM_ADOPTION.md` so the integration plan is explicit.
 
-`psdm audit --json` also emits `aiReadiness`, a stable contract for AI runtime readiness signals. It reports detected AI surfaces, governance artifact groups, gaps, and recommendations for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security. Current detection covers common AI folders and manifest dependencies such as OpenAI, Anthropic, LangChain, LlamaIndex, vector stores, embeddings, and n8n. The contract is documented in `docs/AI_READINESS_AUDIT.md`.
+`riscala audit --json` also emits `aiReadiness`, a stable contract for AI runtime readiness signals. It reports detected AI surfaces, governance artifact groups, gaps, and recommendations for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security. Current detection covers common AI folders and manifest dependencies such as OpenAI, Anthropic, LangChain, LlamaIndex, vector stores, embeddings, and n8n. The contract is documented in `docs/AI_READINESS_AUDIT.md`.
 
-`psdm init` also creates `psdm.config.json`. Existing files are skipped.
+`riscala init` also creates `psdm.config.json`. Existing files are skipped.
 
 ## Model And Tool Independence
 
@@ -210,7 +229,7 @@ See `docs/KNOWLEDGE_AS_CODE.md` for structure, tool roles, maturity levels, and 
 ### Classify a Change
 
 ```bash
-psdm classify "change Supabase RLS policy for client documents"
+riscala classify "change Supabase RLS policy for client documents"
 ```
 
 Expected result:
@@ -222,15 +241,15 @@ Estimated level: Level 3
 Machine-readable output:
 
 ```bash
-psdm audit --json
-psdm validate --json
-psdm classify "change Stripe webhook ownership validation" --json
+riscala audit --json
+riscala validate --json
+riscala classify "change Stripe webhook ownership validation" --json
 ```
 
 Classify by description and touched files:
 
 ```bash
-psdm classify "small cleanup" --file backend/auth/session.py
+riscala classify "small cleanup" --file backend/auth/session.py
 ```
 
 Configured risk paths can raise the level even when the description is vague:
@@ -244,7 +263,7 @@ Estimated level: Level 3
 Inspect the Git index without writing files or requiring a change description:
 
 ```bash
-psdm inspect --staged
+riscala inspect --staged
 ```
 
 The command reports staged file status, applies a Level 1 minimum to any real file change, and raises the result when a configured `riskPath` matches. It does not inspect unstaged or untracked files.
@@ -252,17 +271,51 @@ The command reports staged file status, applies a Level 1 minimum to any real fi
 Use JSON output for automation:
 
 ```bash
-psdm inspect --staged --json
+riscala inspect --staged --json
 ```
 
 The JSON contract includes `decision`, `git.changes`, `files`, `evidence`, and `classification`. `NO_STAGED_CHANGES` is a successful no-op; `NOT_A_GIT_REPOSITORY` exits non-zero.
+
+### Open The Interactive Shell
+
+Open the read-only terminal UI in the current project:
+
+```bash
+riscala shell
+```
+
+Use `/status` to refresh project context and `/inspect` to review staged changes. Mutating slash commands remain blocked until trusted approvers and independent enforcement hooks are configured. See `docs/INTERACTIVE_SHELL.md` for the interface and safety contract.
+
+### Prepare And Verify Approval
+
+Create a machine-readable record for the exact staged diff:
+
+```bash
+riscala action prepare git.commit --json
+```
+
+After a trusted external signer returns a receipt, verify it against the live Git index:
+
+```bash
+riscala approval verify git.commit --receipt ./approval-receipt.json --json
+```
+
+Riscala does not sign receipts. Signing must happen through a hardware-backed or separately authenticated channel. See `docs/ACTION_RECORDS_AND_APPROVAL_RECEIPTS.md`.
+
+Install the local pre-commit enforcement hook after a trusted approver is configured:
+
+```bash
+riscala hook install pre-commit
+```
+
+The hook consumes a valid receipt once and blocks invalid or missing Level 3/4 approval. It preserves existing unmanaged hooks instead of overwriting them. Local hooks can still be bypassed with Git options or filesystem control, so protected branches and remote required checks remain necessary for agent-resistant enforcement.
 
 ### Generate A PR Checklist
 
 Generate a PR checklist:
 
 ```bash
-psdm pr-checklist "change auth session validation" --file backend/auth/session.py
+riscala pr-checklist "change auth session validation" --file backend/auth/session.py
 ```
 
 ### Enforce In CI
@@ -270,7 +323,7 @@ psdm pr-checklist "change auth session validation" --file backend/auth/session.p
 Enforce a maximum level in CI:
 
 ```bash
-psdm enforce "small cleanup" --file src/index.mjs --max-level "Level 2"
+riscala enforce "small cleanup" --file src/index.mjs --max-level "Level 2"
 ```
 
 ### Create An ADR
@@ -278,7 +331,7 @@ psdm enforce "small cleanup" --file src/index.mjs --max-level "Level 2"
 Create an ADR:
 
 ```bash
-psdm adr "Adopt CI change level enforcement"
+riscala adr "Adopt CI change level enforcement"
 ```
 
 ## Local Validation
@@ -365,7 +418,7 @@ The optional `ai` block declares repository-level AI policy for PII, redaction, 
 Use a non-default config path:
 
 ```bash
-psdm validate --config ./governance/psdm.config.json
+riscala validate --config ./governance/psdm.config.json
 ```
 
 ## Feature Artifacts
@@ -373,8 +426,8 @@ psdm validate --config ./governance/psdm.config.json
 For product changes that should not require rewriting the whole project baseline, create scoped artifacts:
 
 ```bash
-psdm init --feature billing
-psdm validate --feature billing
+riscala init --feature billing
+riscala validate --feature billing
 ```
 
 Default feature paths:
@@ -400,9 +453,9 @@ PSDM governs the whole repository, but its strongest controls usually apply to b
 
 These controls live in `riskPaths`. A matching path raises the minimum change level even when the textual change description looks low risk.
 
-`psdm inspect --staged` obtains touched paths directly from the Git index, so developers do not need to repeat them through `--file` or `--files` before review.
+`riscala inspect --staged` obtains touched paths directly from the Git index, so developers do not need to repeat them through `--file` or `--files` before review.
 
-`psdm validate` fails when `riskPaths` contains malformed rules. Invalid risk path rules are ignored by classification so a broken local policy does not crash the CLI.
+`riscala validate` fails when `riskPaths` contains malformed rules. Invalid risk path rules are ignored by classification so a broken local policy does not crash the CLI.
 
 ## Change Levels
 
@@ -462,6 +515,7 @@ The action writes `psdm-enforcement.json` and fails when the classified change e
 - Specification before significant implementation.
 - Knowledge as a versioned project asset.
 - Explicit AI-agent boundaries.
+- Agents justify meaningful mutations but cannot authorize their own high-risk actions.
 - Security-sensitive work requires security context.
 - Deployment-sensitive work requires rollback context.
 - Documentation must support delivery, not replace it.
@@ -475,8 +529,9 @@ This beta does not yet provide:
 - Deep code-level semantic AI readiness detection.
 - SBOM or supply-chain scanning.
 - Deep semantic validation of specs.
+- Independent Git-hook enforcement, receipt replay persistence, hardware signing ceremony integration, and remote approval service.
 
-Freshly initialized templates intentionally contain placeholders. `psdm validate` reports them as warnings and returns `METHOD_BASELINE_REVIEW_REQUIRED` until the artifacts are filled with project-specific content.
+Freshly initialized templates intentionally contain placeholders. `riscala validate` reports them as warnings and returns `METHOD_BASELINE_REVIEW_REQUIRED` until the artifacts are filled with project-specific content.
 
 See `docs/ROADMAP.md`.
 

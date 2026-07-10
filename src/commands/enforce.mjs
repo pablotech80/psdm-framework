@@ -7,7 +7,7 @@ export async function enforceCommand(args) {
   const description = positional.join(' ').trim()
 
   if (!description) {
-    console.error('Usage: psdm enforce "<change description>" [--max-level "Level 2"] [--file path] [--files path,path] [--json]')
+    console.error('Usage: riscala enforce "<change description>" [--max-level "Level 2"] [--file path] [--files path,path] [--json]')
     return { exitCode: 1 }
   }
 

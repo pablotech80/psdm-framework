@@ -6,7 +6,7 @@ export async function inspectCommand(args) {
   const { options, positional } = parseArgs(args)
 
   if (!options.staged || positional.length > 0) {
-    console.error('Usage: psdm inspect --staged [--json] [--target path] [--config path]')
+    console.error('Usage: riscala inspect --staged [--json] [--target path] [--config path]')
     return { exitCode: 1 }
   }
 
@@ -31,7 +31,8 @@ export async function inspectCommand(args) {
     return { exitCode: 0 }
   }
 
-  console.log('PSDM Staged Change Inspection')
+  console.log('Riscala Staged Change Inspection')
+  console.log('Method: PSDM')
   console.log('')
   console.log(`Files: ${report.files.length}`)
   for (const change of report.git.changes) {
