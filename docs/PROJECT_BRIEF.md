@@ -10,6 +10,8 @@ AI-assisted software delivery can move quickly while losing architectural contex
 
 PSDM exists to provide risk-scaled governance for software repositories. It helps teams initialize governance artifacts, classify changes, validate repository readiness, and keep AI agents operating inside explicit boundaries.
 
+Riscala is the product-facing CLI identity. PSDM remains the underlying governance method so project policy, artifacts, and automation are not coupled to a single product name.
+
 ## Success Criteria
 
 - The framework remains installable as a dependency-free CLI.
@@ -18,6 +20,7 @@ PSDM exists to provide risk-scaled governance for software repositories. It help
 - Validation output is useful for both humans and automation.
 - Configuration is explicit, versioned, and understandable without external services.
 - This repository maintains its own PSDM artifacts and can validate its baseline.
+- Riscala can evolve as a recognizable product without breaking PSDM governance contracts.
 
 ## Open Questions
 
@@ -25,3 +28,4 @@ PSDM exists to provide risk-scaled governance for software repositories. It help
 - Whether a Python CLI should exist alongside the Node CLI after behavior stabilizes.
 - Which CI enforcement behavior should fail pull requests versus only report advisory findings.
 - How much semantic validation belongs in PSDM without turning it into a heavyweight policy engine.
+- When the Riscala package and repository transition should occur after dual-executable compatibility is proven.

@@ -93,6 +93,8 @@ Completed:
 - Clean install from npm `@beta` verified for `1.0.0-beta.4`.
 - Dependency-free `psdm inspect --staged` added with deterministic Git evidence, a Level 1 floor, risk-path elevation, and JSON output.
 - Staged inspection fixture coverage added for risk elevation, the Level 1 floor, renames, an empty Git index, and non-Git targets.
+- Riscala accepted as the product-facing identity, with AI Code Governance for Software Delivery as the category and PSDM preserved as the method.
+- Staged Riscala brand migration plan documented without changing runtime, package, config, or JSON contracts.
 
 ## Active Milestone
 
@@ -263,6 +265,8 @@ Planned outcomes:
 
 - [ ] Stable CLI API.
 - [x] Staged Git change inspection with explainable risk-path evidence.
+- [x] Accept Riscala product identity and compatibility boundaries.
+- [ ] Add the `riscala` executable alias with `psdm` parity before interactive CLI work.
 - [ ] Stable config schema.
 - [x] Public package release checklist.
 - [x] Decide package metadata gaps before beta.

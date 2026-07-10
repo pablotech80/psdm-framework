@@ -7,6 +7,8 @@ Project: `psdm-framework`
 
 PSDM is a small Node.js CLI package. The executable entrypoint is `bin/psdm.mjs`; command implementations live under `src/commands`; shared helpers live under `src/lib`; validation logic lives under `src/validator`; project templates live under `templates`.
 
+Riscala is the accepted product-facing identity for the CLI. PSDM remains the method and governance compatibility boundary. The staged migration is defined in `docs/RISCALA_BRAND_MIGRATION.md`; current runtime and package names remain unchanged until their respective migration phases are implemented and validated.
+
 The architecture favors explicit modules over framework abstractions:
 
 - `bin/psdm.mjs` dispatches commands.
@@ -44,6 +46,7 @@ The architecture favors explicit modules over framework abstractions:
 - Preserve existing agent, assistant, skill, prompt, and Copilot-style instructions during adoption, and create a separate PSDM adoption plan when integration is needed.
 - Keep templates plain Markdown so teams can adapt them without special tooling.
 - Keep generated artifacts separate from framework docs where possible.
+- Separate product branding from method contracts: Riscala may change human-facing identity, while PSDM config, artifacts, and automation remain stable unless explicitly versioned.
 
 ## Architecture Gate
 
@@ -72,3 +75,4 @@ Changes require architecture review when they affect:
 - governance semantics for high-risk change levels.
 - the boundary between PSDM governance and external runtime observability.
 - Knowledge as Code semantics, required artifacts, source-of-truth boundaries, or runtime index expectations.
+- Riscala/PSDM naming boundaries, executable compatibility, package transition, or brand migration semantics.

@@ -169,6 +169,8 @@
 
 - [ ] Stable CLI API.
 - [x] Staged Git change inspection with deterministic file and risk-path evidence.
+- [x] Riscala product identity and PSDM compatibility boundary accepted.
+- [ ] Dual `riscala` and `psdm` executable compatibility.
 - [x] Full documentation index.
 - [ ] Tested fixtures.
 - [x] Public package release checklist.

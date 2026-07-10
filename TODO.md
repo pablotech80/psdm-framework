@@ -12,6 +12,7 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
+- [ ] Implement Phase 1 of the Riscala migration: dual executable, parity fixtures, and human-facing product headers.
 - [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
 
 ## Next
@@ -24,6 +25,8 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Done
 
+- [x] Accepted Riscala as the product identity while preserving PSDM as the governance method.
+- [x] Added the Riscala brand migration plan and compatibility boundaries.
 - [x] Added dependency-free `psdm inspect --staged` with deterministic Git evidence and JSON output.
 - [x] Added staged inspection fixtures for risk-path elevation, the Level 1 floor, renames, no staged changes, and non-Git targets.
 - [x] MVP CLI scaffold.

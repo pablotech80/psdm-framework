@@ -15,6 +15,7 @@ Use it to find the right document by task: adopting PSDM in an existing project,
 - `docs/PSDM_OVERVIEW.md`: method overview and governance model.
 - `docs/KNOWLEDGE_AS_CODE.md`: optional Knowledge as Code Layer for versioning intent, decisions, rules, prompts, workflows, verification criteria, and evolution notes.
 - `docs/PROJECT_BRIEF.md`: project purpose, audience, and success criteria.
+- `docs/RISCALA_BRAND_MIGRATION.md`: accepted Riscala product identity and staged compatibility plan.
 - `docs/BETA_RELEASE_NOTES.md`: beta release scope, validation, limitations, and exit criteria.
 - `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, and `SECURITY.md`: public collaboration and reporting expectations.
 
@@ -85,6 +86,7 @@ Key policy concepts:
 - `docs/AI_READINESS_AUDIT.md`: `psdm audit --json` contract for AI readiness signals and governance gaps.
 - `docs/MODEL_AND_TOOL_INDEPENDENCE.md`: model-neutral governance and tool-specific adapter guidance.
 - `docs/KNOWLEDGE_AS_CODE.md`: source-of-truth and runtime-index boundaries for governed project knowledge.
+- `docs/RISCALA_BRAND_MIGRATION.md`: boundary between the Riscala product and PSDM method.
 - `docs/TOOL_REGISTRY.md`: tool registry direction.
 - `ADRs/README.md`: ADR usage guidance.
 
