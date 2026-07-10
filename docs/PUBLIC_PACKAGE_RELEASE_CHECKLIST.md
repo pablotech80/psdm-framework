@@ -395,3 +395,16 @@ Result:
 - Git tag and GitHub pre-release `v1.0.0-beta.4`: created.
 - Clean install from npm `@beta`: passed.
 - npm dist-tag `beta` points to `1.0.0-beta.4`.
+
+## Beta 5 Release - 2026-07-10
+
+Result:
+
+- Published `@ptechsolution/psdm-framework@1.0.0-beta.5` for the Riscala executable and complete read-only shell on npm beta.
+- Includes dual `riscala`/`psdm` executable compatibility, Ptech cyan shell identity, slash command palette, fixed-width shell panels, action-record visibility, approval-boundary visibility, and hook-status visibility.
+- Protected trusted publishing workflow: passed.
+- Explicit owner approval recorded with `CONFIRM NPM BETA PUBLISH`.
+- Git tag and GitHub pre-release `v1.0.0-beta.5`: created.
+- Clean install from npm `@beta`: passed.
+- npm dist-tag `beta` points to `1.0.0-beta.5`.
+- npm dist-tag `latest` still points to `1.0.0-beta.1` because the attempted removal returned `E403`; follow-up remains tracked separately.

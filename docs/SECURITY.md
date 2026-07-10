@@ -53,7 +53,9 @@ Security posture:
 - CodeQL workflow for JavaScript analysis;
 - dependency review workflow for pull requests;
 - Dependabot update configuration for npm and GitHub Actions.
-- `main` branch protection requires pull requests, one approving review, strict `validate-framework` and `Analyze JavaScript` checks, conversation resolution, admin enforcement, and blocks force pushes and deletions.
+- `main` branch protection currently runs in solo-maintainer mode with strict `validate-framework` and `Analyze JavaScript` checks, conversation resolution, admin enforcement, and blocked force pushes and deletions.
+
+When additional maintainers join, team mode should add at least one required approving review from a maintainer with write access. The solo-maintainer mode avoids self-review theater while preserving CI and branch safety controls.
 
 ## Public Vulnerability Reporting
 
@@ -101,4 +103,4 @@ GitHub repository settings:
 - secret scanning push protection: enabled;
 - Dependabot security updates: enabled;
 - private vulnerability reporting: enabled.
-- branch protection on `main`: enabled with required review and required checks.
+- branch protection on `main`: enabled with required checks and solo-maintainer review policy.

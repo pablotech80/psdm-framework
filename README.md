@@ -36,10 +36,14 @@ Try the currently published beta with the compatibility executable:
 
 ```bash
 npm install -g @ptechsolution/psdm-framework@beta
-psdm audit
+riscala audit
 ```
 
-The `riscala` executable is implemented in the repository and prepared for `1.0.0-beta.5`; publishing it to npm still requires the protected release workflow and explicit owner approval.
+The compatibility executable remains available:
+
+```bash
+psdm audit
+```
 
 ## Table Of Contents
 
@@ -105,7 +109,7 @@ flowchart TD
 
 ## Status
 
-`1.0.0-beta.5` candidate. Latest published beta: `1.0.0-beta.4`.
+Latest published beta: `1.0.0-beta.5`.
 
 ## Install
 
@@ -118,10 +122,10 @@ npm install -g @ptechsolution/psdm-framework@beta
 Then run:
 
 ```bash
-psdm help
+riscala help
 ```
 
-The existing `psdm` executable remains supported with identical commands and behavior during the Riscala migration. After the Riscala-enabled beta is published, both `riscala help` and `psdm help` will work from npm installation.
+The existing `psdm` executable remains supported with identical commands and behavior during the Riscala migration. Both `riscala help` and `psdm help` work from the npm beta package.
 
 For development from this checkout:
 
@@ -135,7 +139,7 @@ Then run:
 riscala help
 ```
 
-The command reference below uses the new primary executable available from this checkout and from the prepared `1.0.0-beta.5` package candidate. Use `psdm` with the currently published `1.0.0-beta.4`; command behavior is identical.
+The command reference below uses the primary `riscala` executable. Use `psdm` only when compatibility with older automation is needed; command behavior is identical.
 
 ## CLI
 
@@ -332,6 +336,16 @@ riscala hook install pre-commit
 ```
 
 The hook consumes a valid receipt once and blocks invalid or missing Level 3/4 approval. It preserves existing unmanaged hooks instead of overwriting them. Local hooks can still be bypassed with Git options or filesystem control, so protected branches and remote required checks remain necessary for agent-resistant enforcement.
+
+### Solo Maintainer And Team Mode
+
+Riscala separates local governance from repository ownership rules:
+
+- solo maintainer mode keeps required CI checks, admin enforcement, conversation resolution, and blocked force pushes/deletions, but does not require an approving reviewer;
+- team mode should add at least one required approving review from a maintainer with write access;
+- high-risk Level 3/4 changes still require content-bound approval when project policy says approval is required.
+
+This keeps the product usable for one maintainer without weakening the path to team governance later.
 
 ### Generate A PR Checklist
 
@@ -552,7 +566,7 @@ This beta does not yet provide:
 - Deep code-level semantic AI readiness detection.
 - SBOM or supply-chain scanning.
 - Deep semantic validation of specs.
-- Independent Git-hook enforcement, receipt replay persistence, hardware signing ceremony integration, and remote approval service.
+- Remote approval service, remote replay persistence, or hardware signing ceremony integration.
 
 Freshly initialized templates intentionally contain placeholders. `riscala validate` reports them as warnings and returns `METHOD_BASELINE_REVIEW_REQUIRED` until the artifacts are filled with project-specific content.
 

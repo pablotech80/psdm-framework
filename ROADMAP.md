@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is published at `1.0.0-beta.4`; npm dist-tag `beta` points to `1.0.0-beta.4`.
+PSDM is published at `1.0.0-beta.5`; npm dist-tag `beta` points to `1.0.0-beta.5`.
 
 Completed:
 
@@ -119,7 +119,8 @@ Completed:
 - First owner public key enrolled for content-bound Level 3/4 approval verification.
 - `1.0.0-beta.5` published through protected trusted publishing and verified with clean npm install.
 - Local managed pre-commit hook activated for this checkout.
-- GitHub branch protection enabled for `main` with required PR review, strict `validate-framework` and `Analyze JavaScript` checks, admin enforcement, conversation resolution, and blocked force pushes/deletions.
+- GitHub branch protection enabled for `main` in solo-maintainer mode with strict `validate-framework` and `Analyze JavaScript` checks, admin enforcement, conversation resolution, and blocked force pushes/deletions.
+- Public documentation aligned with the published `1.0.0-beta.5` Riscala executable and the solo-maintainer/team governance distinction.
 
 ## Active Milestone
 
@@ -298,6 +299,7 @@ Planned outcomes:
 - [x] Implement managed pre-commit receipt enforcement with local replay protection.
 - [x] Enroll a real owner public key.
 - [x] Activate local hook and protected branch enforcement.
+- [x] Document solo-maintainer versus team governance mode.
 - [ ] Add a required remote approval check for content-bound Level 3/4 actions.
 - [ ] Stable config schema.
 - [x] Public package release checklist.
