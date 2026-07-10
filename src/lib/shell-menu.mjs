@@ -1,13 +1,22 @@
 import { terminalTheme } from './terminal-style.mjs'
 
 const MENU_WIDTH = 68
+const MENU_NAME_WIDTH = 16
 
 export const SHELL_MENU_COMMANDS = Object.freeze([
   { name: '/help', description: 'Show available commands and safety boundaries.' },
   { name: '/status', description: 'Refresh repository and policy context.' },
   { name: '/audit', description: 'Assess governance adoption and readiness.' },
+  { name: '/check', description: 'Check required artifacts exist.' },
   { name: '/validate', description: 'Validate the governance baseline.' },
   { name: '/inspect', description: 'Inspect staged changes and governance level.' },
+  { name: '/report', description: 'Summarize compliance report readiness.' },
+  { name: '/classify', description: 'Classify a described change.' },
+  { name: '/pr-checklist', description: 'Build a PR checklist for a described change.' },
+  { name: '/init-preview', description: 'Preview governance files without writing.' },
+  { name: '/hook-status', description: 'Inspect managed pre-commit hook status.' },
+  { name: '/action', description: 'Prepare a git.commit action record.' },
+  { name: '/approval', description: 'Show approval receipt boundary.' },
   { name: '/exit', description: 'Close the Riscala shell.' },
 ])
 
@@ -38,8 +47,8 @@ export function moveShellMenuSelection(current, direction, count) {
 function commandRow(command, selected, options) {
   const theme = terminalTheme(options.color)
   const marker = selected ? '❯' : ' '
-  const name = command.name.padEnd(10)
-  const descriptionWidth = MENU_WIDTH - 14
+  const name = command.name.padEnd(MENU_NAME_WIDTH)
+  const descriptionWidth = MENU_WIDTH - MENU_NAME_WIDTH - 4
   const description = truncate(command.description, descriptionWidth).padEnd(descriptionWidth)
 
   return [

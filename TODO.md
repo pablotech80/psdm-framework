@@ -33,6 +33,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Replaced internal `/audit` field wording with current-state artifacts, expanded adoption, specific Git state, and Riscala-native recommendations.
 - [x] Added prioritized AI gap focus and prevented executable-brand normalization from renaming `psdm.config.json`.
 - [x] Added read-only `/validate` to the shell with decision, check counts, focus artifacts, and contextual next action.
+- [x] Expanded the read-only shell into a fuller governance console with check, report, classify, PR checklist, init preview, hook status, action record, and approval-boundary commands.
 - [x] Implemented managed pre-commit receipt enforcement with exclusive locking and one-time local consumption.
 - [x] Added hook install, status, and removal commands that preserve unmanaged hooks and respect Git hook paths.
 - [x] Added fixtures proving low-risk allow, high-risk denial, replay rejection, and existing-hook preservation.

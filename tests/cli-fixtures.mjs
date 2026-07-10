@@ -111,7 +111,7 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   writeFileSync(resolve(target, 'package.json'), '{"name":"shell-fixture","private":true}\n')
   writeFileSync(resolve(target, 'notes.txt'), 'untracked\n')
 
-  const output = runShell([target], '/help\n/status\n/audit\n/validate\n/inspect\n/commit\n/exit\n')
+  const output = runShell([target], '/help\n/status\n/audit\n/check\n/validate\n/report\n/inspect\n/classify update user flow\n/pr-checklist update user flow\n/init-preview\n/hook-status\n/action\n/approval\n/commit\n/exit\n')
 
   assert.match(output, /RISCALA/)
   assert.match(output, /READ ONLY · governance shell/)
@@ -121,23 +121,44 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.match(output, /╭─ COMMANDS /)
   assert.match(output, /╭─ STATUS /)
   assert.match(output, /╭─ AUDIT /)
+  assert.match(output, /╭─ CHECK /)
   assert.match(output, /╭─ VALIDATE /)
+  assert.match(output, /╭─ REPORT /)
   assert.match(output, /╭─ INSPECT /)
+  assert.match(output, /╭─ CLASSIFY /)
+  assert.match(output, /╭─ PR CHECKLIST /)
+  assert.match(output, /╭─ INIT PREVIEW /)
+  assert.match(output, /╭─ HOOK STATUS /)
+  assert.match(output, /╭─ ACTION /)
+  assert.match(output, /╭─ APPROVAL /)
   assert.match(output, /\/status\s+Refresh repository/)
   assert.match(output, /\/audit\s+Assess governance adoption/)
+  assert.match(output, /\/check\s+Check required artifacts/)
   assert.match(output, /\/validate\s+Validate the governance baseline/)
+  assert.match(output, /\/classify\s+Classify a described change/)
+  assert.match(output, /\/pr-checklist\s+Build a PR checklist/)
   assert.match(output, /Artifacts\s+\d+ present · \d+ missing · \d+ empty/)
   assert.match(output, /Adoption\s+Initialize governance baseline/)
   assert.match(output, /AI\s+0 surfaces · Not detected/)
   assert.match(output, /Git\s+1 staged · 1 unstaged · 1 untracked/)
   assert.match(output, /Next\s+Run riscala init/)
   assert.doesNotMatch(output, /Run psdm (?:init|validate)/)
+  assert.match(output, /Status\s+incomplete/)
   assert.match(output, /Decision\s+Needs correction/)
   assert.match(output, /Checks\s+\d+ passed · \d+ failed · \d+ warning/)
+  assert.match(output, /Findings\s+\d+ failure\(s\) · \d+ warning\(s\)/)
   assert.match(output, /Next\s+Fix the failing governance checks/)
   assert.match(output, /Staged inspection · 1 file\(s\) · Level 2/)
   assert.match(output, /src\/tracked\.mjs matches src\/\*\* -> Level 2/)
   assert.match(output, /Next\s+Review this evidence before choosing the next/)
+  assert.match(output, /Govern\s+Product-specific SPEC/)
+  assert.match(output, /Checks\s+\d+ checklist item\(s\)/)
+  assert.match(output, /Create\s+\d+ artifact\(s\)/)
+  assert.match(output, /State\s+not installed/)
+  assert.match(output, /Action\s+git\.commit/)
+  assert.match(output, /Content\s+sha256:/)
+  assert.match(output, /Review this content-bound action record before/)
+  assert.match(output, /Boundary\s+The shell cannot create, type, or/)
   assert.match(output, /Blocked: \/commit is not available in the read-only shell/)
   assert.match(output, /Riscala shell closed/)
   assert.doesNotMatch(output, /\u001b\[/)
@@ -177,14 +198,22 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
     '/help',
     '/status',
     '/audit',
+    '/check',
     '/validate',
     '/inspect',
+    '/report',
+    '/classify',
+    '/pr-checklist',
+    '/init-preview',
+    '/hook-status',
+    '/action',
+    '/approval',
     '/exit',
   ])
   assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
   assert.deepEqual(filterShellMenuCommands('status'), [])
-  assert.equal(moveShellMenuSelection(0, 'previous', 6), 5)
-  assert.equal(moveShellMenuSelection(5, 'next', 6), 0)
+  assert.equal(moveShellMenuSelection(0, 'previous', 14), 13)
+  assert.equal(moveShellMenuSelection(13, 'next', 14), 0)
   assert.match(plainMenu, /Commands/)
   assert.match(plainMenu, /❯ \/status/)
   assert.equal(plainMenu.split('\n').every((line) => line.length === 70), true)

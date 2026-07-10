@@ -1,6 +1,6 @@
 # Riscala Interactive Shell
 
-Status: `Read-only MVP`
+Status: `Read-only governance console`
 Product: `Riscala`
 Method: `PSDM`
 
@@ -85,7 +85,7 @@ Interaction contract:
 - Backspace, Delete, Home, End, Left, and Right preserve normal line editing;
 - `Ctrl+C` and `Ctrl+D` close the interactive session safely.
 
-The palette exists only for a real interactive TTY. Pipes and automation continue to use line-oriented input and receive no cursor-control or ANSI sequences.
+The palette exists only for a real interactive TTY. Pipes and automation continue to use line-oriented input and receive no cursor-control or ANSI sequences. The palette includes diagnostics, report summaries, classification, PR checklist preparation, init preview, hook status, action record preparation, approval-boundary visibility, and session exit.
 
 ## Command Results
 
@@ -99,7 +99,7 @@ Read-only commands share one result-panel grammar instead of emitting unrelated 
 ```
 
 - the title identifies the command result;
-- labels stay aligned across `/status`, `/audit`, `/validate`, `/inspect`, and `/help`;
+- labels stay aligned across the read-only governance commands;
 - long evidence wraps inside the panel instead of being silently truncated;
 - semantic color highlights state but does not change the monochrome text contract;
 - `Next` explains the useful follow-up without executing or authorizing it.
@@ -111,11 +111,19 @@ Read-only commands share one result-panel grammar instead of emitting unrelated 
 | `/help` | Show the available shell commands and safety boundary. |
 | `/status` | Refresh repository, branch, working-tree, and policy context. |
 | `/audit` | Reuse the non-destructive audit engine and summarize governance adoption, artifacts, AI readiness, gaps, Git state, and the next recommendation. |
+| `/check` | Check whether required artifacts exist without validating their internal structure. |
 | `/validate` | Reuse the read-only validator and summarize its decision, passed/failed/warning counts, priority artifacts, and next action. |
+| `/report` | Summarize compliance report readiness and point to the full markdown report command. |
 | `/inspect` | Inspect staged Git changes and calculate their governance level. |
+| `/classify <change description>` | Classify a described change and show required governance. |
+| `/pr-checklist <change description>` | Build a PR checklist summary for a described change. |
+| `/init-preview` | Preview what `riscala init` would create or keep without writing files. |
+| `/hook-status` | Inspect whether the managed pre-commit hook is installed. |
+| `/action` | Prepare a content-bound `git.commit` action record from staged changes. |
+| `/approval` | Explain the external approval receipt boundary. |
 | `/exit` | Close the session. `/quit` is also accepted. |
 
-Commands do not accept arbitrary shell fragments or arguments in this MVP.
+Commands do not accept arbitrary shell fragments. Only `/classify` and `/pr-checklist` accept free-text descriptions.
 
 Human-facing audit copy describes current state rather than internal init operations: artifacts are `present`, `missing`, or `empty`; adoption modes are expanded into actions; AI surfaces and readiness are reported separately; and recommendations use the `riscala` executable name. When gaps exist, `Focus` names the first two and summarizes the remainder. Product-name normalization applies only to executable commands; stable artifacts such as `psdm.config.json` keep their compatibility names. The underlying JSON audit contract remains unchanged.
 
@@ -123,7 +131,7 @@ Human-facing audit copy describes current state rather than internal init operat
 
 The shell is an allowlist router, not a general terminal or agent runtime.
 
-The MVP explicitly blocks `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy`. `/audit` remains read-only and never delegates to `riscala init`; `/validate` only reads configuration, artifacts, and Git state. The action-record and receipt-verification core now exists for `git.commit`, but mutating commands remain blocked until a trusted owner key is enrolled and independent hooks enforce the receipt.
+The shell explicitly blocks `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, `/deploy`, `/init`, `/hook-install`, and `/hook-remove`. `/audit` and `/init-preview` remain read-only and never delegate to `riscala init`; `/validate`, `/check`, `/report`, `/inspect`, `/classify`, `/pr-checklist`, `/hook-status`, `/action`, and `/approval` only read local state or calculate bounded governance evidence. The action-record and receipt-verification core now exists for `git.commit`, but mutating commands remain blocked until a trusted owner key is enrolled and independent hooks enforce the receipt.
 
 A confirmation phrase entered through an agent-controlled terminal is not sufficient human-presence evidence. The approval architecture remains defined in `docs/AGENT_DECISION_PROTOCOL.md`.
 
