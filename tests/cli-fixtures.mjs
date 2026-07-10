@@ -111,7 +111,7 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   writeFileSync(resolve(target, 'package.json'), '{"name":"shell-fixture","private":true}\n')
   writeFileSync(resolve(target, 'notes.txt'), 'untracked\n')
 
-  const output = runShell([target], '/help\n/status\n/inspect\n/commit\n/exit\n')
+  const output = runShell([target], '/help\n/status\n/audit\n/inspect\n/commit\n/exit\n')
 
   assert.match(output, /RISCALA/)
   assert.match(output, /READ ONLY · governance shell/)
@@ -120,14 +120,20 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.match(output, /Policy\s+framework · psdm\.config\.json/)
   assert.match(output, /╭─ COMMANDS /)
   assert.match(output, /╭─ STATUS /)
+  assert.match(output, /╭─ AUDIT /)
   assert.match(output, /╭─ INSPECT /)
   assert.match(output, /\/status\s+Refresh repository/)
+  assert.match(output, /\/audit\s+Assess governance adoption/)
+  assert.match(output, /Artifacts\s+\d+ create · \d+ keep · \d+ empty/)
+  assert.match(output, /Adoption\s+initialize/)
   assert.match(output, /Staged inspection · 1 file\(s\) · Level 2/)
   assert.match(output, /src\/tracked\.mjs matches src\/\*\* -> Level 2/)
   assert.match(output, /Next\s+Review this evidence before choosing the next/)
   assert.match(output, /Blocked: \/commit is not available in the read-only shell/)
   assert.match(output, /Riscala shell closed/)
   assert.doesNotMatch(output, /\u001b\[/)
+  assert.equal(existsSync(resolve(target, 'AGENTS.md')), false)
+  assert.equal(existsSync(resolve(target, 'ROADMAP.md')), false)
   assert.equal(git(target, ['rev-list', '--count', 'HEAD']).trim(), '1')
 }
 
@@ -158,13 +164,14 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
   assert.deepEqual(allCommands.map((item) => item.name), [
     '/help',
     '/status',
+    '/audit',
     '/inspect',
     '/exit',
   ])
   assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
   assert.deepEqual(filterShellMenuCommands('status'), [])
-  assert.equal(moveShellMenuSelection(0, 'previous', 4), 3)
-  assert.equal(moveShellMenuSelection(3, 'next', 4), 0)
+  assert.equal(moveShellMenuSelection(0, 'previous', 5), 4)
+  assert.equal(moveShellMenuSelection(4, 'next', 5), 0)
   assert.match(plainMenu, /Commands/)
   assert.match(plainMenu, /❯ \/status/)
   assert.equal(plainMenu.split('\n').every((line) => line.length === 70), true)

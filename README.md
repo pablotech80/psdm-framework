@@ -159,13 +159,13 @@ riscala approval enforce git.commit [--receipt <path>] [--target <path>] [--conf
 riscala hook <install|remove|status> pre-commit [--target <path>] [--json]
 ```
 
-The dependency-free shell shows the selected project's name, branch, working-tree counts, and active PSDM policy. Its first release is intentionally read-only and supports `/help`, `/status`, `/inspect`, and `/exit`.
+The dependency-free shell shows the selected project's name, branch, working-tree counts, and active PSDM policy. Its first release is intentionally read-only and supports `/help`, `/status`, `/audit`, `/inspect`, and `/exit`.
 
 Interactive terminals use Ptech cyan (`#00A8E8`) with a light accent (`#38BDF8`) for the Riscala frame and prompt. Color is automatically disabled for pipes, non-TTY output, `TERM=dumb`, and the `NO_COLOR` convention.
 
 Type `/` at the interactive prompt to open the dependency-free command palette. Filter by typing, navigate with `↑`/`↓`, run with `Enter`, complete with `Tab`, and dismiss with `Esc`. Piped sessions preserve the original line-oriented behavior.
 
-`/status`, `/inspect`, and `/help` use the same fixed-width result panels. Each result has a clear title, semantic state, and a contextual next action where useful, so repeated commands remain visually consistent without changing the read-only security boundary.
+`/status`, `/audit`, `/inspect`, and `/help` use the same fixed-width result panels. Each result has a clear title, semantic state, and a contextual next action where useful, so repeated commands remain visually consistent without changing the read-only security boundary. `/audit` reuses the existing non-destructive audit engine to summarize adoption, artifacts, AI readiness, gaps, Git state, and the highest-priority recommendation.
 
 ### Initialization
 

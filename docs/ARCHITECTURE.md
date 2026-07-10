@@ -20,7 +20,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/classifier.mjs` owns reusable change classification.
 - `src/lib/inspect.mjs` composes staged Git evidence with reusable change classification.
 - `src/commands/shell.mjs` owns the interactive readline lifecycle and delegates slash commands to an allowlist router.
-- `src/lib/shell.mjs` builds target-specific project context and renders the dependency-free read-only terminal UI.
+- `src/lib/shell.mjs` builds target-specific project context, reuses the audit and staged-inspection engines, and renders the dependency-free read-only terminal UI.
 - `src/lib/terminal-style.mjs` owns Ptech cyan tokens, ANSI styling, and TTY/`NO_COLOR` capability detection.
 - `src/lib/shell-menu.mjs` owns slash-command metadata, filtering, selection movement, and palette rendering.
 - `src/lib/shell-session.mjs` owns raw TTY input, cursor-safe redraw, line editing, and keyboard navigation while delegating command execution to the existing allowlist router.

@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs'
 import { basename, relative } from 'node:path'
+import { buildAudit } from './audit.mjs'
 import { loadConfig } from './config.mjs'
 import { inspectGit } from './git.mjs'
 import { inspectStagedChange } from './inspect.mjs'
@@ -217,6 +218,7 @@ export function renderShellHelp(options = {}) {
   const rows = [
     cardRow('/help', 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/status', 'Refresh repository and policy context.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/audit', 'Assess governance adoption and readiness.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/inspect', 'Inspect staged changes and governance level.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/exit', 'Close the Riscala shell.', { ...options, valueStyle: theme.cyanLight }),
     panelRule('middle', '', options),
@@ -227,6 +229,51 @@ export function renderShellHelp(options = {}) {
   ]
 
   return renderPanel('COMMANDS', rows, options)
+}
+
+function renderAudit(report, options = {}) {
+  const theme = terminalTheme(options.color)
+  const artifactStyle = report.summary.wouldCreate > 0 ? theme.yellow : theme.green
+  const gitState = !report.git.isRepository
+    ? 'not a Git repository'
+    : report.git.isDirty
+      ? `dirty · ${report.git.changes.length} change(s)`
+      : 'clean'
+  const gitStyle = !report.git.isRepository
+    ? theme.red
+    : report.git.isDirty
+      ? theme.yellow
+      : theme.green
+  const readiness = report.aiReadiness.status.replaceAll('_', ' ')
+  const readinessStyle = report.aiReadiness.status === 'gaps_detected'
+    ? theme.yellow
+    : report.aiReadiness.status === 'ready_for_review'
+      ? theme.green
+      : theme.dim
+  const rows = [
+    cardRow('Policy', report.config.profile.name, { ...options, valueStyle: theme.cyanLight }),
+    cardRow('Artifacts', `${report.summary.wouldCreate} create · ${report.summary.wouldSkip} keep · ${report.summary.existingEmpty} empty`, {
+      ...options,
+      valueStyle: artifactStyle,
+    }),
+    cardRow('Adoption', report.aiGovernance.adoptionMode, options),
+    cardRow('AI', `${readiness} · ${report.aiReadiness.detectedSurfaceCount} surface(s)`, {
+      ...options,
+      valueStyle: readinessStyle,
+    }),
+    cardRow('Gaps', `${report.aiReadiness.gaps.length} governance gap(s)`, {
+      ...options,
+      valueStyle: report.aiReadiness.gaps.length > 0 ? theme.yellow : theme.green,
+    }),
+    cardRow('Git', gitState, { ...options, valueStyle: gitStyle }),
+    panelRule('middle', '', options),
+    ...cardRows('Next', report.recommendations[0] || 'Review the audit evidence.', {
+      ...options,
+      valueStyle: theme.cyanLight,
+    }),
+  ]
+
+  return renderPanel('AUDIT', rows, options)
 }
 
 function renderInspection(report, options = {}) {
@@ -320,6 +367,13 @@ export function executeShellCommand(input, { target, configPath = null, color = 
   if (command === '/status') {
     return {
       output: renderShellStatus(buildShellContext({ target, configPath }), { color }),
+      exit: false,
+    }
+  }
+
+  if (command === '/audit') {
+    return {
+      output: renderAudit(buildAudit(target, { configPath }), { color }),
       exit: false,
     }
   }

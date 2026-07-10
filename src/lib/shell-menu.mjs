@@ -5,6 +5,7 @@ const MENU_WIDTH = 68
 export const SHELL_MENU_COMMANDS = Object.freeze([
   { name: '/help', description: 'Show available commands and safety boundaries.' },
   { name: '/status', description: 'Refresh repository and policy context.' },
+  { name: '/audit', description: 'Assess governance adoption and readiness.' },
   { name: '/inspect', description: 'Inspect staged changes and governance level.' },
   { name: '/exit', description: 'Close the Riscala shell.' },
 ])

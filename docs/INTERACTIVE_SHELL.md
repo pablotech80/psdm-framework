@@ -68,6 +68,7 @@ Typing `/` as the first prompt character opens the command palette immediately:
 ╭─ Commands ─────────────────────────────────────────────────────────╮
 │ ❯ /help      Show available commands and safety boundaries.        │
 │   /status    Refresh repository and policy context.                │
+│   /audit     Assess governance adoption and readiness.             │
 │   /inspect   Inspect staged changes and governance level.          │
 │   /exit      Close the Riscala shell.                              │
 ╰─ ↑/↓ navigate · Enter run · Tab complete · Esc close ──────────────╯
@@ -97,7 +98,7 @@ Read-only commands share one result-panel grammar instead of emitting unrelated 
 ```
 
 - the title identifies the command result;
-- labels stay aligned across `/status`, `/inspect`, and `/help`;
+- labels stay aligned across `/status`, `/audit`, `/inspect`, and `/help`;
 - long evidence wraps inside the panel instead of being silently truncated;
 - semantic color highlights state but does not change the monochrome text contract;
 - `Next` explains the useful follow-up without executing or authorizing it.
@@ -108,6 +109,7 @@ Read-only commands share one result-panel grammar instead of emitting unrelated 
 |---|---|
 | `/help` | Show the available shell commands and safety boundary. |
 | `/status` | Refresh repository, branch, working-tree, and policy context. |
+| `/audit` | Reuse the non-destructive audit engine and summarize governance adoption, artifacts, AI readiness, gaps, Git state, and the next recommendation. |
 | `/inspect` | Inspect staged Git changes and calculate their governance level. |
 | `/exit` | Close the session. `/quit` is also accepted. |
 
@@ -117,7 +119,7 @@ Commands do not accept arbitrary shell fragments or arguments in this MVP.
 
 The shell is an allowlist router, not a general terminal or agent runtime.
 
-The MVP explicitly blocks `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy`. The action-record and receipt-verification core now exists for `git.commit`, but those commands remain blocked until a trusted owner key is enrolled and independent hooks enforce the receipt.
+The MVP explicitly blocks `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy`. `/audit` remains read-only and never delegates to `riscala init`. The action-record and receipt-verification core now exists for `git.commit`, but mutating commands remain blocked until a trusted owner key is enrolled and independent hooks enforce the receipt.
 
 A confirmation phrase entered through an agent-controlled terminal is not sufficient human-presence evidence. The approval architecture remains defined in `docs/AGENT_DECISION_PROTOCOL.md`.
 
