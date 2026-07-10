@@ -2,7 +2,7 @@
 
 Status: `Active`
 Project: `psdm-framework`
-Release Target: `1.0.0-beta.4`
+Release Target: `1.0.0-beta.5`
 Latest Published Beta: `1.0.0-beta.4`
 
 ## Purpose
@@ -15,10 +15,10 @@ This checklist is intentionally operational. It does not publish anything by its
 
 Before release, confirm:
 
-- [x] Target version is agreed and written in `package.json`: `1.0.0-beta.1`.
+- [x] Target version is agreed and written in `package.json`: `1.0.0-beta.5`.
 - [x] Release type is agreed: `beta`.
 - [x] Release channel is agreed: npm public package and GitHub tag after approval.
-- [x] Owner approval is recorded for public publication with explicit `CONFIRM NPM BETA PUBLISH`.
+- [ ] Owner approval is recorded for public publication with explicit `CONFIRM NPM BETA PUBLISH`.
 - [x] No production deployment is implied by this release.
 
 ## Repository Preflight
@@ -70,7 +70,7 @@ Expected:
 Verify `package.json`:
 
 - [x] `name` is final for the intended public package: `@ptechsolution/psdm-framework`.
-- [x] `version` matches the release target: `1.0.0-beta.1`.
+- [x] `version` matches the release target: `1.0.0-beta.5`.
 - [x] `description` is clear and public-safe.
 - [x] `license` is correct.
 - [x] `bin.psdm` points to `bin/psdm.mjs`.
@@ -194,7 +194,7 @@ If release validation fails after publication:
 - [x] Decide final beta version string and dist-tag: `1.0.0-beta.1` with npm dist-tag `beta`.
 - [x] Configure npm authentication for the publishing owner or CI.
 - [x] Confirm npm scope ownership or publish permission for `@ptechsolution`.
-- [ ] Record explicit owner approval before running `npm publish`.
+- [ ] Record explicit owner approval before running trusted publish for `1.0.0-beta.5`.
 
 ## Decision Record
 

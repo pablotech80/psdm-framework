@@ -68,7 +68,7 @@ Current commands:
 - `riscala pr-checklist`
 - `riscala report`
 
-The `psdm` compatibility executable supports the same commands. The already published `1.0.0-beta.4` contains only `psdm`; `riscala` becomes installable after a later beta is explicitly approved and published.
+The `psdm` compatibility executable supports the same commands. The prepared `1.0.0-beta.5` candidate includes `riscala`; publishing it to npm still requires the protected release workflow and explicit owner approval.
 
 ## Configuration
 

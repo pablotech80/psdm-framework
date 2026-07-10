@@ -2,11 +2,45 @@
 
 Status: `Published`
 Latest Beta Release: `1.0.0-beta.4`
-Next Beta Candidate: `TBD`
+Next Beta Candidate: `1.0.0-beta.5`
 First Beta Release: `1.0.0-beta.1`
 Project: `psdm-framework`
 
-## Unreleased - Riscala Phase 1
+## Release Candidate - 1.0.0-beta.5
+
+Status: `Prepared, not published`
+
+Prepared: `2026-07-10`
+
+Package: `@ptechsolution/psdm-framework@1.0.0-beta.5`
+
+Purpose:
+
+- Publish the Riscala executable and interactive governance shell to npm beta.
+- Include the Ptech cyan terminal identity and dependency-free slash command palette.
+- Include the full read-only shell workflow for `/status`, `/audit`, `/check`, `/validate`, `/report`, `/inspect`, `/classify`, `/pr-checklist`, `/init-preview`, `/hook-status`, `/action`, and `/approval`.
+- Preserve `psdm` as a compatibility executable mapped to the same entrypoint.
+- Preserve JSON output contracts, `psdm.config.json`, package name, GitHub Action behavior, and dependency-free runtime.
+- Enroll the first owner public key for content-bound Level 3/4 approval verification.
+
+Required before publication:
+
+- Local `npm run release:check -- --allow-dirty`: passed.
+- Local `npm publish --dry-run --access public --tag beta`: passed.
+- GitHub PSDM workflow: pending after release candidate commit.
+- CodeQL workflow: pending after release candidate commit.
+- Protected workflow dry-run: pending.
+- Explicit owner approval: pending, must use `CONFIRM NPM BETA PUBLISH`.
+- Protected workflow real publish: pending.
+- Clean install from npm `@beta`: pending after publication.
+
+Known limitations:
+
+- Mutating shell commands remain blocked until managed hook activation and protected remote enforcement are configured.
+- npm `latest` still points to `1.0.0-beta.1`.
+- Beta status remains active.
+
+## Riscala Phase 1
 
 Status: `Implemented, not published`
 

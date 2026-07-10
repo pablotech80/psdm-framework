@@ -115,6 +115,8 @@ Completed:
 - Incomplete AI-project audit output now surfaces priority gaps while preserving stable PSDM artifact names.
 - Read-only `/validate` added to the shell by reusing the existing validator and prioritizing failed artifacts.
 - Riscala shell expanded into a fuller read-only governance console with `/check`, `/report`, `/classify`, `/pr-checklist`, `/init-preview`, `/hook-status`, `/action`, and `/approval`.
+- `1.0.0-beta.5` release candidate preparation started to publish the Riscala executable and complete interactive shell through npm beta.
+- First owner public key enrolled for content-bound Level 3/4 approval verification.
 
 ## Active Milestone
 
@@ -291,7 +293,8 @@ Planned outcomes:
 - [x] Define agent decision and human-presence approval architecture.
 - [x] Implement machine-readable action records and receipt verification before mutating slash commands.
 - [x] Implement managed pre-commit receipt enforcement with local replay protection.
-- [ ] Enroll a real owner public key, activate the hook, and add protected remote enforcement.
+- [x] Enroll a real owner public key.
+- [ ] Activate the hook and add protected remote enforcement.
 - [ ] Stable config schema.
 - [x] Public package release checklist.
 - [x] Decide package metadata gaps before beta.

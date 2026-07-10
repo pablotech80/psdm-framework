@@ -371,3 +371,42 @@ Known limitations:
 
 - npm `latest` still points to `1.0.0-beta.1`.
 - Beta status remains active.
+
+## Release Candidate Evidence - 1.0.0-beta.5
+
+Package: `@ptechsolution/psdm-framework`
+
+Version: `1.0.0-beta.5`
+
+Publication status: `prepared, not published`
+
+Prepared date: `2026-07-10`
+
+Scope:
+
+- Riscala primary executable included for npm beta while preserving `psdm` compatibility.
+- Dependency-free interactive shell with Ptech cyan identity.
+- Full read-only governance command palette for diagnostics, validation, reporting, classification, PR checklist preparation, init preview, hook status, action records, and approval-boundary visibility.
+- First owner public key enrolled for content-bound Level 3/4 approval verification.
+- Mutating slash commands remain blocked until managed hook activation and protected remote enforcement are configured.
+
+Expected npm dist-tag:
+
+- `beta`
+
+Required before publication:
+
+- Local `npm run release:check -- --allow-dirty`: passed.
+- Local `npm publish --dry-run --access public --tag beta`: passed.
+- GitHub PSDM workflow: pending after release candidate commit.
+- CodeQL workflow: pending after release candidate commit.
+- Protected workflow dry-run: pending.
+- Explicit owner approval: pending as `CONFIRM NPM BETA PUBLISH`.
+- Protected workflow real publish: pending.
+- npm dist-tag verification: pending.
+- Clean install from npm `@beta`: pending.
+
+Known limitations:
+
+- npm `latest` still points to `1.0.0-beta.1`.
+- Beta status remains active.

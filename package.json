@@ -1,6 +1,6 @@
 {
   "name": "@ptechsolution/psdm-framework",
-  "version": "1.0.0-beta.4",
+  "version": "1.0.0-beta.5",
   "description": "Risk-scaled AI code governance for software delivery.",
   "type": "module",
   "bin": {
