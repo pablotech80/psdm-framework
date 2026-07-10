@@ -181,6 +181,7 @@
 - [x] Interactive slash command palette with filtered keyboard navigation.
 - [x] Consistent fixed-width result panels for shell status, inspection, help, and next-action guidance.
 - [x] Read-only shell audit summary backed by the existing repository audit engine.
+- [x] Product-facing shell audit semantics without changing the stable JSON contract.
 - [ ] Trusted owner key enrollment, hook activation, and protected remote enforcement.
 - [x] Full documentation index.
 - [ ] Tested fixtures.

@@ -111,6 +111,7 @@ Completed:
 - Dependency-free slash command palette added with filtering, keyboard navigation, completion, and TTY-safe raw-mode restoration.
 - Shell command results unified into fixed-width product panels with wrapped evidence, semantic states, and contextual next actions.
 - Read-only `/audit` added to the shell by reusing the existing adoption and AI-readiness audit engine.
+- Shell audit copy refined from internal field values into current-state, product-facing Riscala language.
 
 ## Active Milestone
 

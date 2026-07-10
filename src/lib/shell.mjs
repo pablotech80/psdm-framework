@@ -80,8 +80,9 @@ function cardRow(label, value, options = {}) {
   const theme = terminalTheme(options.color)
   const prefix = `  ${label.padEnd(ROW_LABEL_WIDTH)} `
   const available = CARD_WIDTH - prefix.length
-  const rendered = value.length > available
-    ? `${value.slice(0, Math.max(0, available - 1))}…`
+  const contentWidth = available - 1
+  const rendered = value.length > contentWidth
+    ? `${value.slice(0, Math.max(0, contentWidth - 1))}…`
     : value
   const paddedValue = rendered.padEnd(available)
   const valueStyle = options.valueStyle || ((item) => item)
@@ -121,7 +122,7 @@ function wrapText(value, width) {
 }
 
 function cardRows(label, value, options = {}) {
-  const available = CARD_WIDTH - `  ${''.padEnd(ROW_LABEL_WIDTH)} `.length
+  const available = CARD_WIDTH - `  ${''.padEnd(ROW_LABEL_WIDTH)} `.length - 1
 
   return wrapText(value, available).map((line, index) => cardRow(
     index === 0 ? label : '',
@@ -233,41 +234,62 @@ export function renderShellHelp(options = {}) {
 
 function renderAudit(report, options = {}) {
   const theme = terminalTheme(options.color)
+  const presentArtifacts = Math.max(0, report.summary.wouldSkip - report.summary.existingEmpty)
   const artifactStyle = report.summary.wouldCreate > 0 ? theme.yellow : theme.green
+  const changeCounts = countChanges(report.git.changes)
+  const totalChanges = changeCounts.staged + changeCounts.unstaged + changeCounts.untracked
   const gitState = !report.git.isRepository
     ? 'not a Git repository'
-    : report.git.isDirty
-      ? `dirty · ${report.git.changes.length} change(s)`
-      : 'clean'
+    : totalChanges === 0
+      ? 'clean'
+      : totalChanges === 1 && changeCounts.untracked === 1
+        ? '1 untracked change'
+        : totalChanges === 1 && changeCounts.staged === 1
+          ? '1 staged change'
+          : totalChanges === 1
+            ? '1 unstaged change'
+            : changesLabel({ git: report.git, changes: changeCounts })
   const gitStyle = !report.git.isRepository
     ? theme.red
     : report.git.isDirty
       ? theme.yellow
       : theme.green
-  const readiness = report.aiReadiness.status.replaceAll('_', ' ')
+  const readiness = {
+    gaps_detected: 'Gaps detected',
+    not_detected: 'Not detected',
+    ready_for_review: 'Ready for review',
+  }[report.aiReadiness.status] || report.aiReadiness.status.replaceAll('_', ' ')
+  const adoption = report.aiGovernance.adoptionMode === 'integrate'
+    ? 'Integrate existing governance'
+    : 'Initialize governance baseline'
   const readinessStyle = report.aiReadiness.status === 'gaps_detected'
     ? theme.yellow
     : report.aiReadiness.status === 'ready_for_review'
       ? theme.green
       : theme.dim
+  const surfaceCount = report.aiReadiness.detectedSurfaceCount
+  const gapCount = report.aiReadiness.gaps.length
+  const recommendation = report.summary.wouldCreate === 0
+    ? 'Run riscala validate to verify the governance baseline.'
+    : (report.recommendations[0] || 'Review the audit evidence.').replaceAll('psdm', 'riscala')
   const rows = [
     cardRow('Policy', report.config.profile.name, { ...options, valueStyle: theme.cyanLight }),
-    cardRow('Artifacts', `${report.summary.wouldCreate} create · ${report.summary.wouldSkip} keep · ${report.summary.existingEmpty} empty`, {
+    cardRow('Artifacts', `${presentArtifacts} present · ${report.summary.wouldCreate} missing · ${report.summary.existingEmpty} empty`, {
       ...options,
       valueStyle: artifactStyle,
     }),
-    cardRow('Adoption', report.aiGovernance.adoptionMode, options),
-    cardRow('AI', `${readiness} · ${report.aiReadiness.detectedSurfaceCount} surface(s)`, {
+    cardRow('Adoption', adoption, options),
+    cardRow('AI', `${surfaceCount} ${surfaceCount === 1 ? 'surface' : 'surfaces'} · ${readiness}`, {
       ...options,
       valueStyle: readinessStyle,
     }),
-    cardRow('Gaps', `${report.aiReadiness.gaps.length} governance gap(s)`, {
+    cardRow('Gaps', `${gapCount} governance ${gapCount === 1 ? 'gap' : 'gaps'}`, {
       ...options,
-      valueStyle: report.aiReadiness.gaps.length > 0 ? theme.yellow : theme.green,
+      valueStyle: gapCount > 0 ? theme.yellow : theme.green,
     }),
     cardRow('Git', gitState, { ...options, valueStyle: gitStyle }),
     panelRule('middle', '', options),
-    ...cardRows('Next', report.recommendations[0] || 'Review the audit evidence.', {
+    ...cardRows('Next', recommendation, {
       ...options,
       valueStyle: theme.cyanLight,
     }),

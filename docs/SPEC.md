@@ -43,6 +43,7 @@ Project: `psdm-framework`
 - Restore terminal raw mode on normal exit, `/exit`, `Ctrl+C`, and `Ctrl+D` paths.
 - Render `/status`, `/audit`, `/inspect`, and `/help` through a consistent fixed-width result-panel grammar with wrapped evidence and contextual next actions.
 - Reuse the existing non-destructive audit engine for `/audit`; do not duplicate detection logic or invoke initialization.
+- Translate internal audit fields into product-facing shell copy without changing the stable audit JSON contract, and recommend the `riscala` executable rather than its `psdm` compatibility alias.
 - Generate a machine-readable `git.commit` action record bound to repository identity, branch, full staged diff hash, and change classification.
 - Require Level 3 and Level 4 approval policy and fail action preparation closed when trusted approvers are missing or policy is invalid.
 - Verify signed receipts against live staged content, pinned public-key fingerprints, allowed strong approval modes, and configured expiry limits.
