@@ -42,6 +42,8 @@ CLI fixture validation:
 npm test
 ```
 
+Active Work fixtures verify creation, supported mode persistence, cross-process reading, and refusal to overwrite an existing boundary.
+
 Initialized project validation:
 
 ```bash

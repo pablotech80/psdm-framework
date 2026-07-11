@@ -90,6 +90,30 @@ function testRiscalaExecutableAliasContract() {
   assert.match(help, /riscala review "<change intent>" --staged/)
 }
 
+function testActiveWorkCreatesReadsAndPreservesBoundary() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-active-work-'))
+  const created = runJson([
+    'work', 'init', 'Ship the smallest beta.6 continuity flow',
+    '--mode', 'design', '--target', target, '--json',
+  ])
+  const path = resolve(target, '.riscala', 'ACTIVE_WORK.md')
+  const content = readFileSync(path, 'utf8')
+  const shown = runJson(['work', 'show', '--target', target, '--json'])
+  const duplicate = runJson([
+    'work', 'init', 'Replace the objective', '--target', target, '--json',
+  ], { allowFailure: true })
+
+  assert.equal(created.created, true)
+  assert.equal(created.mode, 'design')
+  assert.match(content, /Ship the smallest beta\.6 continuity flow/)
+  assert.match(content, /Mode: `design`/)
+  assert.match(content, /Change another repository/)
+  assert.equal(shown.exists, true)
+  assert.equal(shown.content, content)
+  assert.equal(duplicate.created, false)
+  assert.equal(readFileSync(path, 'utf8'), content)
+}
+
 function testImpactLowRiskWithoutInitStaysLightweight() {
   const target = mkdtempSync(resolve(tmpdir(), 'riscala-impact-low-risk-'))
   writeFileSync(resolve(target, 'package.json'), '{"name":"docs-project"}\n')
@@ -1762,6 +1786,7 @@ function testExampleProjectCoverage() {
 
 const tests = [
   testRiscalaExecutableAliasContract,
+  testActiveWorkCreatesReadsAndPreservesBoundary,
   testImpactLowRiskWithoutInitStaysLightweight,
   testImpactAuthTeachesDecisionWithoutTakingAuthority,
   testImpactUnknownGreenfieldExposesUncertaintyWithoutMutation,

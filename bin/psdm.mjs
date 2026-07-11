@@ -16,6 +16,7 @@ import { approvalCommand } from '../src/commands/approval.mjs'
 import { hookCommand } from '../src/commands/hook.mjs'
 import { impactCommand } from '../src/commands/impact.mjs'
 import { reviewCommand } from '../src/commands/review.mjs'
+import { workCommand } from '../src/commands/work.mjs'
 import {
   COMPATIBILITY_EXECUTABLE,
   PRIMARY_EXECUTABLE,
@@ -41,6 +42,7 @@ const commands = {
   hook: hookCommand,
   impact: impactCommand,
   review: reviewCommand,
+  work: workCommand,
 }
 
 function printHelp() {
@@ -49,12 +51,16 @@ function printHelp() {
 Amplify developer judgment before and after AI-assisted coding.
 
 Start here:
+  ${PRIMARY_EXECUTABLE} work init "<active objective>" --mode implement
+  ${PRIMARY_EXECUTABLE} work show
   ${PRIMARY_EXECUTABLE} impact "<change intent>"
   # Make the decisions and implement with your preferred AI coding tool.
   git add <expected-files>
   ${PRIMARY_EXECUTABLE} review "<change intent>" --staged --files <expected-files>
 
 Usage:
+  ${PRIMARY_EXECUTABLE} work init "<objective>" [--mode inspect|experiment|design|implement|release] [--target path] [--json]
+  ${PRIMARY_EXECUTABLE} work show [--target path] [--json]
   ${PRIMARY_EXECUTABLE} impact "<change intent>" [--guidance learn|balanced|concise] [--file path] [--files path,path] [--target path] [--config path] [--json]
   ${PRIMARY_EXECUTABLE} review "<change intent>" --staged [--guidance learn|balanced|concise] [--file expected-path] [--files expected-paths] [--target path] [--config path] [--json]
   ${PRIMARY_EXECUTABLE} audit [target] [--json] [--feature name] [--config path]
@@ -77,6 +83,7 @@ Compatibility:
   ${COMPATIBILITY_EXECUTABLE} remains supported with identical commands and behavior.
 
 Judgment loop:
+  work       Preserve the active repository, objective, mode, and boundaries across chats.
   impact     Build a repository-grounded technical Judgment Brief before implementation.
   review     Compare accepted intent and expected scope with staged Git evidence.
 

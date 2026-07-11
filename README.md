@@ -28,14 +28,15 @@ PSDM is the internal governance method. Its risk-scaled controls remain availabl
 
 Riscala is currently beta software and is still distributed through the compatibility package `@ptechsolution/psdm-framework`. It is a local CLI and GitHub Action, not a hosted platform.
 
-Beta.6 judgment commands are currently available from this checkout:
+Create the active boundary for the current task:
 
 ```bash
 npm install -g .
-riscala impact "add search to the customer list"
+riscala work init "add search to the customer list" --mode implement
+riscala work show
 ```
 
-The npm `@beta` tag still installs `1.0.0-beta.5` until the beta.6 release gates pass. Beta.5 provides the existing governance CLI and shell, but not the new `impact` and `review` loop.
+The npm `@beta` tag still installs `1.0.0-beta.5` until beta.6 is published.
 
 The compatibility executable remains available:
 
@@ -106,7 +107,7 @@ flowchart TD
 
 Latest published beta: `1.0.0-beta.5`.
 
-Current `main` is redesigning beta.6 around governable Active Work: continuity across chats and explicit control of repository, objective, mode, scope, and authority. The existing judgment commands and PSDM compatibility surface are preserved while this contract is validated. Beta.6 is not ready for publication.
+Current `main` contains the beta.6 candidate centered on governable Active Work. The existing judgment commands and PSDM compatibility surface remain available.
 
 ## Install
 
@@ -143,6 +144,15 @@ The command reference below uses the primary `riscala` executable. Use `psdm` on
 ## CLI
 
 ### Technical Judgment (beta.6 development)
+
+Create or read the compact Active Work boundary used across chats:
+
+```bash
+riscala work init "add Google OAuth while preserving passwords" --mode design
+riscala work show
+```
+
+`work init` creates `.riscala/ACTIVE_WORK.md` once and refuses to overwrite it. The file records repository, objective, mode, allowed and forbidden work, invariants, stop conditions, and categorized context.
 
 Build a read-only Judgment Brief from a proposed change without initializing PSDM artifacts:
 
