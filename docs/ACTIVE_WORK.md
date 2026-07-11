@@ -15,6 +15,7 @@ Keep AI work inside the repository, objective, mode, scope, and authority define
 repository
 objective
 mode
+allowed_paths
 allowed
 forbidden
 must_preserve
@@ -25,6 +26,7 @@ status
 - **Repository:** the only writable project target.
 - **Objective:** the active outcome.
 - **Mode:** `inspect`, `experiment`, `design`, `implement`, or `release`.
+- **Allowed paths:** optional exact, directory, or glob patterns normalized against the Git root.
 - **Allowed:** authorized files, areas, and actions.
 - **Forbidden:** explicit exclusions.
 - **Must preserve:** behavior, decisions, compatibility, or user changes that must remain true.
@@ -68,7 +70,7 @@ The shell lifecycle is:
 
 ## Verification
 
-Before mutation, compare the requested action with Active Work. After mutation, compare changed files and actions with the same boundary and verify `must_preserve` evidence.
+Before mutation, compare the requested action with Active Work. After mutation, compare changed files and actions with the same boundary and verify `must_preserve` evidence. `/review` reports staged violations as advisory evidence. When the optional managed pre-commit hook is installed, the same violations block the commit before approval evaluation.
 
 A technically correct result can still be outside authority.
 

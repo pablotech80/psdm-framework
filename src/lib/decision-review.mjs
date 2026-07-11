@@ -3,6 +3,8 @@ import { realpathSync } from 'node:fs'
 import { buildJudgmentBrief } from './judgment.mjs'
 import { inspectStagedChange } from './inspect.mjs'
 import { inspectRepositoryIdentity, readGitTextFile } from './git.mjs'
+import { parseActiveWork, readActiveWork } from './active-work.mjs'
+import { evaluatePathsAgainstActiveWork } from './scope-control.mjs'
 
 const SURFACE_PATHS = [
   { surface: 'delivery', patterns: [/^\.github\/workflows\//, /^infra\//, /(^|\/)Dockerfile$/, /(^|\/)docker-compose/, /(^|\/)terraform\//, /(^|\/)k8s\//] },
@@ -154,6 +156,9 @@ export function buildDecisionReview({ target, intent, expectedFiles = [], config
   }
 
   const stagedFiles = unique(staged.files).sort()
+  const activeState = readActiveWork(target)
+  const activeWork = parseActiveWork(activeState.content)
+  const activeScope = evaluatePathsAgainstActiveWork({ target, work: activeWork, paths: stagedFiles })
   const expectedSet = new Set(envelope.expectedScope.files)
   const actualSet = new Set(stagedFiles)
   const outsideExpectedScope = envelope.expectedScope.files.length === 0
@@ -181,6 +186,17 @@ export function buildDecisionReview({ target, intent, expectedFiles = [], config
     note: 'Decision Review observes staged test files but does not infer that tests were executed.',
   }
   const deviations = [
+    ...(activeScope.decision === 'REPOSITORY_CONFLICT' ? [{
+      kind: 'active-work-repository-conflict',
+      severity: 'high',
+      statement: 'Active Work belongs to a different repository.',
+    }] : []),
+    ...activeScope.violations.map((file) => ({
+      kind: 'active-work-scope-violation',
+      file,
+      severity: 'high',
+      statement: `${file} is staged outside the Active Work allowed paths.`,
+    })),
     ...outsideExpectedScope.map((file) => ({
       kind: 'scope-drift',
       file,
@@ -224,6 +240,7 @@ export function buildDecisionReview({ target, intent, expectedFiles = [], config
     verification: {
       expectedFiles: envelope.expectedScope.files,
       stagedFiles,
+      activeWorkScope: activeScope,
       outsideExpectedScope,
       expectedButNotStaged,
       observedSurfaces: actualSurfaceEvidence,
@@ -254,6 +271,8 @@ export function printDecisionReview(report, options = {}) {
   const deviationText = (item) => {
     if (!es) return `${item.kind}: ${item.statement}`
     if (item.kind === 'scope-drift') return `${item.kind}: ${item.file} está preparado fuera del alcance esperado.`
+    if (item.kind === 'active-work-scope-violation') return `${item.kind}: ${item.file} está preparado fuera de las rutas permitidas por el trabajo activo.`
+    if (item.kind === 'active-work-repository-conflict') return `${item.kind}: el trabajo activo pertenece a otro repositorio.`
     if (item.kind === 'expected-not-staged') return `${item.kind}: ${item.file} se declaró como esperado pero no está preparado.`
     if (item.kind === 'unexpected-surface') return `${item.kind}: ${item.file} introduce impacto ${item.surface} no previsto.`
     return `${item.kind}: ${item.statement}`

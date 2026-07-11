@@ -46,6 +46,7 @@ Completed:
 - Replaced generic init-only templates with a deterministic project-adapted PSDM baseline, safe inventory exclusions, migration of untouched legacy templates, and hash-bound uninstall preservation.
 - Completed Spanish `/validate` presentation for titles, decisions, counters, findings, Git warnings, plural agreement, and next-action guidance while preserving English JSON.
 - Added optional Allowed Paths to Active Work with Git-root normalization, monorepo support, repository-conflict detection, and exact staged/unstaged/untracked scope findings in shell status.
+- Reused Active Work scope in staged Decision Review and optional pre-commit enforcement; review remains advisory while the installed hook blocks out-of-scope commits before approval evaluation.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

@@ -415,6 +415,8 @@ Install the local pre-commit enforcement hook after a trusted approver is config
 riscala hook install pre-commit
 ```
 
+The hook is optional. When Active Work declares `--files`, it blocks staged files outside those paths before evaluating approval requirements. `/review` reports the same violations without approving or committing anything. Without declared paths, existing lightweight commit behavior remains unchanged.
+
 The hook consumes a valid receipt once and blocks invalid or missing Level 3/4 approval. It preserves existing unmanaged hooks instead of overwriting them. Local hooks can still be bypassed with Git options or filesystem control, so protected branches and remote required checks remain necessary for agent-resistant enforcement.
 
 ### Solo Maintainer And Team Mode

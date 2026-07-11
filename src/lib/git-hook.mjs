@@ -19,11 +19,11 @@ function hookPath(target) {
   return resolveGitPath(target, 'hooks/pre-commit')
 }
 
-function renderHook({ nodePath, cliPath }) {
+function renderHook({ nodePath, cliPath, target }) {
   return `#!/bin/sh
 ${HOOK_MARKER}
-repo_root=$(git rev-parse --show-toplevel) || exit 1
-exec ${shellQuote(nodePath)} ${shellQuote(cliPath)} approval enforce git.commit --target "$repo_root"
+git rev-parse --show-toplevel >/dev/null || exit 1
+exec ${shellQuote(nodePath)} ${shellQuote(cliPath)} approval enforce git.commit --target ${shellQuote(resolve(target))}
 `
 }
 
@@ -65,6 +65,7 @@ export function installPreCommitHook({ target, nodePath, cliPath }) {
   const content = renderHook({
     nodePath: resolve(nodePath),
     cliPath: resolve(cliPath),
+    target,
   })
   const existing = state.installed ? readFileSync(state.path, 'utf8') : null
   if (existing === content) {
