@@ -62,6 +62,7 @@ Acceptance:
 - [x] Keep JSON keys in English.
 - [x] Test accents, long Spanish text, wrapping, and monochrome output.
 - [x] Apply persisted language to external Decision Review while preserving English JSON keys.
+- [x] Provide navigable language choices, accept `/lenguaje`, and remove residual English/number-agreement errors from Spanish status.
 
 Acceptance:
 

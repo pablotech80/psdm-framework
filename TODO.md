@@ -20,6 +20,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Add an idempotent universal adapter installer for Codex, Claude, Cursor, Windsurf, OpenCode, and Antigravity.
 - [x] Make external Decision Review honor Active Work language and normalize nested-project paths against the Git root.
 - [x] Sort shell help and command menus alphabetically and add arrow-navigable `/work` submenus.
+- [x] Add navigable language choices, `/lenguaje` alias, and complete Spanish status grammar/copy.
 
 - [x] Record the continuity experiment and its governance failure without modifying the laboratory repository.
 - [x] Reframe beta.6 around Continuity and Control instead of generic technical recommendations.

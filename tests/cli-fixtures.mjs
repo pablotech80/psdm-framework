@@ -681,19 +681,28 @@ function testShellUsesPtechCyanOnlyForInteractiveTerminals() {
 function testShellDetectsSpanishAndPersistsLanguage() {
   const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-es-'))
   git(target, ['init', '--quiet'])
+  for (let index = 1; index <= 7; index += 1) {
+    writeFileSync(resolve(target, `archivo-${index}.txt`), `${index}\n`)
+  }
+  git(target, ['add', 'archivo-1.txt', 'archivo-2.txt'])
   const output = runShell(
     [target],
-    '/help\n/work design Mejorar la experiencia sin perder el límite del repositorio\n/status\n/language en\n/status\n/exit\n',
+    '/help\n/work design Mejorar la experiencia sin perder el límite del repositorio\n/lenguaje es\n/status\n/language en\n/status\n/exit\n',
     { env: { LC_ALL: 'es_ES.UTF-8', LANG: 'es_ES.UTF-8' } },
   )
   const content = readFileSync(resolve(target, '.riscala', 'ACTIVE_WORK.md'), 'utf8')
 
   assert.match(output, /Trabajo\s+SIN DEFINIR/)
+  assert.match(output, /Cambios\s+2 preparados · 5 sin seguimiento/)
+  assert.match(output, /\+2 archivos modificados más/)
+  assert.match(output, /Política\s+estándar · valores predeterminados/)
+  assert.match(output, /Con tecnología PSDM/)
   assert.match(output, /Siguiente\s+\/work <objetivo>/)
   assert.match(output, /Objetivo\s+Mejorar la experiencia sin perder el límite/)
   assert.match(output, /Permitido\s+Trabajar dentro de este repositorio/)
   assert.match(output, /Autoridad\s+Riscala asesora/)
   assert.match(output, /Idioma cambiado a español|Language changed to English/)
+  assert.doesNotMatch(output, /Unknown command: \/lenguaje/)
   assert.match(output, /Work\s+ACTIVE · design/)
   assert.match(output, /Allowed\s+Work inside this repository/)
   assert.match(content, /Language: `en`/)
@@ -726,6 +735,7 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
   const allCommands = filterShellMenuCommands('/')
   const statusCommand = filterShellMenuCommands('/st')
   const workCommands = filterShellMenuCommands('/work ', '/work')
+  const languageCommands = filterShellMenuCommands('/language ', '/language')
   const plainMenu = renderShellMenu('/', 1)
   const workMenu = renderShellMenu('/work ', 1, { parentName: '/work' })
   const coloredMenu = renderShellMenu('/', 1, { color: true })
@@ -744,6 +754,7 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
     '/init-preview',
     '/inspect',
     '/language',
+    '/lenguaje',
     '/pr-checklist',
     '/report',
     '/review',
@@ -761,10 +772,11 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
     '/work release ',
     '/work transition ',
   ])
+  assert.deepEqual(languageCommands.map((item) => item.name), ['/language en', '/language es'])
   assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
   assert.deepEqual(filterShellMenuCommands('status'), [])
-  assert.equal(moveShellMenuSelection(0, 'previous', 18), 17)
-  assert.equal(moveShellMenuSelection(17, 'next', 18), 0)
+  assert.equal(moveShellMenuSelection(0, 'previous', 19), 18)
+  assert.equal(moveShellMenuSelection(18, 'next', 19), 0)
   assert.match(plainMenu, /Commands/)
   assert.match(plainMenu, /❯ \/approval/)
   assert.match(workMenu, /─ work /)

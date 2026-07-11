@@ -34,6 +34,7 @@ const SHELL_COPY = {
     project: 'Project', branch: 'Branch', changes: 'Changes', files: 'Files', policy: 'Policy', refreshed: 'Refreshed',
     notSet: 'NOT SET', unknownMode: 'unknown mode', notRecorded: 'Not recorded',
     setup: '/work <objective>', clean: 'clean', untracked: 'untracked', staged: 'staged', unstaged: 'unstaged',
+    moreChanged: (count) => `+${count} more changed file(s)`, defaultPolicy: 'defaults', powered: 'Powered by PSDM',
     workExists: 'Active Work already exists. The current boundary was preserved.',
     continued: 'The proposed transition was accepted and work is active.', closed: 'Active Work was closed.',
     transition: 'Transition proposed. Run /work continue to accept it.', noWork: 'No Active Work exists. Create one with /work <objective>.',
@@ -45,6 +46,7 @@ const SHELL_COPY = {
     project: 'Proyecto', branch: 'Rama', changes: 'Cambios', files: 'Archivos', policy: 'Política', refreshed: 'Actualizado',
     notSet: 'SIN DEFINIR', unknownMode: 'modo desconocido', notRecorded: 'No registrado',
     setup: '/work <objetivo>', clean: 'limpio', untracked: 'sin seguimiento', staged: 'preparado', unstaged: 'sin preparar',
+    moreChanged: (count) => `+${count} archivo${count === 1 ? '' : 's'} modificado${count === 1 ? '' : 's'} más`, defaultPolicy: 'valores predeterminados', powered: 'Con tecnología PSDM',
     workExists: 'Ya existe un trabajo activo. Se ha conservado el límite actual.',
     continued: 'La transición propuesta fue aceptada y el trabajo está activo.', closed: 'El trabajo activo fue cerrado.',
     transition: 'Transición propuesta. Ejecuta /work continue para aceptarla.', noWork: 'No existe trabajo activo. Créalo con /work <objetivo>.',
@@ -120,21 +122,29 @@ function changesLabel(context) {
   }
 
   const copy = shellCopy(context.language)
+  const countLabel = (count, label) => {
+    if (context.language !== 'es' || label !== copy.staged) return `${count} ${label}`
+    return `${count} ${count === 1 ? 'preparado' : 'preparados'}`
+  }
   const parts = [
-    context.changes.staged > 0 ? `${context.changes.staged} ${copy.staged}` : null,
-    context.changes.unstaged > 0 ? `${context.changes.unstaged} ${copy.unstaged}` : null,
-    context.changes.untracked > 0 ? `${context.changes.untracked} ${copy.untracked}` : null,
+    context.changes.staged > 0 ? countLabel(context.changes.staged, copy.staged) : null,
+    context.changes.unstaged > 0 ? countLabel(context.changes.unstaged, copy.unstaged) : null,
+    context.changes.untracked > 0 ? countLabel(context.changes.untracked, copy.untracked) : null,
   ].filter(Boolean)
 
   return parts.length > 0 ? parts.join(' · ') : copy.clean
 }
 
 function policyLabel(context) {
+  const copy = shellCopy(context.language)
   const source = context.config.exists
     ? relative(context.target, context.config.path) || basename(context.config.path)
-    : 'defaults'
+    : copy.defaultPolicy
 
-  return `${context.config.profile.name} · ${source}`
+  const profile = context.language === 'es' && context.config.profile.name === 'standard'
+    ? 'estándar'
+    : context.config.profile.name
+  return `${profile} · ${source}`
 }
 
 function changedFileRows(context, options = {}) {
@@ -146,7 +156,7 @@ function changedFileRows(context, options = {}) {
     return cardRows(index === 0 ? shellCopy(context.language).files : '', `${status.padEnd(3)} ${path}`, options)
   })
   const hidden = context.git.changes.length - 5
-  if (hidden > 0) rows.push(...cardRows('', `+${hidden} more changed file(s)`, options))
+  if (hidden > 0) rows.push(...cardRows('', shellCopy(context.language).moreChanged(hidden), options))
   return rows
 }
 
@@ -371,7 +381,7 @@ export function renderShellBanner(context, options = {}) {
     panelRule('middle', '', options),
     ...renderStatusRows(context, options),
     panelRule('bottom', '', options),
-    `${theme.dim('Powered by PSDM')} · ${theme.cyan('/work')} ${theme.dim(copy.footer)} · ${theme.cyan('/')} ${theme.dim(copy.commands)}`,
+    `${theme.dim(copy.powered)} · ${theme.cyan('/work')} ${theme.dim(copy.footer)} · ${theme.cyan('/')} ${theme.dim(copy.commands)}`,
   ].join('\n')
 }
 
@@ -396,6 +406,7 @@ export function renderShellHelp(options = {}) {
     cardRow('/init-preview', 'Preview governance files without writing.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/inspect', 'Inspect staged changes and governance level.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/language', spanish ? 'Cambiar idioma: es o en.' : 'Change language: es or en.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/lenguaje', spanish ? 'Alias en español para cambiar el idioma.' : 'Spanish alias for changing language.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/pr-checklist', 'Build a PR checklist for a described change.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/report', 'Summarize compliance report readiness.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/review', 'Compare intent with staged evidence.', { ...options, valueStyle: theme.cyanLight }),
@@ -924,7 +935,8 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     return { output: '', exit: false }
   }
 
-  const [command, ...parameters] = trimmed.split(/\s+/)
+  const [rawCommand, ...parameters] = trimmed.split(/\s+/)
+  const command = rawCommand === '/lenguaje' ? '/language' : rawCommand
   const description = parameters.join(' ').trim()
   const initialContext = buildShellContext({ target, configPath, language })
   const activeLanguage = initialContext.language
