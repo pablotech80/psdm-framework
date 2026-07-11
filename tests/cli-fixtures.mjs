@@ -191,14 +191,57 @@ function testAgentAdaptersInstallNativeRulesWithoutOverwrite() {
   assert.deepEqual(report.tools, ['codex', 'claude', 'cursor', 'windsurf', 'opencode', 'antigravity'])
   assert.match(agents, /Existing agent rules/)
   assert.match(agents, /riscala-active-work-adapter/)
-  assert.equal(agents.match(/riscala-active-work-adapter/g).length, 1)
+  assert.equal(agents.match(/<!-- riscala-active-work-adapter -->/g).length, 1)
+  assert.match(agents, /riscala work handoff/)
   const claude = readFileSync(resolve(target, 'CLAUDE.md'), 'utf8')
   assert.match(claude, /Existing Claude rules/)
-  assert.equal(claude.match(/riscala-active-work-adapter/g).length, 1)
+  assert.equal(claude.match(/<!-- riscala-active-work-adapter -->/g).length, 1)
   assert.match(readFileSync(resolve(target, '.cursor/rules/riscala-active-work.mdc'), 'utf8'), /alwaysApply: true/)
   assert.match(readFileSync(resolve(target, '.windsurf/rules/riscala-active-work.md'), 'utf8'), /trigger: always_on/)
   assert.match(readFileSync(resolve(target, '.agents/rules/riscala-active-work.md'), 'utf8'), /trigger: always_on/)
   assert.ok(second.results.every((result) => ['ready', 'skipped_existing'].includes(result.status)))
+}
+
+function testActiveWorkHandoffReplacesCurrentStateAndKeepsHistory() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-handoff-'))
+  runJson(['work', 'init', 'Implementar continuidad', '--mode', 'implement', '--target', target, '--json'])
+  const first = runJson([
+    'work', 'handoff', '--completed', 'Control de alcance terminado',
+    '--validation', 'Suite completa superada', '--decisions', 'Mantener Active Work como fuente de verdad', '--questions', 'Ninguna', '--pending', 'Continuidad enriquecida',
+    '--next', 'Implementar el traspaso automático', '--target', target, '--json',
+  ])
+  const second = runJson([
+    'work', 'handoff', '--completed', 'Traspaso implementado',
+    '--validation', 'Pruebas focalizadas superadas', '--decisions', 'El agente registra el cierre', '--questions', 'Confirmar chat nuevo', '--pending', 'Prueba en chat nuevo',
+    '--next', 'Abrir un chat nuevo sin contexto', '--target', target, '--json',
+  ])
+  const content = readFileSync(resolve(target, '.riscala', 'ACTIVE_WORK.md'), 'utf8')
+
+  assert.equal(first.updated, true)
+  assert.equal(second.handoff.next, 'Abrir un chat nuevo sin contexto')
+  assert.match(content, /- Completed: Traspaso implementado/)
+  assert.match(content, /- Validation: Pruebas focalizadas superadas/)
+  assert.match(content, /- Decisions: El agente registra el cierre/)
+  assert.match(content, /- Open Questions: Confirmar chat nuevo/)
+  assert.match(content, /- Pending: Prueba en chat nuevo/)
+  assert.match(content, /- Next Action: Abrir un chat nuevo sin contexto/)
+  assert.doesNotMatch(content, /- Completed: Control de alcance terminado/)
+  assert.equal((content.match(/handoff_recorded/g) || []).length, 2)
+}
+
+function testActiveWorkTransitionAddsAllowedPathsToLegacyRecord() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-legacy-transition-'))
+  runJson(['work', 'init', 'Objetivo antiguo', '--mode', 'design', '--target', target, '--json'])
+  const path = resolve(target, '.riscala', 'ACTIVE_WORK.md')
+  const legacy = readFileSync(path, 'utf8').replace(/\n## Allowed Paths\n\n[\s\S]*?(?=\n## Allowed)/, '')
+  writeFileSync(path, legacy)
+
+  executeShellCommand('/work transition implement Objetivo nuevo --files src/**,tests/**', { target, language: 'es' })
+  executeShellCommand('/work continue', { target, language: 'es' })
+  const content = readFileSync(path, 'utf8')
+
+  assert.match(content, /## Allowed Paths\n\n- `src\/\*\*`\n- `tests\/\*\*`/)
+  assert.match(content, /- Objective: Objetivo nuevo/)
 }
 
 function testImpactLowRiskWithoutInitStaysLightweight() {
@@ -2277,6 +2320,8 @@ const tests = [
   testWorkInitUsesGlobalLanguagePreference,
   testActiveWorkAllowedPathsControlNestedRepositoryScope,
   testAgentAdaptersInstallNativeRulesWithoutOverwrite,
+  testActiveWorkHandoffReplacesCurrentStateAndKeepsHistory,
+  testActiveWorkTransitionAddsAllowedPathsToLegacyRecord,
   testImpactLowRiskWithoutInitStaysLightweight,
   testImpactAuthTeachesDecisionWithoutTakingAuthority,
   testImpactUnknownGreenfieldExposesUncertaintyWithoutMutation,

@@ -98,10 +98,38 @@ ${allowedPaths.length ? allowedPaths.map((path) => `- \`${path}\``).join('\n') :
 
 - None recorded.
 
+## Handoff
+
+- Updated: Not recorded.
+- Completed: Not recorded.
+- Validation: Not recorded.
+- Decisions: Not recorded.
+- Open Questions: None recorded.
+- Pending: Not recorded.
+- Next Action: ${spanish ? 'Trabajar dentro del límite activo o proponer una transición explícita.' : 'Work inside the active boundary or propose an explicit transition.'}
+
 ## Next Permitted Action
 
 ${spanish ? 'Trabajar dentro del límite activo o proponer una transición explícita.' : 'Work inside the active boundary or propose an explicit transition.'}
 `
+}
+
+function handoffValue(content, name) {
+  return content.match(new RegExp(`^- ${name}: (.+)$`, 'm'))?.[1]?.trim() || null
+}
+
+export function recordActiveWorkHandoff({ target, completed, validation, decisions, questions, pending, next }) {
+  const state = readActiveWork(target)
+  if (!state.exists) return { updated: false, reason: 'ACTIVE_WORK_NOT_FOUND', path: state.path }
+  const work = parseActiveWork(state.content)
+  if (work?.status === 'closed') return { updated: false, reason: 'ACTIVE_WORK_CLOSED', path: state.path }
+  const timestamp = new Date().toISOString()
+  const section = `## Handoff\n\n- Updated: ${timestamp}\n- Completed: ${completed}\n- Validation: ${validation}\n- Decisions: ${decisions}\n- Open Questions: ${questions}\n- Pending: ${pending}\n- Next Action: ${next}\n`
+  const content = /\n## Handoff\n[\s\S]*?(?=\n## (?:Next Permitted Action|Lifecycle History)|$)/.test(state.content)
+    ? state.content.replace(/## Handoff\n[\s\S]*?(?=\n## (?:Next Permitted Action|Lifecycle History)|$)/, section.trimEnd())
+    : state.content.replace(/\n## Next Permitted Action/, `\n${section}\n## Next Permitted Action`)
+  writeActiveWork(state.path, `${content.trimEnd()}${historyEntry('handoff_recorded', [`next=${next}`])}`)
+  return { updated: true, reason: 'ACTIVE_WORK_HANDOFF_RECORDED', path: state.path, handoff: { updated: timestamp, completed, validation, decisions, questions, pending, next } }
 }
 
 export function createActiveWork({ target, objective, mode, language = 'en', allowedPaths = [] }) {
@@ -178,12 +206,15 @@ export function continueActiveWork(target) {
   if (!proposal) return { updated: false, reason: 'ACTIVE_WORK_TRANSITION_INVALID', path: state.path }
   const [, objective, mode, pathList] = proposal
   const allowedPaths = !pathList ? work.allowedPaths : pathList === 'all' ? [] : [...pathList.matchAll(/`([^`]+)`/g)].map((match) => match[1])
-  const content = state.content
+  let content = state.content
     .replace(/^Status: `[^`]+`$/m, 'Status: `active`')
     .replace(/^- Objective: [^\n]+$/m, `- Objective: ${objective}`)
     .replace(/^- Mode: `[^`]+`$/m, `- Mode: \`${mode}\``)
-    .replace(/## Allowed Paths\n\n(?:- [^\n]+\n?)+/, `## Allowed Paths\n\n${allowedPaths.length ? allowedPaths.map((path) => `- \`${path}\``).join('\n') : '- Not declared; the whole repository is allowed.'}\n`)
     .replace(/\n## Proposed Transition\n[\s\S]*?(?=\n## Lifecycle History|$)/, '')
+  const allowedSection = `## Allowed Paths\n\n${allowedPaths.length ? allowedPaths.map((path) => `- \`${path}\``).join('\n') : '- Not declared; the whole repository is allowed.'}\n`
+  content = /## Allowed Paths\n/.test(content)
+    ? content.replace(/## Allowed Paths\n\n(?:- [^\n]+\n?)+/, allowedSection)
+    : content.replace(/(- Mode: `[^`]+`\n)/, `$1\n${allowedSection}`)
   writeActiveWork(state.path, `${content.trimEnd()}${historyEntry('transition_accepted', [`from=${work.mode}`, `to=${mode}`])}`)
   return { updated: true, reason: 'ACTIVE_WORK_TRANSITION_ACCEPTED', path: state.path, objective, mode, allowedPaths }
 }
@@ -231,5 +262,14 @@ export function parseActiveWork(content) {
     nextAction,
     proposedObjective: proposal?.[1]?.trim() || null,
     proposedMode: proposal?.[2]?.trim() || null,
+    handoff: {
+      updated: handoffValue(content, 'Updated'),
+      completed: handoffValue(content, 'Completed'),
+      validation: handoffValue(content, 'Validation'),
+      decisions: handoffValue(content, 'Decisions'),
+      questions: handoffValue(content, 'Open Questions'),
+      pending: handoffValue(content, 'Pending'),
+      next: handoffValue(content, 'Next Action'),
+    },
   }
 }

@@ -63,6 +63,7 @@ Start here:
 Usage:
   ${PRIMARY_EXECUTABLE} work init "<objective>" [--mode inspect|experiment|design|implement|release] [--files path,path] [--target path] [--json]
   ${PRIMARY_EXECUTABLE} work show [--target path] [--json]
+  ${PRIMARY_EXECUTABLE} work handoff --completed text --validation text --decisions text --questions text --pending text --next text [--target path] [--json]
   ${PRIMARY_EXECUTABLE} adapters init [codex,claude,cursor,windsurf,opencode,antigravity] [--target path] [--json]
   ${PRIMARY_EXECUTABLE} impact "<change intent>" [--guidance learn|balanced|concise] [--file path] [--files path,path] [--target path] [--config path] [--json]
   ${PRIMARY_EXECUTABLE} review "<change intent>" --staged [--guidance learn|balanced|concise] [--file expected-path] [--files expected-paths] [--target path] [--config path] [--json]

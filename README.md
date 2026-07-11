@@ -37,6 +37,20 @@ riscala work show
 riscala adapters init
 ```
 
+After meaningful progress, agent adapters require the coding agent—not the developer—to record a compact handoff:
+
+```bash
+riscala work handoff \
+  --completed "implemented scope enforcement" \
+  --validation "focused tests passed" \
+  --decisions "keep enforcement deterministic" \
+  --questions "none" \
+  --pending "fresh-chat validation" \
+  --next "open a new chat without context"
+```
+
+The current handoff replaces stale progress while lifecycle history records that a handoff occurred. A fresh agent must follow the exact next action unless it conflicts with the active boundary or a newer explicit developer instruction.
+
 `adapters init` connects Codex, Claude Code, Cursor, Windsurf, OpenCode, and Antigravity to the same `.riscala/ACTIVE_WORK.md` boundary without replacing existing agent instructions.
 
 The npm `@beta` tag installs `1.0.0-beta.6`.
