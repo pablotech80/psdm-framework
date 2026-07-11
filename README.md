@@ -236,6 +236,8 @@ The dependency-free shell is an operational governance console. It manages Activ
 
 When `AGENTS.md` already exists, `/init confirm` preserves its content and appends only missing PSDM Required Reading, Boundaries, and Escalation sections. Repeating initialization does not duplicate the integration block.
 
+For new or untouched PSDM documents, `/init confirm` inspects a bounded repository inventory and generates a project-specific baseline from detected languages, frameworks, directories, validation commands, deployment signals, and sensitive surfaces. It excludes secrets, `.env` files, data directories, virtual environments, dependencies, and build output. Existing edited documents are never overwritten; unknown business decisions remain explicit review questions.
+
 `/uninstall preview` lists the Riscala state, untouched templates, configuration, and adapter blocks that can be removed from the current project. `/uninstall confirm` modifies the repository: it removes recognized Riscala-managed files and blocks while preserving user-modified documents. It does not delete application code or uninstall the global npm package.
 
 The first screen restores `.riscala/ACTIVE_WORK.md`. If none exists, `/work <objective>` creates it with `implement` mode by default. `/work transition` records a proposed boundary without applying it; `/work continue` accepts it explicitly; `/work close` ends the work. Timestamped history remains in the file. Source code is changed by Codex, Claude, Cursor, or your preferred coding agent.

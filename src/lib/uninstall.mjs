@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import { join, resolve } from 'node:path'
 import { REQUIRED_ARTIFACTS, TEMPLATE_MAP } from './artifacts.mjs'
 import { removeAgentAdapters } from './agent-adapters.mjs'
@@ -13,6 +14,19 @@ const EXTRA_TEMPLATES = {
 
 function sameContent(path, expected) {
   return existsSync(path) && statSync(path).isFile() && readFileSync(path, 'utf8') === expected
+}
+
+function fileHash(path) {
+  return createHash('sha256').update(readFileSync(path)).digest('hex')
+}
+
+function installManifest(target) {
+  try {
+    const parsed = JSON.parse(readFileSync(join(target, '.riscala', 'INSTALL_MANIFEST.json'), 'utf8'))
+    return new Map((parsed.files || []).map((item) => [item.path, item.sha256]))
+  } catch {
+    return new Map()
+  }
 }
 
 function managedCandidates(target) {
@@ -41,9 +55,17 @@ export function inspectUninstall(target) {
   const root = resolve(target)
   const remove = []
   const preserve = []
+  const manifest = installManifest(root)
   if (existsSync(join(root, '.riscala'))) remove.push('.riscala/')
+  for (const [relativePath, sha256] of manifest) {
+    const path = join(root, relativePath)
+    if (!existsSync(path)) continue
+    if (statSync(path).isFile() && fileHash(path) === sha256) remove.push(relativePath)
+    else preserve.push(relativePath)
+  }
   for (const item of managedCandidates(root)) {
     if (!existsSync(item.path)) continue
+    if (manifest.has(item.relativePath)) continue
     if (sameContent(item.path, item.expected)) remove.push(item.relativePath)
     else if (item.relativePath !== 'AGENTS.md') preserve.push(item.relativePath)
   }

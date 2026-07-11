@@ -34,6 +34,7 @@ The CLI is for setup, inspection, recovery, and automation. It is not the main d
 - [x] Expose project initialization through a navigable `/init` submenu with preview and explicit confirmation.
 - [x] Preserve existing agent instructions while automatically integrating the PSDM sections required by validation.
 - [x] Provide a reversible project uninstall flow that previews destructive changes and preserves user-owned content.
+- [x] Generate a deterministic project-specific PSDM baseline from safe repository evidence instead of leaving generic templates for the developer.
 
 Acceptance:
 

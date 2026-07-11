@@ -70,7 +70,6 @@ export const SHELL_MENU_COMMANDS = Object.freeze([
   { name: '/check', description: 'Check required artifacts exist.' },
   { name: '/classify', description: 'Classify a described change.' },
   { name: '/exit', description: 'Close the Riscala shell.' },
-  { name: '/uninstall', description: 'Remove Riscala from this project.', children: UNINSTALL_SUBMENU },
   { name: '/help', description: 'Show available commands and safety boundaries.' },
   { name: '/hook-status', description: 'Inspect managed pre-commit hook status.' },
   { name: '/impact', description: 'Think through a change before implementation.' },
@@ -81,6 +80,7 @@ export const SHELL_MENU_COMMANDS = Object.freeze([
   { name: '/report', description: 'Summarize compliance report readiness.' },
   { name: '/review', description: 'Compare intent with staged Git evidence.' },
   { name: '/status', description: 'Refresh repository and policy context.' },
+  { name: '/uninstall', description: 'Remove Riscala from this project.', children: UNINSTALL_SUBMENU },
   { name: '/validate', description: 'Validate the governance baseline.' },
   { name: '/work', description: 'Create, transition, continue, or close Active Work.', children: WORK_SUBMENU },
 ])
