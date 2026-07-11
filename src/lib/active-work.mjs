@@ -2,15 +2,24 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { basename, join, resolve } from 'node:path'
 
 export const WORK_MODES = ['inspect', 'experiment', 'design', 'implement', 'release']
+export const SUPPORTED_LANGUAGES = ['en', 'es']
+
+export function detectLanguage(env = process.env) {
+  const locale = [env.LC_ALL, env.LC_MESSAGES, env.LANG]
+    .find((value) => typeof value === 'string' && value.trim()) || ''
+  return locale.toLowerCase().startsWith('es') ? 'es' : 'en'
+}
 
 export function activeWorkPath(target) {
   return join(resolve(target), '.riscala', 'ACTIVE_WORK.md')
 }
 
-function renderActiveWork({ target, objective, mode }) {
+function renderActiveWork({ target, objective, mode, language }) {
+  const spanish = language === 'es'
   return `# Active Work
 
 Status: \`active\`
+Language: \`${language}\`
 
 ## Boundary
 
@@ -20,29 +29,29 @@ Status: \`active\`
 
 ## Allowed
 
-- Work inside this repository when it directly serves the objective.
+- ${spanish ? 'Trabajar dentro de este repositorio cuando sirva directamente al objetivo.' : 'Work inside this repository when it directly serves the objective.'}
 
 ## Forbidden
 
-- Change another repository.
-- Expand the objective or mode without an explicit transition.
+- ${spanish ? 'Cambiar otro repositorio.' : 'Change another repository.'}
+- ${spanish ? 'Ampliar el objetivo o el modo sin una transición explícita.' : 'Expand the objective or mode without an explicit transition.'}
 
 ## Must Preserve
 
-- Existing unrelated user changes.
-- Secrets, credentials, private data, and production values.
+- ${spanish ? 'Cambios existentes del usuario que no estén relacionados.' : 'Existing unrelated user changes.'}
+- ${spanish ? 'Secretos, credenciales, datos privados y valores de producción.' : 'Secrets, credentials, private data, and production values.'}
 
 ## Stop Conditions
 
-- Repository, objective, or mode changes.
-- The requested action conflicts with Allowed, Forbidden, or Must Preserve.
-- A material decision or required authority is missing.
+- ${spanish ? 'Cambia el repositorio, el objetivo o el modo.' : 'Repository, objective, or mode changes.'}
+- ${spanish ? 'La acción solicitada entra en conflicto con Allowed, Forbidden o Must Preserve.' : 'The requested action conflicts with Allowed, Forbidden, or Must Preserve.'}
+- ${spanish ? 'Falta una decisión material o la autoridad requerida.' : 'A material decision or required authority is missing.'}
 
 ## Context
 
 ### Human Decisions
 
-- The repository, objective, and mode above define the active boundary.
+- ${spanish ? 'El repositorio, el objetivo y el modo anteriores definen el límite activo.' : 'The repository, objective, and mode above define the active boundary.'}
 
 ### Observed Facts
 
@@ -62,18 +71,29 @@ Status: \`active\`
 
 ## Next Permitted Action
 
-Work inside the active boundary or propose an explicit transition.
+${spanish ? 'Trabajar dentro del límite activo o proponer una transición explícita.' : 'Work inside the active boundary or propose an explicit transition.'}
 `
 }
 
-export function createActiveWork({ target, objective, mode }) {
+export function createActiveWork({ target, objective, mode, language = 'en' }) {
   const path = activeWorkPath(target)
   if (existsSync(path)) {
     return { created: false, path, reason: 'ACTIVE_WORK_EXISTS' }
   }
   mkdirSync(join(resolve(target), '.riscala'), { recursive: true })
-  writeFileSync(path, renderActiveWork({ target, objective, mode }))
+  writeFileSync(path, renderActiveWork({ target, objective, mode, language }))
   return { created: true, path, reason: 'ACTIVE_WORK_CREATED' }
+}
+
+export function setActiveWorkLanguage(target, language) {
+  const state = readActiveWork(target)
+  if (!state.exists) return { updated: false, ...state }
+
+  const next = /^Language: `(?:en|es)`$/m.test(state.content)
+    ? state.content.replace(/^Language: `(?:en|es)`$/m, `Language: \`${language}\``)
+    : state.content.replace(/^Status: `[^`]+`$/m, (status) => `${status}\nLanguage: \`${language}\``)
+  writeFileSync(state.path, next)
+  return { updated: true, path: state.path, language }
 }
 
 export function readActiveWork(target) {
@@ -106,6 +126,7 @@ export function parseActiveWork(content) {
 
   return {
     status: content.match(/Status: `([^`]+)`/)?.[1]?.trim() || null,
+    language: content.match(/Language: `(en|es)`/)?.[1] || null,
     repository: value('Repository'),
     objective: value('Objective'),
     mode: value('Mode'),

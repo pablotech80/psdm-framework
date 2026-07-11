@@ -54,17 +54,17 @@ Acceptance:
 
 ## P0 — Spanish And English
 
-- [ ] Detect initial language from system locale.
-- [ ] Translate all primary Active Work and transition messages.
-- [ ] Add `/language es|en`.
-- [ ] Persist language in Active Work.
-- [ ] Keep JSON keys in English.
-- [ ] Test accents, long Spanish text, wrapping, and monochrome output.
+- [x] Detect initial language from system locale.
+- [x] Translate the primary Active Work, status, help-boundary, and setup messages.
+- [x] Add `/language es|en`.
+- [x] Persist language in Active Work.
+- [x] Keep JSON keys in English.
+- [x] Test accents, long Spanish text, wrapping, and monochrome output.
 
 Acceptance:
 
-- [ ] A Spanish-speaking developer completes first use without English instructions.
-- [ ] Language changes presentation, never policy semantics.
+- [x] A Spanish-speaking developer completes first use without English instructions.
+- [x] Language changes presentation, never policy semantics.
 
 ## P1 — Agent-Native Continuity
 

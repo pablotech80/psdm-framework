@@ -206,6 +206,7 @@ The dependency-free shell shows the selected project's name, branch, working-tre
 ```text
 /help
 /work [inspect|experiment|design|implement|release] <objective>
+/language es|en
 /status
 /audit
 /check
@@ -222,6 +223,8 @@ The dependency-free shell shows the selected project's name, branch, working-tre
 ```
 
 The first screen restores `.riscala/ACTIVE_WORK.md`. If none exists, `/work <objective>` creates that single context file with `implement` mode by default; an explicit mode may be placed before the objective. A second `/work` never replaces the existing boundary. Source-code and delivery mutations remain blocked in the shell.
+
+The shell starts in Spanish when the system locale begins with `es`; otherwise it uses English. `/language es|en` persists the presentation language in the existing Active Work file. Language changes labels and standard guidance, never policy meaning or JSON keys.
 
 Interactive terminals use Ptech cyan (`#00A8E8`) with a light accent (`#38BDF8`) for the Riscala frame and prompt. Color is automatically disabled for pipes, non-TTY output, `TERM=dumb`, and the `NO_COLOR` convention.
 

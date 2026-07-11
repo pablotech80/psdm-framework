@@ -8,6 +8,7 @@ import {
 } from '../lib/shell.mjs'
 import { resolveTarget } from '../lib/paths.mjs'
 import { supportsTerminalColor } from '../lib/terminal-style.mjs'
+import { detectLanguage } from '../lib/active-work.mjs'
 import { runInteractiveShellSession } from '../lib/shell-session.mjs'
 
 function invalidOptions(options, positional) {
@@ -37,7 +38,8 @@ export async function shellCommand(args, streams = {}) {
   const output = streams.output || process.stdout
   const env = streams.env || process.env
   const color = supportsTerminalColor(output, env)
-  const context = buildShellContext({ target, configPath: options.configPath })
+  const language = detectLanguage(env)
+  const context = buildShellContext({ target, configPath: options.configPath, language })
   const prompt = renderShellPrompt({ color })
 
   output.write(`${renderShellBanner(context, { color })}\n\n${prompt}`)
@@ -49,6 +51,7 @@ export async function shellCommand(args, streams = {}) {
       target,
       configPath: options.configPath,
       color,
+      language,
       prompt,
     })
   }
@@ -60,6 +63,7 @@ export async function shellCommand(args, streams = {}) {
       target,
       configPath: options.configPath,
       color,
+      language,
     })
 
     if (result.output) {
