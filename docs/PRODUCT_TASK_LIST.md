@@ -63,6 +63,7 @@ Acceptance:
 - [x] Test accents, long Spanish text, wrapping, and monochrome output.
 - [x] Apply persisted language to external Decision Review while preserving English JSON keys.
 - [x] Provide navigable language choices, accept `/lenguaje`, and remove residual English/number-agreement errors from Spanish status.
+- [x] Preserve printable Unicode in interactive objectives and intentions without removing accents or `ñ`.
 
 Acceptance:
 

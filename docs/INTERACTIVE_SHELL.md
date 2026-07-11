@@ -153,6 +153,8 @@ Commands do not accept arbitrary shell fragments. `/work`, `/impact`, `/review`,
 
 The initial shell language is Spanish when `LC_ALL`, `LC_MESSAGES`, or `LANG` begins with `es`; all other locales fall back to English. Active Work persists the selected `es` or `en` value so later shell sessions restore it. `/language` and `/lenguaje` open a navigable language submenu and change presentation only: Markdown field names and JSON keys remain in English, and the repository boundary keeps the same meaning. Spanish status copy applies grammatical number and translates default-policy and hidden-file summaries.
 
+Interactive input preserves printable Unicode. Objectives and intentions may contain `á`, `é`, `í`, `ó`, `ú`, `ü`, `ñ`, `¿`, `¡`, and other non-ASCII characters without transliteration or data loss. Riscala preserves user-authored text exactly; it does not silently correct or rewrite an authorized objective.
+
 Human-facing audit copy describes current state rather than internal init operations: artifacts are `present`, `missing`, or `empty`; adoption modes are expanded into actions; AI surfaces and readiness are reported separately; and recommendations use the `riscala` executable name. When gaps exist, `Focus` names the first two and summarizes the remainder. Product-name normalization applies only to executable commands; stable artifacts such as `psdm.config.json` keep their compatibility names. The underlying JSON audit contract remains unchanged.
 
 ## Security Boundary
