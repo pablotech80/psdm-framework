@@ -157,6 +157,17 @@ unresolved uncertainty
 
 The envelope is human-readable, tool-neutral, and suitable for an AI execution adapter. It is not a complete project specification.
 
+Beta.6 first implements an advisory envelope draft from CLI-supplied expected files. Because the same input channel may be controlled by an AI agent, this draft must expose:
+
+```text
+authority.source = cli_input
+authority.authorityVerified = false
+ownerDecision.status = unverified
+ownerDecision.value = null
+```
+
+It supports comparison and developer reasoning, but it is not proof of owner identity or approval. Strong authority binding remains a separate security boundary.
+
 ### VerificationEvidence
 
 Facts from the implementation and validation stage.
@@ -233,6 +244,7 @@ Rules:
 - Git staged state is the deterministic implementation boundary for beta.6.
 - Unstaged and untracked changes are reported separately and never silently included.
 - A readiness recommendation is advisory; it is not an owner approval.
+- CLI-declared scope is useful comparison input but does not establish human authority.
 - A changed intent or owner decision invalidates the previous comparison.
 - High-risk findings may reuse existing content-bound enforcement, but enforcement is not required for first insight.
 

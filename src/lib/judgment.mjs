@@ -121,6 +121,37 @@ const SURFACE_RULES = [
     learning: 'AI capability is not the same as AI authority; the owner must define both separately.',
   },
   {
+    id: 'dependency-change',
+    signals: ['dependency', 'dependencies', 'library', 'package', 'sdk'],
+    decision: 'Whether a new external dependency is justified by current behavior and acceptable maintenance, security, and delivery cost.',
+    impacts: [
+      ['dependency', 'The project supply chain and maintenance surface may change.', 'high'],
+      ['security', 'A dependency adds transitive code and vulnerability exposure.', 'medium'],
+      ['delivery', 'Install, build, bundle, or runtime behavior may change.', 'medium'],
+      ['testing', 'The integration boundary and failure behavior require focused evidence.', 'medium'],
+    ],
+    assumptions: ['Existing platform or project capabilities cannot solve the need more simply.', 'The dependency is maintained and compatible with the runtime.'],
+    options: [
+      {
+        id: 'use-existing-capability',
+        summary: 'Use an existing project or platform capability.',
+        benefits: ['No new supply-chain surface', 'Lower maintenance cost'],
+        costs: ['May require more local implementation'],
+        reversibility: 'high',
+      },
+      {
+        id: 'add-focused-dependency',
+        summary: 'Add a narrowly scoped dependency with an explicit integration boundary.',
+        benefits: ['Faster implementation', 'Reuse maintained behavior'],
+        costs: ['Supply-chain, update, and compatibility cost'],
+        reversibility: 'medium',
+      },
+    ],
+    recommendation: 'Prefer existing capabilities unless the dependency provides material, tested value that justifies its long-term supply-chain cost.',
+    ownerDecisions: ['What capability is missing?', 'Why is this dependency preferable to existing project or platform behavior?', 'What maintenance and security cost is acceptable?'],
+    learning: 'Adding a dependency is a long-term ownership decision, not only an implementation shortcut.',
+  },
+  {
     id: 'local-presentation',
     signals: ['copy', 'spacing', 'layout', 'style', 'readme', 'documentation', 'hero', 'color', 'typo'],
     decision: 'Whether the change is truly local and reversible or alters a public contract or distribution surface.',

@@ -45,6 +45,9 @@ Security posture:
 - Judgment Brief results label repository evidence as deterministic and semantic impact as inferred with explicit confidence and uncertainty;
 - `ownerDecision` remains unset and developer-only; Riscala cannot create, infer, approve, or simulate it;
 - `riscala impact` is read-only, requires no initialization, and does not persist intent, evidence, or decisions in beta.6;
+- `riscala review` treats CLI-declared expected scope as unverified advisory input and never describes alignment as approval;
+- package dependency review compares bounded dependency names from `HEAD:package.json` and the staged index without logging package contents;
+- Decision Review observes test-file presence but never infers that validation commands were executed;
 - the interactive shell routes an explicit read-only command allowlist, rejects arbitrary terminal input, and blocks mutating slash commands;
 - ANSI styling is limited to interactive presentation and never enters JSON or piped automation output;
 - no npm lifecycle script is introduced for decorative installation behavior;
@@ -96,6 +99,7 @@ Security review is required when a change:
 - introduces dependencies;
 - affects AI-agent tool governance.
 - changes Judgment Brief evidence collection, fact/inference boundaries, owner authority, uncertainty, or recommendation semantics;
+- changes Change Envelope authority status, staged scope comparison, Git object reads, dependency deltas, Decision Review readiness, or approval wording;
 - changes approval receipt, human-presence, content-binding, or agent decision semantics.
 - changes trusted approver configuration, canonical receipt payloads, signature algorithms, or action-record hashes.
 - changes hook installation, receipt consumption, replay state, lock handling, or remote-enforcement assumptions.
