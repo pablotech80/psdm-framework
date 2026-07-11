@@ -14,6 +14,16 @@ const WORK_SUBMENU = Object.freeze([
   { name: '/work transition ', description: 'Propose mode and objective.' },
 ])
 
+const LANGUAGE_SUBMENU = Object.freeze([
+  { name: '/language en', description: 'Cambiar a inglés / Switch to English.', execute: true },
+  { name: '/language es', description: 'Cambiar a español / Switch to Spanish.', execute: true },
+])
+
+const LENGUAJE_SUBMENU = Object.freeze([
+  { name: '/lenguaje en', description: 'Cambiar a inglés.', execute: true },
+  { name: '/lenguaje es', description: 'Cambiar a español.', execute: true },
+])
+
 export const SHELL_MENU_COMMANDS = Object.freeze([
   { name: '/action', description: 'Prepare a git.commit action record.' },
   { name: '/approval', description: 'Show approval receipt boundary.' },
@@ -26,7 +36,8 @@ export const SHELL_MENU_COMMANDS = Object.freeze([
   { name: '/impact', description: 'Think through a change before implementation.' },
   { name: '/init-preview', description: 'Preview governance files without writing.' },
   { name: '/inspect', description: 'Inspect staged changes and governance level.' },
-  { name: '/language', description: 'Change the shell language between es and en.' },
+  { name: '/language', description: 'Change language between English and Spanish.', children: LANGUAGE_SUBMENU },
+  { name: '/lenguaje', description: 'Cambiar el idioma entre español e inglés.', children: LENGUAJE_SUBMENU },
   { name: '/pr-checklist', description: 'Build a PR checklist for a described change.' },
   { name: '/report', description: 'Summarize compliance report readiness.' },
   { name: '/review', description: 'Compare intent with staged Git evidence.' },

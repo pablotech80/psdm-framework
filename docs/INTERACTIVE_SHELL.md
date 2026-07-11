@@ -132,6 +132,7 @@ Read-only commands share one result-panel grammar instead of emitting unrelated 
 | `/work continue` | Explicitly accept a pending transition and activate its boundary. |
 | `/work close` | Close the current work and require a new boundary before continuing. |
 | `/language es|en` | Persist Spanish or English presentation in the existing Active Work file. |
+| `/lenguaje es|en` | Spanish alias for `/language`; both expose an arrow-navigable `en`/`es` submenu. |
 | `/status` | Refresh repository, branch, working-tree, and policy context. |
 | `/audit` | Reuse the non-destructive audit engine and summarize governance adoption, artifacts, AI readiness, gaps, Git state, and the next recommendation. |
 | `/check` | Check whether required artifacts exist without validating their internal structure. |
@@ -150,7 +151,7 @@ Commands do not accept arbitrary shell fragments. `/work`, `/impact`, `/review`,
 
 ## Language
 
-The initial shell language is Spanish when `LC_ALL`, `LC_MESSAGES`, or `LANG` begins with `es`; all other locales fall back to English. Active Work persists the selected `es` or `en` value so later shell sessions restore it. `/language` changes presentation only: Markdown field names and JSON keys remain in English, and the repository boundary keeps the same meaning.
+The initial shell language is Spanish when `LC_ALL`, `LC_MESSAGES`, or `LANG` begins with `es`; all other locales fall back to English. Active Work persists the selected `es` or `en` value so later shell sessions restore it. `/language` and `/lenguaje` open a navigable language submenu and change presentation only: Markdown field names and JSON keys remain in English, and the repository boundary keeps the same meaning. Spanish status copy applies grammatical number and translates default-policy and hidden-file summaries.
 
 Human-facing audit copy describes current state rather than internal init operations: artifacts are `present`, `missing`, or `empty`; adoption modes are expanded into actions; AI surfaces and readiness are reported separately; and recommendations use the `riscala` executable name. When gaps exist, `Focus` names the first two and summarizes the remainder. Product-name normalization applies only to executable commands; stable artifacts such as `psdm.config.json` keep their compatibility names. The underlying JSON audit contract remains unchanged.
 
