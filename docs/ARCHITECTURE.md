@@ -9,6 +9,24 @@ PSDM is a small Node.js CLI package. The executable entrypoint is `bin/psdm.mjs`
 
 Riscala is the accepted product-facing identity for the CLI. PSDM remains the method and governance compatibility boundary. The staged migration is defined in `docs/RISCALA_BRAND_MIGRATION.md`; current runtime and package names remain unchanged until their respective migration phases are implemented and validated.
 
+For beta.6, Riscala's primary architecture is a developer-judgment loop rather than artifact compliance. PSDM supplies the construction and reasoning questions; Riscala connects developer intent, repository evidence, explicit owner decisions, AI-assisted execution, staged verification, and selective learning. The domain model and trust boundaries are defined in `docs/JUDGMENT_ARCHITECTURE.md`.
+
+The target component flow is:
+
+```text
+Project Context + Change Intent
+  -> Evidence Collection
+  -> Criterion Engine
+  -> Judgment Brief
+  -> Owner Decision
+  -> Change Envelope
+  -> Execution Adapter
+  -> Staged Decision Review
+  -> Learning Candidate
+```
+
+Existing audit, classifier, risk-path, staged-inspection, validation, JSON, CI, action-record, approval, and hook modules are reusable primitives. They are not individually the product flow. New beta.6 modules must compose them without duplicating their deterministic evidence contracts.
+
 The architecture favors explicit modules over framework abstractions:
 
 - `bin/psdm.mjs` dispatches commands for both the `riscala` primary executable and `psdm` compatibility executable.
@@ -40,6 +58,15 @@ The architecture favors explicit modules over framework abstractions:
 - `src/validator/validate-method.mjs` evaluates method compliance.
 
 ## Architecture Decisions
+
+- Treat amplification of developer judgment as Riscala's primary product responsibility; project artifact governance remains a PSDM capability, not the default daily experience.
+- Keep observed evidence, inference, options, recommendations, owner decisions, and verification as distinct domain concepts.
+- Require explicit developer authority for `OwnerDecision`; neither Riscala nor an AI agent may synthesize that authority.
+- Use risk to select reasoning depth and evidence, not to impose documents automatically.
+- Make greenfield first use intent-first and legacy first use read-only and evidence-first.
+- Use staged Git state as the beta.6 implementation boundary for Decision Review while reporting unstaged and untracked state separately.
+- Render one reasoning model through learn, balanced, concise, and JSON views rather than maintaining persona-specific decision logic.
+- Preserve current enforcement as an optional advanced boundary; do not make remote approval a beta.6 prerequisite.
 
 - Use dependency-free JavaScript modules to keep installation and audit surface small.
 - Use JSON output as a stable automation contract while preserving human-readable output.
@@ -73,6 +100,13 @@ The architecture favors explicit modules over framework abstractions:
 ## Architecture Gate
 
 Changes require architecture review when they affect:
+
+- Judgment Brief or Decision Review domain contracts;
+- observed/inferred/recommended/owner-decision trust boundaries;
+- Change Envelope content or persistence;
+- greenfield or legacy context discovery;
+- explanation-density semantics;
+- scope-drift or implementation-evidence comparison;
 
 - command contracts or exit codes;
 - pre-init audit semantics;

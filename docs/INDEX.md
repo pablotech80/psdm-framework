@@ -11,6 +11,8 @@ Use it to find the right document by task: adopting PSDM in an existing project,
 
 ## Start Here
 
+- `ADRs/2026-07-11-refocus-riscala-on-developer-judgment.md`: accepted Product Reset making developer judgment the center of Riscala.
+- `docs/JUDGMENT_ARCHITECTURE.md`: beta.6 domain model, trust boundaries, Judgment Brief, Decision Review, greenfield, and legacy contracts.
 - `README.md`: quick start, CLI overview, configuration example, GitHub Action usage.
 - `docs/PSDM_OVERVIEW.md`: method overview and governance model.
 - `docs/KNOWLEDGE_AS_CODE.md`: optional Knowledge as Code Layer for versioning intent, decisions, rules, prompts, workflows, verification criteria, and evolution notes.
@@ -68,7 +70,7 @@ Current commands:
 - `riscala pr-checklist`
 - `riscala report`
 
-The `psdm` compatibility executable supports the same commands. The prepared `1.0.0-beta.5` candidate includes `riscala`; publishing it to npm still requires the protected release workflow and explicit owner approval.
+The `psdm` compatibility executable supports the same commands. `1.0.0-beta.5` is published with both executable aliases. Beta.6 judgment contracts are additive and must preserve existing command and JSON behavior until separately versioned.
 
 ## Configuration
 
@@ -87,6 +89,7 @@ Key policy concepts:
 
 ## Governance
 
+- `docs/JUDGMENT_ARCHITECTURE.md`: developer-judgment domain model and beta.6 trust boundaries.
 - `AGENTS.md`: agent operating rules for this repository.
 - `docs/CHANGE_GOVERNANCE.md`: change levels, required artifacts, stop conditions, and CI enforcement.
 - `docs/ARCHITECTURE.md`: module boundaries and architecture gate.

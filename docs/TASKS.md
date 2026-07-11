@@ -19,12 +19,20 @@ For each meaningful change:
 
 Near-term framework tasks:
 
+- Define beta.6 JSON contracts for Project Context, Judgment Brief, Owner Decision, Change Envelope, Decision Review, and Learning.
+- Map current deterministic repository signals to `ObservedEvidence` without semantic overclaiming.
+- Design intent-first greenfield and read-only legacy context collection.
+- Implement one Judgment Brief path with learn, balanced, concise, and JSON rendering.
+- Implement staged Decision Review for scope drift and representative dependency, migration, CI/deployment, and validation evidence.
+- Add acceptance fixtures for learning, experienced, and staff-level reasoning needs using the same underlying result.
+- Prove first value without `riscala init` and without a complete PSDM artifact baseline.
+- Preserve existing commands, JSON contracts, config, executable aliases, CI, approval, and hook behavior during the additive beta.6 increment.
 - Keep this repository self-governing through PSDM artifacts.
 - Keep pre-init audit useful for existing projects adopting PSDM.
 - Keep PR checklist generation aligned with classifier and risk path behavior.
 - Keep staged change inspection aligned with Git and classifier contracts.
 - Keep agent decision records, approval bindings, and AGENTS adapters aligned with `docs/AGENT_DECISION_PROTOCOL.md`.
-- Add example project coverage.
+- Add greenfield and legacy judgment-loop example coverage.
 - Validate the GitHub Action in a downstream repository workflow.
 - Keep fixtures current as CLI behavior changes.
 
