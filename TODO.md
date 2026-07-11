@@ -33,6 +33,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Adapt new and untouched PSDM templates from bounded repository evidence so init begins governing without manual placeholder cleanup.
 - [x] Record hashes of init-created files so uninstall removes intact generated baselines and preserves later user edits.
 - [x] Translate `/validate` completely into Spanish without changing its automation-facing JSON contract.
+- [x] Make shell `/review` honor the active Spanish language across labels, evidence, readiness, and next-action guidance.
 - [x] Add optional Active Work allowed paths and report exact repository or file-scope conflicts across the complete working tree.
 - [x] Apply the same Active Work file boundary to Decision Review and optional managed pre-commit enforcement.
 

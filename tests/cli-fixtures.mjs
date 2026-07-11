@@ -773,6 +773,22 @@ function testSpanishValidateIsFullyLocalized() {
   assert.doesNotMatch(result.output, /Policy|Decision|Checks|Warning|Next|Working tree/)
 }
 
+function testSpanishShellReviewIsFullyLocalized() {
+  const target = initializeReviewRepository()
+  writeFileSync(resolve(target, 'README.md'), '# Después\n')
+  git(target, ['add', 'README.md'])
+
+  const result = executeShellCommand('/review actualizar documentación', { target, language: 'es' })
+
+  assert.match(result.output, /REVISIÓN/)
+  assert.match(result.output, /Objetivo\s+actualizar documentación/)
+  assert.match(result.output, /Preparados\s+1 archivo\(s\)/)
+  assert.match(result.output, /Disposición\s+alcance alineado; evidencia sin verificar/)
+  assert.match(result.output, /Evidencia\s+Se observó el alcance preparado/)
+  assert.match(result.output, /Siguiente\s+Ejecuta una validación focalizada/)
+  assert.doesNotMatch(result.output, /Intent|Staged|Readiness|Evidence|Next|owner authority/)
+}
+
 function testShellInitRequiresConfirmationAndIsIdempotent() {
   const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-init-'))
   const usage = executeShellCommand('/init', { target, language: 'es' })
@@ -2278,6 +2294,7 @@ const tests = [
   testReadOnlyShellRoutesCommandsAndReportsContext,
   testSpanishShellExitIsLocalized,
   testSpanishValidateIsFullyLocalized,
+  testSpanishShellReviewIsFullyLocalized,
   testShellInitRequiresConfirmationAndIsIdempotent,
   testShellUninstallPreviewsWarnsAndPreservesUserFiles,
   testShellUsesPtechCyanOnlyForInteractiveTerminals,
