@@ -48,7 +48,7 @@ Acceptance:
 - [x] Show objective, mode, allowed, forbidden, and next action first.
 - [x] If missing, offer `/work [mode] <objective>` as the minimal setup.
 - [x] Allow continue, close, or propose transition.
-- [ ] Move audit, validate, impact, review, and approval to an advanced menu.
+- [x] Move audit, validate, impact, review, and approval to an advanced menu while preserving direct command compatibility.
 - [x] Never overwrite Active Work silently.
 
 Acceptance:

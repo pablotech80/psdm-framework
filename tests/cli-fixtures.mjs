@@ -992,6 +992,7 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
   const allCommands = filterShellMenuCommands('/')
   const statusCommand = filterShellMenuCommands('/st')
   const workCommands = filterShellMenuCommands('/work ', '/work')
+  const advancedCommands = filterShellMenuCommands('/advanced ', '/advanced')
   const languageCommands = filterShellMenuCommands('/language ', '/language')
   const plainMenu = renderShellMenu('/', 1)
   const workMenu = renderShellMenu('/work ', 1, { parentName: '/work' })
@@ -1000,24 +1001,27 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
 
   assert.deepEqual(allCommands.map((item) => item.name), [
     '/action',
-    '/approval',
-    '/audit',
+    '/advanced',
     '/check',
     '/classify',
     '/exit',
     '/help',
     '/hook-status',
-    '/impact',
     '/init',
     '/inspect',
     '/language',
     '/pr-checklist',
     '/report',
-    '/review',
     '/status',
     '/uninstall',
-    '/validate',
     '/work',
+  ])
+  assert.deepEqual(advancedCommands.map((item) => item.name), [
+    '/approval',
+    '/audit',
+    '/impact',
+    '/review',
+    '/validate',
   ])
   assert.deepEqual(workCommands.map((item) => item.name), [
     '/work close',
@@ -1043,7 +1047,7 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
   assert.equal(moveShellMenuSelection(0, 'previous', allCommands.length), allCommands.length - 1)
   assert.equal(moveShellMenuSelection(allCommands.length - 1, 'next', allCommands.length), 0)
   assert.match(plainMenu, /Commands/)
-  assert.match(plainMenu, /❯ \/approval/)
+  assert.match(plainMenu, /❯ \/advanced ›/)
   assert.match(workMenu, /─ work /)
   assert.match(workMenu, /❯ \/work continue/)
   assert.equal(plainMenu.split('\n').every((line) => line.length === 70), true)
