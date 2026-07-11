@@ -193,12 +193,24 @@ function testAgentAdaptersInstallNativeRulesWithoutOverwrite() {
   assert.match(agents, /riscala-active-work-adapter/)
   assert.equal(agents.match(/<!-- riscala-active-work-adapter -->/g).length, 1)
   assert.match(agents, /riscala work handoff/)
+  assert.match(agents, /current repository with Repository/)
+  assert.match(agents, /requested outcome with Objective/)
+  assert.match(agents, /requested activity with Mode/)
+  assert.match(agents, /Allowed and Allowed Paths/)
+  assert.match(agents, /Forbidden and Must Preserve/)
+  assert.match(agents, /aligned, conflicting, or unresolved/)
   const claude = readFileSync(resolve(target, 'CLAUDE.md'), 'utf8')
   assert.match(claude, /Existing Claude rules/)
   assert.equal(claude.match(/<!-- riscala-active-work-adapter -->/g).length, 1)
-  assert.match(readFileSync(resolve(target, '.cursor/rules/riscala-active-work.mdc'), 'utf8'), /alwaysApply: true/)
-  assert.match(readFileSync(resolve(target, '.windsurf/rules/riscala-active-work.md'), 'utf8'), /trigger: always_on/)
-  assert.match(readFileSync(resolve(target, '.agents/rules/riscala-active-work.md'), 'utf8'), /trigger: always_on/)
+  const cursor = readFileSync(resolve(target, '.cursor/rules/riscala-active-work.mdc'), 'utf8')
+  const windsurf = readFileSync(resolve(target, '.windsurf/rules/riscala-active-work.md'), 'utf8')
+  const antigravity = readFileSync(resolve(target, '.agents/rules/riscala-active-work.md'), 'utf8')
+  assert.match(cursor, /alwaysApply: true/)
+  assert.match(windsurf, /trigger: always_on/)
+  assert.match(antigravity, /trigger: always_on/)
+  for (const adapter of [claude, cursor, windsurf, antigravity]) {
+    assert.match(adapter, /aligned, conflicting, or unresolved/)
+  }
   assert.ok(second.results.every((result) => ['ready', 'skipped_existing'].includes(result.status)))
 }
 

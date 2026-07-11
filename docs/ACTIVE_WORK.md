@@ -85,6 +85,8 @@ The shell lifecycle is:
 
 Before mutation, compare the requested action with Active Work. After mutation, compare changed files and actions with the same boundary and verify `must_preserve` evidence. `/review` reports staged violations as advisory evidence. When the optional managed pre-commit hook is installed, the same violations block the commit before approval evaluation.
 
+Agent adapters make the pre-mutation comparison explicit across repository, objective, mode, allowed paths/actions, forbidden actions, and preservation rules. Every dimension is `aligned`, `conflicting`, or `unresolved`; mutation proceeds only when all dimensions are aligned. This assessment is deterministic for repository, mode, and paths, while semantic alignment with the objective remains a disclosed agent judgment rather than a false claim of complete understanding.
+
 A technically correct result can still be outside authority.
 
 ## Trust Boundary
