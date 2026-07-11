@@ -19,7 +19,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [ ] Decide which existing `impact` and `review` behavior remains useful after Active Work validation.
 - [x] Implement the smallest beta.6 increment: create and show a non-overwriting Active Work boundary.
 - [x] Prepare the versioned beta.6 candidate and pass the full local release check.
-- [ ] Publish beta.6 through the protected workflow and verify a clean npm install.
+- [x] Publish beta.6 through the protected workflow and verify a clean npm install.
 - [x] Remove mandatory external commit signatures from this solo-maintainer repository to restore a simple explicit-owner workflow.
 
 - [x] Accept the beta.6 Product Reset centered on amplifying developer judgment.

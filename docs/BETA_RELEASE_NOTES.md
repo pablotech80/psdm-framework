@@ -1,8 +1,8 @@
 # BETA_RELEASE_NOTES.md
 
 Status: `Published`
-Latest Beta Release: `1.0.0-beta.5`
-Next Beta Candidate: `1.0.0-beta.6`
+Latest Beta Release: `1.0.0-beta.6`
+Next Beta Candidate: `Not selected`
 
 ## Beta.6 Candidate
 
@@ -56,7 +56,7 @@ Current Decision Review behavior:
 - reports test-file presence without claiming tests were executed;
 - returns `scope_aligned_evidence_unverified` or `developer_review_required` as advisory readiness, never approval.
 
-Beta.6 is now a versioned release candidate. Protected publication and clean npm-install verification remain pending. Strong owner-authority binding remains separate from Active Work context.
+Beta.6 was published through protected trusted publishing and verified with a clean npm `@beta` installation. Strong owner-authority binding remains separate from Active Work context.
 
 External greenfield and representative legacy validation is recorded in `docs/BETA6_EXTERNAL_VALIDATION.md`. The validation produced corrections for greenfield intake, selected-file metadata, lead/contact/API reasoning, evidence density, and aligned-scope wording.
 

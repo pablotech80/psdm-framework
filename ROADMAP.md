@@ -12,7 +12,7 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is published at `1.0.0-beta.5`; npm dist-tags `beta` and `latest` point to `1.0.0-beta.5`.
+Riscala is published at `1.0.0-beta.6`; npm `beta` points to beta.6 while `latest` remains on beta.5.
 
 Riscala has entered a second Product Reset for `1.0.0-beta.6`. The new North Star is governable Active Work: preserve direction across chats and keep every AI action inside the repository, objective, mode, scope, and authority defined by the developer. Existing judgment, governance, Git, JSON, CI, approval, and compatibility primitives remain supporting capabilities.
 
@@ -25,6 +25,7 @@ Completed:
 - Simplified solo-maintainer approval by removing the mandatory external signature requirement from this repository; explicit owner instructions remain required for important actions.
 - Implemented the minimal beta.6 Active Work flow with non-overwriting `work init`, portable Markdown, `work show`, and JSON output.
 - Prepared the versioned `1.0.0-beta.6` candidate and passed the full local release check.
+- Published `1.0.0-beta.6` through trusted publishing, verified clean `@beta` installation, and created the GitHub pre-release.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

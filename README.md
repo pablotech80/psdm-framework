@@ -36,7 +36,7 @@ riscala work init "add search to the customer list" --mode implement
 riscala work show
 ```
 
-The npm `@beta` tag still installs `1.0.0-beta.5` until beta.6 is published.
+The npm `@beta` tag installs `1.0.0-beta.6`.
 
 The compatibility executable remains available:
 
@@ -105,7 +105,7 @@ flowchart TD
 
 ## Status
 
-Latest published beta: `1.0.0-beta.5`.
+Latest published beta: `1.0.0-beta.6`.
 
 Current `main` contains the beta.6 candidate centered on governable Active Work. The existing judgment commands and PSDM compatibility surface remain available.
 
