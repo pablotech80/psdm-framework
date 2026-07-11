@@ -27,6 +27,7 @@ import { buildPrChecklist } from './pr-checklist.mjs'
 import { terminalTheme } from './terminal-style.mjs'
 import { validateMethod } from '../validator/validate-method.mjs'
 import { initializeProject } from '../commands/init.mjs'
+import { inspectUninstall, uninstallProject } from './uninstall.mjs'
 
 const CARD_WIDTH = 68
 const ROW_LABEL_WIDTH = 10
@@ -425,6 +426,7 @@ export function renderShellHelp(options = {}) {
     cardRow('/check', description('Check required artifacts exist.', 'Comprobar artefactos requeridos.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/classify', description('Classify a described change.', 'Clasificar un cambio descrito.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/exit', description('Close the Riscala shell.', 'Cerrar la consola de Riscala.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/uninstall', description('Preview or remove Riscala from this project.', 'Previsualizar o quitar Riscala de este proyecto.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/help', spanish ? 'Mostrar esta referencia de comandos.' : 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/hook-status', description('Inspect managed pre-commit hook status.', 'Comprobar el hook pre-commit.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/impact', description('Think through a change before coding.', 'Evaluar un cambio antes de programar.'), { ...options, valueStyle: theme.cyanLight }),
@@ -978,7 +980,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     }
   }
 
-  if (!['/work', '/language', '/impact', '/init', '/review', '/classify', '/pr-checklist'].includes(command) && parameters.length > 0) {
+  if (!['/work', '/language', '/impact', '/init', '/uninstall', '/review', '/classify', '/pr-checklist'].includes(command) && parameters.length > 0) {
     return {
       output: `Usage error: ${command} does not accept arguments in this shell.`,
       exit: false,
@@ -1190,6 +1192,32 @@ export function executeShellCommand(input, { target, configPath = null, color = 
       output: renderPanel(heading, [
         ...cardRows(activeLanguage === 'es' ? 'Resultado' : 'Result', summary, { color }),
         ...cardRows(activeLanguage === 'es' ? 'Archivos' : 'Files', lines.length ? lines.join('\n') : '-', { color }),
+      ], { color }),
+      exit: false,
+    }
+  }
+
+  if (command === '/uninstall') {
+    const spanish = activeLanguage === 'es'
+    if (!['preview', 'confirm'].includes(description)) {
+      return { output: renderUsage('/uninstall', '/uninstall [preview|confirm]', { color }), exit: false }
+    }
+    const report = description === 'confirm' ? uninstallProject(target) : inspectUninstall(target)
+    const warning = spanish
+      ? 'AVISO: este comando modifica el repositorio y elimina archivos de gobierno de Riscala. Los archivos modificados por el usuario se conservan.'
+      : 'WARNING: this command modifies the repository and removes Riscala governance files. User-modified files are preserved.'
+    const removedOrPlanned = description === 'confirm' ? report.removed : report.remove
+    const preserved = report.preserved || report.preserve
+    return {
+      output: renderPanel(spanish ? 'DESINSTALACIÓN' : 'UNINSTALL', [
+        ...cardRows(spanish ? 'Aviso' : 'Warning', warning, { color, valueStyle: terminalTheme(color).yellow }),
+        panelRule('middle', '', { color }),
+        ...cardRows(spanish ? (description === 'confirm' ? 'Eliminado' : 'Eliminará') : (description === 'confirm' ? 'Removed' : 'Will remove'), removedOrPlanned.length ? removedOrPlanned.join('\n') : '-', { color }),
+        ...cardRows(spanish ? 'Conservará' : 'Will keep', preserved.length ? preserved.join('\n') : '-', { color }),
+        panelRule('middle', '', { color }),
+        ...cardRows(spanish ? 'Siguiente' : 'Next', description === 'confirm'
+          ? (spanish ? 'Riscala fue retirado del proyecto. Cierra esta consola.' : 'Riscala was removed from the project. Close this shell.')
+          : (spanish ? 'Revisa la lista y ejecuta /uninstall confirm para continuar.' : 'Review the list and run /uninstall confirm to continue.'), { color, valueStyle: terminalTheme(color).cyanLight }),
       ], { color }),
       exit: false,
     }

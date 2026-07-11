@@ -714,6 +714,34 @@ function testShellInitRequiresConfirmationAndIsIdempotent() {
   assert.match(repeated.output, /0 creados/)
 }
 
+function testShellUninstallPreviewsWarnsAndPreservesUserFiles() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-uninstall-'))
+  const originalAgents = '# Existing project instructions\n\nKeep this content.\n'
+  writeFileSync(resolve(target, 'AGENTS.md'), originalAgents)
+  executeShellCommand('/work implement Probar desinstalación', { target, language: 'es' })
+  executeShellCommand('/init confirm', { target, language: 'es' })
+  runJson(['adapters', 'init', 'codex,cursor', '--target', target, '--json'])
+  writeFileSync(resolve(target, 'docs', 'SPEC.md'), '# User-owned specification\n')
+
+  const preview = executeShellCommand('/uninstall preview', { target, language: 'es' })
+  assert.match(preview.output, /AVISO: este comando modifica el repositorio/)
+  assert.match(preview.output, /\.riscala\//)
+  assert.match(preview.output, /docs\/SPEC\.md/)
+  assert.equal(existsSync(resolve(target, '.riscala')), true)
+
+  const confirmed = executeShellCommand('/uninstall confirm', { target, language: 'es' })
+  assert.match(confirmed.output, /Riscala fue retirado del proyecto/)
+  assert.equal(existsSync(resolve(target, '.riscala')), false)
+  assert.equal(existsSync(resolve(target, 'psdm.config.json')), false)
+  assert.equal(readFileSync(resolve(target, 'docs', 'SPEC.md'), 'utf8'), '# User-owned specification\n')
+  const agents = readFileSync(resolve(target, 'AGENTS.md'), 'utf8')
+  assert.match(agents, /Existing project instructions/)
+  assert.doesNotMatch(agents, /riscala-(?:psdm-governance|active-work-adapter)/)
+  assert.equal(existsSync(resolve(target, '.cursor', 'rules', 'riscala-active-work.mdc')), false)
+  assert.equal(existsSync(resolve(target, '.cursor')), false)
+  assert.equal(existsSync(resolve(target, 'docs', 'PROJECT_BRIEF.md')), false)
+}
+
 function testShellUsesPtechCyanOnlyForInteractiveTerminals() {
   const context = buildShellContext({ target: repoRoot })
   const plainBanner = renderShellBanner(context)
@@ -838,6 +866,7 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
     '/check',
     '/classify',
     '/exit',
+    '/uninstall',
     '/help',
     '/hook-status',
     '/impact',
@@ -865,6 +894,10 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
   assert.deepEqual(filterShellMenuCommands('/init ', '/init').map((item) => item.name), [
     '/init confirm',
     '/init preview',
+  ])
+  assert.deepEqual(filterShellMenuCommands('/uninstall ', '/uninstall').map((item) => item.name), [
+    '/uninstall confirm',
+    '/uninstall preview',
   ])
   assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
   assert.deepEqual(filterShellMenuCommands('status'), [])
@@ -1419,7 +1452,7 @@ function testInitCreatesAdoptionPlanForExistingAiGovernance() {
   assert.equal(validation.results.filter((item) => item.artifact === 'AGENTS.md' && item.status === 'FAIL').length, 0)
   assert.doesNotMatch(second, /UPDATED AGENTS\.md/)
   assert.equal(repeatedAgents, integratedAgents)
-  assert.equal((repeatedAgents.match(/riscala-psdm-governance/g) || []).length, 1)
+  assert.equal((repeatedAgents.match(/<!-- riscala-psdm-governance -->/g) || []).length, 1)
 }
 
 function testInitIsIdempotentForPsdmManagedGovernance() {
@@ -2088,6 +2121,7 @@ const tests = [
   testReadOnlyShellRoutesCommandsAndReportsContext,
   testSpanishShellExitIsLocalized,
   testShellInitRequiresConfirmationAndIsIdempotent,
+  testShellUninstallPreviewsWarnsAndPreservesUserFiles,
   testShellUsesPtechCyanOnlyForInteractiveTerminals,
   testShellDetectsSpanishAndPersistsLanguage,
   testLanguagePreferenceIsGlobalAcrossProjects,

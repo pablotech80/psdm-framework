@@ -10,6 +10,9 @@ const SPANISH_DESCRIPTIONS = {
   '/check': 'Comprobar artefactos requeridos.',
   '/classify': 'Clasificar un cambio descrito.',
   '/exit': 'Cerrar la consola de Riscala.',
+  '/uninstall': 'Desinstalar Riscala del proyecto.',
+  '/uninstall confirm': 'Confirmar la limpieza del proyecto.',
+  '/uninstall preview': 'Previsualizar qué se eliminará.',
   '/help': 'Mostrar comandos y límites de seguridad.',
   '/hook-status': 'Comprobar el hook pre-commit.',
   '/impact': 'Evaluar un cambio antes de programar.',
@@ -55,6 +58,11 @@ const INIT_SUBMENU = Object.freeze([
   { name: '/init preview', description: 'Preview without changing files.', execute: true },
 ])
 
+const UNINSTALL_SUBMENU = Object.freeze([
+  { name: '/uninstall confirm', description: 'Confirm removal from this project.', execute: true },
+  { name: '/uninstall preview', description: 'Preview files and blocks to remove.', execute: true },
+])
+
 export const SHELL_MENU_COMMANDS = Object.freeze([
   { name: '/action', description: 'Prepare a git.commit action record.' },
   { name: '/approval', description: 'Show approval receipt boundary.' },
@@ -62,6 +70,7 @@ export const SHELL_MENU_COMMANDS = Object.freeze([
   { name: '/check', description: 'Check required artifacts exist.' },
   { name: '/classify', description: 'Classify a described change.' },
   { name: '/exit', description: 'Close the Riscala shell.' },
+  { name: '/uninstall', description: 'Remove Riscala from this project.', children: UNINSTALL_SUBMENU },
   { name: '/help', description: 'Show available commands and safety boundaries.' },
   { name: '/hook-status', description: 'Inspect managed pre-commit hook status.' },
   { name: '/impact', description: 'Think through a change before implementation.' },
@@ -135,7 +144,7 @@ export function renderShellMenu(input, selectedIndex = 0, options = {}) {
   const commands = filterShellMenuCommands(input, options.parentName)
   const rawTitle = options.parentName ? options.parentName.slice(1) : 'Commands'
   const localizedTitle = options.language === 'es'
-    ? ({ Commands: 'Comandos', init: 'inicialización', work: 'trabajo', language: 'idioma' }[rawTitle] || rawTitle)
+    ? ({ Commands: 'Comandos', init: 'inicialización', uninstall: 'desinstalación', work: 'trabajo', language: 'idioma' }[rawTitle] || rawTitle)
     : rawTitle
   const title = `─ ${localizedTitle} `
   const top = `╭${title}${'─'.repeat(MENU_WIDTH - title.length)}╮`
