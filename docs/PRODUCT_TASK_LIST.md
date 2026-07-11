@@ -30,6 +30,7 @@ The CLI is for setup, inspection, recovery, and automation. It is not the main d
 - [x] Confirm Judgment Brief renders each `You decide` item once.
 - [x] Make `/approval` reflect effective repository policy.
 - [x] Preserve the current `/help` Authority and Safety copy.
+- [x] Order help and command menus alphabetically and support arrow navigation inside submenus.
 
 Acceptance:
 
