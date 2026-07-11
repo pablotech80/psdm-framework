@@ -1,5 +1,5 @@
 import { parseArgs, printJson } from '../lib/args.mjs'
-import { createActiveWork, readActiveWork, WORK_MODES } from '../lib/active-work.mjs'
+import { createActiveWork, detectLanguage, readActiveWork, WORK_MODES } from '../lib/active-work.mjs'
 import { resolveTarget } from '../lib/paths.mjs'
 
 function invalidOptions(options) {
@@ -27,7 +27,7 @@ export async function workCommand(args) {
       console.error('Usage: riscala work init "<objective>" [--mode inspect|experiment|design|implement|release] [--target path] [--json]')
       return { exitCode: 1 }
     }
-    const result = createActiveWork({ target, objective, mode })
+    const result = createActiveWork({ target, objective, mode, language: detectLanguage() })
     const report = { command: 'work', operation, target, mode, objective, ...result }
     if (options.json) printJson(report)
     else console.log(result.created ? `Active Work created: ${result.path}` : `Active Work already exists: ${result.path}`)

@@ -125,6 +125,22 @@ function testActiveWorkCreatesReadsAndPreservesBoundary() {
   assert.equal(readFileSync(path, 'utf8'), content)
 }
 
+function testWorkInitUsesGlobalLanguagePreference() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-work-language-'))
+  const configHome = mkdtempSync(resolve(tmpdir(), 'riscala-work-config-'))
+  writeFileSync(resolve(configHome, 'settings.json'), '{"language":"es"}\n')
+
+  const created = runJson([
+    'work', 'init', 'Validar el correo antes de crear un lead',
+    '--mode', 'implement', '--target', target, '--json',
+  ], { configHome })
+  const content = readFileSync(resolve(target, '.riscala', 'ACTIVE_WORK.md'), 'utf8')
+
+  assert.equal(created.created, true)
+  assert.match(content, /Language: `es`/)
+  assert.match(content, /Trabajar dentro de este repositorio/)
+}
+
 function testAgentAdaptersInstallNativeRulesWithoutOverwrite() {
   const target = mkdtempSync(resolve(tmpdir(), 'riscala-adapters-'))
   writeFileSync(resolve(target, 'AGENTS.md'), '# Existing agent rules\n')
@@ -2037,6 +2053,7 @@ function testExampleProjectCoverage() {
 const tests = [
   testRiscalaExecutableAliasContract,
   testActiveWorkCreatesReadsAndPreservesBoundary,
+  testWorkInitUsesGlobalLanguagePreference,
   testAgentAdaptersInstallNativeRulesWithoutOverwrite,
   testImpactLowRiskWithoutInitStaysLightweight,
   testImpactAuthTeachesDecisionWithoutTakingAuthority,
