@@ -1,0 +1,1 @@
+document.querySelectorAll('button').forEach((button)=>button.addEventListener('click',async()=>{await navigator.clipboard.writeText(button.parentElement.querySelector('code').textContent);button.textContent='Copiado';setTimeout(()=>button.textContent='Copiar',1200)}))

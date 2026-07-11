@@ -172,6 +172,8 @@ Completed:
 
 `1.0.0-beta.6`: governable Active Work vertical slice.
 
+Product functionality is frozen for beta.6. The active phase is stabilization: consolidate documentation, publish a navigable guide, remove stale release copy, run final clean-install evidence, and fix regressions only. Optional LLM providers, local repository consultancy, and other feature increments move to later milestones.
+
 Goal:
 
 Prove that Riscala preserves direction across chats and stops AI actions when repository, objective, mode, scope, or authority changes, without turning low-risk work into daily bureaucracy.

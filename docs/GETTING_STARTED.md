@@ -1,6 +1,6 @@
 # Getting Started With Riscala
 
-Status: `Beta.6 Development`
+Status: `Beta.6 Published`
 
 ## The Mental Model
 
@@ -18,14 +18,14 @@ No initialization is required for the judgment loop.
 
 Requirements: Node.js 20 or newer and Git for staged review.
 
-During beta.6 development, install from a checkout of this repository:
+Install the published beta:
 
 ```bash
-npm install -g .
+npm install -g @ptechsolution/psdm-framework@beta
 riscala help
 ```
 
-The npm `@beta` tag still points to `1.0.0-beta.5`, which does not contain `impact` or `review`. This guide will switch to `npm install -g @ptechsolution/psdm-framework@beta` only after beta.6 passes release gates and is published.
+For local framework development, `npm install -g .` installs the current checkout instead.
 
 The package name remains for compatibility. `riscala` is the primary executable; `psdm` remains an identical alias.
 
@@ -110,4 +110,4 @@ Low-risk work should stay lightweight. Higher-risk auth, data, payment, AI-autho
 - Decision Review observes staged Git evidence; it does not execute tests.
 - CLI input is not verified human approval.
 - Riscala does not implement, commit, push, merge, deploy, or publish from the read-only judgment loop.
-- Beta.6 behavior is under development; the npm beta currently remains `1.0.0-beta.5` until release gates pass.
+- Beta.6 is published but remains beta software; interfaces may still change before a stable release.
