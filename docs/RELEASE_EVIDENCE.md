@@ -409,7 +409,7 @@ Scope:
 npm dist-tags after publication:
 
 - `beta`: `1.0.0-beta.5`
-- `latest`: `1.0.0-beta.1`
+- `latest`: initially `1.0.0-beta.1`; aligned with `1.0.0-beta.5` on `2026-07-11` after removal was rejected by the registry.
 
 Validation:
 
@@ -425,5 +425,5 @@ Validation:
 
 Known limitations:
 
-- npm `latest` still points to `1.0.0-beta.1`.
+- npm `latest` and `beta` both point to `1.0.0-beta.5`; stable status is still not implied while the published version remains a prerelease.
 - Beta status remains active.
