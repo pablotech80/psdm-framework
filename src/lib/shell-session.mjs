@@ -37,11 +37,12 @@ export function runInteractiveShellSession({
   let cursor = 0
   let selectedIndex = 0
   let menuSuppressed = false
+  let submenuParent = null
   const promptLength = visibleLength(prompt)
 
   return new Promise((resolve) => {
     function candidates() {
-      return filterShellMenuCommands(buffer)
+      return filterShellMenuCommands(buffer, submenuParent)
     }
 
     function menuVisible() {
@@ -62,7 +63,7 @@ export function runInteractiveShellSession({
         return
       }
 
-      const menu = renderShellMenu(buffer, selectedIndex, { color })
+      const menu = renderShellMenu(buffer, selectedIndex, { color, parentName: submenuParent })
       const lineCount = menu.split('\n').length
       output.write(`\n${menu}`)
       moveCursor(output, 0, -lineCount)
@@ -74,6 +75,7 @@ export function runInteractiveShellSession({
       cursor = 0
       selectedIndex = 0
       menuSuppressed = false
+      submenuParent = null
     }
 
     function cleanup() {
@@ -93,8 +95,23 @@ export function runInteractiveShellSession({
     function executeCurrent() {
       const matches = candidates()
       if (menuVisible() && matches.length > 0) {
-        buffer = matches[Math.min(selectedIndex, matches.length - 1)].name
+        const selected = matches[Math.min(selectedIndex, matches.length - 1)]
+        if (selected.children) {
+          submenuParent = selected.name
+          buffer = `${selected.name} `
+          cursor = buffer.length
+          selectedIndex = 0
+          redraw()
+          return
+        }
+        buffer = selected.name
         cursor = buffer.length
+        if (submenuParent && !selected.execute) {
+          submenuParent = null
+          menuSuppressed = true
+          redraw()
+          return
+        }
       }
 
       clearFrame()
@@ -145,6 +162,14 @@ export function runInteractiveShellSession({
       }
 
       if (key.name === 'escape') {
+        if (submenuParent) {
+          buffer = '/'
+          cursor = 1
+          selectedIndex = 0
+          submenuParent = null
+          redraw()
+          return
+        }
         resetInput()
         redraw()
         return
@@ -166,8 +191,34 @@ export function runInteractiveShellSession({
         const matches = candidates()
         if (matches.length > 0) {
           const selected = matches[Math.min(selectedIndex, matches.length - 1)].name
-          changeBuffer(selected, selected.length)
+          buffer = selected
+          cursor = selected.length
+          selectedIndex = 0
+          submenuParent = null
+          menuSuppressed = true
+          redraw()
         }
+        return
+      }
+
+      if (key.name === 'right' && menuVisible()) {
+        const selected = candidates()[Math.min(selectedIndex, candidates().length - 1)]
+        if (selected?.children) {
+          submenuParent = selected.name
+          buffer = `${selected.name} `
+          cursor = buffer.length
+          selectedIndex = 0
+          redraw()
+          return
+        }
+      }
+
+      if (key.name === 'left' && submenuParent) {
+        buffer = '/'
+        cursor = 1
+        selectedIndex = 0
+        submenuParent = null
+        redraw()
         return
       }
 
@@ -206,6 +257,7 @@ export function runInteractiveShellSession({
       }
 
       if (!key.ctrl && !key.meta && typeof text === 'string' && /^[\x20-\x7E]+$/.test(text)) {
+        submenuParent = null
         changeBuffer(insertAt(buffer, cursor, text), cursor + text.length)
       }
     }

@@ -87,11 +87,15 @@ Typing `/` as the first prompt character opens the command palette immediately:
 
 Interaction contract:
 
+- the main command list and each submenu are ordered alphabetically;
 - typing filters commands by prefix;
 - `↑` and `↓` cycle through filtered commands;
-- `Enter` selects and executes the highlighted command;
+- `Enter` or `→` opens a highlighted command submenu;
+- `↑` and `↓` also navigate submenu options;
+- `←` or `Esc` returns from a submenu to the main menu;
+- `Enter` selects a submenu option; incomplete commands are placed in the prompt for the required text;
 - `Tab` completes the highlighted command without executing it;
-- `Esc` closes the palette and clears the current input;
+- `Esc` closes the main palette and clears the current input;
 - Backspace, Delete, Home, End, Left, and Right preserve normal line editing;
 - `Ctrl+C` and `Ctrl+D` close the interactive session safely.
 

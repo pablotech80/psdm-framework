@@ -725,37 +725,52 @@ function testShellOperatesActiveWorkLifecycle() {
 function testShellMenuFiltersNavigatesAndPreservesLayout() {
   const allCommands = filterShellMenuCommands('/')
   const statusCommand = filterShellMenuCommands('/st')
+  const workCommands = filterShellMenuCommands('/work ', '/work')
   const plainMenu = renderShellMenu('/', 1)
+  const workMenu = renderShellMenu('/work ', 1, { parentName: '/work' })
   const coloredMenu = renderShellMenu('/', 1, { color: true })
   const stripAnsi = (value) => value.replace(/\u001b\[[0-9;]*m/g, '')
 
   assert.deepEqual(allCommands.map((item) => item.name), [
-    '/help',
-    '/work',
-    '/language',
-    '/impact',
-    '/review',
-    '/status',
-    '/audit',
-    '/check',
-    '/validate',
-    '/inspect',
-    '/report',
-    '/classify',
-    '/pr-checklist',
-    '/init-preview',
-    '/hook-status',
     '/action',
     '/approval',
+    '/audit',
+    '/check',
+    '/classify',
     '/exit',
+    '/help',
+    '/hook-status',
+    '/impact',
+    '/init-preview',
+    '/inspect',
+    '/language',
+    '/pr-checklist',
+    '/report',
+    '/review',
+    '/status',
+    '/validate',
+    '/work',
+  ])
+  assert.deepEqual(workCommands.map((item) => item.name), [
+    '/work close',
+    '/work continue',
+    '/work design ',
+    '/work experiment ',
+    '/work implement ',
+    '/work inspect ',
+    '/work release ',
+    '/work transition ',
   ])
   assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
   assert.deepEqual(filterShellMenuCommands('status'), [])
   assert.equal(moveShellMenuSelection(0, 'previous', 18), 17)
   assert.equal(moveShellMenuSelection(17, 'next', 18), 0)
   assert.match(plainMenu, /Commands/)
-  assert.match(plainMenu, /❯ \/work/)
+  assert.match(plainMenu, /❯ \/approval/)
+  assert.match(workMenu, /─ work /)
+  assert.match(workMenu, /❯ \/work continue/)
   assert.equal(plainMenu.split('\n').every((line) => line.length === 70), true)
+  assert.equal(workMenu.split('\n').every((line) => line.length === 70), true)
   assert.equal(stripAnsi(coloredMenu), plainMenu)
 }
 
@@ -778,12 +793,12 @@ async function testInteractiveShellOpensSlashMenuAndNavigates() {
     output,
     env: { TERM: 'xterm-256color' },
   })
-  input.write('/')
+  input.write('/w')
+  input.write('\u001b[C')
   input.write('\u001b[B')
-  input.write('\u001b[B')
-  input.write('\u001b[B')
-  input.write('\u001b[B')
-  input.write('\u001b[B')
+  input.write('\u001b[D')
+  input.write('\u001b')
+  input.write('/st')
   input.write('\r')
   input.write('/e')
   input.write('\r')
@@ -791,7 +806,9 @@ async function testInteractiveShellOpensSlashMenuAndNavigates() {
 
   const visible = captured.replace(/\u001b\[[0-9;?]*[A-Za-z]/g, '')
   assert.match(visible, /Commands/)
-  assert.match(visible, /❯ \/status/)
+  assert.match(visible, /─ work /)
+  assert.match(visible, /❯ \/work continue/)
+  assert.match(visible, /\/status/)
   assert.match(visible, /Project\s+@ptechsolution\/psdm-framework/)
   assert.match(visible, /Riscala shell closed/)
   assert.equal(input.isRaw, false)
