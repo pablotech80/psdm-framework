@@ -39,18 +39,18 @@ Acceptance:
 
 ## P0 — Make Active Work The Entry Point
 
-- [ ] Detect `.riscala/ACTIVE_WORK.md` when `riscala` or `riscala shell` starts.
-- [ ] Show objective, mode, allowed, forbidden, and next action first.
-- [ ] If missing, run a short guided setup asking only objective and mode.
+- [x] Detect `.riscala/ACTIVE_WORK.md` when `riscala shell` starts.
+- [x] Show objective, mode, allowed, forbidden, and next action first.
+- [x] If missing, offer `/work [mode] <objective>` as the minimal setup.
 - [ ] Allow continue, close, or propose transition.
 - [ ] Move audit, validate, impact, review, and approval to an advanced menu.
-- [ ] Never overwrite Active Work silently.
+- [x] Never overwrite Active Work silently.
 
 Acceptance:
 
 - [ ] First use creates a useful boundary in under one minute.
-- [ ] A new chat restores direction without reconstructing the repository.
-- [ ] The first screen answers where, why, what may change, and when to stop.
+- [x] A new shell session restores direction without reconstructing the repository.
+- [x] The first screen answers where, why, what may change, and when to stop once Active Work exists.
 
 ## P0 — Spanish And English
 
