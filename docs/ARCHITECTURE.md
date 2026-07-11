@@ -31,6 +31,8 @@ Existing audit, classifier, risk-path, staged-inspection, validation, JSON, CI, 
 
 The architecture favors explicit modules over framework abstractions:
 
+- `src/lib/active-work.mjs` owns the minimal Active Work path, rendering, non-overwriting creation, and reading.
+- `src/commands/work.mjs` exposes `work init` and `work show` without coupling continuity to approval enforcement.
 - `bin/psdm.mjs` dispatches commands for both the `riscala` primary executable and `psdm` compatibility executable.
 - `src/commands/*.mjs` owns user-facing command behavior.
 - `src/lib/args.mjs` parses CLI options.

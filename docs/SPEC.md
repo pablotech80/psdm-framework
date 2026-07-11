@@ -5,6 +5,15 @@ Project: `psdm-framework`
 
 ## Functional Requirements
 
+### Beta.6 Active Work
+
+- Create `.riscala/ACTIVE_WORK.md` with `riscala work init "<objective>" --mode <mode>`.
+- Support `inspect`, `experiment`, `design`, `implement`, and `release` modes.
+- Refuse to overwrite an existing Active Work record.
+- Print the current record with `riscala work show`.
+- Provide stable JSON for create, exists, found, and not-found outcomes.
+- Keep the record local, dependency-free, Git-backed, and free of secrets or strong-approval claims.
+
 ### Beta.6 Developer Judgment
 
 The public first-use path is `impact -> developer decision -> AI-assisted implementation -> staged review`. It must work without initialization. The CLI and shell must present Riscala as an amplifier of developer judgment; PSDM artifact adoption remains optional until durable governance is justified by project or change risk.

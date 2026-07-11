@@ -23,6 +23,8 @@ Completed:
 - Defined and accepted the minimal Active Work contract; `impact` and `review` remain read-only supporting capabilities.
 - Kept beta.6 unpublished while the new direction moves from contract to a small product increment.
 - Simplified solo-maintainer approval by removing the mandatory external signature requirement from this repository; explicit owner instructions remain required for important actions.
+- Implemented the minimal beta.6 Active Work flow with non-overwriting `work init`, portable Markdown, `work show`, and JSON output.
+- Prepared the versioned `1.0.0-beta.6` candidate and passed the full local release check.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

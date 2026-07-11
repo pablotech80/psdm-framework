@@ -2,7 +2,20 @@
 
 Status: `Published`
 Latest Beta Release: `1.0.0-beta.5`
-Next Beta Candidate: `1.0.0-beta.6 development`
+Next Beta Candidate: `1.0.0-beta.6`
+
+## Beta.6 Candidate
+
+Package: `@ptechsolution/psdm-framework@1.0.0-beta.6`
+
+Beta.6 adds the minimal governable Active Work flow:
+
+- `riscala work init "<objective>" --mode <mode>` creates `.riscala/ACTIVE_WORK.md` without overwriting an existing record;
+- `riscala work show` restores the active repository, objective, mode, boundaries, stop conditions, and categorized context in a new chat;
+- `impact` and `review` remain compatible read-only supporting commands;
+- signed approval remains available but can be disabled explicitly for a solo-maintainer repository.
+
+Beta.6 remains local, dependency-free, Git-backed, and compatible with the `psdm` executable and existing JSON contracts.
 First Beta Release: `1.0.0-beta.1`
 Project: `psdm-framework`
 
@@ -43,7 +56,7 @@ Current Decision Review behavior:
 - reports test-file presence without claiming tests were executed;
 - returns `scope_aligned_evidence_unverified` or `developer_review_required` as advisory readiness, never approval.
 
-This is not yet a versioned beta.6 release candidate. Version metadata and protected publication evidence remain pending. Strong owner-authority binding remains separate from the advisory Change Envelope.
+Beta.6 is now a versioned release candidate. Protected publication and clean npm-install verification remain pending. Strong owner-authority binding remains separate from Active Work context.
 
 External greenfield and representative legacy validation is recorded in `docs/BETA6_EXTERNAL_VALIDATION.md`. The validation produced corrections for greenfield intake, selected-file metadata, lead/contact/API reasoning, evidence density, and aligned-scope wording.
 
