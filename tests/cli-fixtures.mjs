@@ -700,7 +700,9 @@ function testShellInitRequiresConfirmationAndIsIdempotent() {
   assert.equal(existsSync(resolve(target, 'psdm.config.json')), false)
 
   const preview = executeShellCommand('/init preview', { target, language: 'es' })
-  assert.match(preview.output, /INIT PREVIEW/)
+  assert.match(preview.output, /VISTA PREVIA/)
+  assert.match(preview.output, /\/init confirm/)
+  assert.doesNotMatch(preview.output, /outside the shell/)
   assert.equal(existsSync(resolve(target, 'psdm.config.json')), false)
 
   const initialized = executeShellCommand('/init confirm', { target, language: 'es' })
@@ -1398,11 +1400,26 @@ function testInitCreatesAdoptionPlanForExistingAiGovernance() {
   writeFileSync(resolve(target, 'AGENTS.md'), '# Existing agent rules\n')
   writeFileSync(resolve(target, '.github', 'copilot-instructions.md'), '# Copilot rules\n')
 
-  const output = run(['init', target])
+  const originalAgents = readFileSync(resolve(target, 'AGENTS.md'), 'utf8')
+  const output = run(['init', target], { env: { LANG: 'es_ES.UTF-8' } })
+  const integratedAgents = readFileSync(resolve(target, 'AGENTS.md'), 'utf8')
+  const validation = runJson(['validate', target, '--json'])
+  const second = run(['init', target], { env: { LANG: 'es_ES.UTF-8' } })
+  const repeatedAgents = readFileSync(resolve(target, 'AGENTS.md'), 'utf8')
 
   assert.match(output, /CREATED docs\/PSDM_ADOPTION\.md/)
+  assert.match(output, /UPDATED AGENTS\.md/)
   assert.equal(existsSync(resolve(target, 'docs', 'PSDM_ADOPTION.md')), true)
   assert.match(readFileSync(resolve(target, 'docs', 'PSDM_ADOPTION.md'), 'utf8'), /Existing AI Governance/)
+  assert.equal(integratedAgents.startsWith(originalAgents), true)
+  assert.match(integratedAgents, /riscala-psdm-governance/)
+  assert.match(integratedAgents, /PSDM Required Reading/)
+  assert.match(integratedAgents, /PSDM Boundaries/)
+  assert.match(integratedAgents, /PSDM Escalation/)
+  assert.equal(validation.results.filter((item) => item.artifact === 'AGENTS.md' && item.status === 'FAIL').length, 0)
+  assert.doesNotMatch(second, /UPDATED AGENTS\.md/)
+  assert.equal(repeatedAgents, integratedAgents)
+  assert.equal((repeatedAgents.match(/riscala-psdm-governance/g) || []).length, 1)
 }
 
 function testInitIsIdempotentForPsdmManagedGovernance() {

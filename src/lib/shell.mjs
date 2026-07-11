@@ -575,26 +575,32 @@ function renderAudit(report, options = {}) {
 
 function renderInitPreview(report, options = {}) {
   const theme = terminalTheme(options.color)
+  const spanish = options.language === 'es'
   const presentArtifacts = Math.max(0, report.summary.wouldSkip - report.summary.existingEmpty)
   const next = report.summary.wouldCreate === 0
-    ? 'Nothing to create. Run /validate to verify the baseline.'
-    : 'Run riscala init outside the shell when you are ready to write files.'
+    && report.summary.wouldIntegrate === 0
+    ? (spanish ? 'No hay nada que crear o integrar. Ejecuta /validate para verificar la base.' : 'Nothing to create or integrate. Run /validate to verify the baseline.')
+    : (spanish ? 'Ejecuta /init confirm cuando quieras crear o integrar los archivos.' : 'Run /init confirm when you are ready to create or integrate the files.')
   const rows = [
-    cardRow('Policy', report.config.profile.name, { ...options, valueStyle: theme.cyanLight }),
-    cardRow('Create', `${report.summary.wouldCreate} artifact(s)`, {
+    cardRow(spanish ? 'Política' : 'Policy', report.config.profile.name, { ...options, valueStyle: theme.cyanLight }),
+    cardRow(spanish ? 'Crear' : 'Create', spanish ? `${report.summary.wouldCreate} artefacto(s)` : `${report.summary.wouldCreate} artifact(s)`, {
       ...options,
       valueStyle: report.summary.wouldCreate > 0 ? theme.yellow : theme.green,
     }),
-    cardRow('Keep', `${presentArtifacts} artifact(s)`, { ...options, valueStyle: theme.green }),
-    cardRow('Empty', `${report.summary.existingEmpty} artifact(s)`, {
+    cardRow(spanish ? 'Integrar' : 'Integrate', spanish ? `${report.summary.wouldIntegrate} artefacto(s)` : `${report.summary.wouldIntegrate} artifact(s)`, {
+      ...options,
+      valueStyle: report.summary.wouldIntegrate > 0 ? theme.yellow : theme.green,
+    }),
+    cardRow(spanish ? 'Conservar' : 'Keep', spanish ? `${presentArtifacts} artefacto(s)` : `${presentArtifacts} artifact(s)`, { ...options, valueStyle: theme.green }),
+    cardRow(spanish ? 'Vacíos' : 'Empty', spanish ? `${report.summary.existingEmpty} artefacto(s)` : `${report.summary.existingEmpty} artifact(s)`, {
       ...options,
       valueStyle: report.summary.existingEmpty > 0 ? theme.yellow : theme.green,
     }),
     panelRule('middle', '', options),
-    ...cardRows('Next', next, { ...options, valueStyle: theme.cyanLight }),
+    ...cardRows(spanish ? 'Siguiente' : 'Next', next, { ...options, valueStyle: theme.cyanLight }),
   ]
 
-  return renderPanel('INIT PREVIEW', rows, options)
+  return renderPanel(spanish ? 'VISTA PREVIA' : 'INIT PREVIEW', rows, options)
 }
 
 function renderCheck(report, options = {}) {
@@ -1154,7 +1160,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
 
   if (command === '/init-preview') {
     return {
-      output: renderInitPreview(buildAudit(target, { configPath }), { color }),
+      output: renderInitPreview(buildAudit(target, { configPath }), { color, language: activeLanguage }),
       exit: false,
     }
   }
@@ -1175,11 +1181,11 @@ export function executeShellCommand(input, { target, configPath = null, color = 
       }
     }
     const lines = []
-    const result = initializeProject({ target, configPath, log: (line) => lines.push(line) })
+    const result = initializeProject({ target, configPath, language: activeLanguage, log: (line) => lines.push(line) })
     const heading = activeLanguage === 'es' ? 'INICIALIZACIÓN' : 'INITIALIZATION'
     const summary = activeLanguage === 'es'
-      ? `Inicialización completada. ${result.created} creados · ${result.skipped} existentes.`
-      : `Initialization complete. ${result.created} created · ${result.skipped} existing.`
+      ? `Inicialización completada. ${result.created} creados · ${result.updated} actualizados · ${result.skipped} existentes.`
+      : `Initialization complete. ${result.created} created · ${result.updated} updated · ${result.skipped} existing.`
     return {
       output: renderPanel(heading, [
         ...cardRows(activeLanguage === 'es' ? 'Resultado' : 'Result', summary, { color }),

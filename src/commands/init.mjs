@@ -1,12 +1,56 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { TEMPLATE_MAP } from '../lib/artifacts.mjs'
 import { parseArgs } from '../lib/args.mjs'
 import { buildAudit, detectAiGovernance, printAuditReport } from '../lib/audit.mjs'
 import { loadConfig } from '../lib/config.mjs'
 import { resolveTarget, templateDir } from '../lib/paths.mjs'
+import { detectLanguage } from '../lib/active-work.mjs'
 
-export function initializeProject({ target, configPath = null, feature = null, log = console.log }) {
+const PSDM_AGENTS_MARKER = '<!-- riscala-psdm-governance -->'
+
+function missingAgentsSections(content) {
+  return ['# AGENTS.md', 'Required Reading', 'Boundaries', 'Escalation']
+    .filter((marker) => !content.includes(marker))
+}
+
+function agentsIntegrationBlock(missing, language) {
+  const spanish = language === 'es'
+  const sections = []
+  if (missing.includes('# AGENTS.md')) {
+    sections.push('# AGENTS.md — PSDM Integration')
+  }
+  if (missing.includes('Required Reading')) {
+    sections.push(`## PSDM Required Reading / Lectura obligatoria
+
+${spanish ? 'Antes de modificar, lee' : 'Before modifying, read'} \`.riscala/ACTIVE_WORK.md\`, \`psdm.config.json\` ${spanish ? 'y los documentos PSDM relacionados con el cambio' : 'and the PSDM documents relevant to the change'}.`)
+  }
+  if (missing.includes('Boundaries')) {
+    sections.push(`## PSDM Boundaries / Límites
+
+- ${spanish ? 'Trabaja únicamente dentro del repositorio y del objetivo definidos en `.riscala/ACTIVE_WORK.md`.' : 'Work only inside the repository and objective defined in `.riscala/ACTIVE_WORK.md`.'}
+- ${spanish ? 'No amplíes el alcance, el modo ni la autoridad sin una transición explícita.' : 'Do not expand scope, mode, or authority without an explicit transition.'}
+- ${spanish ? 'Conserva los cambios ajenos, secretos, credenciales y datos privados.' : 'Preserve unrelated changes, secrets, credentials, and private data.'}`)
+  }
+  if (missing.includes('Escalation')) {
+    sections.push(`## PSDM Escalation / Escalado
+
+${spanish ? 'Detente y pide una decisión cuando cambien el repositorio, el objetivo o el modo; cuando falte una decisión material; o cuando exista riesgo de seguridad, datos, despliegue o producción.' : 'Stop and request a decision when repository, objective, or mode changes; when a material decision is missing; or when security, data, deployment, or production risk is unclear.'}`)
+  }
+  return `${sections.join('\n\n')}\n`
+}
+
+function integrateExistingAgents(path, language) {
+  const content = readFileSync(path, 'utf8')
+  const missing = missingAgentsSections(content)
+  if (missing.length === 0) return false
+  const marker = content.includes(PSDM_AGENTS_MARKER) ? '' : `${PSDM_AGENTS_MARKER}\n\n`
+  const separator = content.endsWith('\n') ? '\n' : '\n\n'
+  appendFileSync(path, `${separator}${marker}${agentsIntegrationBlock(missing, language)}`)
+  return true
+}
+
+export function initializeProject({ target, configPath = null, feature = null, language = detectLanguage(), log = console.log }) {
   const templates = templateDir()
   const configState = loadConfig(target, configPath)
   const aiGovernance = detectAiGovernance(target)
@@ -17,6 +61,7 @@ export function initializeProject({ target, configPath = null, feature = null, l
     : []
   const artifacts = feature ? featureArtifacts : configState.config.requiredArtifacts
   let created = 0
+  let updated = 0
   let skipped = 0
 
   mkdirSync(target, { recursive: true })
@@ -45,6 +90,11 @@ export function initializeProject({ target, configPath = null, feature = null, l
     }
 
     if (existsSync(destination)) {
+      if (!feature && artifact === 'AGENTS.md' && integrateExistingAgents(destination, language)) {
+        updated += 1
+        log(`UPDATED ${artifact}`)
+        continue
+      }
       skipped += 1
       log(`SKIP    ${artifact}`)
       continue
@@ -89,7 +139,7 @@ export function initializeProject({ target, configPath = null, feature = null, l
     }
   }
 
-  return { created, skipped }
+  return { created, updated, skipped }
 }
 
 export async function initCommand(args) {
@@ -111,7 +161,7 @@ export async function initCommand(args) {
   })
 
   console.log('')
-  console.log(`Riscala init complete. Created: ${result.created}. Skipped: ${result.skipped}.`)
+  console.log(`Riscala init complete. Created: ${result.created}. Updated: ${result.updated}. Skipped: ${result.skipped}.`)
   console.log('Method: PSDM')
 
   return { exitCode: 0 }
