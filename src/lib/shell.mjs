@@ -46,6 +46,7 @@ const SHELL_COPY = {
     languageUpdated: 'Language changed to English.', languageNeedsWork: 'Create Active Work with /work before persisting a language.',
     footer: 'sets the boundary', commands: 'commands', exit: 'Riscala shell closed.',
     allowedPaths: 'Paths', scope: 'Scope',
+    completed: 'Completed', validation: 'Validation', decisions: 'Decisions', questions: 'Questions', pending: 'Pending',
   },
   es: {
     work: 'Trabajo', next: 'Siguiente', objective: 'Objetivo', allowed: 'Permitido', forbidden: 'Prohibido', proposed: 'Propuesto',
@@ -59,6 +60,7 @@ const SHELL_COPY = {
     languageUpdated: 'Idioma cambiado a español.', languageNeedsWork: 'Crea el trabajo activo con /work antes de guardar un idioma.',
     footer: 'define el límite', commands: 'comandos', exit: 'Shell de Riscala cerrado.',
     allowedPaths: 'Rutas', scope: 'Alcance',
+    completed: 'Completado', validation: 'Validación', decisions: 'Decisiones', questions: 'Preguntas', pending: 'Pendiente',
   },
 }
 
@@ -395,9 +397,14 @@ function renderActiveWorkRows(context, options = {}) {
     ...cardRows(copy.objective, work.objective || copy.notRecorded, options),
     ...(work.proposedObjective ? cardRows(copy.proposed, `${work.proposedMode} · ${work.proposedObjective}`, { ...options, valueStyle: theme.yellow }) : []),
     ...(work.allowedPaths?.length ? cardRows(copy.allowedPaths, work.allowedPaths.join(' · '), options) : []),
+    ...(work.handoff?.completed && work.handoff.completed !== 'Not recorded.' ? cardRows(copy.completed, work.handoff.completed, options) : []),
+    ...(work.handoff?.validation && work.handoff.validation !== 'Not recorded.' ? cardRows(copy.validation, work.handoff.validation, options) : []),
+    ...(work.handoff?.decisions && work.handoff.decisions !== 'Not recorded.' ? cardRows(copy.decisions, work.handoff.decisions, options) : []),
+    ...(work.handoff?.questions && work.handoff.questions !== 'None recorded.' ? cardRows(copy.questions, work.handoff.questions, { ...options, valueStyle: theme.yellow }) : []),
+    ...(work.handoff?.pending && work.handoff.pending !== 'Not recorded.' ? cardRows(copy.pending, work.handoff.pending, { ...options, valueStyle: theme.yellow }) : []),
     ...(work.allowed ? cardRows(copy.allowed, localizeBoundary(work.allowed, context.language), options) : []),
     ...(work.forbidden ? cardRows(copy.forbidden, localizeBoundary(work.forbidden, context.language), { ...options, valueStyle: theme.yellow }) : []),
-    ...(work.nextAction ? cardRows(copy.next, localizeBoundary(work.nextAction, context.language), { ...options, valueStyle: theme.cyanLight }) : []),
+    ...((work.handoff?.next && work.handoff.next !== 'Not recorded.' ? work.handoff.next : work.nextAction) ? cardRows(copy.next, localizeBoundary(work.handoff?.next && work.handoff.next !== 'Not recorded.' ? work.handoff.next : work.nextAction, context.language), { ...options, valueStyle: theme.cyanLight }) : []),
   ]
 }
 

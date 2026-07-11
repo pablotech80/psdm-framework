@@ -45,6 +45,19 @@ Active Work must distinguish:
 
 An example or suggestion never becomes an authorized requirement automatically.
 
+## Handoff Contract
+
+Before ending a turn with meaningful progress, an adapted agent records:
+
+- completed work;
+- validation evidence;
+- decisions taken;
+- open questions;
+- pending work;
+- one exact next action.
+
+Only the current handoff is restored as operational context; lifecycle history records handoff events without copying chat transcripts. A fresh chat follows `Handoff > Next Action` unless it conflicts with the boundary or a newer explicit developer instruction. The developer should not need to reconstruct this context manually.
+
 ## Transition Rule
 
 A new instruction does not expand previous authority.

@@ -82,7 +82,7 @@ Acceptance:
 - [x] Require fresh chats to read Active Work before proposing mutation.
 - [ ] Compare new requests with repository, objective, mode, allowed, and forbidden.
 - [x] Stop and propose transition when a boundary changes.
-- [ ] Keep examples, suggestions, and open questions non-authoritative.
+- [x] Keep examples and suggestions non-authoritative while preserving open questions in handoff context.
 - [x] Avoid copying full project context into tool-specific files.
 
 Acceptance:
@@ -90,12 +90,12 @@ Acceptance:
 - [x] Codex recovers the Active Work boundary in a fresh chat.
 - [ ] Claude and Cursor recover the same boundary in fresh chats.
 - [ ] All stop on repository and mode transitions.
-- [ ] Same-boundary reasoning proceeds without approval noise.
+- [x] Same-boundary reasoning proceeds without approval noise.
 
 ## P1 — Active Work Lifecycle
 
 - [x] Support active, transition proposed, and closed states, with superseded boundaries preserved in history.
-- [ ] Preserve decisions, facts, examples, suggestions, questions, and next action.
+- [x] Preserve decisions, facts, examples, suggestions, questions, validation, pending work, and next action.
 - [x] Record old mode, requested boundary, changed fields, and explicit continue/close decision.
 - [x] Preserve transition history without chat transcripts.
 - [x] Detect repository/Active Work conflicts.
@@ -143,7 +143,7 @@ Acceptance:
 ## P2 — Product Evidence
 
 - [ ] Record a real first-use demo in Spanish.
-- [ ] Record fresh-agent continuity.
+- [x] Record fresh-agent continuity.
 - [ ] Record repository and mode transition blocks.
 - [ ] Test in one real project without modifying another repository.
 - [ ] Measure time-to-value, false stops, missed transitions, and confusion.

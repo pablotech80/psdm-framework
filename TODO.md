@@ -36,6 +36,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Make shell `/review` honor the active Spanish language across labels, evidence, readiness, and next-action guidance.
 - [x] Add optional Active Work allowed paths and report exact repository or file-scope conflicts across the complete working tree.
 - [x] Apply the same Active Work file boundary to Decision Review and optional managed pre-commit enforcement.
+- [x] Add agent-native handoff recording and prove exact next-action recovery in a fresh Codex session without supplied context.
 
 - [x] Record the continuity experiment and its governance failure without modifying the laboratory repository.
 - [x] Reframe beta.6 around Continuity and Control instead of generic technical recommendations.
