@@ -49,6 +49,7 @@ Completed:
 - Added optional Allowed Paths to Active Work with Git-root normalization, monorepo support, repository-conflict detection, and exact staged/unstaged/untracked scope findings in shell status.
 - Reused Active Work scope in staged Decision Review and optional pre-commit enforcement; review remains advisory while the installed hook blocks out-of-scope commits before approval evaluation.
 - Added agent-recorded Active Work handoff for completed work, validation, decisions, questions, pending work, and one exact next action; a context-free Codex session recovered and followed that action successfully.
+- Verified that continuity does not expand authority: a fresh Codex session recovered an out-of-bound next action, stopped, and required an explicit Active Work transition; simplified the main shell palette by moving advanced judgment commands into a navigable submenu without changing direct CLI compatibility.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

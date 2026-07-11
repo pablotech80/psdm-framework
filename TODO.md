@@ -37,6 +37,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Add optional Active Work allowed paths and report exact repository or file-scope conflicts across the complete working tree.
 - [x] Apply the same Active Work file boundary to Decision Review and optional managed pre-commit enforcement.
 - [x] Add agent-native handoff recording and prove exact next-action recovery in a fresh Codex session without supplied context.
+- [x] Prove that a recovered next action cannot expand Active Work authority, and move advanced governance commands into an arrow-navigable submenu without breaking direct commands.
 
 - [x] Record the continuity experiment and its governance failure without modifying the laboratory repository.
 - [x] Reframe beta.6 around Continuity and Control instead of generic technical recommendations.

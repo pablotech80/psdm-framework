@@ -234,9 +234,7 @@ The dependency-free shell is an operational governance console. It manages Activ
 /uninstall preview
 /uninstall confirm
 /status
-/audit
 /check
-/validate
 /report
 /inspect
 /classify <change description>
@@ -244,9 +242,11 @@ The dependency-free shell is an operational governance console. It manages Activ
 /init-preview
 /hook-status
 /action
-/approval
+/advanced
 /exit
 ```
+
+The main palette keeps the everyday workflow concise. `/advanced` opens an arrow-navigable submenu for `/approval`, `/audit`, `/impact`, `/review`, and `/validate`. These commands remain directly executable and script-compatible; only their menu presentation changes.
 
 When `AGENTS.md` already exists, `/init confirm` preserves its content and appends only missing PSDM Required Reading, Boundaries, and Escalation sections. Repeating initialization does not duplicate the integration block.
 
@@ -260,7 +260,9 @@ The shell starts in Spanish when the system locale begins with `es`; otherwise i
 
 Interactive terminals use Ptech cyan (`#00A8E8`) with a light accent (`#38BDF8`) for the Riscala frame and prompt. Color is automatically disabled for pipes, non-TTY output, `TERM=dumb`, and the `NO_COLOR` convention.
 
-Type `/` at the interactive prompt to open the dependency-free command palette. Filter by typing, navigate with `↑`/`↓`, run with `Enter`, complete with `Tab`, and dismiss with `Esc`. Piped sessions preserve the original line-oriented behavior.
+Type `/` at the interactive prompt to open the dependency-free command palette. Filter by typing, navigate with `↑`/`↓`, open submenus with `→` or `Enter`, return with `←` or `Esc`, and complete with `Tab`. Piped sessions preserve the original line-oriented behavior.
+
+The Active Work boundary is intentionally stricter than a chat suggestion. In a verified continuity test, a fresh Codex chat recovered the recorded next action but refused to implement it because it fell outside the still-active objective. That stop was correct: the next task required an explicit Active Work transition. Riscala therefore preserved developer control across the chat boundary instead of silently expanding authority.
 
 Shell commands use the same fixed-width result panels. Each result has a clear title, semantic state, and a contextual next action where useful, so repeated commands remain visually consistent without changing the read-only security boundary. `/audit` and `/init-preview` reuse the existing non-destructive audit engine. `/check`, `/validate`, and `/report` summarize baseline readiness. `/classify` and `/pr-checklist` prepare governance decisions from a described change. `/hook-status`, `/action`, and `/approval` expose the approval boundary without creating receipts, installing hooks, committing, pushing, or publishing.
 

@@ -4,6 +4,7 @@ const MENU_WIDTH = 68
 const MENU_NAME_WIDTH = 18
 
 const SPANISH_DESCRIPTIONS = {
+  '/advanced': 'Abrir comandos avanzados de gobierno.',
   '/action': 'Preparar un registro para git.commit.',
   '/approval': 'Mostrar el límite de aprobación.',
   '/audit': 'Evaluar adopción y preparación.',
@@ -37,6 +38,14 @@ const SPANISH_DESCRIPTIONS = {
   '/work transition ': 'Proponer modo y objetivo.',
 }
 
+const ADVANCED_SUBMENU = Object.freeze([
+  { name: '/approval', description: 'Show approval receipt boundary.' },
+  { name: '/audit', description: 'Assess governance adoption and readiness.' },
+  { name: '/impact', description: 'Think through a change before implementation.' },
+  { name: '/review', description: 'Compare intent with staged Git evidence.' },
+  { name: '/validate', description: 'Validate the governance baseline.' },
+])
+
 const WORK_SUBMENU = Object.freeze([
   { name: '/work close', description: 'Close Active Work.', execute: true },
   { name: '/work continue', description: 'Accept a proposed transition.', execute: true },
@@ -65,23 +74,19 @@ const UNINSTALL_SUBMENU = Object.freeze([
 
 export const SHELL_MENU_COMMANDS = Object.freeze([
   { name: '/action', description: 'Prepare a git.commit action record.' },
-  { name: '/approval', description: 'Show approval receipt boundary.' },
-  { name: '/audit', description: 'Assess governance adoption and readiness.' },
+  { name: '/advanced', description: 'Open advanced governance commands.', children: ADVANCED_SUBMENU },
   { name: '/check', description: 'Check required artifacts exist.' },
   { name: '/classify', description: 'Classify a described change.' },
   { name: '/exit', description: 'Close the Riscala shell.' },
   { name: '/help', description: 'Show available commands and safety boundaries.' },
   { name: '/hook-status', description: 'Inspect managed pre-commit hook status.' },
-  { name: '/impact', description: 'Think through a change before implementation.' },
   { name: '/init', description: 'Initialize project governance.', children: INIT_SUBMENU },
   { name: '/inspect', description: 'Inspect staged changes and governance level.' },
   { name: '/language', description: 'Change language between English and Spanish.', children: LANGUAGE_SUBMENU },
   { name: '/pr-checklist', description: 'Build a PR checklist for a described change.' },
   { name: '/report', description: 'Summarize compliance report readiness.' },
-  { name: '/review', description: 'Compare intent with staged Git evidence.' },
   { name: '/status', description: 'Refresh repository and policy context.' },
   { name: '/uninstall', description: 'Remove Riscala from this project.', children: UNINSTALL_SUBMENU },
-  { name: '/validate', description: 'Validate the governance baseline.' },
   { name: '/work', description: 'Create, transition, continue, or close Active Work.', children: WORK_SUBMENU },
 ])
 
@@ -144,7 +149,7 @@ export function renderShellMenu(input, selectedIndex = 0, options = {}) {
   const commands = filterShellMenuCommands(input, options.parentName)
   const rawTitle = options.parentName ? options.parentName.slice(1) : 'Commands'
   const localizedTitle = options.language === 'es'
-    ? ({ Commands: 'Comandos', init: 'inicialización', uninstall: 'desinstalación', work: 'trabajo', language: 'idioma' }[rawTitle] || rawTitle)
+    ? ({ Commands: 'Comandos', advanced: 'avanzado', init: 'inicialización', uninstall: 'desinstalación', work: 'trabajo', language: 'idioma' }[rawTitle] || rawTitle)
     : rawTitle
   const title = `─ ${localizedTitle} `
   const top = `╭${title}${'─'.repeat(MENU_WIDTH - title.length)}╮`
