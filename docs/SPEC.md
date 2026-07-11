@@ -7,6 +7,8 @@ Project: `psdm-framework`
 
 ### Beta.6 Developer Judgment
 
+The public first-use path is `impact -> developer decision -> AI-assisted implementation -> staged review`. It must work without initialization. The CLI and shell must present Riscala as an amplifier of developer judgment; PSDM artifact adoption remains optional until durable governance is justified by project or change risk.
+
 - Provide a repository-grounded Judgment Brief from a developer's change intent without requiring prior `riscala init`.
 - Separate observed facts, semantic inference, options, recommendations, uncertainty, and owner decisions in human-readable and machine-readable results.
 - Treat owner decisions as external authority that Riscala and AI agents may request or record but never create, infer, approve, or simulate.
@@ -48,7 +50,7 @@ Project: `psdm-framework`
 - Inspect staged Git changes without requiring a manual description or file list.
 - Treat any staged file change as at least Level 1 and preserve configured risk paths as the deterministic elevation mechanism.
 - Emit staged file status, risk-path evidence, and classification in human-readable and JSON output.
-- Provide a dependency-free read-only interactive shell with `/help`, `/status`, `/audit`, `/validate`, `/inspect`, and `/exit` routing.
+- Provide a dependency-free read-only interactive shell with compact `/impact <intent>` and `/review <intent>` judgment views plus the existing governance inspection commands.
 - Calculate shell project, branch, change counts, and active policy from the selected target instead of hardcoding repository context.
 - Reject arbitrary input and mutating slash commands until content-bound approval verification is implemented.
 - Render the interactive shell with Ptech cyan `#00A8E8`, light accent `#38BDF8`, and semantic repository-state colors when the output is a capable TTY.

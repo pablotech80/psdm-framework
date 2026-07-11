@@ -11,6 +11,8 @@ Riscala is the accepted product-facing identity for the CLI. PSDM remains the me
 
 For beta.6, Riscala's primary architecture is a developer-judgment loop rather than artifact compliance. PSDM supplies the construction and reasoning questions; Riscala connects developer intent, repository evidence, explicit owner decisions, AI-assisted execution, staged verification, and selective learning. The domain model and trust boundaries are defined in `docs/JUDGMENT_ARCHITECTURE.md`.
 
+The product entry boundary is read-only `impact` before implementation and `review` against staged evidence afterward. It requires no repository initialization. PSDM artifacts, approvals, hooks, and CI form a deeper risk-scaled layer when durable policy or higher-risk delivery justifies them; they are not mandatory daily ceremony for low-risk work.
+
 The target component flow is:
 
 ```text
@@ -42,7 +44,7 @@ The architecture favors explicit modules over framework abstractions:
 - `src/commands/review.mjs` exposes the read-only staged Decision Review while preserving the distinction between alignment and owner approval.
 - `src/lib/inspect.mjs` composes staged Git evidence with reusable change classification.
 - `src/commands/shell.mjs` owns the interactive readline lifecycle and delegates slash commands to an allowlist router.
-- `src/lib/shell.mjs` builds target-specific project context, reuses the audit, validation, and staged-inspection engines, and renders the dependency-free read-only terminal UI.
+- `src/lib/shell.mjs` builds target-specific project context, reuses the judgment, decision-review, audit, validation, and staged-inspection engines, and renders the dependency-free read-only terminal UI.
 - `src/lib/terminal-style.mjs` owns Ptech cyan tokens, ANSI styling, and TTY/`NO_COLOR` capability detection.
 - `src/lib/shell-menu.mjs` owns slash-command metadata, filtering, selection movement, and palette rendering.
 - `src/lib/shell-session.mjs` owns raw TTY input, cursor-safe redraw, line editing, and keyboard navigation while delegating command execution to the existing allowlist router.

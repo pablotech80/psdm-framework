@@ -501,14 +501,16 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   writeFileSync(resolve(target, 'package.json'), '{"name":"shell-fixture","private":true}\n')
   writeFileSync(resolve(target, 'notes.txt'), 'untracked\n')
 
-  const output = runShell([target], '/help\n/status\n/audit\n/check\n/validate\n/report\n/inspect\n/classify update user flow\n/pr-checklist update user flow\n/init-preview\n/hook-status\n/action\n/approval\n/commit\n/exit\n')
+  const output = runShell([target], '/help\n/impact update user flow\n/review update user flow\n/status\n/audit\n/check\n/validate\n/report\n/inspect\n/classify update user flow\n/pr-checklist update user flow\n/init-preview\n/hook-status\n/action\n/approval\n/commit\n/exit\n')
 
   assert.match(output, /RISCALA/)
-  assert.match(output, /READ ONLY · governance shell/)
+  assert.match(output, /READ ONLY · judgment workspace/)
   assert.match(output, /Project\s+shell-fixture/)
   assert.match(output, /Changes\s+1 staged · 1 unstaged · 1 untracked/)
   assert.match(output, /Policy\s+framework · psdm\.config\.json/)
   assert.match(output, /╭─ COMMANDS /)
+  assert.match(output, /╭─ IMPACT /)
+  assert.match(output, /╭─ REVIEW /)
   assert.match(output, /╭─ STATUS /)
   assert.match(output, /╭─ AUDIT /)
   assert.match(output, /╭─ CHECK /)
@@ -522,6 +524,8 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.match(output, /╭─ ACTION /)
   assert.match(output, /╭─ APPROVAL /)
   assert.match(output, /\/status\s+Refresh repository/)
+  assert.match(output, /\/impact\s+Think through a change/)
+  assert.match(output, /\/review\s+Compare intent with staged evidence/)
   assert.match(output, /\/audit\s+Assess governance adoption/)
   assert.match(output, /\/check\s+Check required artifacts/)
   assert.match(output, /\/validate\s+Validate the governance baseline/)
@@ -550,6 +554,7 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.match(output, /Review this content-bound action record before/)
   assert.match(output, /Boundary\s+The shell cannot create, type, or/)
   assert.match(output, /Blocked: \/commit is not available in the read-only shell/)
+  assert.match(output, /Riscala advises\. You decide direction/)
   assert.match(output, /Riscala shell closed/)
   assert.doesNotMatch(output, /\u001b\[/)
   assert.equal(output.split('\n').filter((line) => line.startsWith('│')).every((line) => (
@@ -586,6 +591,8 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
 
   assert.deepEqual(allCommands.map((item) => item.name), [
     '/help',
+    '/impact',
+    '/review',
     '/status',
     '/audit',
     '/check',
@@ -602,10 +609,10 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
   ])
   assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
   assert.deepEqual(filterShellMenuCommands('status'), [])
-  assert.equal(moveShellMenuSelection(0, 'previous', 14), 13)
-  assert.equal(moveShellMenuSelection(13, 'next', 14), 0)
+  assert.equal(moveShellMenuSelection(0, 'previous', 16), 15)
+  assert.equal(moveShellMenuSelection(15, 'next', 16), 0)
   assert.match(plainMenu, /Commands/)
-  assert.match(plainMenu, /❯ \/status/)
+  assert.match(plainMenu, /❯ \/impact/)
   assert.equal(plainMenu.split('\n').every((line) => line.length === 70), true)
   assert.equal(stripAnsi(coloredMenu), plainMenu)
 }
@@ -630,6 +637,8 @@ async function testInteractiveShellOpensSlashMenuAndNavigates() {
     env: { TERM: 'xterm-256color' },
   })
   input.write('/')
+  input.write('\u001b[B')
+  input.write('\u001b[B')
   input.write('\u001b[B')
   input.write('\r')
   input.write('/e')

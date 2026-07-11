@@ -46,6 +46,14 @@ const commands = {
 function printHelp() {
   console.log(`${productHeader()}
 
+Amplify developer judgment before and after AI-assisted coding.
+
+Start here:
+  ${PRIMARY_EXECUTABLE} impact "<change intent>"
+  # Make the decisions and implement with your preferred AI coding tool.
+  git add <expected-files>
+  ${PRIMARY_EXECUTABLE} review "<change intent>" --staged --files <expected-files>
+
 Usage:
   ${PRIMARY_EXECUTABLE} impact "<change intent>" [--guidance learn|balanced|concise] [--file path] [--files path,path] [--target path] [--config path] [--json]
   ${PRIMARY_EXECUTABLE} review "<change intent>" --staged [--guidance learn|balanced|concise] [--file expected-path] [--files expected-paths] [--target path] [--config path] [--json]
@@ -68,23 +76,29 @@ Usage:
 Compatibility:
   ${COMPATIBILITY_EXECUTABLE} remains supported with identical commands and behavior.
 
-Commands:
+Judgment loop:
   impact     Build a repository-grounded technical Judgment Brief before implementation.
-  review     Compare a CLI-declared change envelope with staged Git evidence.
-  adr        Create a new Architecture Decision Record under ADRs/.
+  review     Compare accepted intent and expected scope with staged Git evidence.
+
+Project adoption (optional):
   audit      Preview repository state and what Riscala init would change.
-  init       Create PSDM governance artifacts in a project.
+  init       Create PSDM governance artifacts when durable project policy is justified.
   check      Check required artifacts exist and are non-empty.
-  validate   Validate PSDM baseline structure and required sections.
+  validate   Validate the adopted PSDM baseline.
+  report     Print a markdown governance report.
+
+Risk and delivery controls:
+  adr        Create a new Architecture Decision Record under ADRs/.
   inspect    Inspect staged Git changes and explain their minimum governance level.
-  shell      Open the read-only interactive governance shell.
+  shell      Open the read-only judgment and governance shell.
   action     Build a content-bound record for a proposed action.
   approval   Verify a signed approval receipt against the live action.
   hook       Manage the Riscala pre-commit enforcement hook.
   classify   Estimate change level from a short description.
   enforce    Fail when a classified change exceeds the allowed maximum level.
   pr-checklist Generate a pull request checklist for a change.
-  report     Print a markdown compliance report.
+
+Riscala advises; the developer owns the decision. impact and review require no init.
 `)
 }
 

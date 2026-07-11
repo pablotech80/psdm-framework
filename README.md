@@ -11,27 +11,29 @@
 </p>
 
 <p align="center">
-  <strong>Govern every change at the right level.</strong>
+  <strong>Amplify your judgment before and after AI writes the code.</strong>
 </p>
 
 <p align="center">
-  Govern AI-assisted software delivery with specification, architecture, risk-based controls, and production-ready governance.
+  Understand impact, choose direction, verify the result. You remain the decision-maker.
 </p>
 
-Riscala is the product-facing CLI powered by the PSDM governance method. It helps repositories, teams, developers, AI agents, technical leads, and product teams keep delivery controlled while moving quickly.
+Riscala is a local, dependency-free CLI for developers building software with AI. Before implementation, it turns a change intent and repository evidence into the decisions, trade-offs, risks, and unknowns you should examine. After implementation, it compares that intent with the staged Git result.
 
-AI-assisted development is fast, but speed without governance creates risk.
+Riscala does not replace your coding agent, choose product direction, or approve its own work. It helps you ask better technical questions and retain control while Claude, Cursor, Copilot, Codex, or another tool writes code.
 
-Riscala uses PSDM to decide how much process a change needs based on risk: small safe changes stay fast; security, data, AI, infrastructure, and production-sensitive changes get stronger governance.
+PSDM is the internal governance method. Its risk-scaled controls remain available when a change reaches security, data, AI, infrastructure, or production boundaries, but low-risk daily work does not require initialization or mandatory artifacts.
 
 Riscala is currently beta software and is still distributed through the compatibility package `@ptechsolution/psdm-framework`. It is a local CLI and GitHub Action, not a hosted platform.
 
-Try the currently published beta with the compatibility executable:
+Beta.6 judgment commands are currently available from this checkout:
 
 ```bash
-npm install -g @ptechsolution/psdm-framework@beta
-riscala audit
+npm install -g .
+riscala impact "add search to the customer list"
 ```
+
+The npm `@beta` tag still installs `1.0.0-beta.5` until the beta.6 release gates pass. Beta.5 provides the existing governance CLI and shell, but not the new `impact` and `review` loop.
 
 The compatibility executable remains available:
 
@@ -41,9 +43,9 @@ psdm audit
 
 ## Table Of Contents
 
-- [Why PSDM Exists](#why-psdm-exists)
-- [Governance Flow](#governance-flow)
-- [What PSDM Provides](#what-psdm-provides)
+- [Why Riscala Exists](#why-riscala-exists)
+- [Judgment Loop](#judgment-loop)
+- [What Riscala Provides](#what-riscala-provides)
 - [Status](#status)
 - [Install](#install)
 - [CLI](#cli)
@@ -64,42 +66,33 @@ psdm audit
 - [Design Principles](#design-principles)
 - [Current Limitations](#current-limitations)
 
-## Why PSDM Exists
+## Why Riscala Exists
 
-AI can generate code quickly. Repositories still need durable context: product intent, specifications, architecture decisions, test expectations, security boundaries, deployment rules, and operational ownership.
+AI can generate plausible code faster than a developer can fully reason through its consequences. The scarce capability is no longer typing speed; it is deciding what should change, what must remain true, what evidence matters, and when an apparently simple implementation crosses an expensive boundary.
 
-PSDM gives AI-assisted teams a repeatable governance layer. It helps developers, AI agents, technical leads, and product teams classify change risk, create the right artifacts, and keep delivery controlled without forcing heavyweight process onto small changes.
+An `AGENTS.md` can tell an agent how to behave, but it cannot exercise the developer's judgment. Riscala makes that judgment loop explicit and repository-grounded while leaving final authority with the developer.
 
-## Governance Flow
+## Judgment Loop
 
 ```mermaid
 flowchart TD
-    A[Idea or Change] --> B[Risk Classification]
-    B --> C{Change Level}
-    C -->|Level 0-1| D[Fast Path]
-    C -->|Level 2| E[Product Spec + Tests]
-    C -->|Level 3| F[Security / Data / AI Governance]
-    C -->|Level 4| G[Deployment / Operations / Rollback]
-    D --> H[Validate]
-    E --> H
-    F --> H
-    G --> H
-    H --> I[Controlled Delivery]
+    A[Developer intent] --> B[Riscala impact]
+    B --> C[Developer chooses direction and constraints]
+    C --> D[AI-assisted implementation]
+    D --> E[Stage expected files]
+    E --> F[Riscala review]
+    F --> G{Evidence matches intent?}
+    G -->|No| C
+    G -->|Yes| H[Developer validates and decides]
 ```
 
-## What PSDM Provides
+## What Riscala Provides
 
-- Repository audit before adoption.
-- Governance templates for specs, architecture, security, testing, deployment, operations, and ADRs.
-- Change-level classification from descriptions and touched paths.
-- Staged Git change inspection with deterministic file and risk-path evidence.
-- CI enforcement for maximum allowed change level.
-- AI readiness checks for guardrails, data classification, cost, latency, evals, prompt injection, PII, and tool security.
-- AI-agent governance templates for projects using LLMs, tools, prompts, RAG, or automation.
-- Agent Decision Protocol separating agent justification and execution from content-bound human approval.
-- Knowledge as Code guidance for versioning intent, decisions, rules, prompts, workflows, verification criteria, and evolution notes.
-- JSON output for automation and GitHub Action workflows.
-- Public beta release gates for package contents, docs, and repository readiness.
+- A read-only Judgment Brief before coding: observed facts, inferred impact, options, trade-offs, uncertainty, and decisions reserved for you.
+- A staged Decision Review after coding: expected versus actual scope, sensitive surfaces, dependency changes, and missing evidence.
+- `learn`, `balanced`, and `concise` explanation density for junior, senior, and staff-level workflows without changing authority or safety semantics.
+- Optional PSDM adoption for durable specifications, architecture, security, testing, deployment, operations, and CI controls when the project needs them.
+- Stable JSON output and compatibility with the existing `psdm` executable and npm package.
 
 ## Status
 
@@ -109,7 +102,7 @@ Current `main` is developing the beta.6 Product Reset: Riscala now centers repos
 
 ## Install
 
-Install the published beta from npm:
+Install the published beta.5 from npm:
 
 ```bash
 npm install -g @ptechsolution/psdm-framework@beta
@@ -120,6 +113,8 @@ Then run:
 ```bash
 riscala help
 ```
+
+The beta.6 judgment loop documented below is under development on `main`. From this checkout, install it with `npm install -g .`. Do not expect `impact` or `review` from npm until beta.6 is published.
 
 The existing `psdm` executable remains supported with identical commands and behavior during the Riscala migration. Both `riscala help` and `psdm help` work from the npm beta package.
 
@@ -237,18 +232,36 @@ riscala adr "<decision title>" [--json] [--target <path>] [--date YYYY-MM-DD] [-
 
 ## Quick Start
 
-Inside a project:
+Inside any greenfield or existing project—no initialization required:
 
 ```bash
-riscala audit
-# Analyze repository readiness before writing files.
+# 1. Think before implementation.
+riscala impact "add Google OAuth while preserving password login" \
+  --files src/auth/login.ts,tests/auth/login.test.ts
 
-riscala init
-# Bootstrap PSDM governance artifacts.
+# 2. Decide the direction yourself, then implement with your AI coding tool.
 
-riscala validate
-# Validate the governance baseline.
+# 3. Stage only the implementation you expect to review.
+git add src/auth/login.ts tests/auth/login.test.ts
+
+# 4. Compare the result with the accepted intent and scope.
+riscala review "add Google OAuth while preserving password login" --staged \
+  --files src/auth/login.ts,tests/auth/login.test.ts
 ```
+
+`impact` and `review` are advisory and read-only. They do not implement code, run tests, approve changes, or claim human authority. A scope-aligned review still reports validation evidence as unverified until you run and assess the relevant checks.
+
+Use `--guidance learn` for more teaching, the default `balanced` mode for everyday work, or `--guidance concise` for compact senior/staff review. JSON output is available for automation.
+
+Adopt the broader PSDM baseline only when durable project governance adds value:
+
+```bash
+riscala audit       # Preview adoption without writing files.
+riscala init        # Create the selected governance baseline.
+riscala validate    # Validate the adopted baseline.
+```
+
+See `docs/GETTING_STARTED.md` for greenfield, legacy, shell, and AI-agent examples.
 
 Use `riscala audit` before initializing PSDM in an existing project. It does not modify files; it shows current state, what `riscala init` would create or skip, pros, cons, and recommendations.
 

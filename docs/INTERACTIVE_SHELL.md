@@ -1,12 +1,12 @@
 # Riscala Interactive Shell
 
-Status: `Read-only governance console`
+Status: `Read-only judgment and governance console`
 Product: `Riscala`
 Method: `PSDM`
 
 ## Purpose
 
-Provide a dependency-free terminal interface for inspecting the current project's governance context without granting new mutation capabilities.
+Provide a dependency-free terminal interface for the developer judgment loop and current project governance context without granting new mutation capabilities.
 
 Start it inside any repository:
 
@@ -26,14 +26,14 @@ The project name, branch, working-tree counts, profile, and config source are ca
 
 ```text
 ╭─ RISCALA ──────────────────────────────────────────────────────────╮
-│  Mode       READ ONLY · governance shell                           │
+│  Mode       READ ONLY · judgment workspace                        │
 ├────────────────────────────────────────────────────────────────────┤
 │  Project    payments-api                                          │
 │  Branch     feature/session-hardening                              │
 │  Changes    2 staged · 1 unstaged                                  │
 │  Policy     backend-api · psdm.config.json                         │
 ╰────────────────────────────────────────────────────────────────────╯
-Powered by PSDM · Type / for commands · /inspect staged · /exit close
+Powered by PSDM · /impact before code · /review after staging · / commands
 
 riscala ❯
 ```
@@ -67,6 +67,8 @@ Typing `/` as the first prompt character opens the command palette immediately:
 ```text
 ╭─ Commands ─────────────────────────────────────────────────────────╮
 │ ❯ /help      Show available commands and safety boundaries.        │
+│   /impact    Think through a change before implementation.         │
+│   /review    Compare intent with staged Git evidence.               │
 │   /status    Refresh repository and policy context.                │
 │   /audit     Assess governance adoption and readiness.             │
 │   /validate  Validate the governance baseline.                     │
@@ -86,6 +88,10 @@ Interaction contract:
 - `Ctrl+C` and `Ctrl+D` close the interactive session safely.
 
 The palette exists only for a real interactive TTY. Pipes and automation continue to use line-oriented input and receive no cursor-control or ANSI sequences. The palette includes diagnostics, report summaries, classification, PR checklist preparation, init preview, hook status, action record preparation, approval-boundary visibility, and session exit.
+
+`/impact <change intent>` builds a compact Judgment Brief before implementation. `/review <change intent>` compares the same intent model with staged Git evidence after implementation. These commands advise; the developer owns direction, scope, trade-offs, validation, and acceptance.
+
+The normal CLI remains the precise path for `--files`, explanation density, and JSON output.
 
 ## Command Results
 

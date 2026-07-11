@@ -43,9 +43,13 @@ Current Decision Review behavior:
 - reports test-file presence without claiming tests were executed;
 - returns `scope_aligned_evidence_unverified` or `developer_review_required` as advisory readiness, never approval.
 
-This is not yet a beta.6 release candidate. Public onboarding realignment, version bump, and protected publication evidence remain pending. Strong owner-authority binding remains separate from the advisory Change Envelope.
+This is not yet a versioned beta.6 release candidate. Version metadata and protected publication evidence remain pending. Strong owner-authority binding remains separate from the advisory Change Envelope.
 
-External greenfield and representative legacy validation is now recorded in `docs/BETA6_EXTERNAL_VALIDATION.md`. The validation produced corrections for greenfield intake, selected-file metadata, lead/contact/API reasoning, evidence density, and aligned-scope wording. Public onboarding realignment and a clean-install documentation-only journey remain pending before release-candidate status.
+External greenfield and representative legacy validation is recorded in `docs/BETA6_EXTERNAL_VALIDATION.md`. The validation produced corrections for greenfield intake, selected-file metadata, lead/contact/API reasoning, evidence density, and aligned-scope wording.
+
+Public onboarding now centers the developer judgment loop in README, CLI help, the read-only shell, specification, architecture, and `docs/GETTING_STARTED.md`. The shell exposes compact `/impact <intent>` and `/review <intent>` commands while preserving the external CLI for exact file envelopes and JSON. Documentation distinguishes unpublished beta.6 behavior from the npm `@beta` tag on beta.5.
+
+The clean installed-tarball journey passed using only public guidance. Evidence is recorded in `docs/BETA6_CLEAN_INSTALL_VALIDATION.md`. Beta.6 candidate version preparation remains a separate controlled increment.
 
 ## Beta Release - 1.0.0-beta.5
 
