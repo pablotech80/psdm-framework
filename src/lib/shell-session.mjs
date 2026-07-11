@@ -26,6 +26,7 @@ export function runInteractiveShellSession({
   configPath = null,
   color = false,
   language = 'en',
+  env = process.env,
   prompt,
 }) {
   emitKeypressEvents(input)
@@ -63,7 +64,7 @@ export function runInteractiveShellSession({
         return
       }
 
-      const menu = renderShellMenu(buffer, selectedIndex, { color, parentName: submenuParent })
+      const menu = renderShellMenu(buffer, selectedIndex, { color, language, parentName: submenuParent })
       const lineCount = menu.split('\n').length
       output.write(`\n${menu}`)
       moveCursor(output, 0, -lineCount)
@@ -121,7 +122,9 @@ export function runInteractiveShellSession({
         configPath,
         color,
         language,
+        env,
       })
+      if (result.language) language = result.language
 
       if (result.output) {
         output.write(`${result.output}\n`)

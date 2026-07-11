@@ -64,6 +64,7 @@ Acceptance:
 - [x] Apply persisted language to external Decision Review while preserving English JSON keys.
 - [x] Provide navigable language choices, accept `/lenguaje`, and remove residual English/number-agreement errors from Spanish status.
 - [x] Preserve printable Unicode in interactive objectives and intentions without removing accents or `ñ`.
+- [x] Persist language globally across repositories and apply it immediately throughout the primary shell and menus.
 
 Acceptance:
 

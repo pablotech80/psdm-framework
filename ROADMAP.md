@@ -36,6 +36,7 @@ Completed:
 - Improved shell discoverability with alphabetical help/menu ordering and nested `/work` navigation using arrow keys, Enter, and Escape.
 - Completed the visible Spanish status pass: navigable `en`/`es` language submenu, `/lenguaje` alias, plural agreement, hidden-file summary, policy defaults, and footer localization.
 - Fixed interactive input data loss so Spanish accents, `ñ`, inverted punctuation, and other printable Unicode persist exactly in Active Work.
+- Made language a global immediate Riscala preference across repositories, translated shell menus/states, and allowed closed work to restart while archiving the prior boundary.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

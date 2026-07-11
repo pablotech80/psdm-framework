@@ -151,7 +151,9 @@ Commands do not accept arbitrary shell fragments. `/work`, `/impact`, `/review`,
 
 ## Language
 
-The initial shell language is Spanish when `LC_ALL`, `LC_MESSAGES`, or `LANG` begins with `es`; all other locales fall back to English. Active Work persists the selected `es` or `en` value so later shell sessions restore it. `/language` and `/lenguaje` open a navigable language submenu and change presentation only: Markdown field names and JSON keys remain in English, and the repository boundary keeps the same meaning. Spanish status copy applies grammatical number and translates default-policy and hidden-file summaries.
+The initial shell language uses the global Riscala preference when one exists, then falls back to the system locale. `/language` and `/lenguaje` open a navigable language submenu, apply the choice immediately, and persist it under the user's Riscala configuration so every repository restores the same presentation. Markdown field names and JSON keys remain in English, and the repository boundary keeps the same meaning. Spanish status and menu copy apply grammatical number and translate standard guidance.
+
+When Active Work is `closed`, a new `/work <mode> <objective>` archives the prior record under `.riscala/history/` and creates a clean active boundary. This permits correcting an old damaged objective without rewriting its historical record.
 
 Interactive input preserves printable Unicode. Objectives and intentions may contain `á`, `é`, `í`, `ó`, `ú`, `ü`, `ñ`, `¿`, `¡`, and other non-ASCII characters without transliteration or data loss. Riscala preserves user-authored text exactly; it does not silently correct or rewrite an authorized objective.
 

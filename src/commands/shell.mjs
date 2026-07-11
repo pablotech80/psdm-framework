@@ -38,8 +38,8 @@ export async function shellCommand(args, streams = {}) {
   const output = streams.output || process.stdout
   const env = streams.env || process.env
   const color = supportsTerminalColor(output, env)
-  const language = detectLanguage(env)
-  const context = buildShellContext({ target, configPath: options.configPath, language })
+  let language = detectLanguage(env)
+  const context = buildShellContext({ target, configPath: options.configPath, language, env })
   const prompt = renderShellPrompt({ color })
 
   output.write(`${renderShellBanner(context, { color })}\n\n${prompt}`)
@@ -52,6 +52,7 @@ export async function shellCommand(args, streams = {}) {
       configPath: options.configPath,
       color,
       language,
+      env,
       prompt,
     })
   }
@@ -64,7 +65,9 @@ export async function shellCommand(args, streams = {}) {
       configPath: options.configPath,
       color,
       language,
+      env,
     })
+    if (result.language) language = result.language
 
     if (result.output) {
       output.write(`${result.output}\n`)

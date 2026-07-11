@@ -3,6 +3,36 @@ import { terminalTheme } from './terminal-style.mjs'
 const MENU_WIDTH = 68
 const MENU_NAME_WIDTH = 18
 
+const SPANISH_DESCRIPTIONS = {
+  '/action': 'Preparar un registro para git.commit.',
+  '/approval': 'Mostrar el límite de aprobación.',
+  '/audit': 'Evaluar adopción y preparación.',
+  '/check': 'Comprobar artefactos requeridos.',
+  '/classify': 'Clasificar un cambio descrito.',
+  '/exit': 'Cerrar la consola de Riscala.',
+  '/help': 'Mostrar comandos y límites de seguridad.',
+  '/hook-status': 'Comprobar el hook pre-commit.',
+  '/impact': 'Evaluar un cambio antes de programar.',
+  '/init-preview': 'Previsualizar archivos de gobierno.',
+  '/inspect': 'Inspeccionar cambios preparados.',
+  '/language': 'Cambiar el idioma entre inglés y español.',
+  '/lenguaje': 'Cambiar el idioma entre español e inglés.',
+  '/pr-checklist': 'Preparar la lista de una PR.',
+  '/report': 'Resumir el estado del informe.',
+  '/review': 'Comparar objetivo y evidencia preparada.',
+  '/status': 'Actualizar repositorio y política.',
+  '/validate': 'Validar la base de gobierno.',
+  '/work': 'Crear, cambiar, continuar o cerrar trabajo.',
+  '/work close': 'Cerrar el trabajo activo.',
+  '/work continue': 'Aceptar una transición propuesta.',
+  '/work design ': 'Crear diseño; escribir el objetivo.',
+  '/work experiment ': 'Crear experimento; escribir el objetivo.',
+  '/work implement ': 'Crear implementación; escribir el objetivo.',
+  '/work inspect ': 'Crear inspección; escribir el objetivo.',
+  '/work release ': 'Crear publicación; escribir el objetivo.',
+  '/work transition ': 'Proponer modo y objetivo.',
+}
+
 const WORK_SUBMENU = Object.freeze([
   { name: '/work close', description: 'Close Active Work.', execute: true },
   { name: '/work continue', description: 'Accept a proposed transition.', execute: true },
@@ -79,7 +109,8 @@ function commandRow(command, selected, options) {
   const label = command.children ? `${command.name} ›` : command.name
   const name = label.padEnd(MENU_NAME_WIDTH)
   const descriptionWidth = MENU_WIDTH - MENU_NAME_WIDTH - 4
-  const description = truncate(command.description, descriptionWidth).padEnd(descriptionWidth)
+  const translated = options.language === 'es' ? SPANISH_DESCRIPTIONS[command.name] : null
+  const description = truncate(translated || command.description, descriptionWidth).padEnd(descriptionWidth)
 
   return [
     theme.cyan('│'),
@@ -95,18 +126,22 @@ function commandRow(command, selected, options) {
 
 function emptyRow(options) {
   const theme = terminalTheme(options.color)
-  const content = '  No matching commands'.padEnd(MENU_WIDTH)
+  const content = `  ${options.language === 'es' ? 'No hay comandos coincidentes' : 'No matching commands'}`.padEnd(MENU_WIDTH)
   return `${theme.cyan('│')}${theme.dim(content)}${theme.cyan('│')}`
 }
 
 export function renderShellMenu(input, selectedIndex = 0, options = {}) {
   const theme = terminalTheme(options.color)
   const commands = filterShellMenuCommands(input, options.parentName)
-  const title = `─ ${options.parentName ? options.parentName.slice(1) : 'Commands'} `
+  const rawTitle = options.parentName ? options.parentName.slice(1) : 'Commands'
+  const localizedTitle = options.language === 'es'
+    ? ({ Commands: 'Comandos', work: 'trabajo', language: 'idioma', lenguaje: 'lenguaje' }[rawTitle] || rawTitle)
+    : rawTitle
+  const title = `─ ${localizedTitle} `
   const top = `╭${title}${'─'.repeat(MENU_WIDTH - title.length)}╮`
-  const footerText = options.parentName
-    ? '─ ↑/↓ navigate · Enter select · ←/Esc back '
-    : '─ ↑/↓ navigate · →/Enter open · Tab complete '
+  const footerText = options.language === 'es'
+    ? (options.parentName ? '─ ↑/↓ navegar · Enter elegir · ←/Esc volver ' : '─ ↑/↓ navegar · →/Enter abrir · Tab completar ')
+    : (options.parentName ? '─ ↑/↓ navigate · Enter select · ←/Esc back ' : '─ ↑/↓ navigate · →/Enter open · Tab complete ')
   const bottom = `╰${footerText}${'─'.repeat(MENU_WIDTH - footerText.length)}╯`
   const rows = commands.length > 0
     ? commands.map((command, index) => commandRow(command, index === selectedIndex, options))

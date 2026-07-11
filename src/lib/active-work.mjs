@@ -1,10 +1,35 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { basename, join, resolve } from 'node:path'
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
+import { basename, dirname, join, resolve } from 'node:path'
+import { homedir } from 'node:os'
 
 export const WORK_MODES = ['inspect', 'experiment', 'design', 'implement', 'release']
 export const SUPPORTED_LANGUAGES = ['en', 'es']
 
+export function languagePreferencePath(env = process.env) {
+  const root = env.RISCALA_CONFIG_HOME
+    || join(env.XDG_CONFIG_HOME || join(env.HOME || homedir(), '.config'), 'riscala')
+  return join(root, 'settings.json')
+}
+
+export function readLanguagePreference(env = process.env) {
+  try {
+    const value = JSON.parse(readFileSync(languagePreferencePath(env), 'utf8'))
+    return SUPPORTED_LANGUAGES.includes(value.language) ? value.language : null
+  } catch {
+    return null
+  }
+}
+
+export function setLanguagePreference(language, env = process.env) {
+  const path = languagePreferencePath(env)
+  mkdirSync(dirname(path), { recursive: true })
+  writeFileSync(path, `${JSON.stringify({ language }, null, 2)}\n`)
+  return { path, language }
+}
+
 export function detectLanguage(env = process.env) {
+  const preference = readLanguagePreference(env)
+  if (preference) return preference
   const locale = [env.LC_ALL, env.LC_MESSAGES, env.LANG]
     .find((value) => typeof value === 'string' && value.trim()) || ''
   return locale.toLowerCase().startsWith('es') ? 'es' : 'en'
@@ -78,7 +103,15 @@ ${spanish ? 'Trabajar dentro del límite activo o proponer una transición expl�
 export function createActiveWork({ target, objective, mode, language = 'en' }) {
   const path = activeWorkPath(target)
   if (existsSync(path)) {
-    return { created: false, path, reason: 'ACTIVE_WORK_EXISTS' }
+    const current = parseActiveWork(readFileSync(path, 'utf8'))
+    if (current?.status !== 'closed') return { created: false, path, reason: 'ACTIVE_WORK_EXISTS' }
+    const history = join(resolve(target), '.riscala', 'history')
+    const stamp = new Date().toISOString().replaceAll(':', '-').replaceAll('.', '-')
+    const archivedPath = join(history, `ACTIVE_WORK-${stamp}.md`)
+    mkdirSync(history, { recursive: true })
+    renameSync(path, archivedPath)
+    writeFileSync(path, renderActiveWork({ target, objective, mode, language }))
+    return { created: true, path, archivedPath, reason: 'ACTIVE_WORK_RESTARTED' }
   }
   mkdirSync(join(resolve(target), '.riscala'), { recursive: true })
   writeFileSync(path, renderActiveWork({ target, objective, mode, language }))
