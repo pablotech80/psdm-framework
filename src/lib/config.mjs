@@ -412,15 +412,6 @@ export function validateApprovalPolicy(rawApproval) {
       message: 'approval.requiredLevels must contain only Level 0 through Level 4.',
       priority: 'High',
     })
-  } else if (
-    Array.isArray(rawApproval.requiredLevels)
-    && (!rawApproval.requiredLevels.includes('Level 3')
-      || !rawApproval.requiredLevels.includes('Level 4'))
-  ) {
-    issues.push({
-      message: 'approval.requiredLevels must include Level 3 and Level 4.',
-      priority: 'High',
-    })
   }
 
   if (

@@ -10,6 +10,7 @@ import {
   canonicalReceiptPayload,
   publicKeyFingerprint,
 } from '../src/lib/approval-receipt.mjs'
+import { validateApprovalPolicy } from '../src/lib/config.mjs'
 import {
   buildShellContext,
   renderShellBanner,
@@ -960,7 +961,7 @@ function testInvalidApprovalPolicyFailsClosed() {
   writeFileSync(resolve(target, 'psdm.config.json'), `${JSON.stringify({
     version: 1,
     approval: {
-      requiredLevels: ['Level 1'],
+      requiredLevels: ['Level 5'],
       maxReceiptAgeSeconds: 10,
       trustedApprovers: [{}],
     },
@@ -981,13 +982,38 @@ function testInvalidApprovalPolicyFailsClosed() {
 
   assert.ok(validation.results.some((item) => (
     item.artifact === 'psdm.config.json'
-    && item.message === 'approval.requiredLevels must include Level 3 and Level 4.'
+    && item.message === 'approval.requiredLevels must contain only Level 0 through Level 4.'
   )))
   assert.ok(validation.results.some((item) => item.message.includes('maxReceiptAgeSeconds')))
   assert.ok(validation.results.some((item) => item.message.includes('publicKeyFingerprint')))
   assert.equal(record.decision, 'APPROVAL_POLICY_INVALID')
   assert.equal(record.ready, false)
   assert.ok(record.approval.policyIssues.length > 0)
+}
+
+function testApprovalPolicyMayDisableSignedLevelRequirements() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-approval-disabled-'))
+  writeFileSync(resolve(target, 'psdm.config.json'), `${JSON.stringify({
+    version: 1,
+    approval: {
+      requiredLevels: [],
+      requiredActions: [],
+      trustedApprovers: [],
+    },
+  })}\n`)
+  writeFileSync(resolve(target, 'AGENTS.md'), '# High-risk policy change\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', 'AGENTS.md'])
+
+  const record = runJson(['action', 'prepare', 'git.commit', '--target', target, '--json'])
+
+  assert.deepEqual(validateApprovalPolicy({
+    requiredLevels: [],
+    requiredActions: [],
+    trustedApprovers: [],
+  }), [])
+  assert.equal(record.approval.required, false)
+  assert.equal(record.decision, 'ACTION_RECORD_READY')
 }
 
 function testAuditExistingProject() {
@@ -1759,6 +1785,7 @@ const tests = [
   testHookInstallerRespectsConfiguredHooksPath,
   testActionRecordFailsClosedWithoutTrustedApprover,
   testInvalidApprovalPolicyFailsClosed,
+  testApprovalPolicyMayDisableSignedLevelRequirements,
   testAuditExistingProject,
   testAuditDetectsExistingAiGovernance,
   testAuditDetectsAiRuntimeSurfaces,
