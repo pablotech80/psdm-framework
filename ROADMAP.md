@@ -41,6 +41,7 @@ Completed:
 - Validated Codex continuity in two context-free sessions: it recovered Active Work, stopped a repository/deployment expansion, and proceeded with same-boundary inspection without transition noise.
 - Applied the global language preference to external `work init` so fresh agent context is created in the developer's selected language.
 - Made existing `AGENTS.md` adoption self-consistent: init now preserves prior instructions, integrates only missing PSDM sections, previews the integration, and validates without mandatory-section failures.
+- Added safe project cleanup through navigable `/uninstall preview|confirm`, with an explicit repository-mutation warning, managed-block removal, exact-template deletion, and preservation of user-modified files.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

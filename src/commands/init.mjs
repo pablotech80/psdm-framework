@@ -8,6 +8,7 @@ import { resolveTarget, templateDir } from '../lib/paths.mjs'
 import { detectLanguage } from '../lib/active-work.mjs'
 
 const PSDM_AGENTS_MARKER = '<!-- riscala-psdm-governance -->'
+const PSDM_AGENTS_END_MARKER = '<!-- /riscala-psdm-governance -->'
 
 function missingAgentsSections(content) {
   return ['# AGENTS.md', 'Required Reading', 'Boundaries', 'Escalation']
@@ -37,7 +38,7 @@ ${spanish ? 'Antes de modificar, lee' : 'Before modifying, read'} \`.riscala/ACT
 
 ${spanish ? 'Detente y pide una decisión cuando cambien el repositorio, el objetivo o el modo; cuando falte una decisión material; o cuando exista riesgo de seguridad, datos, despliegue o producción.' : 'Stop and request a decision when repository, objective, or mode changes; when a material decision is missing; or when security, data, deployment, or production risk is unclear.'}`)
   }
-  return `${sections.join('\n\n')}\n`
+  return `${sections.join('\n\n')}\n\n${PSDM_AGENTS_END_MARKER}\n`
 }
 
 function integrateExistingAgents(path, language) {

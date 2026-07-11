@@ -1,4 +1,4 @@
-import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { appendFileSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 
 export const ADAPTER_TOOLS = ['codex', 'claude', 'cursor', 'windsurf', 'opencode', 'antigravity']
@@ -76,4 +76,38 @@ export function installAgentAdapters(target, tools = ADAPTER_TOOLS) {
     results.push({ tools: [tool], path: relativePath, status: 'created' })
   }
   return results
+}
+
+export function removeAgentAdapters(target) {
+  const removed = []
+  const preserved = []
+  for (const [relativePath, expected] of Object.values(TARGETS)) {
+    const path = join(target, relativePath)
+    if (!existsSync(path)) continue
+    const content = readFileSync(path, 'utf8')
+    if (content === expected) {
+      rmSync(path)
+      removed.push(relativePath)
+    } else if (content.includes(SHARED_MARKER)) {
+      const next = content.replace(SHARED_BLOCK, '').replace(`${SHARED_MARKER}\n\n${CONTRACT}`, '').trimEnd()
+      if (next) writeFileSync(path, `${next}\n`)
+      else rmSync(path)
+      removed.push(`${relativePath} (Riscala block)`)
+    } else preserved.push(relativePath)
+  }
+  for (const relativePath of ['AGENTS.md']) {
+    const path = join(target, relativePath)
+    if (!existsSync(path)) continue
+    const content = readFileSync(path, 'utf8')
+    if (!content.includes(SHARED_MARKER)) continue
+    const next = content.replace(SHARED_BLOCK, '').replace(`${SHARED_MARKER}\n\n${CONTRACT}`, '').trimEnd()
+    if (next) writeFileSync(path, `${next}\n`)
+    else rmSync(path)
+    removed.push(`${relativePath} (adapter block)`)
+  }
+  for (const relativePath of ['.cursor/rules', '.cursor', '.windsurf/rules', '.windsurf', '.agents/rules', '.agents']) {
+    const path = join(target, relativePath)
+    if (existsSync(path) && readdirSync(path).length === 0) rmSync(path, { recursive: true })
+  }
+  return { removed, preserved }
 }

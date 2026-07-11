@@ -217,6 +217,8 @@ The dependency-free shell is an operational governance console. It manages Activ
 /language es|en
 /init preview
 /init confirm
+/uninstall preview
+/uninstall confirm
 /status
 /audit
 /check
@@ -233,6 +235,8 @@ The dependency-free shell is an operational governance console. It manages Activ
 ```
 
 When `AGENTS.md` already exists, `/init confirm` preserves its content and appends only missing PSDM Required Reading, Boundaries, and Escalation sections. Repeating initialization does not duplicate the integration block.
+
+`/uninstall preview` lists the Riscala state, untouched templates, configuration, and adapter blocks that can be removed from the current project. `/uninstall confirm` modifies the repository: it removes recognized Riscala-managed files and blocks while preserving user-modified documents. It does not delete application code or uninstall the global npm package.
 
 The first screen restores `.riscala/ACTIVE_WORK.md`. If none exists, `/work <objective>` creates it with `implement` mode by default. `/work transition` records a proposed boundary without applying it; `/work continue` accepts it explicitly; `/work close` ends the work. Timestamped history remains in the file. Source code is changed by Codex, Claude, Cursor, or your preferred coding agent.
 

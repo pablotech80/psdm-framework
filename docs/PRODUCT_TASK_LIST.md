@@ -33,6 +33,7 @@ The CLI is for setup, inspection, recovery, and automation. It is not the main d
 - [x] Order help and command menus alphabetically and support arrow navigation inside submenus.
 - [x] Expose project initialization through a navigable `/init` submenu with preview and explicit confirmation.
 - [x] Preserve existing agent instructions while automatically integrating the PSDM sections required by validation.
+- [x] Provide a reversible project uninstall flow that previews destructive changes and preserves user-owned content.
 
 Acceptance:
 
