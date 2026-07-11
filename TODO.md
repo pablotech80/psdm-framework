@@ -12,7 +12,10 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Execute `docs/PRODUCT_TASK_LIST.md` in priority order, continuing with the Active Work lifecycle and agent adapters.
+- [ ] Stabilize beta.6: freeze product functionality, consolidate user documentation, publish the documentation site, and correct stale beta references.
+- [ ] Audit every existing document as user guide, reference, maintainer documentation, evidence, or archive.
+- [ ] Keep optional LLM interpretation, Gemma/Ollama consultancy, provider work, and broader product increments in post-beta planning.
+- [ ] Resume remaining `docs/PRODUCT_TASK_LIST.md` items only after beta.6 stabilization.
 - [x] Complete and validate the P0 shell visibility and actionable-error increment.
 - [x] Make Active Work the shell entry point with `/work`, restoration in `/status`, and non-overwrite protection.
 - [x] Add Spanish/English shell onboarding with locale detection, `/language`, and Active Work persistence.
