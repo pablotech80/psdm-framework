@@ -20,7 +20,7 @@
 
 Riscala is a local, dependency-free governance layer for developers building software with AI. Beta.6 is being redesigned to preserve the active repository, objective, work mode, allowed scope, prohibitions, and stop conditions across chats and agents. The governing rule is that a new request does not automatically expand prior authority.
 
-**Documentation:** start with the dependency-free Spanish guide at [`docs/index.html`](docs/index.html), then use the Markdown reference for deeper governance contracts.
+**Documentation:** start with the dependency-free web guide at [`docs/index.html`](docs/index.html), then use the Markdown reference for deeper governance contracts.
 
 Riscala does not replace your coding agent, tell it how to program, choose product direction, or approve its own work. Coding agents can reason about implementation; the beta.6 target is to check their proposed actions against the boundary you defined and require an explicit transition when repository, objective, mode, or authority changes.
 
