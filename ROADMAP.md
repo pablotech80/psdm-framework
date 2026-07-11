@@ -31,6 +31,7 @@ Completed:
 - Made Active Work the first shell context: missing work points to `/work`, existing boundaries restore objective, mode, allowed, forbidden, and next action, and repeated setup preserves the original boundary.
 - Added Spanish/English Active Work onboarding with system-locale detection, persisted language selection, translated primary shell context, and unchanged English JSON/Markdown structure.
 - Replaced the read-only shell framing with an operational governance console: Active Work can now propose a transition, accept it with continue, close explicitly, and retain timestamped lifecycle history.
+- Added a universal Active Work adapter contract and non-overwriting native installation for Codex, Claude Code, Cursor, Windsurf, OpenCode, and Antigravity.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

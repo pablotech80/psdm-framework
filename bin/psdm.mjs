@@ -17,6 +17,7 @@ import { hookCommand } from '../src/commands/hook.mjs'
 import { impactCommand } from '../src/commands/impact.mjs'
 import { reviewCommand } from '../src/commands/review.mjs'
 import { workCommand } from '../src/commands/work.mjs'
+import { adaptersCommand } from '../src/commands/adapters.mjs'
 import {
   COMPATIBILITY_EXECUTABLE,
   PRIMARY_EXECUTABLE,
@@ -43,6 +44,7 @@ const commands = {
   impact: impactCommand,
   review: reviewCommand,
   work: workCommand,
+  adapters: adaptersCommand,
 }
 
 function printHelp() {
@@ -61,6 +63,7 @@ Start here:
 Usage:
   ${PRIMARY_EXECUTABLE} work init "<objective>" [--mode inspect|experiment|design|implement|release] [--target path] [--json]
   ${PRIMARY_EXECUTABLE} work show [--target path] [--json]
+  ${PRIMARY_EXECUTABLE} adapters init [codex,claude,cursor,windsurf,opencode,antigravity] [--target path] [--json]
   ${PRIMARY_EXECUTABLE} impact "<change intent>" [--guidance learn|balanced|concise] [--file path] [--files path,path] [--target path] [--config path] [--json]
   ${PRIMARY_EXECUTABLE} review "<change intent>" --staged [--guidance learn|balanced|concise] [--file expected-path] [--files expected-paths] [--target path] [--config path] [--json]
   ${PRIMARY_EXECUTABLE} audit [target] [--json] [--feature name] [--config path]
@@ -84,6 +87,7 @@ Compatibility:
 
 Judgment loop:
   work       Preserve the active repository, objective, mode, and boundaries across chats.
+  adapters   Connect supported coding agents to the same Active Work boundary.
   impact     Build a repository-grounded technical Judgment Brief before implementation.
   review     Compare accepted intent and expected scope with staged Git evidence.
 
