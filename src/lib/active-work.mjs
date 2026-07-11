@@ -39,7 +39,7 @@ export function activeWorkPath(target) {
   return join(resolve(target), '.riscala', 'ACTIVE_WORK.md')
 }
 
-function renderActiveWork({ target, objective, mode, language }) {
+function renderActiveWork({ target, objective, mode, language, allowedPaths = [] }) {
   const spanish = language === 'es'
   return `# Active Work
 
@@ -51,6 +51,10 @@ Language: \`${language}\`
 - Repository: \`${resolve(target)}\`
 - Objective: ${objective}
 - Mode: \`${mode}\`
+
+## Allowed Paths
+
+${allowedPaths.length ? allowedPaths.map((path) => `- \`${path}\``).join('\n') : `- ${spanish ? 'No declaradas; se permite todo el repositorio.' : 'Not declared; the whole repository is allowed.'}`}
 
 ## Allowed
 
@@ -100,7 +104,7 @@ ${spanish ? 'Trabajar dentro del límite activo o proponer una transición expl�
 `
 }
 
-export function createActiveWork({ target, objective, mode, language = 'en' }) {
+export function createActiveWork({ target, objective, mode, language = 'en', allowedPaths = [] }) {
   const path = activeWorkPath(target)
   if (existsSync(path)) {
     const current = parseActiveWork(readFileSync(path, 'utf8'))
@@ -110,11 +114,11 @@ export function createActiveWork({ target, objective, mode, language = 'en' }) {
     const archivedPath = join(history, `ACTIVE_WORK-${stamp}.md`)
     mkdirSync(history, { recursive: true })
     renameSync(path, archivedPath)
-    writeFileSync(path, renderActiveWork({ target, objective, mode, language }))
+    writeFileSync(path, renderActiveWork({ target, objective, mode, language, allowedPaths }))
     return { created: true, path, archivedPath, reason: 'ACTIVE_WORK_RESTARTED' }
   }
   mkdirSync(join(resolve(target), '.riscala'), { recursive: true })
-  writeFileSync(path, renderActiveWork({ target, objective, mode, language }))
+  writeFileSync(path, renderActiveWork({ target, objective, mode, language, allowedPaths }))
   return { created: true, path, reason: 'ACTIVE_WORK_CREATED' }
 }
 
@@ -149,13 +153,14 @@ export function closeActiveWork(target) {
   return { updated: true, reason: 'ACTIVE_WORK_CLOSED', path: state.path }
 }
 
-export function proposeActiveWorkTransition({ target, objective, mode }) {
+export function proposeActiveWorkTransition({ target, objective, mode, allowedPaths = null }) {
   const state = readActiveWork(target)
   if (!state.exists) return { updated: false, reason: 'ACTIVE_WORK_NOT_FOUND', path: state.path }
   const work = parseActiveWork(state.content)
   if (work?.status === 'closed') return { updated: false, reason: 'ACTIVE_WORK_CLOSED', path: state.path }
   const withoutProposal = state.content.replace(/\n## Proposed Transition\n[\s\S]*?(?=\n## Lifecycle History|$)/, '')
-  const proposal = `\n## Proposed Transition\n\n- Objective: ${objective}\n- Mode: \`${mode}\`\n- Decision: \`pending\`\n`
+  const proposedPaths = allowedPaths === null ? work.allowedPaths : allowedPaths
+  const proposal = `\n## Proposed Transition\n\n- Objective: ${objective}\n- Mode: \`${mode}\`\n- Allowed Paths: ${proposedPaths.length ? proposedPaths.map((path) => `\`${path}\``).join(', ') : 'all'}\n- Decision: \`pending\`\n`
   const content = withoutProposal.replace(/^Status: `[^`]+`$/m, 'Status: `transition_proposed`')
   writeActiveWork(state.path, `${content.trimEnd()}${proposal}${historyEntry('transition_proposed', [`from=${work?.mode || 'unknown'}`, `to=${mode}`])}`)
   return { updated: true, reason: 'ACTIVE_WORK_TRANSITION_PROPOSED', path: state.path }
@@ -169,16 +174,18 @@ export function continueActiveWork(target) {
   if (work?.status !== 'transition_proposed') {
     return { updated: false, reason: 'ACTIVE_WORK_ALREADY_ACTIVE', path: state.path }
   }
-  const proposal = state.content.match(/## Proposed Transition\n\n- Objective: ([^\n]+)\n- Mode: `([^`]+)`/)
+  const proposal = state.content.match(/## Proposed Transition\n\n- Objective: ([^\n]+)\n- Mode: `([^`]+)`(?:\n- Allowed Paths: ([^\n]+))?/)
   if (!proposal) return { updated: false, reason: 'ACTIVE_WORK_TRANSITION_INVALID', path: state.path }
-  const [, objective, mode] = proposal
+  const [, objective, mode, pathList] = proposal
+  const allowedPaths = !pathList ? work.allowedPaths : pathList === 'all' ? [] : [...pathList.matchAll(/`([^`]+)`/g)].map((match) => match[1])
   const content = state.content
     .replace(/^Status: `[^`]+`$/m, 'Status: `active`')
     .replace(/^- Objective: [^\n]+$/m, `- Objective: ${objective}`)
     .replace(/^- Mode: `[^`]+`$/m, `- Mode: \`${mode}\``)
+    .replace(/## Allowed Paths\n\n(?:- [^\n]+\n?)+/, `## Allowed Paths\n\n${allowedPaths.length ? allowedPaths.map((path) => `- \`${path}\``).join('\n') : '- Not declared; the whole repository is allowed.'}\n`)
     .replace(/\n## Proposed Transition\n[\s\S]*?(?=\n## Lifecycle History|$)/, '')
   writeActiveWork(state.path, `${content.trimEnd()}${historyEntry('transition_accepted', [`from=${work.mode}`, `to=${mode}`])}`)
-  return { updated: true, reason: 'ACTIVE_WORK_TRANSITION_ACCEPTED', path: state.path, objective, mode }
+  return { updated: true, reason: 'ACTIVE_WORK_TRANSITION_ACCEPTED', path: state.path, objective, mode, allowedPaths }
 }
 
 export function readActiveWork(target) {
@@ -209,6 +216,8 @@ export function parseActiveWork(content) {
   }
   const nextAction = content.match(/## Next Permitted Action\n\n([^\n]+)/)?.[1]?.trim() || null
   const proposal = content.match(/## Proposed Transition\n\n- Objective: ([^\n]+)\n- Mode: `([^`]+)`/)
+  const allowedSection = content.match(/## Allowed Paths\n\n([\s\S]*?)(?=\n## )/)?.[1] || ''
+  const allowedPaths = [...allowedSection.matchAll(/^- `([^`]+)`$/gm)].map((match) => match[1])
 
   return {
     status: content.match(/Status: `([^`]+)`/)?.[1]?.trim() || null,
@@ -216,6 +225,7 @@ export function parseActiveWork(content) {
     repository: value('Repository'),
     objective: value('Objective'),
     mode: value('Mode'),
+    allowedPaths,
     allowed: sectionBullet(content, 'Allowed'),
     forbidden: sectionBullet(content, 'Forbidden'),
     nextAction,

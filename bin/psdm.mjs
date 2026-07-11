@@ -61,7 +61,7 @@ Start here:
   ${PRIMARY_EXECUTABLE} review "<change intent>" --staged --files <expected-files>
 
 Usage:
-  ${PRIMARY_EXECUTABLE} work init "<objective>" [--mode inspect|experiment|design|implement|release] [--target path] [--json]
+  ${PRIMARY_EXECUTABLE} work init "<objective>" [--mode inspect|experiment|design|implement|release] [--files path,path] [--target path] [--json]
   ${PRIMARY_EXECUTABLE} work show [--target path] [--json]
   ${PRIMARY_EXECUTABLE} adapters init [codex,claude,cursor,windsurf,opencode,antigravity] [--target path] [--json]
   ${PRIMARY_EXECUTABLE} impact "<change intent>" [--guidance learn|balanced|concise] [--file path] [--files path,path] [--target path] [--config path] [--json]

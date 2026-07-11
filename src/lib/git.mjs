@@ -23,7 +23,7 @@ export function inspectGit(targetDir) {
   }
 
   const branch = git(targetDir, ['branch', '--show-current']) || null
-  const changes = git(targetDir, ['status', '--porcelain'], { raw: true })
+  const changes = git(targetDir, ['status', '--porcelain', '--untracked-files=all'], { raw: true })
     .split('\n')
     .map((line) => line.trimEnd())
     .filter(Boolean)

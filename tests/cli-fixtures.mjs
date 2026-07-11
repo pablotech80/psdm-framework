@@ -16,6 +16,7 @@ import {
   executeShellCommand,
   renderShellBanner,
   renderShellPrompt,
+  renderShellStatus,
 } from '../src/lib/shell.mjs'
 import {
   PTECH_CYAN,
@@ -139,6 +140,44 @@ function testWorkInitUsesGlobalLanguagePreference() {
   assert.equal(created.created, true)
   assert.match(content, /Language: `es`/)
   assert.match(content, /Trabajar dentro de este repositorio/)
+}
+
+function testActiveWorkAllowedPathsControlNestedRepositoryScope() {
+  const root = mkdtempSync(resolve(tmpdir(), 'riscala-scope-root-'))
+  const target = resolve(root, 'app')
+  const configHome = mkdtempSync(resolve(tmpdir(), 'riscala-scope-config-'))
+  writeFileSync(resolve(configHome, 'settings.json'), '{"language":"es"}\n')
+  mkdirSync(resolve(target, 'src'), { recursive: true })
+  mkdirSync(resolve(target, 'tests'), { recursive: true })
+  git(root, ['init', '--quiet'])
+  writeFileSync(resolve(target, 'src', 'lead.py'), 'lead = True\n')
+  writeFileSync(resolve(target, 'tests', 'test_lead.py'), 'def test_lead(): assert True\n')
+  git(root, ['add', '.'])
+  git(root, ['-c', 'user.name=Riscala', '-c', 'user.email=riscala@example.invalid', 'commit', '--quiet', '-m', 'baseline'])
+
+  const created = runJson([
+    'work', 'init', 'Validar leads', '--mode', 'implement',
+    '--files', 'src/**,tests/**', '--target', target, '--json',
+  ], { configHome })
+  assert.deepEqual(created.allowedPaths, ['src/**', 'tests/**'])
+  writeFileSync(resolve(target, 'src', 'lead.py'), 'lead = False\n')
+  let context = buildShellContext({ target, language: 'es' })
+  assert.equal(context.scope.decision, 'SCOPE_ALIGNED')
+  assert.deepEqual(context.scope.allowedPatterns, ['app/src/**', 'app/tests/**'])
+
+  writeFileSync(resolve(target, 'README.md'), '# Fuera del alcance\n')
+  context = buildShellContext({ target, language: 'es' })
+  assert.equal(context.scope.decision, 'SCOPE_REVIEW_REQUIRED')
+  assert.deepEqual(context.scope.violations, ['app/README.md'])
+  const status = renderShellStatus(context)
+  assert.match(status, /Alcance\s+REVISAR ALCANCE/)
+  assert.match(status, /Fuera\s+app\/README\.md/)
+
+  const activePath = resolve(target, '.riscala', 'ACTIVE_WORK.md')
+  const active = readFileSync(activePath, 'utf8').replace(target, resolve(root, 'otro'))
+  writeFileSync(activePath, active)
+  context = buildShellContext({ target, language: 'es' })
+  assert.equal(context.scope.decision, 'REPOSITORY_CONFLICT')
 }
 
 function testAgentAdaptersInstallNativeRulesWithoutOverwrite() {
@@ -2173,6 +2212,7 @@ const tests = [
   testRiscalaExecutableAliasContract,
   testActiveWorkCreatesReadsAndPreservesBoundary,
   testWorkInitUsesGlobalLanguagePreference,
+  testActiveWorkAllowedPathsControlNestedRepositoryScope,
   testAgentAdaptersInstallNativeRulesWithoutOverwrite,
   testImpactLowRiskWithoutInitStaysLightweight,
   testImpactAuthTeachesDecisionWithoutTakingAuthority,
