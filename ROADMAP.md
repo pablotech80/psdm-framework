@@ -29,6 +29,7 @@ Completed:
 - Converted observed beta.6 friction into a prioritized product task list centered on agent-native use, Spanish/English UX, Active Work, and deterministic control.
 - Started P0 shell usability: exact changed paths, actionable validation findings, review path guidance, and effective approval-policy display.
 - Made Active Work the first shell context: missing work points to `/work`, existing boundaries restore objective, mode, allowed, forbidden, and next action, and repeated setup preserves the original boundary.
+- Added Spanish/English Active Work onboarding with system-locale detection, persisted language selection, translated primary shell context, and unchanged English JSON/Markdown structure.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

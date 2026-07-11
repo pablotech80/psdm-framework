@@ -1,7 +1,15 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { basename, join, relative } from 'node:path'
 import { buildGitCommitActionRecord } from './action-record.mjs'
-import { createActiveWork, parseActiveWork, readActiveWork, WORK_MODES } from './active-work.mjs'
+import {
+  createActiveWork,
+  detectLanguage,
+  parseActiveWork,
+  readActiveWork,
+  setActiveWorkLanguage,
+  SUPPORTED_LANGUAGES,
+  WORK_MODES,
+} from './active-work.mjs'
 import { buildAudit } from './audit.mjs'
 import { classifyChange } from './classifier.mjs'
 import { loadConfig } from './config.mjs'
@@ -16,6 +24,43 @@ import { validateMethod } from '../validator/validate-method.mjs'
 
 const CARD_WIDTH = 68
 const ROW_LABEL_WIDTH = 10
+
+const SHELL_COPY = {
+  en: {
+    work: 'Work', next: 'Next', objective: 'Objective', allowed: 'Allowed', forbidden: 'Forbidden',
+    project: 'Project', branch: 'Branch', changes: 'Changes', files: 'Files', policy: 'Policy', refreshed: 'Refreshed',
+    notSet: 'NOT SET', unknownMode: 'unknown mode', notRecorded: 'Not recorded',
+    setup: '/work <objective>', clean: 'clean', untracked: 'untracked', staged: 'staged', unstaged: 'unstaged',
+    workExists: 'Active Work already exists. The current boundary was preserved.',
+    languageUpdated: 'Language changed to English.', languageNeedsWork: 'Create Active Work with /work before persisting a language.',
+    footer: 'sets the boundary', commands: 'commands',
+  },
+  es: {
+    work: 'Trabajo', next: 'Siguiente', objective: 'Objetivo', allowed: 'Permitido', forbidden: 'Prohibido',
+    project: 'Proyecto', branch: 'Rama', changes: 'Cambios', files: 'Archivos', policy: 'Política', refreshed: 'Actualizado',
+    notSet: 'SIN DEFINIR', unknownMode: 'modo desconocido', notRecorded: 'No registrado',
+    setup: '/work <objetivo>', clean: 'limpio', untracked: 'sin seguimiento', staged: 'preparado', unstaged: 'sin preparar',
+    workExists: 'Ya existe un trabajo activo. Se ha conservado el límite actual.',
+    languageUpdated: 'Idioma cambiado a español.', languageNeedsWork: 'Crea el trabajo activo con /work antes de guardar un idioma.',
+    footer: 'define el límite', commands: 'comandos',
+  },
+}
+
+function shellCopy(language) {
+  return SHELL_COPY[language] || SHELL_COPY.en
+}
+
+const BOUNDARY_TRANSLATIONS = [
+  ['Work inside this repository when it directly serves the objective.', 'Trabajar dentro de este repositorio cuando sirva directamente al objetivo.'],
+  ['Change another repository.', 'Cambiar otro repositorio.'],
+  ['Work inside the active boundary or propose an explicit transition.', 'Trabajar dentro del límite activo o proponer una transición explícita.'],
+]
+
+function localizeBoundary(value, language) {
+  const pair = BOUNDARY_TRANSLATIONS.find((items) => items.includes(value))
+  if (!pair) return value
+  return language === 'es' ? pair[1] : pair[0]
+}
 
 function projectName(target) {
   const manifestPath = `${target}/package.json`
@@ -67,13 +112,14 @@ function changesLabel(context) {
     return 'not a Git repository'
   }
 
+  const copy = shellCopy(context.language)
   const parts = [
-    context.changes.staged > 0 ? `${context.changes.staged} staged` : null,
-    context.changes.unstaged > 0 ? `${context.changes.unstaged} unstaged` : null,
-    context.changes.untracked > 0 ? `${context.changes.untracked} untracked` : null,
+    context.changes.staged > 0 ? `${context.changes.staged} ${copy.staged}` : null,
+    context.changes.unstaged > 0 ? `${context.changes.unstaged} ${copy.unstaged}` : null,
+    context.changes.untracked > 0 ? `${context.changes.untracked} ${copy.untracked}` : null,
   ].filter(Boolean)
 
-  return parts.length > 0 ? parts.join(' · ') : 'clean'
+  return parts.length > 0 ? parts.join(' · ') : copy.clean
 }
 
 function policyLabel(context) {
@@ -90,7 +136,7 @@ function changedFileRows(context, options = {}) {
   const rows = context.git.changes.slice(0, 5).flatMap((line, index) => {
     const status = line.slice(0, 2).trim() || '??'
     const path = line.slice(3).trim()
-    return cardRows(index === 0 ? 'Files' : '', `${status.padEnd(3)} ${path}`, options)
+    return cardRows(index === 0 ? shellCopy(context.language).files : '', `${status.padEnd(3)} ${path}`, options)
   })
   const hidden = context.git.changes.length - 5
   if (hidden > 0) rows.push(...cardRows('', `+${hidden} more changed file(s)`, options))
@@ -177,6 +223,7 @@ function renderPanel(title, rows, options = {}) {
 
 function renderStatusRows(context, options = {}) {
   const theme = terminalTheme(options.color)
+  const copy = shellCopy(context.language)
   const changesStyle = !context.git.isRepository
     ? theme.red
     : context.git.isDirty
@@ -184,11 +231,11 @@ function renderStatusRows(context, options = {}) {
       : theme.green
 
   return [
-    cardRow('Project', context.project, { ...options, valueStyle: theme.bold }),
-    cardRow('Branch', context.git.branch || (context.git.isRepository ? 'detached HEAD' : 'n/a'), options),
-    cardRow('Changes', changesLabel(context), { ...options, valueStyle: changesStyle }),
+    cardRow(copy.project, context.project, { ...options, valueStyle: theme.bold }),
+    cardRow(copy.branch, context.git.branch || (context.git.isRepository ? 'detached HEAD' : 'n/a'), options),
+    cardRow(copy.changes, changesLabel(context), { ...options, valueStyle: changesStyle }),
     ...changedFileRows(context, options),
-    cardRow('Policy', policyLabel(context), options),
+    cardRow(copy.policy, policyLabel(context), options),
   ]
 }
 
@@ -245,13 +292,16 @@ function buildCheckReport({ target, configPath = null }) {
   }
 }
 
-export function buildShellContext({ target, configPath = null }) {
+export function buildShellContext({ target, configPath = null, language = detectLanguage() }) {
   const git = inspectGit(target)
   const configState = loadConfig(target, configPath)
   const activeWorkState = readActiveWork(target)
 
   return {
     target,
+    language: activeWorkState.exists
+      ? (parseActiveWork(activeWorkState.content)?.language || language)
+      : language,
     project: projectName(target),
     git,
     changes: countChanges(git.changes),
@@ -270,37 +320,40 @@ export function buildShellContext({ target, configPath = null }) {
 function renderActiveWorkRows(context, options = {}) {
   const theme = terminalTheme(options.color)
   const work = context.activeWork.work
+  const copy = shellCopy(context.language)
 
   if (!context.activeWork.exists || !work) {
     return [
-      cardRow('Work', 'NOT SET', { ...options, valueStyle: theme.yellow }),
-      ...cardRows('Next', '/work <objective>', { ...options, valueStyle: theme.cyanLight }),
+      cardRow(copy.work, copy.notSet, { ...options, valueStyle: theme.yellow }),
+      ...cardRows(copy.next, copy.setup, { ...options, valueStyle: theme.cyanLight }),
     ]
   }
 
   return [
-    cardRow('Work', `${(work.status || 'active').toUpperCase()} · ${work.mode || 'unknown mode'}`, {
+    cardRow(copy.work, `${(work.status || 'active').toUpperCase()} · ${work.mode || copy.unknownMode}`, {
       ...options,
       valueStyle: theme.green,
     }),
-    ...cardRows('Objective', work.objective || 'Not recorded', options),
-    ...(work.allowed ? cardRows('Allowed', work.allowed, options) : []),
-    ...(work.forbidden ? cardRows('Forbidden', work.forbidden, { ...options, valueStyle: theme.yellow }) : []),
-    ...(work.nextAction ? cardRows('Next', work.nextAction, { ...options, valueStyle: theme.cyanLight }) : []),
+    ...cardRows(copy.objective, work.objective || copy.notRecorded, options),
+    ...(work.allowed ? cardRows(copy.allowed, localizeBoundary(work.allowed, context.language), options) : []),
+    ...(work.forbidden ? cardRows(copy.forbidden, localizeBoundary(work.forbidden, context.language), { ...options, valueStyle: theme.yellow }) : []),
+    ...(work.nextAction ? cardRows(copy.next, localizeBoundary(work.nextAction, context.language), { ...options, valueStyle: theme.cyanLight }) : []),
   ]
 }
 
 export function renderShellStatus(context, options = {}) {
+  const copy = shellCopy(context.language)
   return renderPanel('STATUS', [
     ...renderActiveWorkRows(context, options),
     panelRule('middle', '', options),
     ...renderStatusRows(context, options),
-    cardRow('Refreshed', `${new Date().toISOString().slice(11, 19)} UTC`, options),
+    cardRow(copy.refreshed, `${new Date().toISOString().slice(11, 19)} UTC`, options),
   ], options)
 }
 
 export function renderShellBanner(context, options = {}) {
   const theme = terminalTheme(options.color)
+  const copy = shellCopy(context.language)
   const title = '─ RISCALA '
   const top = `╭${title}${'─'.repeat(CARD_WIDTH - title.length)}╮`
 
@@ -310,7 +363,7 @@ export function renderShellBanner(context, options = {}) {
     panelRule('middle', '', options),
     ...renderStatusRows(context, options),
     panelRule('bottom', '', options),
-    `${theme.dim('Powered by PSDM')} · ${theme.cyan('/work')} ${theme.dim('sets the boundary')} · ${theme.cyan('/')} ${theme.dim('commands')}`,
+    `${theme.dim('Powered by PSDM')} · ${theme.cyan('/work')} ${theme.dim(copy.footer)} · ${theme.cyan('/')} ${theme.dim(copy.commands)}`,
   ].join('\n')
 }
 
@@ -321,9 +374,11 @@ export function renderShellPrompt(options = {}) {
 
 export function renderShellHelp(options = {}) {
   const theme = terminalTheme(options.color)
+  const spanish = options.language === 'es'
   const rows = [
-    cardRow('/help', 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/work', 'Create the active objective and mode.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/help', spanish ? 'Mostrar esta referencia de comandos.' : 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/work', spanish ? 'Crear el objetivo y modo activos.' : 'Create the active objective and mode.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/language', spanish ? 'Cambiar idioma: es o en.' : 'Change language: es or en.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/impact', 'Think through a change before coding.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/review', 'Compare intent with staged evidence.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/status', 'Refresh repository and policy context.', { ...options, valueStyle: theme.cyanLight }),
@@ -340,11 +395,15 @@ export function renderShellHelp(options = {}) {
     cardRow('/approval', 'Show approval receipt boundary.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/exit', 'Close the Riscala shell.', { ...options, valueStyle: theme.cyanLight }),
     panelRule('middle', '', options),
-    ...cardRows('Authority', 'Riscala advises. You decide direction, scope, trade-offs, and whether the evidence is sufficient.', {
+    ...cardRows(spanish ? 'Autoridad' : 'Authority', spanish
+      ? 'Riscala asesora. Tú decides la dirección, el alcance, las concesiones y si la evidencia es suficiente.'
+      : 'Riscala advises. You decide direction, scope, trade-offs, and whether the evidence is sufficient.', {
       ...options,
       valueStyle: theme.cyanLight,
     }),
-    ...cardRows('Safety', '/work only creates .riscala/ACTIVE_WORK.md. Code changes and other mutating commands remain blocked.', {
+    ...cardRows(spanish ? 'Seguridad' : 'Safety', spanish
+      ? '/work solo crea .riscala/ACTIVE_WORK.md. Los cambios de código y otros comandos de escritura siguen bloqueados.'
+      : '/work only creates .riscala/ACTIVE_WORK.md. Code changes and other mutating commands remain blocked.', {
       ...options,
       valueStyle: theme.yellow,
     }),
@@ -850,7 +909,7 @@ const MUTATING_COMMANDS = new Set([
   '/release',
 ])
 
-export function executeShellCommand(input, { target, configPath = null, color = false }) {
+export function executeShellCommand(input, { target, configPath = null, color = false, language = detectLanguage() }) {
   const trimmed = input.trim()
 
   if (!trimmed) {
@@ -859,6 +918,9 @@ export function executeShellCommand(input, { target, configPath = null, color = 
 
   const [command, ...parameters] = trimmed.split(/\s+/)
   const description = parameters.join(' ').trim()
+  const initialContext = buildShellContext({ target, configPath, language })
+  const activeLanguage = initialContext.language
+  const copy = shellCopy(activeLanguage)
 
   if (MUTATING_COMMANDS.has(command)) {
     return {
@@ -867,7 +929,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     }
   }
 
-  if (!['/work', '/impact', '/review', '/classify', '/pr-checklist'].includes(command) && parameters.length > 0) {
+  if (!['/work', '/language', '/impact', '/review', '/classify', '/pr-checklist'].includes(command) && parameters.length > 0) {
     return {
       output: `Usage error: ${command} does not accept arguments in this shell.`,
       exit: false,
@@ -875,7 +937,24 @@ export function executeShellCommand(input, { target, configPath = null, color = 
   }
 
   if (command === '/help') {
-    return { output: renderShellHelp({ color }), exit: false }
+    return { output: renderShellHelp({ color, language: activeLanguage }), exit: false }
+  }
+
+  if (command === '/language') {
+    const requested = parameters[0]
+    if (parameters.length !== 1 || !SUPPORTED_LANGUAGES.includes(requested)) {
+      return { output: renderUsage('/language', '/language es|en', { color }), exit: false }
+    }
+    const result = setActiveWorkLanguage(target, requested)
+    const requestedCopy = shellCopy(requested)
+    return {
+      output: renderPanel('LANGUAGE', cardRows(
+        requested === 'es' ? 'Idioma' : 'Language',
+        result.updated ? requestedCopy.languageUpdated : requestedCopy.languageNeedsWork,
+        { color, valueStyle: result.updated ? terminalTheme(color).green : terminalTheme(color).yellow },
+      ), { color }),
+      exit: false,
+    }
   }
 
   if (command === '/work') {
@@ -888,12 +967,12 @@ export function executeShellCommand(input, { target, configPath = null, color = 
       }
     }
 
-    const result = createActiveWork({ target, objective, mode: requestedMode })
-    const context = buildShellContext({ target, configPath })
+    const result = createActiveWork({ target, objective, mode: requestedMode, language: activeLanguage })
+    const context = buildShellContext({ target, configPath, language: activeLanguage })
     const rows = result.created
       ? renderActiveWorkRows(context, { color })
       : [
-          ...cardRows('State', 'Active Work already exists. The current boundary was preserved.', {
+          ...cardRows(activeLanguage === 'es' ? 'Estado' : 'State', copy.workExists, {
             color,
             valueStyle: terminalTheme(color).yellow,
           }),
@@ -928,7 +1007,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
 
   if (command === '/status') {
     return {
-      output: renderShellStatus(buildShellContext({ target, configPath }), { color }),
+      output: renderShellStatus(initialContext, { color }),
       exit: false,
     }
   }

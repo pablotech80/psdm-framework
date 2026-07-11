@@ -25,6 +25,7 @@ export function runInteractiveShellSession({
   target,
   configPath = null,
   color = false,
+  language = 'en',
   prompt,
 }) {
   emitKeypressEvents(input)
@@ -102,6 +103,7 @@ export function runInteractiveShellSession({
         target,
         configPath,
         color,
+        language,
       })
 
       if (result.output) {

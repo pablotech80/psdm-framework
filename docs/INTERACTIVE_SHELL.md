@@ -74,6 +74,7 @@ Typing `/` as the first prompt character opens the command palette immediately:
 ╭─ Commands ─────────────────────────────────────────────────────────╮
 │ ❯ /help      Show available commands and safety boundaries.        │
 │   /work      Create the active objective and working mode.         │
+│   /language  Change the shell language between es and en.          │
 │   /impact    Think through a change before implementation.         │
 │   /review    Compare intent with staged Git evidence.               │
 │   /status    Refresh repository and policy context.                │
@@ -123,6 +124,7 @@ Read-only commands share one result-panel grammar instead of emitting unrelated 
 |---|---|
 | `/help` | Show the available shell commands and safety boundary. |
 | `/work [mode] <objective>` | Create `.riscala/ACTIVE_WORK.md` once; default mode is `implement`, and an existing boundary is preserved. |
+| `/language es|en` | Persist Spanish or English presentation in the existing Active Work file. |
 | `/status` | Refresh repository, branch, working-tree, and policy context. |
 | `/audit` | Reuse the non-destructive audit engine and summarize governance adoption, artifacts, AI readiness, gaps, Git state, and the next recommendation. |
 | `/check` | Check whether required artifacts exist without validating their internal structure. |
@@ -138,6 +140,10 @@ Read-only commands share one result-panel grammar instead of emitting unrelated 
 | `/exit` | Close the session. `/quit` is also accepted. |
 
 Commands do not accept arbitrary shell fragments. `/work`, `/impact`, `/review`, `/classify`, and `/pr-checklist` accept bounded free-text descriptions.
+
+## Language
+
+The initial shell language is Spanish when `LC_ALL`, `LC_MESSAGES`, or `LANG` begins with `es`; all other locales fall back to English. Active Work persists the selected `es` or `en` value so later shell sessions restore it. `/language` changes presentation only: Markdown field names and JSON keys remain in English, and the repository boundary keeps the same meaning.
 
 Human-facing audit copy describes current state rather than internal init operations: artifacts are `present`, `missing`, or `empty`; adoption modes are expanded into actions; AI surfaces and readiness are reported separately; and recommendations use the `riscala` executable name. When gaps exist, `Focus` names the first two and summarizes the remainder. Product-name normalization applies only to executable commands; stable artifacts such as `psdm.config.json` keep their compatibility names. The underlying JSON audit contract remains unchanged.
 

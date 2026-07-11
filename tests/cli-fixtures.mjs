@@ -50,11 +50,12 @@ function runJson(args, options = {}) {
   return JSON.parse(run(args, options))
 }
 
-function runShell(args, input) {
+function runShell(args, input, options = {}) {
   return execFileSync(process.execPath, [cli, 'shell', ...args], {
     cwd: repoRoot,
     encoding: 'utf8',
     input,
+    env: { ...process.env, ...(options.env || {}) },
     stdio: ['pipe', 'pipe', 'pipe'],
   })
 }
@@ -624,6 +625,29 @@ function testShellUsesPtechCyanOnlyForInteractiveTerminals() {
   assert.equal(supportsTerminalColor({ isTTY: true }, { TERM: 'xterm', NO_COLOR: '' }), false)
 }
 
+function testShellDetectsSpanishAndPersistsLanguage() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-es-'))
+  git(target, ['init', '--quiet'])
+  const output = runShell(
+    [target],
+    '/help\n/work design Mejorar la experiencia sin perder el límite del repositorio\n/status\n/language en\n/status\n/exit\n',
+    { env: { LC_ALL: 'es_ES.UTF-8', LANG: 'es_ES.UTF-8' } },
+  )
+  const content = readFileSync(resolve(target, '.riscala', 'ACTIVE_WORK.md'), 'utf8')
+
+  assert.match(output, /Trabajo\s+SIN DEFINIR/)
+  assert.match(output, /Siguiente\s+\/work <objetivo>/)
+  assert.match(output, /Objetivo\s+Mejorar la experiencia sin perder el límite/)
+  assert.match(output, /Permitido\s+Trabajar dentro de este repositorio/)
+  assert.match(output, /Autoridad\s+Riscala asesora/)
+  assert.match(output, /Idioma cambiado a español|Language changed to English/)
+  assert.match(output, /Work\s+ACTIVE · design/)
+  assert.match(output, /Allowed\s+Work inside this repository/)
+  assert.match(content, /Language: `en`/)
+  assert.match(content, /Objetivo|Objective: Mejorar la experiencia/)
+  assert.doesNotMatch(output, /\u001b\[/)
+}
+
 function testShellMenuFiltersNavigatesAndPreservesLayout() {
   const allCommands = filterShellMenuCommands('/')
   const statusCommand = filterShellMenuCommands('/st')
@@ -634,6 +658,7 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
   assert.deepEqual(allCommands.map((item) => item.name), [
     '/help',
     '/work',
+    '/language',
     '/impact',
     '/review',
     '/status',
@@ -652,8 +677,8 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
   ])
   assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
   assert.deepEqual(filterShellMenuCommands('status'), [])
-  assert.equal(moveShellMenuSelection(0, 'previous', 17), 16)
-  assert.equal(moveShellMenuSelection(16, 'next', 17), 0)
+  assert.equal(moveShellMenuSelection(0, 'previous', 18), 17)
+  assert.equal(moveShellMenuSelection(17, 'next', 18), 0)
   assert.match(plainMenu, /Commands/)
   assert.match(plainMenu, /❯ \/work/)
   assert.equal(plainMenu.split('\n').every((line) => line.length === 70), true)
@@ -680,6 +705,7 @@ async function testInteractiveShellOpensSlashMenuAndNavigates() {
     env: { TERM: 'xterm-256color' },
   })
   input.write('/')
+  input.write('\u001b[B')
   input.write('\u001b[B')
   input.write('\u001b[B')
   input.write('\u001b[B')
@@ -1820,6 +1846,7 @@ const tests = [
   testDecisionReviewGuidanceChangesDensityNotAuthority,
   testReadOnlyShellRoutesCommandsAndReportsContext,
   testShellUsesPtechCyanOnlyForInteractiveTerminals,
+  testShellDetectsSpanishAndPersistsLanguage,
   testShellMenuFiltersNavigatesAndPreservesLayout,
   testInteractiveShellOpensSlashMenuAndNavigates,
   testActionRecordAndApprovalReceiptVerification,
