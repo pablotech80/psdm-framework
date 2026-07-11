@@ -36,6 +36,11 @@ function run(args, options = {}) {
       cwd: repoRoot,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'pipe'],
+      env: {
+        ...process.env,
+        RISCALA_CONFIG_HOME: options.configHome || mkdtempSync(resolve(tmpdir(), 'riscala-config-')),
+        ...(options.env || {}),
+      },
     })
   } catch (error) {
     if (options.allowFailure && typeof error.stdout === 'string') {
@@ -55,7 +60,11 @@ function runShell(args, input, options = {}) {
     cwd: repoRoot,
     encoding: 'utf8',
     input,
-    env: { ...process.env, ...(options.env || {}) },
+    env: {
+      ...process.env,
+      RISCALA_CONFIG_HOME: options.configHome || mkdtempSync(resolve(tmpdir(), 'riscala-config-')),
+      ...(options.env || {}),
+    },
     stdio: ['pipe', 'pipe', 'pipe'],
   })
 }
@@ -710,6 +719,43 @@ function testShellDetectsSpanishAndPersistsLanguage() {
   assert.doesNotMatch(output, /\u001b\[/)
 }
 
+function testLanguagePreferenceIsGlobalAcrossProjects() {
+  const configHome = mkdtempSync(resolve(tmpdir(), 'riscala-global-language-'))
+  const first = mkdtempSync(resolve(tmpdir(), 'riscala-language-first-'))
+  const second = mkdtempSync(resolve(tmpdir(), 'riscala-language-second-'))
+  git(first, ['init', '--quiet'])
+  git(second, ['init', '--quiet'])
+  run(['work', 'init', 'First objective', '--target', first], { configHome })
+  run(['work', 'init', 'Second objective', '--target', second], { configHome })
+
+  const changed = runShell([first], '/lenguaje es\n/help\n/exit\n', { configHome })
+  const output = runShell([second], '/status\n/exit\n', { configHome })
+
+  assert.match(changed, /╭─ COMANDOS /)
+  assert.match(changed, /\/status\s+Actualizar repositorio y política/)
+  assert.match(output, /Trabajo\s+ACTIVO · implementación/)
+  assert.match(output, /Objetivo\s+Second objective/)
+  assert.match(output, /Con tecnología PSDM/)
+  assert.doesNotMatch(output, /Work\s+ACTIVE/)
+}
+
+function testClosedWorkCanRestartAndArchivesPreviousBoundary() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-work-restart-'))
+  const configHome = mkdtempSync(resolve(tmpdir(), 'riscala-config-'))
+  git(target, ['init', '--quiet'])
+  runShell([target], '/work implement Objetivo anterior\n/work close\n/work implement Añadir validación nueva\n/status\n/exit\n', {
+    configHome,
+    env: { LANG: 'es_ES.UTF-8' },
+  })
+
+  const content = readFileSync(resolve(target, '.riscala', 'ACTIVE_WORK.md'), 'utf8')
+  const history = readdirSync(resolve(target, '.riscala', 'history'))
+  assert.match(content, /Status: `active`/)
+  assert.match(content, /Objective: Añadir validación nueva/)
+  assert.equal(history.length, 1)
+  assert.match(readFileSync(resolve(target, '.riscala', 'history', history[0]), 'utf8'), /Objective: Objetivo anterior/)
+}
+
 function testShellOperatesActiveWorkLifecycle() {
   const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-lifecycle-'))
   git(target, ['init', '--quiet'])
@@ -803,7 +849,7 @@ async function testInteractiveShellOpensSlashMenuAndNavigates() {
   const session = shellCommand([repoRoot], {
     input,
     output,
-    env: { TERM: 'xterm-256color' },
+    env: { TERM: 'xterm-256color', RISCALA_CONFIG_HOME: mkdtempSync(resolve(tmpdir(), 'riscala-config-')) },
   })
   input.write('/w')
   input.write('\u001b[C')
@@ -839,7 +885,7 @@ async function testInteractiveShellPreservesSpanishUnicodeInput() {
   const session = shellCommand([target], {
     input,
     output,
-    env: { TERM: 'xterm-256color', LANG: 'es_ES.UTF-8' },
+    env: { TERM: 'xterm-256color', LANG: 'es_ES.UTF-8', RISCALA_CONFIG_HOME: mkdtempSync(resolve(tmpdir(), 'riscala-config-')) },
   })
   input.write('/work implement Añadir validación del correo: ¿sí? ¡Sí!')
   input.write('\r')
@@ -1979,6 +2025,8 @@ const tests = [
   testReadOnlyShellRoutesCommandsAndReportsContext,
   testShellUsesPtechCyanOnlyForInteractiveTerminals,
   testShellDetectsSpanishAndPersistsLanguage,
+  testLanguagePreferenceIsGlobalAcrossProjects,
+  testClosedWorkCanRestartAndArchivesPreviousBoundary,
   testShellOperatesActiveWorkLifecycle,
   testShellMenuFiltersNavigatesAndPreservesLayout,
   testInteractiveShellOpensSlashMenuAndNavigates,

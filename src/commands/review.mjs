@@ -1,7 +1,7 @@
 import { parseArgs, printJson } from '../lib/args.mjs'
 import { buildDecisionReview, printDecisionReview } from '../lib/decision-review.mjs'
 import { resolveTarget } from '../lib/paths.mjs'
-import { parseActiveWork, readActiveWork, detectLanguage } from '../lib/active-work.mjs'
+import { parseActiveWork, readActiveWork, detectLanguage, readLanguagePreference } from '../lib/active-work.mjs'
 
 export async function reviewCommand(args) {
   const { options, positional } = parseArgs(args)
@@ -40,7 +40,7 @@ export async function reviewCommand(args) {
   if (options.json) printJson(report)
   else {
     const activeWork = readActiveWork(target)
-    const language = parseActiveWork(activeWork.content)?.language || detectLanguage()
+    const language = readLanguagePreference() || parseActiveWork(activeWork.content)?.language || detectLanguage()
     printDecisionReview(report, { language })
   }
 

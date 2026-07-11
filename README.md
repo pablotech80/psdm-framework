@@ -232,7 +232,7 @@ The dependency-free shell is an operational governance console. It manages Activ
 
 The first screen restores `.riscala/ACTIVE_WORK.md`. If none exists, `/work <objective>` creates it with `implement` mode by default. `/work transition` records a proposed boundary without applying it; `/work continue` accepts it explicitly; `/work close` ends the work. Timestamped history remains in the file. Source code is changed by Codex, Claude, Cursor, or your preferred coding agent.
 
-The shell starts in Spanish when the system locale begins with `es`; otherwise it uses English. `/language es|en` persists the presentation language in the existing Active Work file. Language changes labels and standard guidance, never policy meaning or JSON keys.
+The shell starts in Spanish when the system locale begins with `es`; otherwise it uses English. `/language es|en` or `/lenguaje es|en` stores a global Riscala preference, applies it immediately, and restores it across repositories. Language changes presentation, never policy meaning or JSON keys.
 
 Interactive terminals use Ptech cyan (`#00A8E8`) with a light accent (`#38BDF8`) for the Riscala frame and prompt. Color is automatically disabled for pipes, non-TTY output, `TERM=dumb`, and the `NO_COLOR` convention.
 

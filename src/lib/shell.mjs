@@ -9,7 +9,9 @@ import {
   parseActiveWork,
   proposeActiveWorkTransition,
   readActiveWork,
+  readLanguagePreference,
   setActiveWorkLanguage,
+  setLanguagePreference,
   SUPPORTED_LANGUAGES,
   WORK_MODES,
 } from './active-work.mjs'
@@ -63,12 +65,33 @@ const BOUNDARY_TRANSLATIONS = [
   ['Work inside this repository when it directly serves the objective.', 'Trabajar dentro de este repositorio cuando sirva directamente al objetivo.'],
   ['Change another repository.', 'Cambiar otro repositorio.'],
   ['Work inside the active boundary or propose an explicit transition.', 'Trabajar dentro del límite activo o proponer una transición explícita.'],
+  ['Create a new Active Work boundary before continuing.', 'Crear un nuevo límite de trabajo activo antes de continuar.'],
 ]
 
 function localizeBoundary(value, language) {
   const pair = BOUNDARY_TRANSLATIONS.find((items) => items.includes(value))
   if (!pair) return value
   return language === 'es' ? pair[1] : pair[0]
+}
+
+function localizeWorkState(value, language) {
+  if (language !== 'es') return value.toUpperCase()
+  return {
+    active: 'ACTIVO',
+    closed: 'CERRADO',
+    transition_proposed: 'TRANSICIÓN PROPUESTA',
+  }[value] || value.toUpperCase()
+}
+
+function localizeWorkMode(value, language) {
+  if (language !== 'es') return value
+  return {
+    inspect: 'inspección',
+    experiment: 'experimento',
+    design: 'diseño',
+    implement: 'implementación',
+    release: 'publicación',
+  }[value] || value
 }
 
 function projectName(target) {
@@ -309,16 +332,16 @@ function buildCheckReport({ target, configPath = null }) {
   }
 }
 
-export function buildShellContext({ target, configPath = null, language = detectLanguage() }) {
+export function buildShellContext({ target, configPath = null, language = detectLanguage(), env = process.env }) {
   const git = inspectGit(target)
   const configState = loadConfig(target, configPath)
   const activeWorkState = readActiveWork(target)
 
   return {
     target,
-    language: activeWorkState.exists
-      ? (parseActiveWork(activeWorkState.content)?.language || language)
-      : language,
+    language: readLanguagePreference(env)
+      || (activeWorkState.exists ? parseActiveWork(activeWorkState.content)?.language : null)
+      || language,
     project: projectName(target),
     git,
     changes: countChanges(git.changes),
@@ -347,7 +370,7 @@ function renderActiveWorkRows(context, options = {}) {
   }
 
   return [
-    cardRow(copy.work, `${(work.status || 'active').toUpperCase()} · ${work.mode || copy.unknownMode}`, {
+    cardRow(copy.work, `${localizeWorkState(work.status || 'active', context.language)} · ${localizeWorkMode(work.mode, context.language) || copy.unknownMode}`, {
       ...options,
       valueStyle: theme.green,
     }),
@@ -361,7 +384,7 @@ function renderActiveWorkRows(context, options = {}) {
 
 export function renderShellStatus(context, options = {}) {
   const copy = shellCopy(context.language)
-  return renderPanel('STATUS', [
+  return renderPanel(context.language === 'es' ? 'ESTADO' : 'STATUS', [
     ...renderActiveWorkRows(context, options),
     panelRule('middle', '', options),
     ...renderStatusRows(context, options),
@@ -393,25 +416,26 @@ export function renderShellPrompt(options = {}) {
 export function renderShellHelp(options = {}) {
   const theme = terminalTheme(options.color)
   const spanish = options.language === 'es'
+  const description = (english, spanishText) => spanish ? spanishText : english
   const rows = [
-    cardRow('/action', 'Prepare a git.commit action record.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/approval', 'Show approval receipt boundary.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/audit', 'Assess governance adoption and readiness.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/check', 'Check required artifacts exist.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/classify', 'Classify a described change.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/exit', 'Close the Riscala shell.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/action', description('Prepare a git.commit action record.', 'Preparar un registro para git.commit.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/approval', description('Show approval receipt boundary.', 'Mostrar el límite de aprobación.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/audit', description('Assess governance adoption and readiness.', 'Evaluar adopción y preparación.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/check', description('Check required artifacts exist.', 'Comprobar artefactos requeridos.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/classify', description('Classify a described change.', 'Clasificar un cambio descrito.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/exit', description('Close the Riscala shell.', 'Cerrar la consola de Riscala.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/help', spanish ? 'Mostrar esta referencia de comandos.' : 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/hook-status', 'Inspect managed pre-commit hook status.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/impact', 'Think through a change before coding.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/init-preview', 'Preview governance files without writing.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/inspect', 'Inspect staged changes and governance level.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/hook-status', description('Inspect managed pre-commit hook status.', 'Comprobar el hook pre-commit.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/impact', description('Think through a change before coding.', 'Evaluar un cambio antes de programar.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/init-preview', description('Preview governance files without writing.', 'Previsualizar archivos de gobierno.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/inspect', description('Inspect staged changes and governance level.', 'Inspeccionar cambios preparados.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/language', spanish ? 'Cambiar idioma: es o en.' : 'Change language: es or en.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/lenguaje', spanish ? 'Alias en español para cambiar el idioma.' : 'Spanish alias for changing language.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/pr-checklist', 'Build a PR checklist for a described change.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/report', 'Summarize compliance report readiness.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/review', 'Compare intent with staged evidence.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/status', 'Refresh repository and policy context.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/validate', 'Validate the governance baseline.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/pr-checklist', description('Build a PR checklist for a described change.', 'Preparar la lista de una PR.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/report', description('Summarize compliance report readiness.', 'Resumir el estado del informe.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/review', description('Compare intent with staged evidence.', 'Comparar objetivo y evidencia preparada.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/status', description('Refresh repository and policy context.', 'Actualizar repositorio y política.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/validate', description('Validate the governance baseline.', 'Validar la base de gobierno.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/work', spanish ? 'Crear, cambiar, continuar o cerrar trabajo.' : 'Create, transition, continue, or close work.', { ...options, valueStyle: theme.cyanLight }),
     panelRule('middle', '', options),
     ...cardRows(spanish ? 'Autoridad' : 'Authority', spanish
@@ -428,7 +452,7 @@ export function renderShellHelp(options = {}) {
     }),
   ]
 
-  return renderPanel('COMMANDS', rows, options)
+  return renderPanel(spanish ? 'COMANDOS' : 'COMMANDS', rows, options)
 }
 
 function renderJudgmentBrief(report, options = {}) {
@@ -928,7 +952,7 @@ const MUTATING_COMMANDS = new Set([
   '/release',
 ])
 
-export function executeShellCommand(input, { target, configPath = null, color = false, language = detectLanguage() }) {
+export function executeShellCommand(input, { target, configPath = null, color = false, language = detectLanguage(), env = process.env }) {
   const trimmed = input.trim()
 
   if (!trimmed) {
@@ -938,7 +962,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
   const [rawCommand, ...parameters] = trimmed.split(/\s+/)
   const command = rawCommand === '/lenguaje' ? '/language' : rawCommand
   const description = parameters.join(' ').trim()
-  const initialContext = buildShellContext({ target, configPath, language })
+  const initialContext = buildShellContext({ target, configPath, language, env })
   const activeLanguage = initialContext.language
   const copy = shellCopy(activeLanguage)
 
@@ -965,24 +989,27 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     if (parameters.length !== 1 || !SUPPORTED_LANGUAGES.includes(requested)) {
       return { output: renderUsage('/language', '/language es|en', { color }), exit: false }
     }
-    const result = setActiveWorkLanguage(target, requested)
+    setActiveWorkLanguage(target, requested)
+    setLanguagePreference(requested, env)
     const requestedCopy = shellCopy(requested)
     return {
-      output: renderPanel('LANGUAGE', cardRows(
+      output: renderPanel(requested === 'es' ? 'IDIOMA' : 'LANGUAGE', cardRows(
         requested === 'es' ? 'Idioma' : 'Language',
-        result.updated ? requestedCopy.languageUpdated : requestedCopy.languageNeedsWork,
-        { color, valueStyle: result.updated ? terminalTheme(color).green : terminalTheme(color).yellow },
+        requestedCopy.languageUpdated,
+        { color, valueStyle: terminalTheme(color).green },
       ), { color }),
+      language: requested,
       exit: false,
     }
   }
 
   if (command === '/work') {
+    const workTitle = activeLanguage === 'es' ? 'TRABAJO' : 'WORK'
     const operation = parameters[0]
     if (operation === 'close' && parameters.length === 1) {
       const result = closeActiveWork(target)
       const message = result.updated ? copy.closed : result.reason === 'ACTIVE_WORK_NOT_FOUND' ? copy.noWork : copy.closed
-      return { output: renderPanel('WORK', cardRows(activeLanguage === 'es' ? 'Estado' : 'State', message, { color }), { color }), exit: false }
+      return { output: renderPanel(workTitle, cardRows(activeLanguage === 'es' ? 'Estado' : 'State', message, { color }), { color }), exit: false }
     }
     if (operation === 'continue' && parameters.length === 1) {
       const result = continueActiveWork(target)
@@ -993,7 +1020,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
           : result.reason === 'ACTIVE_WORK_CLOSED'
             ? copy.closed
             : activeLanguage === 'es' ? 'El trabajo ya está activo.' : 'Work is already active.'
-      return { output: renderPanel('WORK', cardRows(activeLanguage === 'es' ? 'Estado' : 'State', message, { color }), { color }), exit: false }
+      return { output: renderPanel(workTitle, cardRows(activeLanguage === 'es' ? 'Estado' : 'State', message, { color }), { color }), exit: false }
     }
     if (operation === 'transition') {
       const requestedMode = parameters[1]
@@ -1003,7 +1030,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
       }
       const result = proposeActiveWorkTransition({ target, objective, mode: requestedMode })
       const message = result.updated ? copy.transition : result.reason === 'ACTIVE_WORK_NOT_FOUND' ? copy.noWork : copy.closed
-      return { output: renderPanel('WORK', cardRows(activeLanguage === 'es' ? 'Estado' : 'State', message, { color }), { color }), exit: false }
+      return { output: renderPanel(workTitle, cardRows(activeLanguage === 'es' ? 'Estado' : 'State', message, { color }), { color }), exit: false }
     }
     const requestedMode = WORK_MODES.includes(parameters[0]) ? parameters.shift() : 'implement'
     const objective = parameters.join(' ').trim()
@@ -1015,7 +1042,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     }
 
     const result = createActiveWork({ target, objective, mode: requestedMode, language: activeLanguage })
-    const context = buildShellContext({ target, configPath, language: activeLanguage })
+    const context = buildShellContext({ target, configPath, language: activeLanguage, env })
     const rows = result.created
       ? renderActiveWorkRows(context, { color })
       : [
@@ -1026,7 +1053,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
           panelRule('middle', '', { color }),
           ...renderActiveWorkRows(context, { color }),
         ]
-    return { output: renderPanel('WORK', rows, { color }), exit: false }
+    return { output: renderPanel(workTitle, rows, { color }), exit: false }
   }
 
   if (command === '/impact') {
