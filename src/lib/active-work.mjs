@@ -96,6 +96,58 @@ export function setActiveWorkLanguage(target, language) {
   return { updated: true, path: state.path, language }
 }
 
+function writeActiveWork(path, content) {
+  writeFileSync(path, content.endsWith('\n') ? content : `${content}\n`)
+}
+
+function historyEntry(action, details = []) {
+  return `\n## Lifecycle History\n\n- ${new Date().toISOString()} · ${action}${details.length ? ` · ${details.join(' · ')}` : ''}\n`
+}
+
+export function closeActiveWork(target) {
+  const state = readActiveWork(target)
+  if (!state.exists) return { updated: false, reason: 'ACTIVE_WORK_NOT_FOUND', path: state.path }
+  const work = parseActiveWork(state.content)
+  if (work?.status === 'closed') return { updated: false, reason: 'ACTIVE_WORK_ALREADY_CLOSED', path: state.path }
+  const content = state.content
+    .replace(/^Status: `[^`]+`$/m, 'Status: `closed`')
+    .replace(/## Next Permitted Action\n\n[^\n]+/, '## Next Permitted Action\n\nCreate a new Active Work boundary before continuing.')
+  writeActiveWork(state.path, `${content.trimEnd()}${historyEntry('closed', [`objective=${work?.objective || 'unknown'}`])}`)
+  return { updated: true, reason: 'ACTIVE_WORK_CLOSED', path: state.path }
+}
+
+export function proposeActiveWorkTransition({ target, objective, mode }) {
+  const state = readActiveWork(target)
+  if (!state.exists) return { updated: false, reason: 'ACTIVE_WORK_NOT_FOUND', path: state.path }
+  const work = parseActiveWork(state.content)
+  if (work?.status === 'closed') return { updated: false, reason: 'ACTIVE_WORK_CLOSED', path: state.path }
+  const withoutProposal = state.content.replace(/\n## Proposed Transition\n[\s\S]*?(?=\n## Lifecycle History|$)/, '')
+  const proposal = `\n## Proposed Transition\n\n- Objective: ${objective}\n- Mode: \`${mode}\`\n- Decision: \`pending\`\n`
+  const content = withoutProposal.replace(/^Status: `[^`]+`$/m, 'Status: `transition_proposed`')
+  writeActiveWork(state.path, `${content.trimEnd()}${proposal}${historyEntry('transition_proposed', [`from=${work?.mode || 'unknown'}`, `to=${mode}`])}`)
+  return { updated: true, reason: 'ACTIVE_WORK_TRANSITION_PROPOSED', path: state.path }
+}
+
+export function continueActiveWork(target) {
+  const state = readActiveWork(target)
+  if (!state.exists) return { updated: false, reason: 'ACTIVE_WORK_NOT_FOUND', path: state.path }
+  const work = parseActiveWork(state.content)
+  if (work?.status === 'closed') return { updated: false, reason: 'ACTIVE_WORK_CLOSED', path: state.path }
+  if (work?.status !== 'transition_proposed') {
+    return { updated: false, reason: 'ACTIVE_WORK_ALREADY_ACTIVE', path: state.path }
+  }
+  const proposal = state.content.match(/## Proposed Transition\n\n- Objective: ([^\n]+)\n- Mode: `([^`]+)`/)
+  if (!proposal) return { updated: false, reason: 'ACTIVE_WORK_TRANSITION_INVALID', path: state.path }
+  const [, objective, mode] = proposal
+  const content = state.content
+    .replace(/^Status: `[^`]+`$/m, 'Status: `active`')
+    .replace(/^- Objective: [^\n]+$/m, `- Objective: ${objective}`)
+    .replace(/^- Mode: `[^`]+`$/m, `- Mode: \`${mode}\``)
+    .replace(/\n## Proposed Transition\n[\s\S]*?(?=\n## Lifecycle History|$)/, '')
+  writeActiveWork(state.path, `${content.trimEnd()}${historyEntry('transition_accepted', [`from=${work.mode}`, `to=${mode}`])}`)
+  return { updated: true, reason: 'ACTIVE_WORK_TRANSITION_ACCEPTED', path: state.path, objective, mode }
+}
+
 export function readActiveWork(target) {
   const path = activeWorkPath(target)
   if (!existsSync(path)) {
@@ -123,6 +175,7 @@ export function parseActiveWork(content) {
     return (match?.[1] || match?.[2] || '').trim() || null
   }
   const nextAction = content.match(/## Next Permitted Action\n\n([^\n]+)/)?.[1]?.trim() || null
+  const proposal = content.match(/## Proposed Transition\n\n- Objective: ([^\n]+)\n- Mode: `([^`]+)`/)
 
   return {
     status: content.match(/Status: `([^`]+)`/)?.[1]?.trim() || null,
@@ -133,5 +186,7 @@ export function parseActiveWork(content) {
     allowed: sectionBullet(content, 'Allowed'),
     forbidden: sectionBullet(content, 'Forbidden'),
     nextAction,
+    proposedObjective: proposal?.[1]?.trim() || null,
+    proposedMode: proposal?.[2]?.trim() || null,
   }
 }

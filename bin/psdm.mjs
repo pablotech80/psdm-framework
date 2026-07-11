@@ -97,7 +97,7 @@ Project adoption (optional):
 Risk and delivery controls:
   adr        Create a new Architecture Decision Record under ADRs/.
   inspect    Inspect staged Git changes and explain their minimum governance level.
-  shell      Open the read-only judgment and governance shell.
+  shell      Open the operational Active Work governance shell.
   action     Build a content-bound record for a proposed action.
   approval   Verify a signed approval receipt against the live action.
   hook       Manage the Riscala pre-commit enforcement hook.

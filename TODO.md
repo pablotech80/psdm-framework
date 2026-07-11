@@ -16,6 +16,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Complete and validate the P0 shell visibility and actionable-error increment.
 - [x] Make Active Work the shell entry point with `/work`, restoration in `/status`, and non-overwrite protection.
 - [x] Add Spanish/English shell onboarding with locale detection, `/language`, and Active Work persistence.
+- [x] Make the shell operational with explicit Active Work transition, continue, close, and lifecycle history.
 
 - [x] Record the continuity experiment and its governance failure without modifying the laboratory repository.
 - [x] Reframe beta.6 around Continuity and Control instead of generic technical recommendations.

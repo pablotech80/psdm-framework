@@ -1,12 +1,12 @@
 # Riscala Interactive Shell
 
-Status: `Active Work and read-only governance console`
+Status: `Operational Active Work governance console`
 Product: `Riscala`
 Method: `PSDM`
 
 ## Purpose
 
-Provide a dependency-free terminal interface that restores the current Active Work boundary before showing repository governance context. The only setup mutation is creation of `.riscala/ACTIVE_WORK.md`; source-code and delivery mutations remain blocked.
+Provide a dependency-free terminal interface that creates, restores, transitions, continues, and closes the current Active Work boundary before showing repository governance context. Riscala governs the work; the developer's preferred coding agent changes source code.
 
 Start it inside any repository:
 
@@ -124,6 +124,9 @@ Read-only commands share one result-panel grammar instead of emitting unrelated 
 |---|---|
 | `/help` | Show the available shell commands and safety boundary. |
 | `/work [mode] <objective>` | Create `.riscala/ACTIVE_WORK.md` once; default mode is `implement`, and an existing boundary is preserved. |
+| `/work transition <mode> <objective>` | Record a proposed boundary without applying it. |
+| `/work continue` | Explicitly accept a pending transition and activate its boundary. |
+| `/work close` | Close the current work and require a new boundary before continuing. |
 | `/language es|en` | Persist Spanish or English presentation in the existing Active Work file. |
 | `/status` | Refresh repository, branch, working-tree, and policy context. |
 | `/audit` | Reuse the non-destructive audit engine and summarize governance adoption, artifacts, AI readiness, gaps, Git state, and the next recommendation. |
@@ -151,8 +154,8 @@ Human-facing audit copy describes current state rather than internal init operat
 
 The shell is an allowlist router, not a general terminal or agent runtime.
 
-The shell explicitly blocks `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, `/deploy`, `/init`, `/hook-install`, and `/hook-remove`. `/work` may create only `.riscala/ACTIVE_WORK.md` and refuses to overwrite it. `/audit` and `/init-preview` remain read-only and never delegate to `riscala init`; `/validate`, `/check`, `/report`, `/inspect`, `/classify`, `/pr-checklist`, `/hook-status`, `/action`, and `/approval` only read local state or calculate bounded governance evidence. The action-record and receipt-verification core now exists for `git.commit`, but mutating commands remain blocked until a trusted owner key is enrolled and independent hooks enforce the receipt.
+The shell explicitly blocks `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, `/deploy`, `/init`, `/hook-install`, and `/hook-remove`. The `/work` lifecycle may update only `.riscala/ACTIVE_WORK.md`, preserves transition history, and never silently replaces a boundary. `/audit` and `/init-preview` remain non-destructive and never delegate to `riscala init`; `/validate`, `/check`, `/report`, `/inspect`, `/classify`, `/pr-checklist`, `/hook-status`, `/action`, and `/approval` only read local state or calculate bounded governance evidence. Git delivery stays separate until its own enforced boundary is implemented.
 
 A confirmation phrase entered through an agent-controlled terminal is not sufficient human-presence evidence. The approval architecture remains defined in `docs/AGENT_DECISION_PROTOCOL.md`.
 
-The shell reads local project metadata and invokes Git only through existing fixed-argument inspection helpers. Apart from the explicit one-time Active Work context file, it does not execute user-provided shell commands, modify files, change the Git index, or emit a new JSON automation contract.
+The shell reads local project metadata and invokes Git only through existing fixed-argument inspection helpers. Apart from the explicit Active Work lifecycle, it does not execute user-provided shell commands, modify source files, change the Git index, or emit a new JSON automation contract.

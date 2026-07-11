@@ -562,7 +562,7 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.match(output, /╭─ ACTION /)
   assert.match(output, /╭─ APPROVAL /)
   assert.match(output, /\/status\s+Refresh repository/)
-  assert.match(output, /\/work\s+Create the active objective/)
+  assert.match(output, /\/work\s+Create, transition, continue/)
   assert.match(output, /\/impact\s+Think through a change/)
   assert.match(output, /\/review\s+Compare intent with staged evidence/)
   assert.match(output, /\/audit\s+Assess governance adoption/)
@@ -593,10 +593,10 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.match(output, /Content\s+sha256:/)
   assert.match(output, /Review this content-bound action record before/)
   assert.match(output, /Mode\s+signed approval disabled/)
-  assert.match(output, /Boundary\s+The shell remains read only/)
+  assert.match(output, /Boundary\s+The shell manages Active Work/)
   assert.match(output, /AGENTS\.md looks like a file path/)
   assert.match(output, /riscala review "describe the change" --staged --file/)
-  assert.match(output, /Blocked: \/commit is not available in the read-only shell/)
+  assert.match(output, /Blocked: \/commit is not available in the governance shell/)
   assert.match(output, /Riscala advises\. You decide direction/)
   assert.match(output, /Riscala shell closed/)
   assert.doesNotMatch(output, /\u001b\[/)
@@ -646,6 +646,27 @@ function testShellDetectsSpanishAndPersistsLanguage() {
   assert.match(content, /Language: `en`/)
   assert.match(content, /Objetivo|Objective: Mejorar la experiencia/)
   assert.doesNotMatch(output, /\u001b\[/)
+}
+
+function testShellOperatesActiveWorkLifecycle() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-lifecycle-'))
+  git(target, ['init', '--quiet'])
+  const output = runShell([target], '/work design Define the navigation\n/work transition implement Build the navigation\n/status\n/work continue\n/status\n/work close\n/status\n/exit\n')
+  const content = readFileSync(resolve(target, '.riscala', 'ACTIVE_WORK.md'), 'utf8')
+
+  assert.match(output, /Transition proposed/)
+  assert.match(output, /TRANSITION_PROPOSED · design/)
+  assert.match(output, /Proposed\s+implement · Build the navigation/)
+  assert.match(output, /transition was accepted and work is/)
+  assert.match(output, /Objective\s+Build the navigation/)
+  assert.match(output, /ACTIVE · implement/)
+  assert.match(output, /Active Work was closed/)
+  assert.match(output, /CLOSED · implement/)
+  assert.match(content, /Status: `closed`/)
+  assert.match(content, /transition_proposed/)
+  assert.match(content, /transition_accepted/)
+  assert.match(content, /· closed ·/)
+  assert.doesNotMatch(content, /## Proposed Transition/)
 }
 
 function testShellMenuFiltersNavigatesAndPreservesLayout() {
@@ -1847,6 +1868,7 @@ const tests = [
   testReadOnlyShellRoutesCommandsAndReportsContext,
   testShellUsesPtechCyanOnlyForInteractiveTerminals,
   testShellDetectsSpanishAndPersistsLanguage,
+  testShellOperatesActiveWorkLifecycle,
   testShellMenuFiltersNavigatesAndPreservesLayout,
   testInteractiveShellOpensSlashMenuAndNavigates,
   testActionRecordAndApprovalReceiptVerification,

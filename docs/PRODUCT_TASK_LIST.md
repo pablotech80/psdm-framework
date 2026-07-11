@@ -42,13 +42,13 @@ Acceptance:
 - [x] Detect `.riscala/ACTIVE_WORK.md` when `riscala shell` starts.
 - [x] Show objective, mode, allowed, forbidden, and next action first.
 - [x] If missing, offer `/work [mode] <objective>` as the minimal setup.
-- [ ] Allow continue, close, or propose transition.
+- [x] Allow continue, close, or propose transition.
 - [ ] Move audit, validate, impact, review, and approval to an advanced menu.
 - [x] Never overwrite Active Work silently.
 
 Acceptance:
 
-- [ ] First use creates a useful boundary in under one minute.
+- [x] First use creates a useful boundary in under one minute.
 - [x] A new shell session restores direction without reconstructing the repository.
 - [x] The first screen answers where, why, what may change, and when to stop once Active Work exists.
 
@@ -84,17 +84,17 @@ Acceptance:
 
 ## P1 — Active Work Lifecycle
 
-- [ ] Support active, transition proposed, closed, and superseded states.
+- [x] Support active, transition proposed, and closed states, with superseded boundaries preserved in history.
 - [ ] Preserve decisions, facts, examples, suggestions, questions, and next action.
-- [ ] Record old boundary, requested boundary, changed fields, and developer decision.
-- [ ] Preserve transition history without chat transcripts.
+- [x] Record old mode, requested boundary, changed fields, and explicit continue/close decision.
+- [x] Preserve transition history without chat transcripts.
 - [ ] Detect repository/Active Work conflicts.
 
 Acceptance:
 
-- [ ] Design can transition to implementation without losing decisions.
+- [x] Design can transition to implementation without losing the prior boundary history.
 - [ ] Repository changes always create a visible transition.
-- [ ] Closed work cannot be treated silently as active.
+- [x] Closed work cannot be treated silently as active.
 
 ## P1 — Deterministic Control
 

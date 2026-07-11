@@ -134,7 +134,7 @@ The public first-use path is `impact -> developer decision -> AI-assisted implem
 - Staged inspection reports `NO_STAGED_CHANGES` without failure and exits non-zero with `NOT_A_GIT_REPOSITORY` when the target is not a Git repository.
 - `node bin/psdm.mjs shell <target>` renders target-specific context and routes `/help`, `/status`, `/audit`, `/validate`, `/inspect`, and `/exit` through an allowlist.
 - The shell distinguishes staged, unstaged, and untracked Git changes without mutating the repository.
-- `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy` are blocked in the read-only shell.
+- `/commit`, `/push`, `/pr`, `/merge`, `/publish`, `/release`, and `/deploy` remain outside the Active Work governance shell until each has its own enforced boundary.
 - Colored and monochrome shell rendering have identical visible text after ANSI removal, and piped shell sessions contain no ANSI escape sequences.
 - The slash palette exposes only `/help`, `/status`, `/audit`, `/validate`, `/inspect`, and `/exit`; navigation wraps and filtered selection executes through the existing command router.
 - `/audit` reports the same underlying adoption and AI-readiness state as `riscala audit` without modifying the target.
