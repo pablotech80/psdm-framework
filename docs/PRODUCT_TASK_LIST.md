@@ -98,7 +98,7 @@ Acceptance:
 - [ ] Preserve decisions, facts, examples, suggestions, questions, and next action.
 - [x] Record old mode, requested boundary, changed fields, and explicit continue/close decision.
 - [x] Preserve transition history without chat transcripts.
-- [ ] Detect repository/Active Work conflicts.
+- [x] Detect repository/Active Work conflicts.
 
 Acceptance:
 
@@ -108,17 +108,17 @@ Acceptance:
 
 ## P1 — Deterministic Control
 
-- [ ] Compare current repository with Active Work repository.
-- [ ] Compare staged and unstaged paths with allowed and forbidden paths.
+- [x] Compare current repository with Active Work repository.
+- [x] Compare staged, unstaged, and untracked paths with explicitly allowed paths.
 - [x] Normalize selected-project paths against the Git root in staged Decision Review.
-- [ ] Report exact file and violated boundary.
+- [x] Report exact file and violated boundary.
 - [ ] Distinguish advisory findings from enforced failures.
 - [ ] Keep solo-developer defaults lightweight.
 - [ ] Preserve optional stricter team and production policy.
 
 Acceptance:
 
-- [ ] Out-of-scope files are identified exactly.
+- [x] Out-of-scope files are identified exactly.
 - [ ] Same-scope low-risk work avoids unrelated governance.
 - [ ] CI and local boundary results agree.
 

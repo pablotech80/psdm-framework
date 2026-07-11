@@ -32,7 +32,7 @@ Create the active boundary for the current task:
 
 ```bash
 npm install -g .
-riscala work init "add search to the customer list" --mode implement
+riscala work init "add search to the customer list" --mode implement --files src/search/**,tests/search/**
 riscala work show
 riscala adapters init
 ```
@@ -151,11 +151,11 @@ The command reference below uses the primary `riscala` executable. Use `psdm` on
 Create or read the compact Active Work boundary used across chats:
 
 ```bash
-riscala work init "add Google OAuth while preserving passwords" --mode design
+riscala work init "add Google OAuth while preserving passwords" --mode design --files src/auth/**,tests/auth/**
 riscala work show
 ```
 
-`work init` creates `.riscala/ACTIVE_WORK.md` once and refuses to overwrite it. The file records repository, objective, mode, allowed and forbidden work, invariants, stop conditions, and categorized context.
+`work init` creates `.riscala/ACTIVE_WORK.md` once and refuses to overwrite it. The file records repository, objective, mode, optional allowed paths, forbidden work, invariants, stop conditions, and categorized context. When `--files` is present, `/status` compares staged, unstaged, and untracked paths with that boundary and reports exact violations. Without `--files`, Riscala keeps the lightweight whole-repository behavior.
 
 Build a read-only Judgment Brief from a proposed change without initializing PSDM artifacts:
 

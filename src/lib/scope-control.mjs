@@ -1,0 +1,57 @@
+import { realpathSync } from 'node:fs'
+import { relative, resolve } from 'node:path'
+import { inspectRepositoryIdentity } from './git.mjs'
+import { normalizePath } from './risk-paths.mjs'
+
+function canonical(path) {
+  try { return realpathSync(resolve(path)) } catch { return resolve(path) }
+}
+
+function escapeRegex(value) {
+  return value.replace(/[.+^${}()|[\]\\]/g, '\\$&')
+}
+
+function patternRegex(pattern) {
+  const normalized = normalizePath(pattern).replace(/\/$/, '')
+  let source = '^'
+  for (let index = 0; index < normalized.length; index += 1) {
+    if (normalized[index] === '*' && normalized[index + 1] === '*') {
+      source += '.*'
+      index += 1
+    } else if (normalized[index] === '*') source += '[^/]*'
+    else source += escapeRegex(normalized[index])
+  }
+  if (!normalized.includes('*')) source += '(?:/.*)?'
+  return new RegExp(`${source}$`)
+}
+
+function changedPaths(lines) {
+  return [...new Set(lines.flatMap((line) => {
+    const value = line.slice(3).trim().replace(/^"|"$/g, '')
+    return value.includes(' -> ') ? value.split(' -> ') : [value]
+  }).filter(Boolean))]
+}
+
+export function evaluateActiveWorkScope({ target, git, work }) {
+  if (!work) return { decision: 'NO_ACTIVE_WORK', repositoryMatches: null, allowedPatterns: [], changedPaths: [], violations: [] }
+  const repositoryMatches = canonical(work.repository) === canonical(target)
+  if (!repositoryMatches) {
+    return { decision: 'REPOSITORY_CONFLICT', repositoryMatches, allowedPatterns: work.allowedPaths || [], changedPaths: changedPaths(git.changes), violations: [] }
+  }
+  const identity = inspectRepositoryIdentity(target)
+  const prefix = identity ? normalizePath(relative(canonical(identity.root), canonical(target))) : ''
+  const allowedPatterns = (work.allowedPaths || []).map((pattern) => normalizePath(prefix ? `${prefix}/${pattern}` : pattern))
+  const paths = changedPaths(git.changes).filter((path) => !/(^|\/)\.riscala(?:\/|$)/.test(path))
+  if (allowedPatterns.length === 0) {
+    return { decision: 'UNSCOPED', repositoryMatches, allowedPatterns, changedPaths: paths, violations: [] }
+  }
+  const matchers = allowedPatterns.map(patternRegex)
+  const violations = paths.filter((path) => !matchers.some((matcher) => matcher.test(normalizePath(path))))
+  return {
+    decision: violations.length ? 'SCOPE_REVIEW_REQUIRED' : 'SCOPE_ALIGNED',
+    repositoryMatches,
+    allowedPatterns,
+    changedPaths: paths,
+    violations,
+  }
+}
