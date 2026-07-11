@@ -86,6 +86,7 @@ function testRiscalaExecutableAliasContract() {
   assert.match(help, /psdm remains supported with identical commands and behavior/)
   assert.match(help, /riscala shell \[target\]/)
   assert.match(help, /riscala impact "<change intent>"/)
+  assert.match(help, /riscala review "<change intent>" --staged/)
 }
 
 function testImpactLowRiskWithoutInitStaysLightweight() {
@@ -219,6 +220,201 @@ function testImpactRejectsUnsupportedGuidance() {
     '--guidance',
     'architect',
   ]), /Command failed/)
+}
+
+function initializeReviewRepository() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-decision-review-'))
+  mkdirSync(resolve(target, 'src', 'auth'), { recursive: true })
+  writeFileSync(resolve(target, 'README.md'), '# Before\n')
+  writeFileSync(resolve(target, 'package.json'), JSON.stringify({
+    name: 'review-app',
+    dependencies: { express: '1.0.0' },
+  }))
+  writeFileSync(resolve(target, 'src', 'auth', 'login.mjs'), 'export const login = false\n')
+  git(target, ['init', '--quiet'])
+  git(target, ['add', '.'])
+  git(target, [
+    '-c',
+    'user.name=PSDM Test',
+    '-c',
+    'user.email=psdm-test@example.invalid',
+    'commit',
+    '--quiet',
+    '-m',
+    'baseline',
+  ])
+  return target
+}
+
+function testDecisionReviewAlignedScopeRemainsAdvisory() {
+  const target = initializeReviewRepository()
+  writeFileSync(resolve(target, 'README.md'), '# After\n')
+  git(target, ['add', 'README.md'])
+
+  const report = runJson([
+    'review',
+    'update README copy',
+    '--staged',
+    '--target',
+    target,
+    '--file',
+    'README.md',
+    '--json',
+  ])
+
+  assert.equal(report.decision, 'STAGED_DECISION_REVIEW_READY')
+  assert.equal(report.advisory, true)
+  assert.equal(report.envelope.authority.source, 'cli_input')
+  assert.equal(report.envelope.authority.authorityVerified, false)
+  assert.equal(report.envelope.ownerDecision.value, null)
+  assert.deepEqual(report.verification.outsideExpectedScope, [])
+  assert.deepEqual(report.verification.deviations, [])
+  assert.equal(report.verification.readiness, 'aligned_but_unapproved')
+  assert.equal(report.verification.authority.approval, false)
+}
+
+function testDecisionReviewDetectsScopeAndDeliveryDrift() {
+  const target = initializeReviewRepository()
+  mkdirSync(resolve(target, '.github', 'workflows'), { recursive: true })
+  writeFileSync(resolve(target, 'src', 'auth', 'login.mjs'), 'export const login = true\n')
+  writeFileSync(resolve(target, '.github', 'workflows', 'deploy.yml'), 'name: deploy\n')
+  git(target, ['add', 'src/auth/login.mjs', '.github/workflows/deploy.yml'])
+
+  const report = runJson([
+    'review',
+    'add OAuth login',
+    '--staged',
+    '--target',
+    target,
+    '--file',
+    'src/auth/login.mjs',
+    '--json',
+  ])
+  const output = run([
+    'review',
+    'add OAuth login',
+    '--staged',
+    '--target',
+    target,
+    '--file',
+    'src/auth/login.mjs',
+  ])
+
+  assert.deepEqual(report.verification.outsideExpectedScope, ['.github/workflows/deploy.yml'])
+  assert.ok(report.verification.deviations.some((item) => item.kind === 'scope-drift'))
+  assert.ok(report.verification.deviations.some((item) => (
+    item.kind === 'unexpected-surface'
+    && item.surface === 'delivery'
+    && item.severity === 'high'
+  )))
+  assert.equal(report.verification.readiness, 'developer_review_required')
+  assert.match(output, /Authority: advisory · owner decision not verified/)
+  assert.match(output, /developer_review_required/)
+  assert.match(output, /does not approve, commit, or establish human authority/)
+}
+
+function testDecisionReviewReportsDependencyDeltaWithoutReadingSource() {
+  const target = initializeReviewRepository()
+  writeFileSync(resolve(target, 'package.json'), JSON.stringify({
+    name: 'review-app',
+    dependencies: { express: '1.0.0', axios: '1.0.0' },
+  }))
+  git(target, ['add', 'package.json'])
+
+  const report = runJson([
+    'review',
+    'add HTTP client dependency',
+    '--staged',
+    '--target',
+    target,
+    '--file',
+    'package.json',
+    '--json',
+  ])
+
+  assert.equal(report.verification.dependencyDelta.status, 'compared')
+  assert.deepEqual(report.verification.dependencyDelta.added, ['axios'])
+  assert.deepEqual(report.verification.dependencyDelta.removed, [])
+  assert.ok(report.verification.deviations.some((item) => item.kind === 'dependency-change'))
+  assert.ok(report.brief.judgment.learningPrinciples.some((item) => item.includes('long-term ownership decision')))
+  assert.equal(report.envelope.authority.authorityVerified, false)
+}
+
+function testDecisionReviewReportsMissingExpectedScope() {
+  const target = initializeReviewRepository()
+  writeFileSync(resolve(target, 'README.md'), '# After\n')
+  git(target, ['add', 'README.md'])
+
+  const report = runJson([
+    'review',
+    'update README and docs copy',
+    '--staged',
+    '--target',
+    target,
+    '--files',
+    'README.md,docs/guide.md',
+    '--json',
+  ])
+
+  assert.deepEqual(report.verification.expectedButNotStaged, ['docs/guide.md'])
+  assert.ok(report.verification.deviations.some((item) => (
+    item.kind === 'expected-not-staged'
+    && item.file === 'docs/guide.md'
+  )))
+  assert.equal(report.verification.readiness, 'developer_review_required')
+}
+
+function testDecisionReviewNoStagedChangesIsReadOnlyNoOp() {
+  const target = initializeReviewRepository()
+  const report = runJson([
+    'review',
+    'update README copy',
+    '--staged',
+    '--target',
+    target,
+    '--file',
+    'README.md',
+    '--json',
+  ])
+
+  assert.equal(report.decision, 'NO_STAGED_CHANGES')
+  assert.equal(report.verification, null)
+  assert.equal(report.envelope.authority.authorityVerified, false)
+}
+
+function testDecisionReviewGuidanceChangesDensityNotAuthority() {
+  const target = initializeReviewRepository()
+  writeFileSync(resolve(target, 'README.md'), '# After\n')
+  git(target, ['add', 'README.md'])
+
+  const concise = run([
+    'review',
+    'update README copy',
+    '--staged',
+    '--target',
+    target,
+    '--file',
+    'README.md',
+    '--guidance',
+    'concise',
+  ])
+  const learn = run([
+    'review',
+    'update README copy',
+    '--staged',
+    '--target',
+    target,
+    '--file',
+    'README.md',
+    '--guidance',
+    'learn',
+  ])
+
+  assert.doesNotMatch(concise, /Expected files/)
+  assert.doesNotMatch(concise, /Staged files/)
+  assert.match(learn, /Reasoning to reuse/)
+  assert.match(concise, /does not approve, commit, or establish human authority/)
+  assert.match(learn, /does not approve, commit, or establish human authority/)
 }
 
 function testReadOnlyShellRoutesCommandsAndReportsContext() {
@@ -1476,6 +1672,12 @@ const tests = [
   testImpactUnknownGreenfieldExposesUncertaintyWithoutMutation,
   testImpactDoesNotMatchAiInsideOrdinaryWords,
   testImpactRejectsUnsupportedGuidance,
+  testDecisionReviewAlignedScopeRemainsAdvisory,
+  testDecisionReviewDetectsScopeAndDeliveryDrift,
+  testDecisionReviewReportsDependencyDeltaWithoutReadingSource,
+  testDecisionReviewReportsMissingExpectedScope,
+  testDecisionReviewNoStagedChangesIsReadOnlyNoOp,
+  testDecisionReviewGuidanceChangesDensityNotAuthority,
   testReadOnlyShellRoutesCommandsAndReportsContext,
   testShellUsesPtechCyanOnlyForInteractiveTerminals,
   testShellMenuFiltersNavigatesAndPreservesLayout,

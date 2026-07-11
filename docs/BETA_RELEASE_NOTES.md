@@ -26,7 +26,24 @@ Current behavior:
 - falls back to explicit high uncertainty instead of inventing semantic understanding;
 - renders learn, balanced, concise, and JSON views from the same result.
 
-This is not yet a beta.6 release candidate. Change Envelope persistence, staged Decision Review, greenfield/legacy external validation, public onboarding realignment, version bump, and protected publication evidence remain pending.
+The second implemented increment adds staged Decision Review:
+
+```bash
+riscala review "<change intent>" --staged [--file <expected-path>] [--files <expected-paths>] [--guidance learn|balanced|concise] [--target <path>] [--config <path>] [--json]
+```
+
+Current Decision Review behavior:
+
+- creates an in-memory advisory Change Envelope from CLI-declared expected files;
+- exposes `authorityVerified: false` and keeps the owner decision unset;
+- compares expected files with staged Git files;
+- reports scope drift and expected files missing from the staged implementation;
+- detects observed auth, schema, AI, configuration, dependency, test, documentation, and delivery surfaces;
+- compares dependency names between `HEAD:package.json` and the staged index;
+- reports test-file presence without claiming tests were executed;
+- returns `aligned_but_unapproved` or `developer_review_required` as advisory readiness, never approval.
+
+This is not yet a beta.6 release candidate. Greenfield/legacy external validation, public onboarding realignment, version bump, and protected publication evidence remain pending. Strong owner-authority binding remains separate from the advisory Change Envelope.
 
 ## Beta Release - 1.0.0-beta.5
 

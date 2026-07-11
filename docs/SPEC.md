@@ -12,6 +12,7 @@ Project: `psdm-framework`
 - Treat owner decisions as external authority that Riscala and AI agents may request or record but never create, infer, approve, or simulate.
 - Build a minimal tool-neutral Change Envelope from accepted intent, scope, constraints, expected impact, required evidence, and stop conditions.
 - Compare a Change Envelope with staged Git evidence through a Decision Review.
+- Accept CLI-declared expected files as an authority-unverified advisory envelope and expose `authorityVerified: false` rather than treating terminal input as human-presence proof.
 - Report scope drift, unexpected risk surfaces, new dependencies, schema or migration impact, config/CI/deployment changes, missing validation, and contradictions when observable.
 - Render the same underlying reasoning result in `learn`, `balanced`, `concise`, and JSON forms without weakening safety semantics.
 - Explain why a consequence matters in learning output and avoid repeating obvious context in concise output.
@@ -20,7 +21,7 @@ Project: `psdm-framework`
 - Keep existing commands and JSON contracts compatible while beta.6 contracts remain additive.
 - Keep SaaS, remote approval, autonomous owner decisions, package/repository migration, and runtime knowledge infrastructure out of beta.6.
 
-- Provide a `riscala` CLI with additive `impact`, `action`, `approval`, `adr`, `init`, `audit`, `check`, `validate`, `inspect`, `shell`, `classify`, `enforce`, `pr-checklist`, and `report` commands through the `psdm` compatibility entrypoint.
+- Provide a `riscala` CLI with additive `impact`, `review`, `action`, `approval`, `adr`, `init`, `audit`, `check`, `validate`, `inspect`, `shell`, `classify`, `enforce`, `pr-checklist`, and `report` commands through the `psdm` compatibility entrypoint.
 - Provide a non-destructive `audit` command that previews repository state and `init` impact.
 - Detect existing AI governance files during audit and recommend integration without overwrite.
 - Emit an `aiReadiness` contract from `riscala audit --json` and its `psdm` compatibility equivalent for AI surface and governance gap reporting.
@@ -90,6 +91,7 @@ Project: `psdm-framework`
 - A learning result explains at least one reusable technical reasoning principle for a representative high-risk change.
 - A concise result omits obvious background while retaining non-obvious impact, contradictions, uncertainty, and evidence gaps.
 - Decision Review uses staged Git state and reports unstaged/untracked state separately.
+- Decision Review reports files outside expected scope, expected files missing from the index, unexpected sensitive surfaces, and package dependency-name deltas when observable.
 - A staged file outside the accepted scope is reported as drift.
 - Representative dependency, migration, CI/deployment, and missing-test deviations are detected when supported by deterministic evidence.
 - Existing command fixtures, executable alias parity, config compatibility, and JSON contracts remain green.

@@ -116,6 +116,19 @@ export function readStagedDiff(targetDir) {
   ], { raw: true })
 }
 
+export function readGitTextFile(targetDir, source, path) {
+  if (!['head', 'index'].includes(source)) {
+    throw new Error(`Unsupported Git text source: ${source}`)
+  }
+
+  const object = source === 'head' ? `HEAD:${path}` : `:${path}`
+  try {
+    return git(targetDir, ['show', object], { raw: true })
+  } catch {
+    return null
+  }
+}
+
 export function inspectRepositoryIdentity(targetDir) {
   const repository = inspectGit(targetDir)
   if (!repository.isRepository) {

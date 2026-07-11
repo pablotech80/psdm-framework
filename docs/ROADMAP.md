@@ -177,6 +177,9 @@
 - [x] Implement the first read-only Judgment Brief through `riscala impact` without mandatory initialization.
 - [x] Add deterministic evidence and representative auth, data, delivery, AI, low-risk, and uncertainty reasoning.
 - [x] Add first-use, authority-boundary, and explanation-density fixtures.
+- [x] Implement advisory Change Envelope and staged Decision Review without simulating owner authority.
+- [x] Detect scope drift, missing expected files, unexpected sensitive surfaces, and package dependency deltas.
+- [x] Add aligned, drift, dependency, missing-scope, and no-staged-change fixtures.
 - [ ] Prove first value without mandatory initialization in greenfield and legacy repositories.
 - [ ] Reuse existing deterministic Git, risk-path, config, validation, and CI primitives.
 - [ ] Preserve `riscala`/`psdm`, config, JSON, package, and Action compatibility.

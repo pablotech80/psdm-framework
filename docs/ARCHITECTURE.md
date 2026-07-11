@@ -38,6 +38,8 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/classifier.mjs` owns reusable change classification.
 - `src/lib/judgment.mjs` builds beta.6 Project Context, deterministic Observed Evidence, inferred impact hypotheses, owner-authority boundaries, and learn/balanced/concise Judgment Brief rendering.
 - `src/commands/impact.mjs` exposes the additive read-only `riscala impact` command and JSON entrypoint without requiring initialization.
+- `src/lib/decision-review.mjs` builds an authority-unverified advisory Change Envelope and compares it with staged files, observed risk surfaces, package dependency deltas, and validation evidence.
+- `src/commands/review.mjs` exposes the read-only staged Decision Review while preserving the distinction between alignment and owner approval.
 - `src/lib/inspect.mjs` composes staged Git evidence with reusable change classification.
 - `src/commands/shell.mjs` owns the interactive readline lifecycle and delegates slash commands to an allowlist router.
 - `src/lib/shell.mjs` builds target-specific project context, reuses the audit, validation, and staged-inspection engines, and renders the dependency-free read-only terminal UI.
@@ -67,6 +69,7 @@ The architecture favors explicit modules over framework abstractions:
 - Use risk to select reasoning depth and evidence, not to impose documents automatically.
 - Make greenfield first use intent-first and legacy first use read-only and evidence-first.
 - Use staged Git state as the beta.6 implementation boundary for Decision Review while reporting unstaged and untracked state separately.
+- Treat CLI-declared expected scope as unverified comparison input; it must never be presented as owner identity, approval, or content-bound authority.
 - Render one reasoning model through learn, balanced, concise, and JSON views rather than maintaining persona-specific decision logic.
 - Preserve current enforcement as an optional advanced boundary; do not make remote approval a beta.6 prerequisite.
 

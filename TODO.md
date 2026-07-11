@@ -21,6 +21,10 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Add deterministic repository evidence for Git state, manifests, project identity, validation scripts, dependencies, structure, and expected paths.
 - [x] Add intent-specific reasoning for authentication, data/schema, delivery, AI behavior, local presentation, and explicit-uncertainty fallback.
 - [x] Add fixtures for low-risk concise output, auth learning output, unknown greenfield intent, invalid guidance, no mutation, and developer-only authority.
+- [x] Implement an authority-unverified advisory Change Envelope from CLI-declared expected files.
+- [x] Implement `riscala review --staged` for expected/staged scope comparison and advisory readiness.
+- [x] Detect scope drift, expected files missing from staged state, unexpected sensitive surfaces, and package dependency deltas.
+- [x] Add Decision Review fixtures for aligned scope, delivery drift, dependency changes, missing expected scope, no staged changes, and non-approval semantics.
 
 ## Next
 
@@ -28,7 +32,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [ ] Design the legacy discovery flow with observed architecture, uncertainty, owner correction, and no initial mutation.
 - [ ] Map existing audit, classify, inspect, risk-path, config, JSON, and CI primitives into the new architecture.
 - [ ] Add a regression scenario proving that product-direction and governance-architecture changes are not reduced to Level 0 merely because their paths or wording lack current classifier signals.
-- [ ] Implement the owner-controlled Change Envelope and complete the vertical slice with staged Decision Review.
+- [ ] Decide and validate how an explicit owner decision can bind to a Change Envelope without treating agent-controlled CLI input as human-presence proof.
 - [ ] Add representative junior-learning, senior-balanced, and staff-concise acceptance fixtures.
 - [ ] Validate beta.6 in at least one greenfield and one external legacy repository.
 - [ ] Realign README, help, SPEC, ARCHITECTURE, shell guidance, and product docs only after the new flow is proven.
