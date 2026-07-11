@@ -407,4 +407,4 @@ Result:
 - Git tag and GitHub pre-release `v1.0.0-beta.5`: created.
 - Clean install from npm `@beta`: passed.
 - npm dist-tag `beta` points to `1.0.0-beta.5`.
-- npm dist-tag `latest` still points to `1.0.0-beta.1` because the attempted removal returned `E403`; follow-up remains tracked separately.
+- npm dist-tag `latest` initially remained on `1.0.0-beta.1`; on `2026-07-11`, it was aligned with `1.0.0-beta.5` after registry removal attempts remained rejected.

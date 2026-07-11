@@ -1,11 +1,5 @@
 <p align="center">
-  <img src="./assets/psdm-logo.png" alt="PSDM method mark by Ptech" width="180" />
-</p>
-
-<h1 align="center">Riscala</h1>
-
-<p align="center">
-  <strong>AI Code Governance for Software Delivery</strong>
+  <img src="./assets/riscala-hero.jpg" alt="Riscala — AI Code Governance for Software Delivery" width="100%" />
 </p>
 
 <p align="center">

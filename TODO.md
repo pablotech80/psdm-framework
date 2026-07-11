@@ -12,7 +12,8 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
-- [ ] Resolve npm `latest` dist-tag removal `E403` with npm support or package/org settings.
+- [x] Resolve the stale npm `latest` tag by aligning it with `1.0.0-beta.5` after removal remained rejected by the registry.
+- [x] Replace the README logo header with the Riscala product hero asset.
 
 ## Next
 

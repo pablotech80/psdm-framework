@@ -2,7 +2,7 @@
 
 Status: `Active`
 Repository: `psdm-framework`
-Last Updated: `2026-07-10`
+Last Updated: `2026-07-11`
 
 ## Purpose
 
@@ -12,10 +12,12 @@ This file is operational and must be updated with every meaningful project advan
 
 ## Current State
 
-PSDM is published at `1.0.0-beta.5`; npm dist-tag `beta` points to `1.0.0-beta.5`.
+PSDM is published at `1.0.0-beta.5`; npm dist-tags `beta` and `latest` point to `1.0.0-beta.5`.
 
 Completed:
 
+- Stale npm `latest` dist-tag resolved by aligning it with `1.0.0-beta.5` after registry removal attempts were rejected.
+- README hero updated to the Riscala product identity while preserving PSDM as the internal governance method.
 - `0.1.0` MVP CLI and templates.
 - `0.2.0-alpha` config, JSON output, feature artifacts, git awareness, GitHub Action MVP, and tool registry draft.
 - `0.3.0-alpha` backend/platform risk path classification.
@@ -285,7 +287,7 @@ Planned outcomes:
 - [x] Publish `@ptechsolution/psdm-framework@1.0.0-beta.4` through trusted publishing.
 - [x] Create Git tag and GitHub pre-release `v1.0.0-beta.4`.
 - [x] Verify clean install from npm `@beta` for `1.0.0-beta.4`.
-- [ ] Resolve npm `latest` dist-tag `E403` follow-up.
+- [x] Resolve npm `latest` dist-tag follow-up by aligning `latest` with `1.0.0-beta.5`.
 
 ### `1.0.0`
 
@@ -326,7 +328,7 @@ Planned outcomes:
 - [x] Public npm package readiness for beta.
 - [x] Create Git tag and GitHub pre-release `v1.0.0-beta.1`.
 - [x] Configure npm trusted publishing for future releases.
-- [ ] Resolve npm `latest` dist-tag `E403` follow-up before stable release.
+- [x] Resolve stale npm `latest` dist-tag before stable release.
 - [x] Documentation site or complete docs index.
 - [x] Example project fixture coverage.
 

@@ -44,7 +44,7 @@ Validation:
 Known limitations:
 
 - Mutating shell commands remain blocked until managed hook activation and protected remote enforcement are configured.
-- npm `latest` still points to `1.0.0-beta.1`.
+- npm `latest` and `beta` now point to `1.0.0-beta.5`; removal was rejected by the registry, so the stale tag was aligned with the current beta.
 - Beta status remains active.
 
 ## Riscala Phase 1

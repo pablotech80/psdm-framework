@@ -163,7 +163,7 @@
 - [x] removed unconditional `npm@latest` upgrade from protected npm workflow.
 - [x] verified `1.0.0-beta.4` through protected workflow dry-run.
 - [x] published `1.0.0-beta.4` through protected trusted publishing workflow.
-- [ ] npm `latest` dist-tag `E403` follow-up.
+- [x] npm `latest` dist-tag follow-up resolved by aligning it with `1.0.0-beta.5`.
 
 ## v1.0
 
@@ -217,7 +217,7 @@
 - [x] npm trusted publishing configured for future releases.
 - [x] Knowledge as Code Layer documentation.
 - [x] `1.0.0-beta.4` Knowledge as Code beta publication.
-- [ ] npm `latest` dist-tag `E403` follow-up before stable release.
+- [x] stale npm `latest` dist-tag resolved before stable release.
 - [x] Example project fixture coverage.
 - [ ] Runnable example projects.
 
