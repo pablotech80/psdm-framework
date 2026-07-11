@@ -826,6 +826,33 @@ async function testInteractiveShellOpensSlashMenuAndNavigates() {
   assert.equal(input.isRaw, false)
 }
 
+async function testInteractiveShellPreservesSpanishUnicodeInput() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-unicode-'))
+  git(target, ['init', '--quiet'])
+  const input = new PassThrough()
+  const output = new PassThrough()
+  input.isTTY = true
+  input.isRaw = false
+  input.setRawMode = (value) => { input.isRaw = value }
+  output.isTTY = true
+
+  const session = shellCommand([target], {
+    input,
+    output,
+    env: { TERM: 'xterm-256color', LANG: 'es_ES.UTF-8' },
+  })
+  input.write('/work implement Añadir validación del correo: ¿sí? ¡Sí!')
+  input.write('\r')
+  input.write('/exit')
+  input.write('\r')
+  await session
+
+  const content = readFileSync(resolve(target, '.riscala', 'ACTIVE_WORK.md'), 'utf8')
+  assert.match(content, /Objective: Añadir validación del correo: ¿sí\? ¡Sí!/)
+  assert.match(content, /Language: `es`/)
+  assert.equal(input.isRaw, false)
+}
+
 function approvalFixture() {
   const target = mkdtempSync(resolve(tmpdir(), 'riscala-approval-'))
   const keyDirectory = resolve(target, 'governance', 'keys')
@@ -1955,6 +1982,7 @@ const tests = [
   testShellOperatesActiveWorkLifecycle,
   testShellMenuFiltersNavigatesAndPreservesLayout,
   testInteractiveShellOpensSlashMenuAndNavigates,
+  testInteractiveShellPreservesSpanishUnicodeInput,
   testActionRecordAndApprovalReceiptVerification,
   testApprovalEnforcementConsumesReceiptOnce,
   testManagedPreCommitHookAllowsLowRiskAndBlocksHighRisk,

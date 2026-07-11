@@ -256,7 +256,10 @@ export function runInteractiveShellSession({
         return
       }
 
-      if (!key.ctrl && !key.meta && typeof text === 'string' && /^[\x20-\x7E]+$/.test(text)) {
+      const printableText = typeof text === 'string'
+        && text.length > 0
+        && !/[\u0000-\u001F\u007F]/u.test(text)
+      if (!key.ctrl && !key.meta && printableText) {
         submenuParent = null
         changeBuffer(insertAt(buffer, cursor, text), cursor + text.length)
       }
