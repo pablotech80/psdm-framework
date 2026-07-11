@@ -24,6 +24,8 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Preserve Spanish accents, `ñ`, inverted punctuation, and printable Unicode in interactive shell input.
 - [x] Make language a global immediate preference and allow closed work to restart with archived history.
 - [x] Add `/init` to the shell with arrow navigation, a safe preview, and explicit confirmation before writing governance files.
+- [x] Validate fresh Codex continuity for both an out-of-bound repository/deployment request and an in-bound inspection request.
+- [x] Apply the global language preference when `riscala work init` creates Active Work outside the shell.
 
 - [x] Record the continuity experiment and its governance failure without modifying the laboratory repository.
 - [x] Reframe beta.6 around Continuity and Control instead of generic technical recommendations.

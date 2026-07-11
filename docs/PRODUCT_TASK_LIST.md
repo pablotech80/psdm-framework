@@ -84,7 +84,8 @@ Acceptance:
 
 Acceptance:
 
-- [ ] Codex, Claude, and Cursor recover the same boundary in fresh chats.
+- [x] Codex recovers the Active Work boundary in a fresh chat.
+- [ ] Claude and Cursor recover the same boundary in fresh chats.
 - [ ] All stop on repository and mode transitions.
 - [ ] Same-boundary reasoning proceeds without approval noise.
 
