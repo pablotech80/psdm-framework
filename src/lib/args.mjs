@@ -11,6 +11,7 @@ export function parseArgs(args) {
     dryRun: false,
     staged: false,
     receiptPath: null,
+    guidance: null,
   }
   const positional = []
 
@@ -34,6 +35,12 @@ export function parseArgs(args) {
 
     if (arg === '--receipt') {
       options.receiptPath = args[index + 1] || null
+      index += 1
+      continue
+    }
+
+    if (arg === '--guidance') {
+      options.guidance = args[index + 1] || ''
       index += 1
       continue
     }

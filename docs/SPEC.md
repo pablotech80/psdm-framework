@@ -20,7 +20,7 @@ Project: `psdm-framework`
 - Keep existing commands and JSON contracts compatible while beta.6 contracts remain additive.
 - Keep SaaS, remote approval, autonomous owner decisions, package/repository migration, and runtime knowledge infrastructure out of beta.6.
 
-- Provide a `psdm` CLI with `action`, `approval`, `adr`, `init`, `audit`, `check`, `validate`, `inspect`, `shell`, `classify`, `enforce`, `pr-checklist`, and `report` commands.
+- Provide a `riscala` CLI with additive `impact`, `action`, `approval`, `adr`, `init`, `audit`, `check`, `validate`, `inspect`, `shell`, `classify`, `enforce`, `pr-checklist`, and `report` commands through the `psdm` compatibility entrypoint.
 - Provide a non-destructive `audit` command that previews repository state and `init` impact.
 - Detect existing AI governance files during audit and recommend integration without overwrite.
 - Emit an `aiReadiness` contract from `riscala audit --json` and its `psdm` compatibility equivalent for AI surface and governance gap reporting.

@@ -54,6 +54,7 @@ When `riscala audit` detects existing AI governance files, `riscala init` create
 
 Current commands:
 
+- `riscala impact`
 - `riscala audit`
 - `riscala adr`
 - `riscala init`

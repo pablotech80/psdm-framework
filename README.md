@@ -105,6 +105,8 @@ flowchart TD
 
 Latest published beta: `1.0.0-beta.5`.
 
+Current `main` is developing the beta.6 Product Reset: Riscala now centers repository-grounded technical judgment before implementation while preserving the existing PSDM compatibility surface.
+
 ## Install
 
 Install the published beta from npm:
@@ -136,6 +138,25 @@ riscala help
 The command reference below uses the primary `riscala` executable. Use `psdm` only when compatibility with older automation is needed; command behavior is identical.
 
 ## CLI
+
+### Technical Judgment (beta.6 development)
+
+Build a read-only Judgment Brief from a proposed change without initializing PSDM artifacts:
+
+```bash
+riscala impact "add Google OAuth login while preserving passwords"
+```
+
+Adjust explanation density without changing the underlying facts or safety semantics:
+
+```bash
+riscala impact "add Google OAuth login" --guidance learn
+riscala impact "add Google OAuth login" --guidance balanced
+riscala impact "add Google OAuth login" --guidance concise
+riscala impact "add Google OAuth login" --json
+```
+
+The brief separates observed repository evidence, inferred impact, options, advisory recommendation, uncertainty, and decisions reserved for the developer. `impact` is read-only, does not require `riscala init`, and never creates or simulates an owner decision.
 
 ### Repository
 

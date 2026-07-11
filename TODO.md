@@ -17,6 +17,10 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Define the Judgment Brief contract with explicit facts, inferences, options, trade-offs, recommendation, uncertainty, and owner-decision boundaries.
 - [x] Define the staged Decision Review contract that compares accepted intent and scope with the real Git diff and validation evidence.
 - [x] Specify `learn`, `balanced`, `concise`, and JSON renderings of the same reasoning result.
+- [x] Implement the first read-only `riscala impact` Judgment Brief without requiring `riscala init`.
+- [x] Add deterministic repository evidence for Git state, manifests, project identity, validation scripts, dependencies, structure, and expected paths.
+- [x] Add intent-specific reasoning for authentication, data/schema, delivery, AI behavior, local presentation, and explicit-uncertainty fallback.
+- [x] Add fixtures for low-risk concise output, auth learning output, unknown greenfield intent, invalid guidance, no mutation, and developer-only authority.
 
 ## Next
 
@@ -24,7 +28,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [ ] Design the legacy discovery flow with observed architecture, uncertainty, owner correction, and no initial mutation.
 - [ ] Map existing audit, classify, inspect, risk-path, config, JSON, and CI primitives into the new architecture.
 - [ ] Add a regression scenario proving that product-direction and governance-architecture changes are not reduced to Level 0 merely because their paths or wording lack current classifier signals.
-- [ ] Implement the smallest vertical slice from Judgment Brief to staged Decision Review.
+- [ ] Implement the owner-controlled Change Envelope and complete the vertical slice with staged Decision Review.
 - [ ] Add representative junior-learning, senior-balanced, and staff-concise acceptance fixtures.
 - [ ] Validate beta.6 in at least one greenfield and one external legacy repository.
 - [ ] Realign README, help, SPEC, ARCHITECTURE, shell guidance, and product docs only after the new flow is proven.

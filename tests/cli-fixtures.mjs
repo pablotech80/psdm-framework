@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import { generateKeyPairSync, sign } from 'node:crypto'
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { dirname, resolve } from 'node:path'
 import { tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
@@ -85,6 +85,140 @@ function testRiscalaExecutableAliasContract() {
   assert.match(help, /Powered by PSDM/)
   assert.match(help, /psdm remains supported with identical commands and behavior/)
   assert.match(help, /riscala shell \[target\]/)
+  assert.match(help, /riscala impact "<change intent>"/)
+}
+
+function testImpactLowRiskWithoutInitStaysLightweight() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-impact-low-risk-'))
+  writeFileSync(resolve(target, 'package.json'), '{"name":"docs-project"}\n')
+  const before = readdirSync(target).sort()
+
+  const report = runJson([
+    'impact',
+    'update README hero',
+    '--target',
+    target,
+    '--guidance',
+    'concise',
+    '--json',
+  ])
+  const output = run([
+    'impact',
+    'update README hero',
+    '--target',
+    target,
+    '--guidance',
+    'concise',
+  ])
+
+  assert.equal(report.command, 'impact')
+  assert.equal(report.projectContext.initializedWithPsdm, false)
+  assert.equal(report.projectContext.mode, 'legacy')
+  assert.equal(report.ownerDecision.value, null)
+  assert.equal(report.ownerDecision.authority, 'developer_only')
+  assert.deepEqual(report.judgment.ownerDecisionsRequired, [])
+  assert.ok(report.judgment.affectedSurfaces.some((item) => item.surface === 'presentation'))
+  assert.ok(report.observedEvidence.every((item) => item.confidence === 'deterministic'))
+  assert.ok(report.judgment.affectedSurfaces.every((item) => item.epistemicStatus === 'inferred'))
+  assert.doesNotMatch(output, /Observed facts/)
+  assert.doesNotMatch(output, /Assumptions to challenge/)
+  assert.match(output, /avoid adding governance artifacts/)
+  assert.deepEqual(readdirSync(target).sort(), before)
+}
+
+function testImpactAuthTeachesDecisionWithoutTakingAuthority() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-impact-auth-'))
+  mkdirSync(resolve(target, 'src', 'auth'), { recursive: true })
+  mkdirSync(resolve(target, 'tests'), { recursive: true })
+  writeFileSync(resolve(target, 'package.json'), JSON.stringify({
+    name: 'auth-service',
+    scripts: { test: 'node tests/auth.mjs' },
+    dependencies: { express: '1.0.0' },
+  }))
+  writeFileSync(resolve(target, 'src', 'auth', 'session.mjs'), 'export const session = true\n')
+
+  const report = runJson([
+    'impact',
+    'add Google OAuth login while preserving passwords',
+    '--target',
+    target,
+    '--file',
+    'src/auth/session.mjs',
+    '--guidance',
+    'learn',
+    '--json',
+  ])
+  const output = run([
+    'impact',
+    'add Google OAuth login while preserving passwords',
+    '--target',
+    target,
+    '--file',
+    'src/auth/session.mjs',
+    '--guidance',
+    'learn',
+  ])
+
+  assert.equal(report.projectContext.initializedWithPsdm, false)
+  assert.match(report.judgment.decision, /identity, trust, and access/)
+  assert.ok(report.judgment.options.some((item) => item.id === 'preserve-and-link-explicitly'))
+  assert.ok(report.judgment.ownerDecisionsRequired.some((item) => item.includes('link two identities')))
+  assert.equal(report.ownerDecision.status, 'required')
+  assert.equal(report.ownerDecision.value, null)
+  assert.equal(report.legacyClassification.estimatedLevel, 'Level 3')
+  assert.ok(report.observedEvidence.some((item) => (
+    item.kind === 'validation-capability'
+    && item.source === 'package.json:scripts'
+  )))
+  assert.match(output, /Reasoning to reuse/)
+  assert.match(output, /identity and data-lifecycle decision/)
+  assert.match(output, /cannot create, infer, approve, or simulate one/)
+}
+
+function testImpactUnknownGreenfieldExposesUncertaintyWithoutMutation() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-impact-greenfield-'))
+  const before = readdirSync(target).sort()
+  const report = runJson([
+    'impact',
+    'improve the system',
+    '--target',
+    target,
+    '--json',
+  ])
+
+  assert.equal(report.projectContext.mode, 'greenfield')
+  assert.equal(report.projectContext.initializedWithPsdm, false)
+  assert.equal(report.judgment.uncertainty.level, 'high')
+  assert.match(report.judgment.decision, /not provide enough deterministic evidence/)
+  assert.deepEqual(report.judgment.options, [])
+  assert.equal(report.ownerDecision.value, null)
+  assert.deepEqual(readdirSync(target).sort(), before)
+}
+
+function testImpactDoesNotMatchAiInsideOrdinaryWords() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-impact-signal-boundary-'))
+  const report = runJson([
+    'impact',
+    'maintain README formatting',
+    '--target',
+    target,
+    '--json',
+  ])
+
+  assert.ok(report.judgment.affectedSurfaces.some((item) => item.rule === 'local-presentation'))
+  assert.ok(report.judgment.affectedSurfaces.every((item) => item.rule !== 'ai-behavior'))
+}
+
+function testImpactRejectsUnsupportedGuidance() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-impact-guidance-'))
+  assert.throws(() => run([
+    'impact',
+    'update copy',
+    '--target',
+    target,
+    '--guidance',
+    'architect',
+  ]), /Command failed/)
 }
 
 function testReadOnlyShellRoutesCommandsAndReportsContext() {
@@ -1337,6 +1471,11 @@ function testExampleProjectCoverage() {
 
 const tests = [
   testRiscalaExecutableAliasContract,
+  testImpactLowRiskWithoutInitStaysLightweight,
+  testImpactAuthTeachesDecisionWithoutTakingAuthority,
+  testImpactUnknownGreenfieldExposesUncertaintyWithoutMutation,
+  testImpactDoesNotMatchAiInsideOrdinaryWords,
+  testImpactRejectsUnsupportedGuidance,
   testReadOnlyShellRoutesCommandsAndReportsContext,
   testShellUsesPtechCyanOnlyForInteractiveTerminals,
   testShellMenuFiltersNavigatesAndPreservesLayout,
