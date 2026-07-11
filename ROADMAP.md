@@ -51,6 +51,7 @@ Completed:
 - Added agent-recorded Active Work handoff for completed work, validation, decisions, questions, pending work, and one exact next action; a context-free Codex session recovered and followed that action successfully.
 - Verified that continuity does not expand authority: a fresh Codex session recovered an out-of-bound next action, stopped, and required an explicit Active Work transition; simplified the main shell palette by moving advanced judgment commands into a navigable submenu without changing direct CLI compatibility.
 - Made the agent-native boundary assessment explicit across repository, objective, mode, allowed paths/actions, forbidden actions, and preservation rules, with aligned/conflicting/unresolved outcomes and regression coverage across every generated adapter.
+- Anchored repository authority before requested path changes after a real Codex test exposed that the requested repository could otherwise evaluate itself; the repeated test stayed in `psdm-framework`, did not read Flowleads, and blocked both repository and mode changes.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

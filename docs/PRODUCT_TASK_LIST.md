@@ -88,6 +88,7 @@ Acceptance:
 Acceptance:
 
 - [x] Codex recovers the Active Work boundary in a fresh chat.
+- [x] Codex stops before entering a requested repository and reports simultaneous repository and mode conflicts.
 - [ ] Claude and Cursor recover the same boundary in fresh chats.
 - [ ] All stop on repository and mode transitions.
 - [x] Same-boundary reasoning proceeds without approval noise.

@@ -87,6 +87,10 @@ Before mutation, compare the requested action with Active Work. After mutation, 
 
 Agent adapters make the pre-mutation comparison explicit across repository, objective, mode, allowed paths/actions, forbidden actions, and preservation rules. Every dimension is `aligned`, `conflicting`, or `unresolved`; mutation proceeds only when all dimensions are aligned. This assessment is deterministic for repository, mode, and paths, while semantic alignment with the objective remains a disclosed agent judgment rather than a false claim of complete understanding.
 
+The repository check is anchored to the initial working repository before the agent follows a requested path or workspace change. Active Work found inside a requested target cannot authorize entering that same target; otherwise the request would replace the boundary before being evaluated.
+
+This rule is evidence-backed. In the first Codex experiment, the agent entered the requested Flowleads path and incorrectly treated its local Active Work as proof that the repository matched. After anchoring authority to the initial repository, the repeated experiment stayed in `psdm-framework`, did not read Flowleads, and reported both repository and mode conflicts.
+
 A technically correct result can still be outside authority.
 
 ## Trust Boundary

@@ -143,8 +143,8 @@ Prefer small, explicit, testable increments. Always name the next action and exp
 
 Before any file write, shell command, tool call, commit, push, or external action:
 
-1. Read `.riscala/ACTIVE_WORK.md` from the current repository.
-2. Verify that its Repository matches the current repository.
+1. Before following any requested `cd`, target path, repository path, or workspace switch, capture the initial working repository and read its `.riscala/ACTIVE_WORK.md`.
+2. Verify that Active Work Repository matches that initial repository. A repository named in the new request is a requested transition, never the authority source for evaluating itself; do not enter or read that repository before resolving the transition.
 3. If it is missing or Status is `closed`, stop and ask the developer to create Active Work.
 4. If Status is `transition_proposed`, do not mutate; ask the developer to run `/work continue` or revise the proposal.
 5. Before treating a request as authority, produce a boundary assessment that explicitly compares: current repository with Repository; requested outcome with Objective; requested activity with Mode; intended files/actions with Allowed and Allowed Paths; and the request with Forbidden and Must Preserve.

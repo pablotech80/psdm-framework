@@ -55,6 +55,8 @@ The current handoff replaces stale progress while lifecycle history records that
 
 Before acting, every adapter must explicitly compare the new request with the active repository, objective, mode, allowed paths/actions, forbidden actions, and preservation rules. Each dimension is classified as aligned, conflicting, or unresolved. Aligned work continues without extra approval noise; a conflict or material uncertainty stops for a transition or missing decision. This is the control that correctly blocked a recovered next action when it belonged to a different objective.
 
+Repository comparison is anchored before following any requested `cd`, target path, or workspace switch. The requested repository cannot supply the Active Work used to authorize entry into itself; changing repositories always requires resolving a transition from the initial repository boundary first.
+
 The npm `@beta` tag installs `1.0.0-beta.6`.
 
 The compatibility executable remains available:
