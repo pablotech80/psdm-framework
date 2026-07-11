@@ -526,10 +526,18 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   writeFileSync(resolve(target, 'package.json'), '{"name":"shell-fixture","private":true}\n')
   writeFileSync(resolve(target, 'notes.txt'), 'untracked\n')
 
-  const output = runShell([target], '/help\n/impact update user flow\n/review update user flow\n/review AGENTS.md\n/status\n/audit\n/check\n/validate\n/report\n/inspect\n/classify update user flow\n/pr-checklist update user flow\n/init-preview\n/hook-status\n/action\n/approval\n/commit\n/exit\n')
+  const output = runShell([target], '/help\n/work design Improve shell continuity\n/status\n/work replace the objective\n/impact update user flow\n/review update user flow\n/review AGENTS.md\n/audit\n/check\n/validate\n/report\n/inspect\n/classify update user flow\n/pr-checklist update user flow\n/init-preview\n/hook-status\n/action\n/approval\n/commit\n/exit\n')
+  const activeWork = readFileSync(resolve(target, '.riscala', 'ACTIVE_WORK.md'), 'utf8')
 
   assert.match(output, /RISCALA/)
-  assert.match(output, /READ ONLY · judgment workspace/)
+  assert.match(output, /Work\s+NOT SET/)
+  assert.match(output, /Next\s+\/work <objective>/)
+  assert.match(output, /╭─ WORK /)
+  assert.match(output, /Work\s+ACTIVE · design/)
+  assert.match(output, /Objective\s+Improve shell continuity/)
+  assert.match(output, /Active Work already exists/)
+  assert.match(activeWork, /Objective: Improve shell continuity/)
+  assert.doesNotMatch(activeWork, /replace the objective/)
   assert.match(output, /Project\s+shell-fixture/)
   assert.match(output, /Changes\s+1 staged · 1 unstaged · 1 untracked/)
   assert.match(output, /Files\s+M\s+src\/tracked\.mjs/)
@@ -553,6 +561,7 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.match(output, /╭─ ACTION /)
   assert.match(output, /╭─ APPROVAL /)
   assert.match(output, /\/status\s+Refresh repository/)
+  assert.match(output, /\/work\s+Create the active objective/)
   assert.match(output, /\/impact\s+Think through a change/)
   assert.match(output, /\/review\s+Compare intent with staged evidence/)
   assert.match(output, /\/audit\s+Assess governance adoption/)
@@ -563,7 +572,7 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.match(output, /Artifacts\s+\d+ present · \d+ missing · \d+ empty/)
   assert.match(output, /Adoption\s+Initialize governance baseline/)
   assert.match(output, /AI\s+0 surfaces · Not detected/)
-  assert.match(output, /Git\s+1 staged · 1 unstaged · 1 untracked/)
+  assert.match(output, /Git\s+1 staged · 1 unstaged · 2 untracked/)
   assert.match(output, /Next\s+Run riscala init/)
   assert.doesNotMatch(output, /Run psdm (?:init|validate)/)
   assert.match(output, /Status\s+incomplete/)
@@ -624,6 +633,7 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
 
   assert.deepEqual(allCommands.map((item) => item.name), [
     '/help',
+    '/work',
     '/impact',
     '/review',
     '/status',
@@ -642,10 +652,10 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
   ])
   assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
   assert.deepEqual(filterShellMenuCommands('status'), [])
-  assert.equal(moveShellMenuSelection(0, 'previous', 16), 15)
-  assert.equal(moveShellMenuSelection(15, 'next', 16), 0)
+  assert.equal(moveShellMenuSelection(0, 'previous', 17), 16)
+  assert.equal(moveShellMenuSelection(16, 'next', 17), 0)
   assert.match(plainMenu, /Commands/)
-  assert.match(plainMenu, /❯ \/impact/)
+  assert.match(plainMenu, /❯ \/work/)
   assert.equal(plainMenu.split('\n').every((line) => line.length === 70), true)
   assert.equal(stripAnsi(coloredMenu), plainMenu)
 }
@@ -670,6 +680,7 @@ async function testInteractiveShellOpensSlashMenuAndNavigates() {
     env: { TERM: 'xterm-256color' },
   })
   input.write('/')
+  input.write('\u001b[B')
   input.write('\u001b[B')
   input.write('\u001b[B')
   input.write('\u001b[B')

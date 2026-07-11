@@ -1,6 +1,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { basename, join, relative } from 'node:path'
 import { buildGitCommitActionRecord } from './action-record.mjs'
+import { createActiveWork, parseActiveWork, readActiveWork, WORK_MODES } from './active-work.mjs'
 import { buildAudit } from './audit.mjs'
 import { classifyChange } from './classifier.mjs'
 import { loadConfig } from './config.mjs'
@@ -247,12 +248,17 @@ function buildCheckReport({ target, configPath = null }) {
 export function buildShellContext({ target, configPath = null }) {
   const git = inspectGit(target)
   const configState = loadConfig(target, configPath)
+  const activeWorkState = readActiveWork(target)
 
   return {
     target,
     project: projectName(target),
     git,
     changes: countChanges(git.changes),
+    activeWork: {
+      ...activeWorkState,
+      work: parseActiveWork(activeWorkState.content),
+    },
     config: {
       path: configState.path,
       exists: configState.exists,
@@ -261,8 +267,33 @@ export function buildShellContext({ target, configPath = null }) {
   }
 }
 
+function renderActiveWorkRows(context, options = {}) {
+  const theme = terminalTheme(options.color)
+  const work = context.activeWork.work
+
+  if (!context.activeWork.exists || !work) {
+    return [
+      cardRow('Work', 'NOT SET', { ...options, valueStyle: theme.yellow }),
+      ...cardRows('Next', '/work <objective>', { ...options, valueStyle: theme.cyanLight }),
+    ]
+  }
+
+  return [
+    cardRow('Work', `${(work.status || 'active').toUpperCase()} · ${work.mode || 'unknown mode'}`, {
+      ...options,
+      valueStyle: theme.green,
+    }),
+    ...cardRows('Objective', work.objective || 'Not recorded', options),
+    ...(work.allowed ? cardRows('Allowed', work.allowed, options) : []),
+    ...(work.forbidden ? cardRows('Forbidden', work.forbidden, { ...options, valueStyle: theme.yellow }) : []),
+    ...(work.nextAction ? cardRows('Next', work.nextAction, { ...options, valueStyle: theme.cyanLight }) : []),
+  ]
+}
+
 export function renderShellStatus(context, options = {}) {
   return renderPanel('STATUS', [
+    ...renderActiveWorkRows(context, options),
+    panelRule('middle', '', options),
     ...renderStatusRows(context, options),
     cardRow('Refreshed', `${new Date().toISOString().slice(11, 19)} UTC`, options),
   ], options)
@@ -275,14 +306,11 @@ export function renderShellBanner(context, options = {}) {
 
   return [
     theme.cyan(top),
-    cardRow('Mode', 'READ ONLY · judgment workspace', {
-      ...options,
-      valueStyle: theme.cyanLight,
-    }),
+    ...renderActiveWorkRows(context, options),
     panelRule('middle', '', options),
     ...renderStatusRows(context, options),
     panelRule('bottom', '', options),
-    `${theme.dim('Powered by PSDM')} · ${theme.cyan('/impact')} ${theme.dim('before code')} · ${theme.cyan('/review')} ${theme.dim('after staging')} · ${theme.cyan('/')} ${theme.dim('commands')}`,
+    `${theme.dim('Powered by PSDM')} · ${theme.cyan('/work')} ${theme.dim('sets the boundary')} · ${theme.cyan('/')} ${theme.dim('commands')}`,
   ].join('\n')
 }
 
@@ -295,6 +323,7 @@ export function renderShellHelp(options = {}) {
   const theme = terminalTheme(options.color)
   const rows = [
     cardRow('/help', 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/work', 'Create the active objective and mode.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/impact', 'Think through a change before coding.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/review', 'Compare intent with staged evidence.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/status', 'Refresh repository and policy context.', { ...options, valueStyle: theme.cyanLight }),
@@ -315,7 +344,7 @@ export function renderShellHelp(options = {}) {
       ...options,
       valueStyle: theme.cyanLight,
     }),
-    ...cardRows('Safety', 'Read only. Mutating commands remain blocked until independent approval enforcement is configured.', {
+    ...cardRows('Safety', '/work only creates .riscala/ACTIVE_WORK.md. Code changes and other mutating commands remain blocked.', {
       ...options,
       valueStyle: theme.yellow,
     }),
@@ -838,7 +867,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     }
   }
 
-  if (!['/impact', '/review', '/classify', '/pr-checklist'].includes(command) && parameters.length > 0) {
+  if (!['/work', '/impact', '/review', '/classify', '/pr-checklist'].includes(command) && parameters.length > 0) {
     return {
       output: `Usage error: ${command} does not accept arguments in this shell.`,
       exit: false,
@@ -847,6 +876,31 @@ export function executeShellCommand(input, { target, configPath = null, color = 
 
   if (command === '/help') {
     return { output: renderShellHelp({ color }), exit: false }
+  }
+
+  if (command === '/work') {
+    const requestedMode = WORK_MODES.includes(parameters[0]) ? parameters.shift() : 'implement'
+    const objective = parameters.join(' ').trim()
+    if (!objective) {
+      return {
+        output: renderUsage('/work', '/work [inspect|experiment|design|implement|release] <objective>', { color }),
+        exit: false,
+      }
+    }
+
+    const result = createActiveWork({ target, objective, mode: requestedMode })
+    const context = buildShellContext({ target, configPath })
+    const rows = result.created
+      ? renderActiveWorkRows(context, { color })
+      : [
+          ...cardRows('State', 'Active Work already exists. The current boundary was preserved.', {
+            color,
+            valueStyle: terminalTheme(color).yellow,
+          }),
+          panelRule('middle', '', { color }),
+          ...renderActiveWorkRows(context, { color }),
+        ]
+    return { output: renderPanel('WORK', rows, { color }), exit: false }
   }
 
   if (command === '/impact') {

@@ -5,6 +5,7 @@ const MENU_NAME_WIDTH = 16
 
 export const SHELL_MENU_COMMANDS = Object.freeze([
   { name: '/help', description: 'Show available commands and safety boundaries.' },
+  { name: '/work', description: 'Create the active objective and working mode.' },
   { name: '/impact', description: 'Think through a change before implementation.' },
   { name: '/review', description: 'Compare intent with staged Git evidence.' },
   { name: '/status', description: 'Refresh repository and policy context.' },
