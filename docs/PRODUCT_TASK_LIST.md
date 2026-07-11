@@ -112,14 +112,14 @@ Acceptance:
 - [x] Compare staged, unstaged, and untracked paths with explicitly allowed paths.
 - [x] Normalize selected-project paths against the Git root in staged Decision Review.
 - [x] Report exact file and violated boundary.
-- [ ] Distinguish advisory findings from enforced failures.
-- [ ] Keep solo-developer defaults lightweight.
-- [ ] Preserve optional stricter team and production policy.
+- [x] Distinguish advisory `/review` findings from enforced pre-commit failures.
+- [x] Keep solo-developer defaults lightweight by leaving the hook and allowed paths optional.
+- [x] Preserve optional stricter team and production policy.
 
 Acceptance:
 
 - [x] Out-of-scope files are identified exactly.
-- [ ] Same-scope low-risk work avoids unrelated governance.
+- [x] Same-scope low-risk work avoids unrelated governance.
 - [ ] CI and local boundary results agree.
 
 ## P2 — Optional LLM Interpretation

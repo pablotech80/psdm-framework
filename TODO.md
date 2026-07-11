@@ -34,6 +34,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Record hashes of init-created files so uninstall removes intact generated baselines and preserves later user edits.
 - [x] Translate `/validate` completely into Spanish without changing its automation-facing JSON contract.
 - [x] Add optional Active Work allowed paths and report exact repository or file-scope conflicts across the complete working tree.
+- [x] Apply the same Active Work file boundary to Decision Review and optional managed pre-commit enforcement.
 
 - [x] Record the continuity experiment and its governance failure without modifying the laboratory repository.
 - [x] Reframe beta.6 around Continuity and Control instead of generic technical recommendations.

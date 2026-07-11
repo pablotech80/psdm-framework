@@ -25,33 +25,27 @@ function patternRegex(pattern) {
   return new RegExp(`${source}$`)
 }
 
-function changedPaths(lines) {
+export function changedPaths(lines) {
   return [...new Set(lines.flatMap((line) => {
     const value = line.slice(3).trim().replace(/^"|"$/g, '')
     return value.includes(' -> ') ? value.split(' -> ') : [value]
   }).filter(Boolean))]
 }
 
-export function evaluateActiveWorkScope({ target, git, work }) {
-  if (!work) return { decision: 'NO_ACTIVE_WORK', repositoryMatches: null, allowedPatterns: [], changedPaths: [], violations: [] }
+export function evaluatePathsAgainstActiveWork({ target, work, paths }) {
+  if (!work) return { decision: 'NO_ACTIVE_WORK', repositoryMatches: null, allowedPatterns: [], changedPaths: paths, violations: [] }
   const repositoryMatches = canonical(work.repository) === canonical(target)
-  if (!repositoryMatches) {
-    return { decision: 'REPOSITORY_CONFLICT', repositoryMatches, allowedPatterns: work.allowedPaths || [], changedPaths: changedPaths(git.changes), violations: [] }
-  }
+  if (!repositoryMatches) return { decision: 'REPOSITORY_CONFLICT', repositoryMatches, allowedPatterns: work.allowedPaths || [], changedPaths: paths, violations: [] }
   const identity = inspectRepositoryIdentity(target)
   const prefix = identity ? normalizePath(relative(canonical(identity.root), canonical(target))) : ''
   const allowedPatterns = (work.allowedPaths || []).map((pattern) => normalizePath(prefix ? `${prefix}/${pattern}` : pattern))
-  const paths = changedPaths(git.changes).filter((path) => !/(^|\/)\.riscala(?:\/|$)/.test(path))
-  if (allowedPatterns.length === 0) {
-    return { decision: 'UNSCOPED', repositoryMatches, allowedPatterns, changedPaths: paths, violations: [] }
-  }
+  const scopedPaths = paths.filter((path) => !/(^|\/)\.riscala(?:\/|$)/.test(path))
+  if (allowedPatterns.length === 0) return { decision: 'UNSCOPED', repositoryMatches, allowedPatterns, changedPaths: scopedPaths, violations: [] }
   const matchers = allowedPatterns.map(patternRegex)
-  const violations = paths.filter((path) => !matchers.some((matcher) => matcher.test(normalizePath(path))))
-  return {
-    decision: violations.length ? 'SCOPE_REVIEW_REQUIRED' : 'SCOPE_ALIGNED',
-    repositoryMatches,
-    allowedPatterns,
-    changedPaths: paths,
-    violations,
-  }
+  const violations = scopedPaths.filter((path) => !matchers.some((matcher) => matcher.test(normalizePath(path))))
+  return { decision: violations.length ? 'SCOPE_REVIEW_REQUIRED' : 'SCOPE_ALIGNED', repositoryMatches, allowedPatterns, changedPaths: scopedPaths, violations }
+}
+
+export function evaluateActiveWorkScope({ target, git, work }) {
+  return evaluatePathsAgainstActiveWork({ target, work, paths: changedPaths(git.changes) })
 }

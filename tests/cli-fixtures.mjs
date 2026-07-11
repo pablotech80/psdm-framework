@@ -485,6 +485,28 @@ function testDecisionReviewDetectsScopeAndDeliveryDrift() {
   assert.match(output, /does not approve, commit, or establish human authority/)
 }
 
+function testDecisionReviewUsesActiveWorkAllowedPaths() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-review-active-scope-'))
+  mkdirSync(resolve(target, 'src'), { recursive: true })
+  mkdirSync(resolve(target, 'docs'), { recursive: true })
+  git(target, ['init', '--quiet'])
+  writeFileSync(resolve(target, 'src', 'lead.mjs'), 'export const lead = true\n')
+  writeFileSync(resolve(target, 'docs', 'README.md'), '# Docs\n')
+  git(target, ['add', '.'])
+  git(target, ['-c', 'user.name=Riscala', '-c', 'user.email=riscala@example.invalid', 'commit', '--quiet', '-m', 'baseline'])
+  runJson(['work', 'init', 'Cambiar lead', '--files', 'src/**', '--target', target, '--json'])
+  writeFileSync(resolve(target, 'src', 'lead.mjs'), 'export const lead = false\n')
+  writeFileSync(resolve(target, 'docs', 'README.md'), '# Changed docs\n')
+  git(target, ['add', 'src/lead.mjs', 'docs/README.md'])
+
+  const report = runJson(['review', 'Cambiar lead', '--staged', '--files', 'src/lead.mjs,docs/README.md', '--target', target, '--json'])
+
+  assert.equal(report.verification.activeWorkScope.decision, 'SCOPE_REVIEW_REQUIRED')
+  assert.deepEqual(report.verification.activeWorkScope.violations, ['docs/README.md'])
+  assert.ok(report.verification.deviations.some((item) => item.kind === 'active-work-scope-violation' && item.file === 'docs/README.md'))
+  assert.equal(report.verification.readiness, 'developer_review_required')
+}
+
 function testDecisionReviewReportsDependencyDeltaWithoutReadingSource() {
   const target = initializeReviewRepository()
   writeFileSync(resolve(target, 'package.json'), JSON.stringify({
@@ -1278,6 +1300,31 @@ function testManagedPreCommitHookAllowsLowRiskAndBlocksHighRisk() {
   const removed = runJson(['hook', 'remove', 'pre-commit', '--target', target, '--json'])
   assert.equal(removed.decision, 'HOOK_REMOVED')
   assert.equal(existsSync(resolve(target, '.git', 'hooks', 'pre-commit')), false)
+}
+
+function testManagedPreCommitHookBlocksActiveWorkScopeViolation() {
+  const root = mkdtempSync(resolve(tmpdir(), 'riscala-hook-scope-root-'))
+  const target = resolve(root, 'app')
+  mkdirSync(resolve(target, 'src'), { recursive: true })
+  mkdirSync(resolve(target, 'docs'), { recursive: true })
+  git(root, ['init', '--quiet'])
+  writeFileSync(resolve(target, 'src', 'lead.mjs'), 'export const lead = true\n')
+  writeFileSync(resolve(target, 'docs', 'README.md'), '# Docs\n')
+  git(root, ['add', '.'])
+  git(root, ['-c', 'user.name=Riscala', '-c', 'user.email=riscala@example.invalid', 'commit', '--quiet', '-m', 'baseline'])
+  runJson(['work', 'init', 'Cambiar lead', '--files', 'src/**', '--target', target, '--json'])
+  runJson(['hook', 'install', 'pre-commit', '--target', target, '--json'])
+
+  writeFileSync(resolve(target, 'src', 'lead.mjs'), 'export const lead = false\n')
+  git(root, ['add', 'app/src/lead.mjs'])
+  git(root, ['-c', 'user.name=Riscala', '-c', 'user.email=riscala@example.invalid', 'commit', '--quiet', '-m', 'allowed scope'])
+
+  writeFileSync(resolve(target, 'docs', 'README.md'), '# Outside scope\n')
+  git(root, ['add', 'app/docs/README.md'])
+  assert.throws(() => git(root, ['-c', 'user.name=Riscala', '-c', 'user.email=riscala@example.invalid', 'commit', '--quiet', '-m', 'blocked scope']))
+  const report = runJson(['approval', 'enforce', 'git.commit', '--target', target, '--json'], { allowFailure: true })
+  assert.equal(report.decision, 'COMMIT_ACTIVE_WORK_SCOPE_DENIED')
+  assert.deepEqual(report.scope.violations, ['app/docs/README.md'])
 }
 
 function testHookInstallerPreservesUnmanagedHook() {
@@ -2222,6 +2269,7 @@ const tests = [
   testImpactRejectsUnsupportedGuidance,
   testDecisionReviewAlignedScopeRemainsAdvisory,
   testDecisionReviewDetectsScopeAndDeliveryDrift,
+  testDecisionReviewUsesActiveWorkAllowedPaths,
   testDecisionReviewReportsDependencyDeltaWithoutReadingSource,
   testDecisionReviewReportsMissingExpectedScope,
   testDecisionReviewNoStagedChangesIsReadOnlyNoOp,
@@ -2243,6 +2291,7 @@ const tests = [
   testActionRecordAndApprovalReceiptVerification,
   testApprovalEnforcementConsumesReceiptOnce,
   testManagedPreCommitHookAllowsLowRiskAndBlocksHighRisk,
+  testManagedPreCommitHookBlocksActiveWorkScopeViolation,
   testHookInstallerPreservesUnmanagedHook,
   testHookInstallerRespectsConfiguredHooksPath,
   testActionRecordFailsClosedWithoutTrustedApprover,

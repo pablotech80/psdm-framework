@@ -11,6 +11,9 @@ import {
 import { join } from 'node:path'
 import { verifyGitCommitApproval } from './approval-receipt.mjs'
 import { resolveGitDirectory } from './git.mjs'
+import { inspectStagedGit } from './git.mjs'
+import { parseActiveWork, readActiveWork } from './active-work.mjs'
+import { evaluatePathsAgainstActiveWork } from './scope-control.mjs'
 
 function enforcementPaths(target) {
   const gitDirectory = resolveGitDirectory(target)
@@ -121,6 +124,28 @@ export function enforceGitCommitApproval({
     }
   }
 
+  const activeState = readActiveWork(target)
+  const activeWork = parseActiveWork(activeState.content)
+  const staged = inspectStagedGit(target)
+  const stagedPaths = [...new Set(staged.changes.flatMap((change) => change.previousPath ? [change.previousPath, change.path] : [change.path]))]
+  const scope = evaluatePathsAgainstActiveWork({ target, work: activeWork, paths: stagedPaths })
+  if (scope.decision === 'REPOSITORY_CONFLICT' || scope.violations.length > 0) {
+    return {
+      version: 1,
+      command: 'approval',
+      operation: 'enforce',
+      action: 'git.commit',
+      decision: 'COMMIT_ACTIVE_WORK_SCOPE_DENIED',
+      allowed: false,
+      verification: null,
+      scope,
+      consumption: null,
+      violations: scope.decision === 'REPOSITORY_CONFLICT'
+        ? ['Active Work belongs to a different repository.']
+        : scope.violations.map((file) => `${file} is staged outside the Active Work allowed paths.`),
+    }
+  }
+
   const verification = verifyGitCommitApproval({
     target,
     receiptPath: receiptPath || paths.receipt,
@@ -137,6 +162,7 @@ export function enforceGitCommitApproval({
     verification,
     consumption: null,
     violations: [...verification.violations],
+    scope,
   }
 
   if (!verification.valid) {
