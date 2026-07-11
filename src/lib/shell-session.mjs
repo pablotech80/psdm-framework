@@ -86,7 +86,11 @@ export function runInteractiveShellSession({
       input.pause()
     }
 
-    function closeSession(message = 'Riscala shell closed.') {
+    function localizedCloseMessage() {
+      return language === 'es' ? 'Shell de Riscala cerrado.' : 'Riscala shell closed.'
+    }
+
+    function closeSession(message = localizedCloseMessage()) {
       clearFrame()
       output.write(`${message}\n`)
       cleanup()
@@ -150,7 +154,7 @@ export function runInteractiveShellSession({
 
     function onKeypress(text, key = {}) {
       if (key.ctrl && key.name === 'c') {
-        closeSession('^C\nRiscala shell closed.')
+        closeSession(`^C\n${localizedCloseMessage()}`)
         return
       }
 

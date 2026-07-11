@@ -31,6 +31,7 @@ The CLI is for setup, inspection, recovery, and automation. It is not the main d
 - [x] Make `/approval` reflect effective repository policy.
 - [x] Preserve the current `/help` Authority and Safety copy.
 - [x] Order help and command menus alphabetically and support arrow navigation inside submenus.
+- [x] Expose project initialization through a navigable `/init` submenu with preview and explicit confirmation.
 
 Acceptance:
 

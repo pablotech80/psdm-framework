@@ -13,10 +13,11 @@ const SPANISH_DESCRIPTIONS = {
   '/help': 'Mostrar comandos y límites de seguridad.',
   '/hook-status': 'Comprobar el hook pre-commit.',
   '/impact': 'Evaluar un cambio antes de programar.',
-  '/init-preview': 'Previsualizar archivos de gobierno.',
+  '/init': 'Inicializar el gobierno del proyecto.',
+  '/init confirm': 'Confirmar e inicializar el proyecto.',
+  '/init preview': 'Previsualizar sin modificar archivos.',
   '/inspect': 'Inspeccionar cambios preparados.',
   '/language': 'Cambiar el idioma entre inglés y español.',
-  '/lenguaje': 'Cambiar el idioma entre español e inglés.',
   '/pr-checklist': 'Preparar la lista de una PR.',
   '/report': 'Resumir el estado del informe.',
   '/review': 'Comparar objetivo y evidencia preparada.',
@@ -49,9 +50,9 @@ const LANGUAGE_SUBMENU = Object.freeze([
   { name: '/language es', description: 'Cambiar a español / Switch to Spanish.', execute: true },
 ])
 
-const LENGUAJE_SUBMENU = Object.freeze([
-  { name: '/lenguaje en', description: 'Cambiar a inglés.', execute: true },
-  { name: '/lenguaje es', description: 'Cambiar a español.', execute: true },
+const INIT_SUBMENU = Object.freeze([
+  { name: '/init confirm', description: 'Confirm and initialize this project.', execute: true },
+  { name: '/init preview', description: 'Preview without changing files.', execute: true },
 ])
 
 export const SHELL_MENU_COMMANDS = Object.freeze([
@@ -64,10 +65,9 @@ export const SHELL_MENU_COMMANDS = Object.freeze([
   { name: '/help', description: 'Show available commands and safety boundaries.' },
   { name: '/hook-status', description: 'Inspect managed pre-commit hook status.' },
   { name: '/impact', description: 'Think through a change before implementation.' },
-  { name: '/init-preview', description: 'Preview governance files without writing.' },
+  { name: '/init', description: 'Initialize project governance.', children: INIT_SUBMENU },
   { name: '/inspect', description: 'Inspect staged changes and governance level.' },
   { name: '/language', description: 'Change language between English and Spanish.', children: LANGUAGE_SUBMENU },
-  { name: '/lenguaje', description: 'Cambiar el idioma entre español e inglés.', children: LENGUAJE_SUBMENU },
   { name: '/pr-checklist', description: 'Build a PR checklist for a described change.' },
   { name: '/report', description: 'Summarize compliance report readiness.' },
   { name: '/review', description: 'Compare intent with staged Git evidence.' },
@@ -135,7 +135,7 @@ export function renderShellMenu(input, selectedIndex = 0, options = {}) {
   const commands = filterShellMenuCommands(input, options.parentName)
   const rawTitle = options.parentName ? options.parentName.slice(1) : 'Commands'
   const localizedTitle = options.language === 'es'
-    ? ({ Commands: 'Comandos', work: 'trabajo', language: 'idioma', lenguaje: 'lenguaje' }[rawTitle] || rawTitle)
+    ? ({ Commands: 'Comandos', init: 'inicialización', work: 'trabajo', language: 'idioma' }[rawTitle] || rawTitle)
     : rawTitle
   const title = `─ ${localizedTitle} `
   const top = `╭${title}${'─'.repeat(MENU_WIDTH - title.length)}╮`
