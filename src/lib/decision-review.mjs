@@ -6,6 +6,8 @@ const SURFACE_PATHS = [
   { surface: 'delivery', patterns: [/^\.github\/workflows\//, /^infra\//, /(^|\/)Dockerfile$/, /(^|\/)docker-compose/, /(^|\/)terraform\//, /(^|\/)k8s\//] },
   { surface: 'schema', patterns: [/(^|\/)migrations?\//, /(^|\/)schema\./, /(^|\/)models?\//] },
   { surface: 'authentication', patterns: [/(^|\/)(auth|authentication|authorization|sessions?)(\/|\.|$)/] },
+  { surface: 'api-contract', patterns: [/(^|\/)api\//] },
+  { surface: 'user-flow', patterns: [/(^|\/)(contact|contacto|leads?|forms?)(\/|\.|-)/] },
   { surface: 'ai-behavior', patterns: [/(^|\/)(ai|agents?|prompts?|rag|embeddings?|tools?)(\/|\.|$)/] },
   { surface: 'configuration', patterns: [/(^|\/)(config|configuration)(\/|\.|$)/, /(^|\/)\.env(\.|$)/] },
   { surface: 'dependency', patterns: [/(^|\/)package\.json$/, /(^|\/)pyproject\.toml$/, /(^|\/)requirements\.txt$/, /(^|\/)go\.mod$/, /(^|\/)Cargo\.toml$/] },
@@ -19,6 +21,7 @@ const EXPECTED_RULE_SURFACES = {
   delivery: ['delivery', 'configuration', 'test'],
   'ai-behavior': ['ai-behavior', 'configuration', 'dependency', 'test'],
   'dependency-change': ['dependency', 'delivery', 'test'],
+  'lead-intake': ['user-flow', 'api-contract', 'schema', 'test'],
   'local-presentation': ['documentation', 'test'],
 }
 
@@ -195,7 +198,7 @@ export function buildDecisionReview({ target, intent, expectedFiles = [], config
     })
   }
 
-  const readiness = deviations.length > 0 ? 'developer_review_required' : 'aligned_but_unapproved'
+  const readiness = deviations.length > 0 ? 'developer_review_required' : 'scope_aligned_evidence_unverified'
   return {
     version: 1,
     command: 'review',
@@ -249,6 +252,7 @@ export function printDecisionReview(report) {
   if (!concise) {
     printList('Expected files', report.verification.expectedFiles)
     printList('Staged files', report.verification.stagedFiles)
+    printList('Observed surfaces', report.verification.observedSurfaces, (item) => `${item.surface}: ${item.file}`)
   }
   printList('Deviations', report.verification.deviations, (item) => `${item.kind}: ${item.statement}`)
   if (report.verification.dependencyDelta) {

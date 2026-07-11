@@ -166,7 +166,7 @@ riscala review "add Google OAuth login" --staged \
   --files src/auth/login.mjs,tests/auth/login.test.mjs
 ```
 
-`review` reports staged files outside the declared scope, expected files that are missing, unexpected auth/schema/AI/config/deployment surfaces, package dependency changes, and the absence of supplied validation results. The Change Envelope is an advisory CLI input with `authorityVerified: false`; Decision Review never approves, commits, or establishes human authority.
+`review` reports staged files outside the declared scope, expected files that are missing, observed and unexpected auth/schema/AI/config/deployment surfaces, package dependency changes, and the absence of supplied validation results. `scope_aligned_evidence_unverified` means only that staged scope aligns; it does not claim validation or approval. The Change Envelope is an advisory CLI input with `authorityVerified: false`; Decision Review never approves, commits, or establishes human authority.
 
 ### Repository
 
