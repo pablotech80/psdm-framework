@@ -1,6 +1,8 @@
+import { relative } from 'node:path'
+import { realpathSync } from 'node:fs'
 import { buildJudgmentBrief } from './judgment.mjs'
 import { inspectStagedChange } from './inspect.mjs'
-import { readGitTextFile } from './git.mjs'
+import { inspectRepositoryIdentity, readGitTextFile } from './git.mjs'
 
 const SURFACE_PATHS = [
   { surface: 'delivery', patterns: [/^\.github\/workflows\//, /^infra\//, /(^|\/)Dockerfile$/, /(^|\/)docker-compose/, /(^|\/)terraform\//, /(^|\/)k8s\//] },
@@ -122,8 +124,18 @@ export function buildChangeEnvelope({ intent, expectedFiles, brief }) {
 }
 
 export function buildDecisionReview({ target, intent, expectedFiles = [], configPath = null, guidance = 'balanced' }) {
-  const brief = buildJudgmentBrief({ target, intent, files: expectedFiles, configPath, guidance })
-  const envelope = buildChangeEnvelope({ intent, expectedFiles, brief })
+  const repository = inspectRepositoryIdentity(target)
+  const targetPrefix = repository
+    ? relative(realpathSync(repository.root), realpathSync(target)).replaceAll('\\', '/')
+    : ''
+  const normalizedExpectedFiles = unique(expectedFiles.map((file) => {
+    const normalized = file.replace(/^\.\//, '').replaceAll('\\', '/')
+    return targetPrefix && normalized !== targetPrefix && !normalized.startsWith(`${targetPrefix}/`)
+      ? `${targetPrefix}/${normalized}`
+      : normalized
+  }))
+  const brief = buildJudgmentBrief({ target, intent, files: normalizedExpectedFiles, configPath, guidance })
+  const envelope = buildChangeEnvelope({ intent, expectedFiles: normalizedExpectedFiles, brief })
   const staged = inspectStagedChange({ target, configPath })
 
   if (staged.decision !== 'CHANGE_REVIEW_REQUIRED') {
@@ -235,32 +247,46 @@ function printList(title, values, formatter = (value) => value) {
   for (const value of values) console.log(`- ${formatter(value)}`)
 }
 
-export function printDecisionReview(report) {
+export function printDecisionReview(report, options = {}) {
   const concise = report.guidance === 'concise'
   const learn = report.guidance === 'learn'
-  console.log('Riscala Decision Review')
-  console.log(`Guidance: ${report.guidance}`)
-  console.log(`Decision: ${report.decision}`)
-  console.log('Authority: advisory · owner decision not verified')
+  const es = options.language === 'es'
+  const deviationText = (item) => {
+    if (!es) return `${item.kind}: ${item.statement}`
+    if (item.kind === 'scope-drift') return `${item.kind}: ${item.file} está preparado fuera del alcance esperado.`
+    if (item.kind === 'expected-not-staged') return `${item.kind}: ${item.file} se declaró como esperado pero no está preparado.`
+    if (item.kind === 'unexpected-surface') return `${item.kind}: ${item.file} introduce impacto ${item.surface} no previsto.`
+    return `${item.kind}: ${item.statement}`
+  }
+  console.log(es ? 'Revisión de decisión de Riscala' : 'Riscala Decision Review')
+  console.log(`${es ? 'Detalle' : 'Guidance'}: ${report.guidance}`)
+  console.log(`${es ? 'Decisión' : 'Decision'}: ${report.decision}`)
+  console.log(es ? 'Autoridad: consultiva · decisión del propietario no verificada' : 'Authority: advisory · owner decision not verified')
 
   if (!report.verification) {
-    console.log(`\nState\n${report.staged.decision === 'NO_STAGED_CHANGES' ? 'No staged changes found.' : 'Target is not a Git repository.'}`)
+    console.log(`\n${es ? 'Estado' : 'State'}\n${report.staged.decision === 'NO_STAGED_CHANGES' ? (es ? 'No hay cambios preparados.' : 'No staged changes found.') : (es ? 'El destino no es un repositorio Git.' : 'Target is not a Git repository.')}`)
     return
   }
 
-  console.log(`\nIntent\n${report.envelope.intent}`)
+  console.log(`\n${es ? 'Objetivo' : 'Intent'}\n${report.envelope.intent}`)
   if (!concise) {
-    printList('Expected files', report.verification.expectedFiles)
-    printList('Staged files', report.verification.stagedFiles)
-    printList('Observed surfaces', report.verification.observedSurfaces, (item) => `${item.surface}: ${item.file}`)
+    printList(es ? 'Archivos esperados' : 'Expected files', report.verification.expectedFiles)
+    printList(es ? 'Archivos preparados' : 'Staged files', report.verification.stagedFiles)
+    printList(es ? 'Superficies observadas' : 'Observed surfaces', report.verification.observedSurfaces, (item) => `${item.surface}: ${item.file}`)
   }
-  printList('Deviations', report.verification.deviations, (item) => `${item.kind}: ${item.statement}`)
+  printList(es ? 'Desviaciones' : 'Deviations', report.verification.deviations, deviationText)
   if (report.verification.dependencyDelta) {
     const delta = report.verification.dependencyDelta
     console.log(`\nDependencies\nAdded: ${delta.added.join(', ') || 'none'} · Removed: ${delta.removed.join(', ') || 'none'}`)
   }
-  console.log(`\nValidation evidence\n${report.verification.validation.status}: ${report.verification.validation.note}`)
-  console.log(`\nReadiness recommendation\n${report.verification.readiness}`)
-  if (learn) printList('Reasoning to reuse', report.brief.judgment.learningPrinciples)
-  console.log(`\nOwner authority\n${report.verification.authority.note}`)
+  const validationNote = es
+    ? 'La revisión observa archivos de prueba preparados, pero no supone que las pruebas se hayan ejecutado.'
+    : report.verification.validation.note
+  console.log(`\n${es ? 'Evidencia de validación' : 'Validation evidence'}\n${report.verification.validation.status}: ${validationNote}`)
+  console.log(`\n${es ? 'Recomendación' : 'Readiness recommendation'}\n${report.verification.readiness}`)
+  if (learn) printList(es ? 'Razonamiento reutilizable' : 'Reasoning to reuse', report.brief.judgment.learningPrinciples)
+  const authorityNote = es
+    ? 'La recomendación es consultiva. Esta revisión no aprueba, confirma ni establece autoridad humana.'
+    : report.verification.authority.note
+  console.log(`\n${es ? 'Autoridad del propietario' : 'Owner authority'}\n${authorityNote}`)
 }

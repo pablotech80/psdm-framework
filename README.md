@@ -184,6 +184,8 @@ riscala review "add Google OAuth login" --staged \
 
 `review` reports staged files outside the declared scope, expected files that are missing, observed and unexpected auth/schema/AI/config/deployment surfaces, package dependency changes, and the absence of supplied validation results. `scope_aligned_evidence_unverified` means only that staged scope aligns; it does not claim validation or approval. The Change Envelope is an advisory CLI input with `authorityVerified: false`; Decision Review never approves, commits, or establishes human authority.
 
+Human-readable `review` output restores the language persisted in `.riscala/ACTIVE_WORK.md`; JSON keys remain English. In nested projects or monorepos, expected paths entered relative to the selected project are normalized to the Git root before comparison, avoiding false scope drift.
+
 ### Repository
 
 ```bash
