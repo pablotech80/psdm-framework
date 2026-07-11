@@ -2,9 +2,12 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { basename, join, relative } from 'node:path'
 import { buildGitCommitActionRecord } from './action-record.mjs'
 import {
+  closeActiveWork,
+  continueActiveWork,
   createActiveWork,
   detectLanguage,
   parseActiveWork,
+  proposeActiveWorkTransition,
   readActiveWork,
   setActiveWorkLanguage,
   SUPPORTED_LANGUAGES,
@@ -27,20 +30,24 @@ const ROW_LABEL_WIDTH = 10
 
 const SHELL_COPY = {
   en: {
-    work: 'Work', next: 'Next', objective: 'Objective', allowed: 'Allowed', forbidden: 'Forbidden',
+    work: 'Work', next: 'Next', objective: 'Objective', allowed: 'Allowed', forbidden: 'Forbidden', proposed: 'Proposed',
     project: 'Project', branch: 'Branch', changes: 'Changes', files: 'Files', policy: 'Policy', refreshed: 'Refreshed',
     notSet: 'NOT SET', unknownMode: 'unknown mode', notRecorded: 'Not recorded',
     setup: '/work <objective>', clean: 'clean', untracked: 'untracked', staged: 'staged', unstaged: 'unstaged',
     workExists: 'Active Work already exists. The current boundary was preserved.',
+    continued: 'The proposed transition was accepted and work is active.', closed: 'Active Work was closed.',
+    transition: 'Transition proposed. Run /work continue to accept it.', noWork: 'No Active Work exists. Create one with /work <objective>.',
     languageUpdated: 'Language changed to English.', languageNeedsWork: 'Create Active Work with /work before persisting a language.',
     footer: 'sets the boundary', commands: 'commands',
   },
   es: {
-    work: 'Trabajo', next: 'Siguiente', objective: 'Objetivo', allowed: 'Permitido', forbidden: 'Prohibido',
+    work: 'Trabajo', next: 'Siguiente', objective: 'Objetivo', allowed: 'Permitido', forbidden: 'Prohibido', proposed: 'Propuesto',
     project: 'Proyecto', branch: 'Rama', changes: 'Cambios', files: 'Archivos', policy: 'Política', refreshed: 'Actualizado',
     notSet: 'SIN DEFINIR', unknownMode: 'modo desconocido', notRecorded: 'No registrado',
     setup: '/work <objetivo>', clean: 'limpio', untracked: 'sin seguimiento', staged: 'preparado', unstaged: 'sin preparar',
     workExists: 'Ya existe un trabajo activo. Se ha conservado el límite actual.',
+    continued: 'La transición propuesta fue aceptada y el trabajo está activo.', closed: 'El trabajo activo fue cerrado.',
+    transition: 'Transición propuesta. Ejecuta /work continue para aceptarla.', noWork: 'No existe trabajo activo. Créalo con /work <objetivo>.',
     languageUpdated: 'Idioma cambiado a español.', languageNeedsWork: 'Crea el trabajo activo con /work antes de guardar un idioma.',
     footer: 'define el límite', commands: 'comandos',
   },
@@ -335,6 +342,7 @@ function renderActiveWorkRows(context, options = {}) {
       valueStyle: theme.green,
     }),
     ...cardRows(copy.objective, work.objective || copy.notRecorded, options),
+    ...(work.proposedObjective ? cardRows(copy.proposed, `${work.proposedMode} · ${work.proposedObjective}`, { ...options, valueStyle: theme.yellow }) : []),
     ...(work.allowed ? cardRows(copy.allowed, localizeBoundary(work.allowed, context.language), options) : []),
     ...(work.forbidden ? cardRows(copy.forbidden, localizeBoundary(work.forbidden, context.language), { ...options, valueStyle: theme.yellow }) : []),
     ...(work.nextAction ? cardRows(copy.next, localizeBoundary(work.nextAction, context.language), { ...options, valueStyle: theme.cyanLight }) : []),
@@ -377,7 +385,7 @@ export function renderShellHelp(options = {}) {
   const spanish = options.language === 'es'
   const rows = [
     cardRow('/help', spanish ? 'Mostrar esta referencia de comandos.' : 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/work', spanish ? 'Crear el objetivo y modo activos.' : 'Create the active objective and mode.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/work', spanish ? 'Crear, cambiar, continuar o cerrar trabajo.' : 'Create, transition, continue, or close work.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/language', spanish ? 'Cambiar idioma: es o en.' : 'Change language: es or en.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/impact', 'Think through a change before coding.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/review', 'Compare intent with staged evidence.', { ...options, valueStyle: theme.cyanLight }),
@@ -402,8 +410,8 @@ export function renderShellHelp(options = {}) {
       valueStyle: theme.cyanLight,
     }),
     ...cardRows(spanish ? 'Seguridad' : 'Safety', spanish
-      ? '/work solo crea .riscala/ACTIVE_WORK.md. Los cambios de código y otros comandos de escritura siguen bloqueados.'
-      : '/work only creates .riscala/ACTIVE_WORK.md. Code changes and other mutating commands remain blocked.', {
+      ? 'El ciclo /work actualiza solo .riscala/ACTIVE_WORK.md. Riscala gobierna el trabajo; tu agente cambia el código.'
+      : 'The /work lifecycle updates only .riscala/ACTIVE_WORK.md. Riscala governs work; your coding agent changes code.', {
       ...options,
       valueStyle: theme.yellow,
     }),
@@ -848,7 +856,7 @@ function renderApprovalBoundary(policy, options = {}) {
       cardRow('Mode', 'signed approval disabled', { ...options, valueStyle: theme.green }),
       ...cardRows('Authority', 'Important actions still require an explicit developer instruction.', options),
       panelRule('middle', '', options),
-      ...cardRows('Boundary', 'The shell remains read only and cannot approve or execute mutations.', {
+      ...cardRows('Boundary', 'The shell manages Active Work but cannot invent approval or execute Git delivery actions.', {
         ...options,
         valueStyle: theme.cyanLight,
       }),
@@ -924,7 +932,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
 
   if (MUTATING_COMMANDS.has(command)) {
     return {
-      output: `Blocked: ${command} is not available in the read-only shell. A mutating command requires content-bound approval enforcement.`,
+      output: `Blocked: ${command} is not available in the governance shell. Git delivery actions require their own enforced boundary.`,
       exit: false,
     }
   }
@@ -958,6 +966,33 @@ export function executeShellCommand(input, { target, configPath = null, color = 
   }
 
   if (command === '/work') {
+    const operation = parameters[0]
+    if (operation === 'close' && parameters.length === 1) {
+      const result = closeActiveWork(target)
+      const message = result.updated ? copy.closed : result.reason === 'ACTIVE_WORK_NOT_FOUND' ? copy.noWork : copy.closed
+      return { output: renderPanel('WORK', cardRows(activeLanguage === 'es' ? 'Estado' : 'State', message, { color }), { color }), exit: false }
+    }
+    if (operation === 'continue' && parameters.length === 1) {
+      const result = continueActiveWork(target)
+      const message = result.updated
+        ? copy.continued
+        : result.reason === 'ACTIVE_WORK_NOT_FOUND'
+          ? copy.noWork
+          : result.reason === 'ACTIVE_WORK_CLOSED'
+            ? copy.closed
+            : activeLanguage === 'es' ? 'El trabajo ya está activo.' : 'Work is already active.'
+      return { output: renderPanel('WORK', cardRows(activeLanguage === 'es' ? 'Estado' : 'State', message, { color }), { color }), exit: false }
+    }
+    if (operation === 'transition') {
+      const requestedMode = parameters[1]
+      const objective = parameters.slice(2).join(' ').trim()
+      if (!WORK_MODES.includes(requestedMode) || !objective) {
+        return { output: renderUsage('/work', '/work transition <mode> <objective>', { color }), exit: false }
+      }
+      const result = proposeActiveWorkTransition({ target, objective, mode: requestedMode })
+      const message = result.updated ? copy.transition : result.reason === 'ACTIVE_WORK_NOT_FOUND' ? copy.noWork : copy.closed
+      return { output: renderPanel('WORK', cardRows(activeLanguage === 'es' ? 'Estado' : 'State', message, { color }), { color }), exit: false }
+    }
     const requestedMode = WORK_MODES.includes(parameters[0]) ? parameters.shift() : 'implement'
     const objective = parameters.join(' ').trim()
     if (!objective) {

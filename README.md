@@ -201,11 +201,14 @@ riscala approval enforce git.commit [--receipt <path>] [--target <path>] [--conf
 riscala hook <install|remove|status> pre-commit [--target <path>] [--json]
 ```
 
-The dependency-free shell shows the selected project's name, branch, working-tree counts, and active PSDM policy. It is intentionally read-only while still exposing the main governance workflow:
+The dependency-free shell is an operational governance console. It manages Active Work while showing branch, working-tree state, and active PSDM policy:
 
 ```text
 /help
 /work [inspect|experiment|design|implement|release] <objective>
+/work transition <mode> <new objective>
+/work continue
+/work close
 /language es|en
 /status
 /audit
@@ -222,7 +225,7 @@ The dependency-free shell shows the selected project's name, branch, working-tre
 /exit
 ```
 
-The first screen restores `.riscala/ACTIVE_WORK.md`. If none exists, `/work <objective>` creates that single context file with `implement` mode by default; an explicit mode may be placed before the objective. A second `/work` never replaces the existing boundary. Source-code and delivery mutations remain blocked in the shell.
+The first screen restores `.riscala/ACTIVE_WORK.md`. If none exists, `/work <objective>` creates it with `implement` mode by default. `/work transition` records a proposed boundary without applying it; `/work continue` accepts it explicitly; `/work close` ends the work. Timestamped history remains in the file. Source code is changed by Codex, Claude, Cursor, or your preferred coding agent.
 
 The shell starts in Spanish when the system locale begins with `es`; otherwise it uses English. `/language es|en` persists the presentation language in the existing Active Work file. Language changes labels and standard guidance, never policy meaning or JSON keys.
 
@@ -367,7 +370,7 @@ The JSON contract includes `decision`, `git.changes`, `files`, `evidence`, and `
 
 ### Open The Interactive Shell
 
-Open the read-only terminal UI in the current project:
+Open the Active Work governance console in the current project:
 
 ```bash
 riscala shell

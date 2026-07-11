@@ -55,6 +55,17 @@ repository | objective | mode | allowed | forbidden | authority
 
 The transition proposal must state the current boundary, requested boundary, changed fields, risks, and authority required. Acceptance creates a new boundary; it does not retroactively authorize earlier actions.
 
+The shell lifecycle is:
+
+```text
+/work <mode> <objective>
+  -> /work transition <mode> <new objective>
+  -> /work continue
+  -> /work close
+```
+
+`transition` records a pending boundary. `continue` is the explicit developer action that activates it. `close` prevents the previous boundary from being restored as active. Each decision appends timestamped lifecycle history without storing the conversation transcript.
+
 ## Verification
 
 Before mutation, compare the requested action with Active Work. After mutation, compare changed files and actions with the same boundary and verify `must_preserve` evidence.
