@@ -83,6 +83,19 @@ function policyLabel(context) {
   return `${context.config.profile.name} · ${source}`
 }
 
+function changedFileRows(context, options = {}) {
+  if (!context.git.isRepository || context.git.changes.length === 0) return []
+
+  const rows = context.git.changes.slice(0, 5).flatMap((line, index) => {
+    const status = line.slice(0, 2).trim() || '??'
+    const path = line.slice(3).trim()
+    return cardRows(index === 0 ? 'Files' : '', `${status.padEnd(3)} ${path}`, options)
+  })
+  const hidden = context.git.changes.length - 5
+  if (hidden > 0) rows.push(...cardRows('', `+${hidden} more changed file(s)`, options))
+  return rows
+}
+
 function cardRow(label, value, options = {}) {
   const theme = terminalTheme(options.color)
   const prefix = `  ${label.padEnd(ROW_LABEL_WIDTH)} `
@@ -173,6 +186,7 @@ function renderStatusRows(context, options = {}) {
     cardRow('Project', context.project, { ...options, valueStyle: theme.bold }),
     cardRow('Branch', context.git.branch || (context.git.isRepository ? 'detached HEAD' : 'n/a'), options),
     cardRow('Changes', changesLabel(context), { ...options, valueStyle: changesStyle }),
+    ...changedFileRows(context, options),
     cardRow('Policy', policyLabel(context), options),
   ]
 }
@@ -248,7 +262,10 @@ export function buildShellContext({ target, configPath = null }) {
 }
 
 export function renderShellStatus(context, options = {}) {
-  return renderPanel('STATUS', renderStatusRows(context, options), options)
+  return renderPanel('STATUS', [
+    ...renderStatusRows(context, options),
+    cardRow('Refreshed', `${new Date().toISOString().slice(11, 19)} UTC`, options),
+  ], options)
 }
 
 export function renderShellBanner(context, options = {}) {
@@ -520,6 +537,11 @@ function renderValidation(report, options = {}) {
       ...options,
       valueStyle: decisionStyle,
     }) : []),
+    ...findings.slice(0, 2).flatMap((item, index) => cardRows(
+      index === 0 ? (item.status === 'FAIL' ? 'Failure' : 'Warning') : '',
+      `${item.artifact}: ${item.message}`,
+      { ...options, valueStyle: item.status === 'FAIL' ? theme.red : theme.yellow },
+    )),
     panelRule('middle', '', options),
     ...cardRows('Next', next, { ...options, valueStyle: theme.cyanLight }),
   ]
@@ -730,14 +752,48 @@ function renderActionRecord(record, options = {}) {
   return renderPanel('ACTION', rows, options)
 }
 
-function renderApprovalBoundary(options = {}) {
+function renderApprovalBoundary(policy, options = {}) {
   const theme = terminalTheme(options.color)
+  const enabled = policy.requiredLevels.length > 0 || policy.requiredActions.length > 0
+  if (!enabled) {
+    return renderPanel('APPROVAL', [
+      cardRow('Mode', 'signed approval disabled', { ...options, valueStyle: theme.green }),
+      ...cardRows('Authority', 'Important actions still require an explicit developer instruction.', options),
+      panelRule('middle', '', options),
+      ...cardRows('Boundary', 'The shell remains read only and cannot approve or execute mutations.', {
+        ...options,
+        valueStyle: theme.cyanLight,
+      }),
+    ], options)
+  }
   return renderPanel('APPROVAL', [
     cardRow('Mode', 'external receipt required', { ...options, valueStyle: theme.yellow }),
     ...cardRows('Verify', 'Use riscala approval verify git.commit --receipt <path> outside the shell.', options),
     ...cardRows('Enforce', 'The managed pre-commit hook enforces receipts before git commit.', options),
     panelRule('middle', '', options),
     ...cardRows('Boundary', 'The shell cannot create, type, or simulate human approval.', {
+      ...options,
+      valueStyle: theme.cyanLight,
+    }),
+  ], options)
+}
+
+function looksLikeFilePath(value, target) {
+  return !value.includes(' ') && (
+    existsSync(join(target, value)) || value.includes('/') || /\.[a-z0-9_-]+$/i.test(value)
+  )
+}
+
+function renderReviewPathGuidance(path, options = {}) {
+  const theme = terminalTheme(options.color)
+  return renderPanel('REVIEW', [
+    ...cardRows('Input', `${path} looks like a file path, not a change intention.`, {
+      ...options,
+      valueStyle: theme.yellow,
+    }),
+    panelRule('middle', '', options),
+    ...cardRows('Try', '/review "describe what you intended to change"', options),
+    ...cardRows('With file', `riscala review "describe the change" --staged --file ${path}`, {
       ...options,
       valueStyle: theme.cyanLight,
     }),
@@ -806,6 +862,9 @@ export function executeShellCommand(input, { target, configPath = null, color = 
   if (command === '/review') {
     if (!description) {
       return { output: renderUsage('/review', '/review <change intent>', { color }), exit: false }
+    }
+    if (looksLikeFilePath(description, target)) {
+      return { output: renderReviewPathGuidance(description, { color }), exit: false }
     }
     return {
       output: renderDecisionReview(buildDecisionReview({ target, intent: description, configPath }), { color }),
@@ -909,8 +968,9 @@ export function executeShellCommand(input, { target, configPath = null, color = 
   }
 
   if (command === '/approval') {
+    const policy = loadConfig(target, configPath).config.approval
     return {
-      output: renderApprovalBoundary({ color }),
+      output: renderApprovalBoundary(policy, { color }),
       exit: false,
     }
   }
