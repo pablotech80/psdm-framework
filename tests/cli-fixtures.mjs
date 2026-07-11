@@ -524,6 +524,38 @@ function testDecisionReviewGuidanceChangesDensityNotAuthority() {
   assert.match(learn, /does not approve, commit, or establish human authority/)
 }
 
+function testDecisionReviewUsesActiveLanguageAndNormalizesNestedTarget() {
+  const root = mkdtempSync(resolve(tmpdir(), 'riscala-review-monorepo-'))
+  const target = resolve(root, 'outbound-engine')
+  mkdirSync(resolve(target, 'src'), { recursive: true })
+  mkdirSync(resolve(target, 'tests'), { recursive: true })
+  writeFileSync(resolve(target, 'src/database.py'), 'value = 1\n')
+  writeFileSync(resolve(target, 'tests/test_database.py'), 'def test_value():\n    assert True\n')
+  git(root, ['init', '--quiet'])
+  git(root, ['add', '.'])
+  git(root, ['-c', 'user.name=PSDM Test', '-c', 'user.email=psdm-test@example.invalid', 'commit', '--quiet', '-m', 'baseline'])
+  writeFileSync(resolve(target, 'src/database.py'), 'value = 2\n')
+  writeFileSync(resolve(target, 'tests/test_database.py'), 'def test_value():\n    assert 2 == 2\n')
+  git(root, ['add', 'outbound-engine/src/database.py', 'outbound-engine/tests/test_database.py'])
+  runShell([target], '/work implement Validar correo\n/language es\n/exit\n')
+
+  const args = [
+    'review', 'Validar correo', '--staged', '--target', target,
+    '--files', 'src/database.py,tests/test_database.py',
+  ]
+  const output = run(args)
+  const report = runJson([...args, '--json'])
+
+  assert.match(output, /Revisión de decisión de Riscala/)
+  assert.match(output, /Archivos esperados/)
+  assert.match(output, /outbound-engine\/src\/database\.py/)
+  assert.match(output, /Evidencia de validación/)
+  assert.match(output, /La revisión observa archivos de prueba/)
+  assert.doesNotMatch(output, /Deviations|scope-drift|expected-not-staged/)
+  assert.deepEqual(report.verification.outsideExpectedScope, [])
+  assert.deepEqual(report.verification.expectedButNotStaged, [])
+}
+
 function testReadOnlyShellRoutesCommandsAndReportsContext() {
   const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-'))
   mkdirSync(resolve(target, 'src'), { recursive: true })
@@ -1887,6 +1919,7 @@ const tests = [
   testDecisionReviewReportsMissingExpectedScope,
   testDecisionReviewNoStagedChangesIsReadOnlyNoOp,
   testDecisionReviewGuidanceChangesDensityNotAuthority,
+  testDecisionReviewUsesActiveLanguageAndNormalizesNestedTarget,
   testReadOnlyShellRoutesCommandsAndReportsContext,
   testShellUsesPtechCyanOnlyForInteractiveTerminals,
   testShellDetectsSpanishAndPersistsLanguage,

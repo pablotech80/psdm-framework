@@ -60,6 +60,7 @@ Acceptance:
 - [x] Persist language in Active Work.
 - [x] Keep JSON keys in English.
 - [x] Test accents, long Spanish text, wrapping, and monochrome output.
+- [x] Apply persisted language to external Decision Review while preserving English JSON keys.
 
 Acceptance:
 
@@ -100,6 +101,7 @@ Acceptance:
 
 - [ ] Compare current repository with Active Work repository.
 - [ ] Compare staged and unstaged paths with allowed and forbidden paths.
+- [x] Normalize selected-project paths against the Git root in staged Decision Review.
 - [ ] Report exact file and violated boundary.
 - [ ] Distinguish advisory findings from enforced failures.
 - [ ] Keep solo-developer defaults lightweight.
