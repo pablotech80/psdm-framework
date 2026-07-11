@@ -53,6 +53,8 @@ The current handoff replaces stale progress while lifecycle history records that
 
 `adapters init` connects Codex, Claude Code, Cursor, Windsurf, OpenCode, and Antigravity to the same `.riscala/ACTIVE_WORK.md` boundary without replacing existing agent instructions.
 
+Before acting, every adapter must explicitly compare the new request with the active repository, objective, mode, allowed paths/actions, forbidden actions, and preservation rules. Each dimension is classified as aligned, conflicting, or unresolved. Aligned work continues without extra approval noise; a conflict or material uncertainty stops for a transition or missing decision. This is the control that correctly blocked a recovered next action when it belonged to a different objective.
+
 The npm `@beta` tag installs `1.0.0-beta.6`.
 
 The compatibility executable remains available:

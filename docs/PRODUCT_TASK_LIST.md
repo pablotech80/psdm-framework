@@ -80,7 +80,7 @@ Acceptance:
 - [x] Define minimal adapters for Codex, Claude, Cursor, Windsurf, OpenCode, and Antigravity.
 - [x] Keep `.riscala/ACTIVE_WORK.md` as source of truth; adapters only point to it.
 - [x] Require fresh chats to read Active Work before proposing mutation.
-- [ ] Compare new requests with repository, objective, mode, allowed, and forbidden.
+- [x] Require every adapted agent to compare new requests with repository, objective, mode, allowed paths/actions, forbidden actions, and preservation rules before acting.
 - [x] Stop and propose transition when a boundary changes.
 - [x] Keep examples and suggestions non-authoritative while preserving open questions in handoff context.
 - [x] Avoid copying full project context into tool-specific files.
