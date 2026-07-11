@@ -20,6 +20,7 @@ Completed:
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.
+- Implemented the first read-only `riscala impact` Judgment Brief with deterministic repository evidence, explicit inference and uncertainty, developer-only decision authority, and learn/balanced/concise/JSON output without mandatory initialization.
 - Stale npm `latest` dist-tag resolved by aligning it with `1.0.0-beta.5` after registry removal attempts were rejected.
 - README hero updated to the Riscala product identity while preserving PSDM as the internal governance method.
 - `0.1.0` MVP CLI and templates.

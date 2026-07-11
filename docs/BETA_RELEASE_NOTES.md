@@ -2,9 +2,31 @@
 
 Status: `Published`
 Latest Beta Release: `1.0.0-beta.5`
-Next Beta Candidate: `Not scheduled`
+Next Beta Candidate: `1.0.0-beta.6 development`
 First Beta Release: `1.0.0-beta.1`
 Project: `psdm-framework`
+
+## Beta.6 Development — Developer Judgment
+
+Beta.6 refocuses Riscala on amplifying developer technical judgment during AI-assisted development.
+
+The first implemented increment adds a read-only Judgment Brief:
+
+```bash
+riscala impact "<change intent>" [--guidance learn|balanced|concise] [--file <path>] [--files <path,path>] [--target <path>] [--config <path>] [--json]
+```
+
+Current behavior:
+
+- produces first value without `riscala init`;
+- separates deterministic repository evidence from inferred impact;
+- exposes assumptions, options, trade-offs, recommendation, uncertainty, and developer decisions required;
+- keeps `ownerDecision.value` unset and reserves authority for the developer;
+- provides focused reasoning for authentication, data/schema, delivery, AI behavior, and low-risk presentation changes;
+- falls back to explicit high uncertainty instead of inventing semantic understanding;
+- renders learn, balanced, concise, and JSON views from the same result.
+
+This is not yet a beta.6 release candidate. Change Envelope persistence, staged Decision Review, greenfield/legacy external validation, public onboarding realignment, version bump, and protected publication evidence remain pending.
 
 ## Beta Release - 1.0.0-beta.5
 

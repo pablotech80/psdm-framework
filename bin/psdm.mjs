@@ -14,6 +14,7 @@ import { shellCommand } from '../src/commands/shell.mjs'
 import { actionCommand } from '../src/commands/action.mjs'
 import { approvalCommand } from '../src/commands/approval.mjs'
 import { hookCommand } from '../src/commands/hook.mjs'
+import { impactCommand } from '../src/commands/impact.mjs'
 import {
   COMPATIBILITY_EXECUTABLE,
   PRIMARY_EXECUTABLE,
@@ -37,12 +38,14 @@ const commands = {
   action: actionCommand,
   approval: approvalCommand,
   hook: hookCommand,
+  impact: impactCommand,
 }
 
 function printHelp() {
   console.log(`${productHeader()}
 
 Usage:
+  ${PRIMARY_EXECUTABLE} impact "<change intent>" [--guidance learn|balanced|concise] [--file path] [--files path,path] [--target path] [--config path] [--json]
   ${PRIMARY_EXECUTABLE} audit [target] [--json] [--feature name] [--config path]
   ${PRIMARY_EXECUTABLE} adr "<decision title>" [--json] [--target path] [--date YYYY-MM-DD] [--status Proposed]
   ${PRIMARY_EXECUTABLE} init [target] [--feature name] [--dry-run]
@@ -63,6 +66,7 @@ Compatibility:
   ${COMPATIBILITY_EXECUTABLE} remains supported with identical commands and behavior.
 
 Commands:
+  impact     Build a repository-grounded technical Judgment Brief before implementation.
   adr        Create a new Architecture Decision Record under ADRs/.
   audit      Preview repository state and what Riscala init would change.
   init       Create PSDM governance artifacts in a project.

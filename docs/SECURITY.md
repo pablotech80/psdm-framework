@@ -15,12 +15,18 @@ Primary security concerns:
 - expanding dependencies and supply-chain surface without clear need.
 - allowing an AI agent to satisfy or reuse its own human-approval gate.
 - executing modified content after approval was issued for a different hash or target.
+- presenting inferred technical impact as observed repository fact;
+- presenting an advisory recommendation as developer authority;
+- leaking sensitive repository contents through Judgment Brief evidence;
+- creating false confidence when repository evidence is incomplete.
 
 Relevant sensitive surfaces:
 
 - `src/validator/**`
 - `src/lib/config.mjs`
 - `src/lib/classifier.mjs`
+- `src/lib/judgment.mjs`
+- `src/commands/impact.mjs`
 - `src/lib/git.mjs`
 - `src/lib/risk-paths.mjs`
 - `templates/**`
@@ -35,6 +41,10 @@ Security posture:
 - agent instructions forbid self-approval, while future strong enforcement requires content-bound hardware or remote approval;
 - local file inspection only;
 - staged inspection invokes Git with fixed arguments through `execFileSync`, reads file-status metadata rather than file contents, and never mutates the index;
+- Judgment Brief evidence exposes bounded metadata and repository-relative provenance rather than unrestricted source content;
+- Judgment Brief results label repository evidence as deterministic and semantic impact as inferred with explicit confidence and uncertainty;
+- `ownerDecision` remains unset and developer-only; Riscala cannot create, infer, approve, or simulate it;
+- `riscala impact` is read-only, requires no initialization, and does not persist intent, evidence, or decisions in beta.6;
 - the interactive shell routes an explicit read-only command allowlist, rejects arbitrary terminal input, and blocks mutating slash commands;
 - ANSI styling is limited to interactive presentation and never enters JSON or piped automation output;
 - no npm lifecycle script is introduced for decorative installation behavior;
@@ -85,6 +95,7 @@ Security review is required when a change:
 - changes either executable mapping or allows Riscala/PSDM behavior to diverge;
 - introduces dependencies;
 - affects AI-agent tool governance.
+- changes Judgment Brief evidence collection, fact/inference boundaries, owner authority, uncertainty, or recommendation semantics;
 - changes approval receipt, human-presence, content-binding, or agent decision semantics.
 - changes trusted approver configuration, canonical receipt payloads, signature algorithms, or action-record hashes.
 - changes hook installation, receipt consumption, replay state, lock handling, or remote-enforcement assumptions.

@@ -18,6 +18,7 @@ node bin/psdm.mjs help
 node bin/psdm.mjs audit . --json
 node bin/psdm.mjs adr "Adopt CI change level enforcement" --target "$(mktemp -d)" --date 2026-07-08 --json
 node bin/psdm.mjs classify "small cleanup" --file src/validator/validate-method.mjs --json
+node bin/psdm.mjs impact "add Google OAuth login while preserving passwords" --guidance learn --json
 node bin/psdm.mjs inspect --staged --json
 printf '/help\n/status\n/audit\n/check\n/validate\n/report\n/inspect\n/classify update user flow\n/pr-checklist update user flow\n/init-preview\n/hook-status\n/action\n/approval\n/exit\n' | node bin/psdm.mjs shell .
 node bin/psdm.mjs action prepare git.commit --json
@@ -80,6 +81,7 @@ node bin/psdm.mjs validate . --json
 - Verify approval fixtures with real detached signatures: valid Ed25519 receipt, unsupported phrase mode, changed staged content, missing approver trust, and invalid policy.
 - Verify enforcement consumes an approval once, rejects replay, permits lower-risk commits, blocks Level 3 without trust, respects Git hook paths, and preserves unmanaged hooks.
 - Run staged inspection fixtures for changes to Git parsing, classification floors, risk-path evidence, or inspect output.
+- Run Judgment Brief fixtures for changes to evidence provenance, impact inference, owner authority, uncertainty, explanation density, or first-use behavior without init.
 - Verify root `AGENTS.md` classifies as Level 3 when agent governance or default risk paths change.
 - Verify approval enforcement and Git hook modules classify as Level 3 by default.
 - Run executable alias fixtures and the release check for changes to Riscala branding, `package.json` bin mappings, or help output.

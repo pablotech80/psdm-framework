@@ -174,6 +174,9 @@
 - [x] Define a minimal owner-controlled decision state and change envelope.
 - [x] Define staged Decision Review against intent, scope, and evidence.
 - [x] Support learning, balanced, concise, and JSON renderings.
+- [x] Implement the first read-only Judgment Brief through `riscala impact` without mandatory initialization.
+- [x] Add deterministic evidence and representative auth, data, delivery, AI, low-risk, and uncertainty reasoning.
+- [x] Add first-use, authority-boundary, and explanation-density fixtures.
 - [ ] Prove first value without mandatory initialization in greenfield and legacy repositories.
 - [ ] Reuse existing deterministic Git, risk-path, config, validation, and CI primitives.
 - [ ] Preserve `riscala`/`psdm`, config, JSON, package, and Action compatibility.

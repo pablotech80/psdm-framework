@@ -36,6 +36,8 @@ The architecture favors explicit modules over framework abstractions:
 - `src/lib/adr.mjs` owns ADR filename generation and scaffold rendering.
 - `src/lib/audit.mjs` builds the non-destructive repository adoption preview, detects existing AI governance files, detects AI runtime surfaces from paths and manifests, and emits the AI readiness audit contract.
 - `src/lib/classifier.mjs` owns reusable change classification.
+- `src/lib/judgment.mjs` builds beta.6 Project Context, deterministic Observed Evidence, inferred impact hypotheses, owner-authority boundaries, and learn/balanced/concise Judgment Brief rendering.
+- `src/commands/impact.mjs` exposes the additive read-only `riscala impact` command and JSON entrypoint without requiring initialization.
 - `src/lib/inspect.mjs` composes staged Git evidence with reusable change classification.
 - `src/commands/shell.mjs` owns the interactive readline lifecycle and delegates slash commands to an allowlist router.
 - `src/lib/shell.mjs` builds target-specific project context, reuses the audit, validation, and staged-inspection engines, and renders the dependency-free read-only terminal UI.
