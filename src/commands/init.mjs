@@ -1,4 +1,5 @@
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { createHash } from 'node:crypto'
 import { dirname, join } from 'node:path'
 import { TEMPLATE_MAP } from '../lib/artifacts.mjs'
 import { parseArgs } from '../lib/args.mjs'
@@ -6,6 +7,7 @@ import { buildAudit, detectAiGovernance, printAuditReport } from '../lib/audit.m
 import { loadConfig } from '../lib/config.mjs'
 import { resolveTarget, templateDir } from '../lib/paths.mjs'
 import { detectLanguage } from '../lib/active-work.mjs'
+import { renderProjectBaseline } from '../lib/project-baseline.mjs'
 
 const PSDM_AGENTS_MARKER = '<!-- riscala-psdm-governance -->'
 const PSDM_AGENTS_END_MARKER = '<!-- /riscala-psdm-governance -->'
@@ -51,6 +53,21 @@ function integrateExistingAgents(path, language) {
   return true
 }
 
+function contentHash(content) {
+  return createHash('sha256').update(content).digest('hex')
+}
+
+function writeInstallManifest(target, entries) {
+  if (entries.length === 0) return
+  const path = join(target, '.riscala', 'INSTALL_MANIFEST.json')
+  let previous = { version: 1, files: [] }
+  try { previous = JSON.parse(readFileSync(path, 'utf8')) } catch {}
+  const files = new Map((previous.files || []).map((item) => [item.path, item]))
+  for (const entry of entries) files.set(entry.path, entry)
+  mkdirSync(dirname(path), { recursive: true })
+  writeFileSync(path, `${JSON.stringify({ version: 1, files: [...files.values()] }, null, 2)}\n`)
+}
+
 export function initializeProject({ target, configPath = null, feature = null, language = detectLanguage(), log = console.log }) {
   const templates = templateDir()
   const configState = loadConfig(target, configPath)
@@ -64,6 +81,7 @@ export function initializeProject({ target, configPath = null, feature = null, l
   let created = 0
   let updated = 0
   let skipped = 0
+  const manifestEntries = []
 
   mkdirSync(target, { recursive: true })
 
@@ -76,6 +94,7 @@ export function initializeProject({ target, configPath = null, feature = null, l
         const readme = join(destination, 'README.md')
         const template = readFileSync(join(templates, 'ADRS_README.md'), 'utf8')
         writeFileSync(readme, template)
+        manifestEntries.push({ path: 'ADRs/README.md', sha256: contentHash(template) })
         created += 1
         log(`CREATED ${artifact}`)
       } else {
@@ -96,6 +115,18 @@ export function initializeProject({ target, configPath = null, feature = null, l
         log(`UPDATED ${artifact}`)
         continue
       }
+      const baseline = !feature ? renderProjectBaseline(artifact, target) : null
+      const templateName = TEMPLATE_MAP[artifact] || TEMPLATE_MAP[artifact.split('/').at(-1)]
+      if (baseline && templateName) {
+        const originalTemplate = readFileSync(join(templates, templateName), 'utf8')
+        if (readFileSync(destination, 'utf8') === originalTemplate) {
+          writeFileSync(destination, baseline)
+          manifestEntries.push({ path: artifact, sha256: contentHash(baseline) })
+          updated += 1
+          log(`UPDATED ${artifact}`)
+          continue
+        }
+      }
       skipped += 1
       log(`SKIP    ${artifact}`)
       continue
@@ -103,10 +134,13 @@ export function initializeProject({ target, configPath = null, feature = null, l
 
     mkdirSync(dirname(destination), { recursive: true })
     const templateName = TEMPLATE_MAP[artifact] || TEMPLATE_MAP[artifact.split('/').at(-1)]
-    const template = templateName
+    const baseline = !feature ? renderProjectBaseline(artifact, target) : null
+    const template = baseline || (templateName
       ? readFileSync(join(templates, templateName), 'utf8')
       : `# ${artifact.split('/').at(-1)}\n\nTODO: Define project-specific PSDM content.\n`
+    )
     writeFileSync(destination, template)
+    manifestEntries.push({ path: artifact, sha256: contentHash(template) })
     created += 1
     log(`CREATED ${artifact}`)
   }
@@ -119,6 +153,7 @@ export function initializeProject({ target, configPath = null, feature = null, l
       mkdirSync(dirname(adoptionDestination), { recursive: true })
       const template = readFileSync(join(templates, 'PSDM_ADOPTION.md'), 'utf8')
       writeFileSync(adoptionDestination, template)
+      manifestEntries.push({ path: adoptionArtifact, sha256: contentHash(template) })
       created += 1
       log(`CREATED ${adoptionArtifact}`)
     } else {
@@ -132,6 +167,7 @@ export function initializeProject({ target, configPath = null, feature = null, l
     if (!existsSync(configDestination)) {
       const template = readFileSync(join(templates, 'psdm.config.json'), 'utf8')
       writeFileSync(configDestination, template)
+      manifestEntries.push({ path: 'psdm.config.json', sha256: contentHash(template) })
       created += 1
       log('CREATED psdm.config.json')
     } else {
@@ -140,6 +176,7 @@ export function initializeProject({ target, configPath = null, feature = null, l
     }
   }
 
+  writeInstallManifest(target, manifestEntries)
   return { created, updated, skipped }
 }
 

@@ -28,7 +28,10 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Apply the global language preference when `riscala work init` creates Active Work outside the shell.
 - [x] Integrate missing PSDM sections into an existing `AGENTS.md` without overwrite or duplication, and remove the resulting self-generated validation failures.
 - [x] Correct `/init preview` to show `/init confirm` and disclose planned integration inside the shell.
-- [x] Add `/uninstall` immediately after `/exit` with preview, confirmation, repository-mutation disclaimer, adapter cleanup, and preservation of modified files.
+- [x] Add `/uninstall` with preview, confirmation, repository-mutation disclaimer, adapter cleanup, and preservation of modified files.
+- [x] Reorder `/uninstall` alphabetically between `/status` and `/validate` in the menu and help.
+- [x] Adapt new and untouched PSDM templates from bounded repository evidence so init begins governing without manual placeholder cleanup.
+- [x] Record hashes of init-created files so uninstall removes intact generated baselines and preserves later user edits.
 
 - [x] Record the continuity experiment and its governance failure without modifying the laboratory repository.
 - [x] Reframe beta.6 around Continuity and Control instead of generic technical recommendations.

@@ -2,6 +2,9 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join } from 'node:path'
 import { loadConfig } from './config.mjs'
 import { inspectGit } from './git.mjs'
+import { TEMPLATE_MAP } from './artifacts.mjs'
+import { templateDir } from './paths.mjs'
+import { PROJECT_BASELINE_ARTIFACTS } from './project-baseline.mjs'
 
 const AI_GOVERNANCE_PATHS = [
   'AGENTS.md',
@@ -158,6 +161,19 @@ function inspectPath(target, artifact) {
         currentState: 'present',
         installAction: 'integrate',
         message: `Would preserve the file and add missing PSDM sections: ${missingMarkers.join(', ')}.`,
+      }
+    }
+  }
+
+  const templateName = TEMPLATE_MAP[artifact]
+  if (templateName && PROJECT_BASELINE_ARTIFACTS.includes(artifact)) {
+    const templatePath = join(templateDir(), templateName)
+    if (existsSync(templatePath) && readFileSync(fullPath, 'utf8') === readFileSync(templatePath, 'utf8')) {
+      return {
+        artifact,
+        currentState: 'template',
+        installAction: 'integrate',
+        message: 'Would replace the untouched generic template with a project-adapted PSDM baseline.',
       }
     }
   }

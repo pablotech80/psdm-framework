@@ -42,6 +42,8 @@ Completed:
 - Applied the global language preference to external `work init` so fresh agent context is created in the developer's selected language.
 - Made existing `AGENTS.md` adoption self-consistent: init now preserves prior instructions, integrates only missing PSDM sections, previews the integration, and validates without mandatory-section failures.
 - Added safe project cleanup through navigable `/uninstall preview|confirm`, with an explicit repository-mutation warning, managed-block removal, exact-template deletion, and preservation of user-modified files.
+- Kept `/uninstall` alphabetically ordered between `/status` and `/validate` in both the command palette and help.
+- Replaced generic init-only templates with a deterministic project-adapted PSDM baseline, safe inventory exclusions, migration of untouched legacy templates, and hash-bound uninstall preservation.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

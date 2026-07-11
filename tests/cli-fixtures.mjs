@@ -866,7 +866,6 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
     '/check',
     '/classify',
     '/exit',
-    '/uninstall',
     '/help',
     '/hook-status',
     '/impact',
@@ -877,6 +876,7 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
     '/report',
     '/review',
     '/status',
+    '/uninstall',
     '/validate',
     '/work',
   ])
@@ -1436,7 +1436,7 @@ function testInitCreatesAdoptionPlanForExistingAiGovernance() {
   const originalAgents = readFileSync(resolve(target, 'AGENTS.md'), 'utf8')
   const output = run(['init', target], { env: { LANG: 'es_ES.UTF-8' } })
   const integratedAgents = readFileSync(resolve(target, 'AGENTS.md'), 'utf8')
-  const validation = runJson(['validate', target, '--json'])
+  const validation = JSON.parse(run(['validate', target, '--json'], { allowFailure: true }))
   const second = run(['init', target], { env: { LANG: 'es_ES.UTF-8' } })
   const repeatedAgents = readFileSync(resolve(target, 'AGENTS.md'), 'utf8')
 
@@ -1466,6 +1466,42 @@ function testInitIsIdempotentForPsdmManagedGovernance() {
   assert.equal(existsSync(resolve(target, 'docs', 'PSDM_ADOPTION.md')), false)
   assert.equal(report.aiGovernance.adoptionMode, 'initialize')
   assert.deepEqual(report.aiGovernance.existing, [])
+}
+
+function testInitUpgradesUntouchedTemplatesAndPreservesEditedDocuments() {
+  const target = mkdtempSync(resolve(tmpdir(), 'psdm-template-upgrade-'))
+  mkdirSync(resolve(target, 'docs'), { recursive: true })
+  mkdirSync(resolve(target, 'src'), { recursive: true })
+  mkdirSync(resolve(target, 'tests'), { recursive: true })
+  writeFileSync(resolve(target, 'requirements.txt'), 'fastapi==1.0.0\npytest==8.0.0\n')
+  writeFileSync(resolve(target, 'src', 'main.py'), 'app = object()\n')
+  writeFileSync(resolve(target, 'tests', 'test_main.py'), 'def test_main(): assert True\n')
+  const artifacts = {
+    'AGENTS.md': 'AGENTS.md',
+    'docs/PROJECT_BRIEF.md': 'PROJECT_BRIEF.md',
+    'docs/SPEC.md': 'SPEC.md',
+    'docs/ARCHITECTURE.md': 'ARCHITECTURE.md',
+    'docs/CHANGE_GOVERNANCE.md': 'CHANGE_GOVERNANCE.md',
+    'docs/TASKS.md': 'TASKS.md',
+    'docs/TESTING.md': 'TESTING.md',
+    'docs/DEPLOYMENT.md': 'DEPLOYMENT.md',
+    'docs/SECURITY.md': 'SECURITY.md',
+    'docs/OPERATIONS.md': 'OPERATIONS.md',
+    'psdm.config.json': 'psdm.config.json',
+  }
+  for (const [destination, template] of Object.entries(artifacts)) {
+    writeFileSync(resolve(target, destination), readFileSync(resolve(repoRoot, 'templates', template), 'utf8'))
+  }
+  writeFileSync(resolve(target, 'docs', 'SPEC.md'), '# User specification\n\nPreserve this decision.\n')
+
+  const output = run(['init', target], { env: { LANG: 'es_ES.UTF-8' } })
+  const validation = JSON.parse(run(['validate', target, '--json'], { allowFailure: true }))
+
+  assert.match(output, /UPDATED docs\/PROJECT_BRIEF\.md/)
+  assert.match(output, /UPDATED docs\/ARCHITECTURE\.md/)
+  assert.equal(readFileSync(resolve(target, 'docs', 'SPEC.md'), 'utf8'), '# User specification\n\nPreserve this decision.\n')
+  assert.equal(validation.failures, 4)
+  assert.ok(validation.results.filter((item) => item.artifact !== 'docs/SPEC.md').every((item) => item.status !== 'WARN'))
 }
 
 function testInitDryRunDoesNotWrite() {
@@ -1760,12 +1796,18 @@ function testEnforceBlocksExceededLevel() {
 
 function testValidateInitializedProject() {
   const target = mkdtempSync(resolve(tmpdir(), 'psdm-validate-'))
+  mkdirSync(resolve(target, 'src'), { recursive: true })
+  mkdirSync(resolve(target, 'tests'), { recursive: true })
+  writeFileSync(resolve(target, 'requirements.txt'), 'fastapi==1.0.0\npytest==8.0.0\n')
+  writeFileSync(resolve(target, 'src', 'api.py'), 'def health(): return {"ok": True}\n')
+  writeFileSync(resolve(target, 'tests', 'test_api.py'), 'def test_health(): assert True\n')
+  writeFileSync(resolve(target, 'Makefile'), 'test:\n\tpytest\n')
   run(['init', target])
   const report = runJson(['validate', target, '--json'])
 
-  assert.equal(report.decision, 'METHOD_BASELINE_REVIEW_REQUIRED')
+  assert.equal(report.decision, 'METHOD_BASELINE_APPROVED')
   assert.equal(report.failures, 0)
-  assert.ok(report.warnings > 0)
+  assert.equal(report.warnings, 0)
   assert.equal(report.config.exists, true)
   assert.equal(report.config.ai.pii.allowedInPrompts, false)
   assert.equal(report.config.ai.tools.registryRequired, true)
@@ -1777,6 +1819,14 @@ function testValidateInitializedProject() {
   assert.match(agentRules, /## 8\. Agent Decision Protocol/)
   assert.match(agentRules, /must never approve its own action/)
   assert.match(agentRules, /why that action should come next/)
+  const brief = readFileSync(resolve(target, 'docs', 'PROJECT_BRIEF.md'), 'utf8')
+  const testing = readFileSync(resolve(target, 'docs', 'TESTING.md'), 'utf8')
+  assert.match(brief, /Python, FastAPI, Pytest/)
+  assert.match(brief, /src, tests/)
+  assert.match(testing, /`make test`/)
+  assert.match(testing, /`pytest`/)
+  assert.doesNotMatch(`${brief}\n${testing}`, /\bTBD\b|\bTODO\s*:/)
+  assert.equal(existsSync(resolve(target, '.riscala', 'INSTALL_MANIFEST.json')), true)
 }
 
 function testCustomConfigArtifact() {
@@ -2143,6 +2193,7 @@ const tests = [
   testAuditDetectsAiRuntimeSurfaces,
   testInitCreatesAdoptionPlanForExistingAiGovernance,
   testInitIsIdempotentForPsdmManagedGovernance,
+  testInitUpgradesUntouchedTemplatesAndPreservesEditedDocuments,
   testInitDryRunDoesNotWrite,
   testAdrCreatesDecisionRecord,
   testAdrRejectsInvalidDate,
