@@ -11,16 +11,18 @@
 </p>
 
 <p align="center">
-  <strong>Amplify your judgment before and after AI writes the code.</strong>
+  <strong>Keep AI work inside the objective, repository, scope, and authority you defined.</strong>
 </p>
 
 <p align="center">
-  Understand impact, choose direction, verify the result. You remain the decision-maker.
+  Preserve direction across chats. Stop unauthorized transitions. Verify the result stayed in bounds.
 </p>
 
-Riscala is a local, dependency-free CLI for developers building software with AI. Before implementation, it turns a change intent and repository evidence into the decisions, trade-offs, risks, and unknowns you should examine. After implementation, it compares that intent with the staged Git result.
+Riscala is a local, dependency-free governance layer for developers building software with AI. Beta.6 is being redesigned to preserve the active repository, objective, work mode, allowed scope, prohibitions, and stop conditions across chats and agents. The governing rule is that a new request does not automatically expand prior authority.
 
-Riscala does not replace your coding agent, choose product direction, or approve its own work. It helps you ask better technical questions and retain control while Claude, Cursor, Copilot, Codex, or another tool writes code.
+Riscala does not replace your coding agent, tell it how to program, choose product direction, or approve its own work. Coding agents can reason about implementation; the beta.6 target is to check their proposed actions against the boundary you defined and require an explicit transition when repository, objective, mode, or authority changes.
+
+The existing beta.6-development `impact` and `review` commands remain read-only supporting experiments. They do not represent full semantic understanding and no longer define the product's primary value.
 
 PSDM is the internal governance method. Its risk-scaled controls remain available when a change reaches security, data, AI, infrastructure, or production boundaries, but low-risk daily work does not require initialization or mandatory artifacts.
 
@@ -44,7 +46,7 @@ psdm audit
 ## Table Of Contents
 
 - [Why Riscala Exists](#why-riscala-exists)
-- [Judgment Loop](#judgment-loop)
+- [Supporting Judgment Loop](#supporting-judgment-loop)
 - [What Riscala Provides](#what-riscala-provides)
 - [Status](#status)
 - [Install](#install)
@@ -68,11 +70,15 @@ psdm audit
 
 ## Why Riscala Exists
 
-AI can generate plausible code faster than a developer can fully reason through its consequences. The scarce capability is no longer typing speed; it is deciding what should change, what must remain true, what evidence matters, and when an apparently simple implementation crosses an expensive boundary.
+AI can produce correct code and still be ungovernable: it can change the wrong repository, turn an experiment into implementation, expand scope, or continue after the developer's authority ended. Long conversations may recover control, but that direction is easily lost when the next chat starts.
 
-An `AGENTS.md` can tell an agent how to behave, but it cannot exercise the developer's judgment. Riscala makes that judgment loop explicit and repository-grounded while leaving final authority with the developer.
+An `AGENTS.md` provides general repository rules. It does not preserve the concrete boundary of today's task. Riscala keeps that active work compact and explicit while leaving final authority with the developer.
 
-## Judgment Loop
+The beta.6 direction is defined in [`docs/ACTIVE_WORK.md`](docs/ACTIVE_WORK.md): continuity preserves direction; control stops or verifies actions at the boundary.
+
+## Supporting Judgment Loop
+
+Inside an authorized Active Work boundary, the existing read-only judgment path remains available:
 
 ```mermaid
 flowchart TD
@@ -88,6 +94,8 @@ flowchart TD
 
 ## What Riscala Provides
 
+- A compact Active Work contract for continuity across chats and explicit transitions when authority changes.
+- Before-action boundary checks and after-action compliance verification as the beta.6 target direction.
 - A read-only Judgment Brief before coding: observed facts, inferred impact, options, trade-offs, uncertainty, and decisions reserved for you.
 - A staged Decision Review after coding: expected versus actual scope, sensitive surfaces, dependency changes, and missing evidence.
 - `learn`, `balanced`, and `concise` explanation density for junior, senior, and staff-level workflows without changing authority or safety semantics.
@@ -98,7 +106,7 @@ flowchart TD
 
 Latest published beta: `1.0.0-beta.5`.
 
-Current `main` is developing the beta.6 Product Reset: Riscala now centers repository-grounded technical judgment before implementation while preserving the existing PSDM compatibility surface.
+Current `main` is redesigning beta.6 around governable Active Work: continuity across chats and explicit control of repository, objective, mode, scope, and authority. The existing judgment commands and PSDM compatibility surface are preserved while this contract is validated. Beta.6 is not ready for publication.
 
 ## Install
 

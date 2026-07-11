@@ -60,10 +60,7 @@
   "approval": {
     "maxReceiptAgeSeconds": 600,
     "requiredActions": [],
-    "requiredLevels": [
-      "Level 3",
-      "Level 4"
-    ],
+    "requiredLevels": [],
     "trustedApprovers": [
       {
         "id": "ptech-owner",

@@ -12,6 +12,14 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Now
 
+- [x] Record the continuity experiment and its governance failure without modifying the laboratory repository.
+- [x] Reframe beta.6 around Continuity and Control instead of generic technical recommendations.
+- [x] Define the minimal Active Work contract and explicit transition rule.
+- [x] Record the second beta.6 Product Reset as an accepted ADR and relate it explicitly to the earlier judgment decision.
+- [ ] Decide which existing `impact` and `review` behavior remains useful after Active Work validation.
+- [ ] Define the smallest beta.6 implementation increment from the accepted contract.
+- [x] Remove mandatory external commit signatures from this solo-maintainer repository to restore a simple explicit-owner workflow.
+
 - [x] Accept the beta.6 Product Reset centered on amplifying developer judgment.
 - [x] Define the beta.6 domain model: Project Context, Observed Evidence, Change Intent, Impact Hypothesis, Decision Option, Owner Decision, Change Envelope, Verification Evidence, and Learning.
 - [x] Define the Judgment Brief contract with explicit facts, inferences, options, trade-offs, recommendation, uncertainty, and owner-decision boundaries.
@@ -33,10 +41,12 @@ This file must be updated with every meaningful project advance. Completed items
 
 ## Next
 
+- [ ] Specify the transition workflow without simulating human authority.
+
 - [x] Design and validate the greenfield flow so useful reasoning precedes optional artifact creation.
 - [x] Design and validate legacy discovery with bounded repository evidence, uncertainty, and no source mutation.
 - [x] Map existing audit, classify, inspect, risk-path, config, JSON, and Git primitives into the first judgment loop.
-- [ ] Add a regression scenario proving that product-direction and governance-architecture changes are not reduced to Level 0 merely because their paths or wording lack current classifier signals.
+- [ ] Revisit product-direction classification only if the minimal beta.6 implementation requires it.
 - [ ] Decide and validate how an explicit owner decision can bind to a Change Envelope without treating agent-controlled CLI input as human-presence proof.
 - [x] Add representative learning, balanced, and concise acceptance fixtures.
 - [x] Validate beta.6 in a greenfield scenario and a temporary snapshot of a real legacy repository.

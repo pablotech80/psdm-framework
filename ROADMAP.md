@@ -14,9 +14,15 @@ This file is operational and must be updated with every meaningful project advan
 
 PSDM is published at `1.0.0-beta.5`; npm dist-tags `beta` and `latest` point to `1.0.0-beta.5`.
 
-Riscala has entered a Product Reset for `1.0.0-beta.6`. The new North Star is developer judgment amplification: repository-grounded impact before implementation, explicit developer decisions, and staged verification against accepted intent and scope. Existing governance, Git, JSON, CI, approval, and compatibility primitives remain available but no longer define the primary daily experience.
+Riscala has entered a second Product Reset for `1.0.0-beta.6`. The new North Star is governable Active Work: preserve direction across chats and keep every AI action inside the repository, objective, mode, scope, and authority defined by the developer. Existing judgment, governance, Git, JSON, CI, approval, and compatibility primitives remain supporting capabilities.
 
 Completed:
+
+- Recorded the continuity experiment without modifying its laboratory repository: compact context recovered direction across chats, while an agent later crossed repository, objective, mode, and action-authority boundaries despite producing technically correct work.
+- Accepted Continuity and Control as Riscala's primary product capabilities and rejected generic implementation recommendation as the product's differentiator.
+- Defined and accepted the minimal Active Work contract; `impact` and `review` remain read-only supporting capabilities.
+- Kept beta.6 unpublished while the new direction moves from contract to a small product increment.
+- Simplified solo-maintainer approval by removing the mandatory external signature requirement from this repository; explicit owner instructions remain required for important actions.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.
@@ -135,13 +141,20 @@ Completed:
 
 ## Active Milestone
 
-`1.0.0-beta.6`: developer-judgment vertical slice.
+`1.0.0-beta.6`: governable Active Work vertical slice.
 
 Goal:
 
-Deliver the first complete Riscala judgment loop for greenfield and legacy repositories without turning project-lifecycle governance into daily developer friction.
+Prove that Riscala preserves direction across chats and stops AI actions when repository, objective, mode, scope, or authority changes, without turning low-risk work into daily bureaucracy.
 
 Planned outcomes:
+
+- Preserve a compact, categorized Active Work record across chats and agents.
+- Distinguish human decisions, observed facts, examples, suggestions, and open questions.
+- Check repository, objective, mode, scope, prohibitions, and authority before mutation.
+- Require an explicit transition when a new request changes the active boundary.
+- Verify after implementation that files, actions, and protected invariants stayed in bounds.
+- Validate continuity and stop behavior in real agent workflows before beta.6 publication.
 
 - Produce a repository-grounded Judgment Brief before implementation.
 - Separate observed facts, inferences, options, recommendations, uncertainty, and developer decisions.

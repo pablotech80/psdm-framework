@@ -92,8 +92,8 @@ The `version` field identifies the config format. Version `1` supports additive 
 `approval.requiredLevels`
 
 - Type: change-level string array.
-- Must include: `Level 3` and `Level 4`.
-- Meaning: change classifications that require signed approval. Lower levels may be added for stricter projects.
+- Default: `Level 3` and `Level 4`.
+- Meaning: change classifications that require signed approval. Projects may add levels for stricter enforcement or use an empty array to disable signed level-based approval.
 
 `approval.requiredActions`
 
