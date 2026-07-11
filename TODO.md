@@ -13,6 +13,7 @@ This file must be updated with every meaningful project advance. Completed items
 ## Now
 
 - [ ] Execute `docs/PRODUCT_TASK_LIST.md` in priority order, starting with P0 shell visibility and actionable errors.
+- [x] Complete and validate the P0 shell visibility and actionable-error increment.
 
 - [x] Record the continuity experiment and its governance failure without modifying the laboratory repository.
 - [x] Reframe beta.6 around Continuity and Control instead of generic technical recommendations.

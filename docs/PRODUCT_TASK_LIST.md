@@ -20,22 +20,22 @@ The CLI is for setup, inspection, recovery, and automation. It is not the main d
 
 ## P0 — Fix Current Shell Friction
 
-- [ ] Show up to five changed paths in the banner and `/status`.
-- [ ] Preserve staged, unstaged, and untracked markers.
-- [ ] Show `+N more` without sending unstaged files to `/inspect --staged`.
-- [ ] Make `/status` visibly refresh state with a timestamp or state delta.
-- [ ] Show actual `/validate` warning and failure messages.
-- [ ] Detect path-like `/review` input and explain that an intention is required.
-- [ ] Suggest the correct `review --file` syntax.
-- [ ] Remove duplicated `You decide` rows.
-- [ ] Make `/approval` reflect effective repository policy.
-- [ ] Preserve the current `/help` Authority and Safety copy.
+- [x] Show up to five changed paths in the banner and `/status`.
+- [x] Preserve staged, unstaged, and untracked markers.
+- [x] Show `+N more` without sending unstaged files to `/inspect --staged`.
+- [x] Make `/status` visibly refresh state with a timestamp or state delta.
+- [x] Show actual `/validate` warning and failure messages.
+- [x] Detect path-like `/review` input and explain that an intention is required.
+- [x] Suggest the correct `review --file` syntax.
+- [x] Confirm Judgment Brief renders each `You decide` item once.
+- [x] Make `/approval` reflect effective repository policy.
+- [x] Preserve the current `/help` Authority and Safety copy.
 
 Acceptance:
 
-- [ ] A warning is actionable without leaving the shell.
-- [ ] Every initial-panel field has an obvious purpose.
-- [ ] `/review AGENTS.md` produces corrective guidance, not a misleading Git error.
+- [x] A warning is actionable without leaving the shell.
+- [x] Every initial-panel field has an obvious purpose.
+- [x] `/review AGENTS.md` produces corrective guidance, not a misleading Git error.
 
 ## P0 — Make Active Work The Entry Point
 
@@ -138,6 +138,23 @@ Acceptance:
 - [ ] Measure time-to-value, false stops, missed transitions, and confusion.
 - [ ] Compare honestly with runtime enforcement and behavioral-contract products.
 - [ ] Update positioning only after demos pass.
+- [ ] Reproduce the Claude experiment: an inspect-only request must stop before clone, write, or commit actions.
+
+## P2 — Local Repository Consultant
+
+- [ ] Evaluate Gemma locally for Spanish repository questions, summaries, and boundary explanations.
+- [ ] Start with bounded file inventory and text search; do not add a vector database initially.
+- [ ] Answer with repository-relative file and line references.
+- [ ] Treat repository content as untrusted data, never as model instructions.
+- [ ] Enforce local-only mode, path allowlists, secret exclusions, ephemeral context, and no training on repository data.
+- [ ] Give the consultant no shell, network, write, commit, push, or deploy tools.
+- [ ] Support an enterprise-approved bring-your-own local model instead of hard-coding Gemma.
+
+Acceptance:
+
+- [ ] A developer can ask in Spanish how a private repository works without code leaving the machine.
+- [ ] Every architectural claim includes inspectable file evidence.
+- [ ] Prompt injection inside repository files cannot cause tool execution or broader file access.
 
 ## Deferred
 
