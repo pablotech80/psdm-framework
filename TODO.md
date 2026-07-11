@@ -20,9 +20,10 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Add an idempotent universal adapter installer for Codex, Claude, Cursor, Windsurf, OpenCode, and Antigravity.
 - [x] Make external Decision Review honor Active Work language and normalize nested-project paths against the Git root.
 - [x] Sort shell help and command menus alphabetically and add arrow-navigable `/work` submenus.
-- [x] Add navigable language choices, `/lenguaje` alias, and complete Spanish status grammar/copy.
+- [x] Add one navigable `/language` menu with English and Spanish choices and complete Spanish status grammar/copy.
 - [x] Preserve Spanish accents, `ñ`, inverted punctuation, and printable Unicode in interactive shell input.
 - [x] Make language a global immediate preference and allow closed work to restart with archived history.
+- [x] Add `/init` to the shell with arrow navigation, a safe preview, and explicit confirmation before writing governance files.
 
 - [x] Record the continuity experiment and its governance failure without modifying the laboratory repository.
 - [x] Reframe beta.6 around Continuity and Control instead of generic technical recommendations.

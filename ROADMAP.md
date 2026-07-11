@@ -34,9 +34,10 @@ Completed:
 - Added a universal Active Work adapter contract and non-overwriting native installation for Codex, Claude Code, Cursor, Windsurf, OpenCode, and Antigravity.
 - Corrected the first real Codex validation findings: external `review` now uses the persisted language and nested-project expected paths align with Git-root staged paths.
 - Improved shell discoverability with alphabetical help/menu ordering and nested `/work` navigation using arrow keys, Enter, and Escape.
-- Completed the visible Spanish status pass: navigable `en`/`es` language submenu, `/lenguaje` alias, plural agreement, hidden-file summary, policy defaults, and footer localization.
+- Completed the visible Spanish status pass: one navigable `/language` submenu for `en`/`es`, plural agreement, hidden-file summary, policy defaults, and footer localization.
 - Fixed interactive input data loss so Spanish accents, `ñ`, inverted punctuation, and other printable Unicode persist exactly in Active Work.
 - Made language a global immediate Riscala preference across repositories, translated shell menus/states, and allowed closed work to restart while archiving the prior boundary.
+- Added navigable shell initialization with a non-mutating `/init preview` path and explicit `/init confirm`, reusing the idempotent project initializer.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

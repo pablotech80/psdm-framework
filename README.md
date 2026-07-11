@@ -215,6 +215,8 @@ The dependency-free shell is an operational governance console. It manages Activ
 /work continue
 /work close
 /language es|en
+/init preview
+/init confirm
 /status
 /audit
 /check

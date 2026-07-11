@@ -26,6 +26,7 @@ import { buildDecisionReview } from './decision-review.mjs'
 import { buildPrChecklist } from './pr-checklist.mjs'
 import { terminalTheme } from './terminal-style.mjs'
 import { validateMethod } from '../validator/validate-method.mjs'
+import { initializeProject } from '../commands/init.mjs'
 
 const CARD_WIDTH = 68
 const ROW_LABEL_WIDTH = 10
@@ -41,7 +42,7 @@ const SHELL_COPY = {
     continued: 'The proposed transition was accepted and work is active.', closed: 'Active Work was closed.',
     transition: 'Transition proposed. Run /work continue to accept it.', noWork: 'No Active Work exists. Create one with /work <objective>.',
     languageUpdated: 'Language changed to English.', languageNeedsWork: 'Create Active Work with /work before persisting a language.',
-    footer: 'sets the boundary', commands: 'commands',
+    footer: 'sets the boundary', commands: 'commands', exit: 'Riscala shell closed.',
   },
   es: {
     work: 'Trabajo', next: 'Siguiente', objective: 'Objetivo', allowed: 'Permitido', forbidden: 'Prohibido', proposed: 'Propuesto',
@@ -53,7 +54,7 @@ const SHELL_COPY = {
     continued: 'La transición propuesta fue aceptada y el trabajo está activo.', closed: 'El trabajo activo fue cerrado.',
     transition: 'Transición propuesta. Ejecuta /work continue para aceptarla.', noWork: 'No existe trabajo activo. Créalo con /work <objetivo>.',
     languageUpdated: 'Idioma cambiado a español.', languageNeedsWork: 'Crea el trabajo activo con /work antes de guardar un idioma.',
-    footer: 'define el límite', commands: 'comandos',
+    footer: 'define el límite', commands: 'comandos', exit: 'Shell de Riscala cerrado.',
   },
 }
 
@@ -427,10 +428,9 @@ export function renderShellHelp(options = {}) {
     cardRow('/help', spanish ? 'Mostrar esta referencia de comandos.' : 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/hook-status', description('Inspect managed pre-commit hook status.', 'Comprobar el hook pre-commit.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/impact', description('Think through a change before coding.', 'Evaluar un cambio antes de programar.'), { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/init-preview', description('Preview governance files without writing.', 'Previsualizar archivos de gobierno.'), { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/init', description('Preview or confirm project initialization.', 'Previsualizar o confirmar la inicialización.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/inspect', description('Inspect staged changes and governance level.', 'Inspeccionar cambios preparados.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/language', spanish ? 'Cambiar idioma: es o en.' : 'Change language: es or en.', { ...options, valueStyle: theme.cyanLight }),
-    cardRow('/lenguaje', spanish ? 'Alias en español para cambiar el idioma.' : 'Spanish alias for changing language.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/pr-checklist', description('Build a PR checklist for a described change.', 'Preparar la lista de una PR.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/report', description('Summarize compliance report readiness.', 'Resumir el estado del informe.'), { ...options, valueStyle: theme.cyanLight }),
     cardRow('/review', description('Compare intent with staged evidence.', 'Comparar objetivo y evidencia preparada.'), { ...options, valueStyle: theme.cyanLight }),
@@ -445,8 +445,8 @@ export function renderShellHelp(options = {}) {
       valueStyle: theme.cyanLight,
     }),
     ...cardRows(spanish ? 'Seguridad' : 'Safety', spanish
-      ? 'El ciclo /work actualiza solo .riscala/ACTIVE_WORK.md. Riscala gobierna el trabajo; tu agente cambia el código.'
-      : 'The /work lifecycle updates only .riscala/ACTIVE_WORK.md. Riscala governs work; your coding agent changes code.', {
+      ? '/work actualiza el límite activo. /init solo escribe después de elegir confirm. Riscala no modifica el código de la aplicación.'
+      : '/work updates the active boundary. /init writes only after choosing confirm. Riscala does not modify application code.', {
       ...options,
       valueStyle: theme.yellow,
     }),
@@ -944,7 +944,6 @@ const MUTATING_COMMANDS = new Set([
   '/deploy',
   '/hook-install',
   '/hook-remove',
-  '/init',
   '/merge',
   '/pr',
   '/publish',
@@ -973,7 +972,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     }
   }
 
-  if (!['/work', '/language', '/impact', '/review', '/classify', '/pr-checklist'].includes(command) && parameters.length > 0) {
+  if (!['/work', '/language', '/impact', '/init', '/review', '/classify', '/pr-checklist'].includes(command) && parameters.length > 0) {
     return {
       output: `Usage error: ${command} does not accept arguments in this shell.`,
       exit: false,
@@ -1160,6 +1159,36 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     }
   }
 
+  if (command === '/init') {
+    if (description === 'preview') {
+      return {
+        output: renderInitPreview(buildAudit(target, { configPath }), { color, language: activeLanguage }),
+        exit: false,
+      }
+    }
+    if (description !== 'confirm') {
+      return {
+        output: renderUsage('/init', activeLanguage === 'es'
+          ? '/init [preview|confirm]'
+          : '/init [preview|confirm]', { color }),
+        exit: false,
+      }
+    }
+    const lines = []
+    const result = initializeProject({ target, configPath, log: (line) => lines.push(line) })
+    const heading = activeLanguage === 'es' ? 'INICIALIZACIÓN' : 'INITIALIZATION'
+    const summary = activeLanguage === 'es'
+      ? `Inicialización completada. ${result.created} creados · ${result.skipped} existentes.`
+      : `Initialization complete. ${result.created} created · ${result.skipped} existing.`
+    return {
+      output: renderPanel(heading, [
+        ...cardRows(activeLanguage === 'es' ? 'Resultado' : 'Result', summary, { color }),
+        ...cardRows(activeLanguage === 'es' ? 'Archivos' : 'Files', lines.length ? lines.join('\n') : '-', { color }),
+      ], { color }),
+      exit: false,
+    }
+  }
+
   if (command === '/hook-status') {
     return {
       output: renderHookStatus(inspectPreCommitHook(target), target, { color }),
@@ -1183,7 +1212,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
   }
 
   if (command === '/exit' || command === '/quit') {
-    return { output: 'Riscala shell closed.', exit: true }
+    return { output: copy.exit, exit: true }
   }
 
   if (!command.startsWith('/')) {

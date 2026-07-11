@@ -13,6 +13,7 @@ import {
 import { validateApprovalPolicy } from '../src/lib/config.mjs'
 import {
   buildShellContext,
+  executeShellCommand,
   renderShellBanner,
   renderShellPrompt,
 } from '../src/lib/shell.mjs'
@@ -670,6 +671,31 @@ function testReadOnlyShellRoutesCommandsAndReportsContext() {
   assert.equal(git(target, ['rev-list', '--count', 'HEAD']).trim(), '1')
 }
 
+function testSpanishShellExitIsLocalized() {
+  const result = executeShellCommand('/exit', { target: repoRoot, language: 'es' })
+  assert.equal(result.output, 'Shell de Riscala cerrado.')
+  assert.equal(result.exit, true)
+}
+
+function testShellInitRequiresConfirmationAndIsIdempotent() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-init-'))
+  const usage = executeShellCommand('/init', { target, language: 'es' })
+  assert.match(usage.output, /\/init \[preview\|confirm\]/)
+  assert.equal(existsSync(resolve(target, 'psdm.config.json')), false)
+
+  const preview = executeShellCommand('/init preview', { target, language: 'es' })
+  assert.match(preview.output, /INIT PREVIEW/)
+  assert.equal(existsSync(resolve(target, 'psdm.config.json')), false)
+
+  const initialized = executeShellCommand('/init confirm', { target, language: 'es' })
+  assert.match(initialized.output, /INICIALIZACIÓN/)
+  assert.match(initialized.output, /Inicialización completada/)
+  assert.equal(existsSync(resolve(target, 'psdm.config.json')), true)
+
+  const repeated = executeShellCommand('/init confirm', { target, language: 'es' })
+  assert.match(repeated.output, /0 creados/)
+}
+
 function testShellUsesPtechCyanOnlyForInteractiveTerminals() {
   const context = buildShellContext({ target: repoRoot })
   const plainBanner = renderShellBanner(context)
@@ -797,10 +823,9 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
     '/help',
     '/hook-status',
     '/impact',
-    '/init-preview',
+    '/init',
     '/inspect',
     '/language',
-    '/lenguaje',
     '/pr-checklist',
     '/report',
     '/review',
@@ -819,10 +844,14 @@ function testShellMenuFiltersNavigatesAndPreservesLayout() {
     '/work transition ',
   ])
   assert.deepEqual(languageCommands.map((item) => item.name), ['/language en', '/language es'])
+  assert.deepEqual(filterShellMenuCommands('/init ', '/init').map((item) => item.name), [
+    '/init confirm',
+    '/init preview',
+  ])
   assert.deepEqual(statusCommand.map((item) => item.name), ['/status'])
   assert.deepEqual(filterShellMenuCommands('status'), [])
-  assert.equal(moveShellMenuSelection(0, 'previous', 19), 18)
-  assert.equal(moveShellMenuSelection(18, 'next', 19), 0)
+  assert.equal(moveShellMenuSelection(0, 'previous', allCommands.length), allCommands.length - 1)
+  assert.equal(moveShellMenuSelection(allCommands.length - 1, 'next', allCommands.length), 0)
   assert.match(plainMenu, /Commands/)
   assert.match(plainMenu, /❯ \/approval/)
   assert.match(workMenu, /─ work /)
@@ -867,8 +896,8 @@ async function testInteractiveShellOpensSlashMenuAndNavigates() {
   assert.match(visible, /─ work /)
   assert.match(visible, /❯ \/work continue/)
   assert.match(visible, /\/status/)
-  assert.match(visible, /Project\s+@ptechsolution\/psdm-framework/)
-  assert.match(visible, /Riscala shell closed/)
+  assert.match(visible, /(?:Project|Proyecto)\s+@ptechsolution\/psdm-framework/)
+  assert.match(visible, /(?:Riscala shell closed|Shell de Riscala cerrado)/)
   assert.equal(input.isRaw, false)
 }
 
@@ -2023,6 +2052,8 @@ const tests = [
   testDecisionReviewGuidanceChangesDensityNotAuthority,
   testDecisionReviewUsesActiveLanguageAndNormalizesNestedTarget,
   testReadOnlyShellRoutesCommandsAndReportsContext,
+  testSpanishShellExitIsLocalized,
+  testShellInitRequiresConfirmationAndIsIdempotent,
   testShellUsesPtechCyanOnlyForInteractiveTerminals,
   testShellDetectsSpanishAndPersistsLanguage,
   testLanguagePreferenceIsGlobalAcrossProjects,
