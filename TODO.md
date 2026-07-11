@@ -2,30 +2,44 @@
 
 Status: `Active`
 Repository: `psdm-framework`
-Last Updated: `2026-07-10`
+Last Updated: `2026-07-11`
 
 ## Purpose
 
-Track concrete next tasks for PSDM Framework development.
+Track concrete next tasks for Riscala product development and PSDM method preservation.
 
 This file must be updated with every meaningful project advance. Completed items should move to `Done` instead of disappearing without trace.
 
 ## Now
 
-- [x] Resolve the stale npm `latest` tag by aligning it with `1.0.0-beta.5` after removal remained rejected by the registry.
-- [x] Replace the README logo header with the Riscala product hero asset.
+- [x] Accept the beta.6 Product Reset centered on amplifying developer judgment.
+- [x] Define the beta.6 domain model: Project Context, Observed Evidence, Change Intent, Impact Hypothesis, Decision Option, Owner Decision, Change Envelope, Verification Evidence, and Learning.
+- [x] Define the Judgment Brief contract with explicit facts, inferences, options, trade-offs, recommendation, uncertainty, and owner-decision boundaries.
+- [x] Define the staged Decision Review contract that compares accepted intent and scope with the real Git diff and validation evidence.
+- [x] Specify `learn`, `balanced`, `concise`, and JSON renderings of the same reasoning result.
 
 ## Next
 
-- [ ] Verify npm package page displays provenance for `1.0.0-beta.5`.
-- [ ] Add a required remote approval check for content-bound Level 3/4 actions.
+- [ ] Design the greenfield flow so useful reasoning precedes optional artifact creation.
+- [ ] Design the legacy discovery flow with observed architecture, uncertainty, owner correction, and no initial mutation.
+- [ ] Map existing audit, classify, inspect, risk-path, config, JSON, and CI primitives into the new architecture.
+- [ ] Add a regression scenario proving that product-direction and governance-architecture changes are not reduced to Level 0 merely because their paths or wording lack current classifier signals.
+- [ ] Implement the smallest vertical slice from Judgment Brief to staged Decision Review.
+- [ ] Add representative junior-learning, senior-balanced, and staff-concise acceptance fixtures.
+- [ ] Validate beta.6 in at least one greenfield and one external legacy repository.
+- [ ] Realign README, help, SPEC, ARCHITECTURE, shell guidance, and product docs only after the new flow is proven.
 
 ## Later
 
-- [ ] Add richer runnable example projects.
+- [ ] Decide whether remote content-bound approval adds value after the judgment loop is validated.
+- [ ] Reconsider package and repository migration only after beta.6 usage evidence.
+- [ ] Add richer runnable examples that teach technical judgment rather than framework compliance.
+- [ ] Verify npm provenance presentation as release evidence, not product direction.
 
 ## Done
 
+- [x] Resolve the stale npm `latest` tag by aligning it with `1.0.0-beta.5` after removal remained rejected by the registry.
+- [x] Replace the README logo header with the Riscala product hero asset.
 - [x] Applied Ptech cyan `#00A8E8` and light accent `#38BDF8` to the interactive shell and `riscala ❯` prompt.
 - [x] Added TTY, `NO_COLOR`, `TERM=dumb`, pipe, and ANSI-layout regression coverage without npm lifecycle scripts.
 - [x] Added a dependency-free slash command palette with filtering, arrow navigation, Tab completion, Enter execution, and raw-mode restoration.

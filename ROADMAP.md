@@ -14,8 +14,12 @@ This file is operational and must be updated with every meaningful project advan
 
 PSDM is published at `1.0.0-beta.5`; npm dist-tags `beta` and `latest` point to `1.0.0-beta.5`.
 
+Riscala has entered a Product Reset for `1.0.0-beta.6`. The new North Star is developer judgment amplification: repository-grounded impact before implementation, explicit developer decisions, and staged verification against accepted intent and scope. Existing governance, Git, JSON, CI, approval, and compatibility primitives remain available but no longer define the primary daily experience.
+
 Completed:
 
+- Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
+- Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.
 - Stale npm `latest` dist-tag resolved by aligning it with `1.0.0-beta.5` after registry removal attempts were rejected.
 - README hero updated to the Riscala product identity while preserving PSDM as the internal governance method.
 - `0.1.0` MVP CLI and templates.
@@ -126,18 +130,23 @@ Completed:
 
 ## Active Milestone
 
-`1.0.0-beta`: release readiness.
+`1.0.0-beta.6`: developer-judgment vertical slice.
 
 Goal:
 
-Prepare PSDM for first reusable beta packaging without publishing until owner approval, npm authentication, and final release gates are satisfied.
+Deliver the first complete Riscala judgment loop for greenfield and legacy repositories without turning project-lifecycle governance into daily developer friction.
 
 Planned outcomes:
 
-- Keep package metadata, versioning, tarball contents, and validation gates explicit.
-- Preserve the governance-layer boundary for AI readiness and guardrails.
-- Confirm downstream Action and local release checks before publication.
-- Avoid publishing until owner approval and npm authentication are in place.
+- Produce a repository-grounded Judgment Brief before implementation.
+- Separate observed facts, inferences, options, recommendations, uncertainty, and developer decisions.
+- Represent accepted intent and scope in a minimal, tool-neutral change envelope.
+- Compare staged implementation with the accepted decision and required evidence.
+- Support `learn`, `balanced`, `concise`, and JSON output without changing safety semantics.
+- Provide first value without mandatory `init` or a complete PSDM artifact set.
+- Validate the flow in at least one greenfield and one legacy project.
+- Preserve existing executable, config, JSON, CI, and package compatibility.
+- Keep SaaS, remote approval, package migration, repository rename, and runtime knowledge infrastructure out of beta.6.
 
 ## Next Milestones
 

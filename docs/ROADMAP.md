@@ -167,6 +167,26 @@
 
 ## v1.0
 
+### Beta.6 Product Reset
+
+- [x] Refocus Riscala on amplifying developer judgment while preserving PSDM as the reasoning method.
+- [x] Define the repository-grounded Judgment Brief contract.
+- [x] Define a minimal owner-controlled decision state and change envelope.
+- [x] Define staged Decision Review against intent, scope, and evidence.
+- [x] Support learning, balanced, concise, and JSON renderings.
+- [ ] Prove first value without mandatory initialization in greenfield and legacy repositories.
+- [ ] Reuse existing deterministic Git, risk-path, config, validation, and CI primitives.
+- [ ] Preserve `riscala`/`psdm`, config, JSON, package, and Action compatibility.
+- [ ] Validate the complete loop before publishing `1.0.0-beta.6`.
+
+Deferred from beta.6:
+
+- SaaS and hosted state.
+- Remote approval.
+- Package or repository rename.
+- Runtime vector, graph, or GraphRAG infrastructure.
+- Additional templates, risk levels, or opaque scoring.
+
 - [ ] Stable CLI API.
 - [x] Staged Git change inspection with deterministic file and risk-path evidence.
 - [x] Riscala product identity and PSDM compatibility boundary accepted.

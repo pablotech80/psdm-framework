@@ -5,6 +5,21 @@ Project: `psdm-framework`
 
 ## Functional Requirements
 
+### Beta.6 Developer Judgment
+
+- Provide a repository-grounded Judgment Brief from a developer's change intent without requiring prior `riscala init`.
+- Separate observed facts, semantic inference, options, recommendations, uncertainty, and owner decisions in human-readable and machine-readable results.
+- Treat owner decisions as external authority that Riscala and AI agents may request or record but never create, infer, approve, or simulate.
+- Build a minimal tool-neutral Change Envelope from accepted intent, scope, constraints, expected impact, required evidence, and stop conditions.
+- Compare a Change Envelope with staged Git evidence through a Decision Review.
+- Report scope drift, unexpected risk surfaces, new dependencies, schema or migration impact, config/CI/deployment changes, missing validation, and contradictions when observable.
+- Render the same underlying reasoning result in `learn`, `balanced`, `concise`, and JSON forms without weakening safety semantics.
+- Explain why a consequence matters in learning output and avoid repeating obvious context in concise output.
+- Support greenfield reasoning from intent and legacy reasoning from read-only repository discovery.
+- Reuse existing audit, Git, inspection, risk-path, config, JSON, CI, and approval primitives without making artifact compliance the primary daily experience.
+- Keep existing commands and JSON contracts compatible while beta.6 contracts remain additive.
+- Keep SaaS, remote approval, autonomous owner decisions, package/repository migration, and runtime knowledge infrastructure out of beta.6.
+
 - Provide a `psdm` CLI with `action`, `approval`, `adr`, `init`, `audit`, `check`, `validate`, `inspect`, `shell`, `classify`, `enforce`, `pr-checklist`, and `report` commands.
 - Provide a non-destructive `audit` command that previews repository state and `init` impact.
 - Detect existing AI governance files during audit and recommend integration without overwrite.
@@ -64,6 +79,20 @@ Project: `psdm-framework`
 - Maintain at least one downstream-like example fixture that exercises audit, init, and validate behavior.
 
 ## Acceptance Criteria
+
+### Beta.6 Judgment Loop
+
+- A greenfield repository receives a useful first Judgment Brief from intent without generated artifacts.
+- A legacy repository receives observed evidence, inferred boundaries, unknowns, and confidence without mutation.
+- Observed claims include repository-relative provenance and are never merged with semantic inference.
+- An owner-decision field cannot be completed by Riscala or an AI agent.
+- A low-risk change produces a short result without mandatory documents or manufactured alternatives.
+- A learning result explains at least one reusable technical reasoning principle for a representative high-risk change.
+- A concise result omits obvious background while retaining non-obvious impact, contradictions, uncertainty, and evidence gaps.
+- Decision Review uses staged Git state and reports unstaged/untracked state separately.
+- A staged file outside the accepted scope is reported as drift.
+- Representative dependency, migration, CI/deployment, and missing-test deviations are detected when supported by deterministic evidence.
+- Existing command fixtures, executable alias parity, config compatibility, and JSON contracts remain green.
 
 - `npm pack --dry-run` includes the CLI, source, templates, docs, and root governance files.
 - `node bin/psdm.mjs help` documents supported commands and options.
