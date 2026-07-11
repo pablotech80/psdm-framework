@@ -76,6 +76,8 @@ A fact with provenance.
 
 Evidence must not contain secrets, private customer data, or unrestricted file content.
 
+For selected JavaScript or TypeScript paths, beta.6 may report bounded module references and exported HTTP handler names as deterministic metadata. It must not emit source bodies or unrestricted file excerpts.
+
 ### ChangeIntent
 
 The developer's proposed outcome before implementation.

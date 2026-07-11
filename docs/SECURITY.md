@@ -42,6 +42,7 @@ Security posture:
 - local file inspection only;
 - staged inspection invokes Git with fixed arguments through `execFileSync`, reads file-status metadata rather than file contents, and never mutates the index;
 - Judgment Brief evidence exposes bounded metadata and repository-relative provenance rather than unrestricted source content;
+- selected JavaScript/TypeScript inspection is bounded by file size and may emit only module references and exported HTTP handler names, never source bodies;
 - Judgment Brief results label repository evidence as deterministic and semantic impact as inferred with explicit confidence and uncertainty;
 - `ownerDecision` remains unset and developer-only; Riscala cannot create, infer, approve, or simulate it;
 - `riscala impact` is read-only, requires no initialization, and does not persist intent, evidence, or decisions in beta.6;

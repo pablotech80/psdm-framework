@@ -41,9 +41,11 @@ Current Decision Review behavior:
 - detects observed auth, schema, AI, configuration, dependency, test, documentation, and delivery surfaces;
 - compares dependency names between `HEAD:package.json` and the staged index;
 - reports test-file presence without claiming tests were executed;
-- returns `aligned_but_unapproved` or `developer_review_required` as advisory readiness, never approval.
+- returns `scope_aligned_evidence_unverified` or `developer_review_required` as advisory readiness, never approval.
 
-This is not yet a beta.6 release candidate. Greenfield/legacy external validation, public onboarding realignment, version bump, and protected publication evidence remain pending. Strong owner-authority binding remains separate from the advisory Change Envelope.
+This is not yet a beta.6 release candidate. Public onboarding realignment, version bump, and protected publication evidence remain pending. Strong owner-authority binding remains separate from the advisory Change Envelope.
+
+External greenfield and representative legacy validation is now recorded in `docs/BETA6_EXTERNAL_VALIDATION.md`. The validation produced corrections for greenfield intake, selected-file metadata, lead/contact/API reasoning, evidence density, and aligned-scope wording. Public onboarding realignment and a clean-install documentation-only journey remain pending before release-candidate status.
 
 ## Beta Release - 1.0.0-beta.5
 

@@ -25,17 +25,23 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Implement `riscala review --staged` for expected/staged scope comparison and advisory readiness.
 - [x] Detect scope drift, expected files missing from staged state, unexpected sensitive surfaces, and package dependency deltas.
 - [x] Add Decision Review fixtures for aligned scope, delivery drift, dependency changes, missing expected scope, no staged changes, and non-approval semantics.
+- [x] Validate greenfield first use without init and correct the flow to start with user, problem, outcome, scope, and expensive-to-get-wrong concerns.
+- [x] Validate against a temporary snapshot of a real Ptech legacy repository without mutating its source checkout.
+- [x] Add bounded selected-file import and HTTP-handler evidence after real validation exposed generic legacy reasoning.
+- [x] Add lead/contact/API judgment for consent, data processing, routing, persistence, fallback, and user-visible contracts.
+- [x] Refine evidence density and replace ambiguous aligned wording with `scope_aligned_evidence_unverified`.
 
 ## Next
 
-- [ ] Design the greenfield flow so useful reasoning precedes optional artifact creation.
-- [ ] Design the legacy discovery flow with observed architecture, uncertainty, owner correction, and no initial mutation.
-- [ ] Map existing audit, classify, inspect, risk-path, config, JSON, and CI primitives into the new architecture.
+- [x] Design and validate the greenfield flow so useful reasoning precedes optional artifact creation.
+- [x] Design and validate legacy discovery with bounded repository evidence, uncertainty, and no source mutation.
+- [x] Map existing audit, classify, inspect, risk-path, config, JSON, and Git primitives into the first judgment loop.
 - [ ] Add a regression scenario proving that product-direction and governance-architecture changes are not reduced to Level 0 merely because their paths or wording lack current classifier signals.
 - [ ] Decide and validate how an explicit owner decision can bind to a Change Envelope without treating agent-controlled CLI input as human-presence proof.
-- [ ] Add representative junior-learning, senior-balanced, and staff-concise acceptance fixtures.
-- [ ] Validate beta.6 in at least one greenfield and one external legacy repository.
-- [ ] Realign README, help, SPEC, ARCHITECTURE, shell guidance, and product docs only after the new flow is proven.
+- [x] Add representative learning, balanced, and concise acceptance fixtures.
+- [x] Validate beta.6 in a greenfield scenario and a temporary snapshot of a real legacy repository.
+- [ ] Realign product positioning, README quick start, help hierarchy, shell guidance, and public docs around developer judgment.
+- [ ] Run a clean-install journey using only public documentation before marking beta.6 as a release candidate.
 
 ## Later
 

@@ -16,6 +16,23 @@ const MANIFESTS = [
   'build.gradle',
 ]
 
+const GREENFIELD_INTAKE_RULE = {
+  id: 'greenfield-intake',
+  signals: [],
+  decision: 'Which smallest user outcome should be validated before architecture and implementation choices become commitments.',
+  impacts: [
+    ['problem', 'The problem and current user pain must be explicit before solution scope expands.', 'high'],
+    ['user-outcome', 'Success needs an observable user or business outcome.', 'high'],
+    ['scope', 'The first version needs explicit in-scope and out-of-scope boundaries.', 'high'],
+    ['architecture', 'Technology choices should follow constraints and risk rather than lead the intake.', 'medium'],
+  ],
+  assumptions: ['The proposed product solves a validated problem.', 'The first version can be bounded around one measurable outcome.'],
+  options: [],
+  recommendation: 'Clarify the user, problem, first measurable outcome, scope boundary, and expensive-to-get-wrong concerns before selecting architecture.',
+  ownerDecisions: ['Who experiences the problem?', 'What observable outcome makes the first version valuable?', 'What is explicitly outside the first version?', 'What would be expensive or unsafe to get wrong?'],
+  learning: 'Greenfield judgment begins with problem and outcome clarity; architecture should not substitute for product intake.',
+}
+
 const SURFACE_RULES = [
   {
     id: 'authentication',
@@ -119,6 +136,39 @@ const SURFACE_RULES = [
     recommendation: 'Define data, authority, evaluation, and fallback boundaries before optimizing model capability.',
     ownerDecisions: ['What may the AI decide?', 'Which data may enter model context?', 'Which failures require human review?'],
     learning: 'AI capability is not the same as AI authority; the owner must define both separately.',
+  },
+  {
+    id: 'lead-intake',
+    signals: ['lead', 'contact', 'recommendation', 'form'],
+    filePatterns: [/(^|\/)(contact|contacto|leads?|forms?)(\/|\.|-)/, /(^|\/)api\/[^/]*(lead|contact)/],
+    decision: 'How a recommendation should influence the lead journey without silently changing consent, data handling, routing, or the user-visible contract.',
+    impacts: [
+      ['user-flow', 'The contact or qualification journey may gain a new decision point or failure state.', 'high'],
+      ['input-data', 'Lead content may become model input or influence stored qualification data.', 'medium'],
+      ['api-contract', 'Submission payloads, responses, or failure behavior may change.', 'medium'],
+      ['persistence', 'Recommendations may be displayed transiently, stored, or used for routing.', 'medium'],
+      ['testing', 'Consent, fallback, invalid input, and recommendation behavior need representative evidence.', 'high'],
+    ],
+    assumptions: ['The recommendation is advisory unless explicit authority is granted.', 'Lead data is allowed to enter the selected processing path.'],
+    options: [
+      {
+        id: 'advisory-after-submit',
+        summary: 'Generate a recommendation after valid submission and keep routing unchanged.',
+        benefits: ['Lower workflow risk', 'Clear separation from lead acceptance'],
+        costs: ['Recommendation may arrive later or require an additional UI state'],
+        reversibility: 'high',
+      },
+      {
+        id: 'recommendation-drives-routing',
+        summary: 'Use the recommendation to alter lead routing or qualification.',
+        benefits: ['More automation', 'Potentially faster prioritization'],
+        costs: ['Higher authority, fairness, data, and failure risk'],
+        reversibility: 'medium',
+      },
+    ],
+    recommendation: 'Start with an advisory recommendation separated from lead acceptance and routing until quality, consent, and fallback evidence justify more authority.',
+    ownerDecisions: ['Is the recommendation user-facing, operator-facing, or both?', 'May it change lead routing or only provide advice?', 'Which lead fields may be processed?', 'What happens when recommendation generation fails?'],
+    learning: 'Adding AI to an intake flow changes authority and data handling only when its output influences acceptance, persistence, or routing.',
   },
   {
     id: 'dependency-change',
@@ -226,13 +276,34 @@ function collectStructureEvidence(target) {
 }
 
 function collectRequestedFileEvidence(target, files) {
-  return files.map((file) => {
+  return files.flatMap((file) => {
     const path = join(target, file)
     if (!existsSync(path)) {
-      return evidence('requested-path', file, `${file} was supplied as expected scope but is not present.`)
+      return [evidence('requested-path', file, `${file} was supplied as expected scope but is not present.`)]
     }
-    const type = statSync(path).isDirectory() ? 'directory' : (extname(path) || 'file')
-    return evidence('requested-path', file, `${file} exists as ${type}.`)
+    const stat = statSync(path)
+    const type = stat.isDirectory() ? 'directory' : (extname(path) || 'file')
+    const results = [evidence('requested-path', file, `${file} exists as ${type}.`)]
+    if (stat.isDirectory() || stat.size > 256_000 || !['.js', '.jsx', '.mjs', '.cjs', '.ts', '.tsx'].includes(extname(path))) {
+      return results
+    }
+
+    const content = readFileSync(path, 'utf8')
+    const imports = Array.from(new Set([
+      ...content.matchAll(/\bfrom\s+['"]([^'"]+)['"]/g),
+      ...content.matchAll(/\brequire\(\s*['"]([^'"]+)['"]\s*\)/g),
+    ].map((match) => match[1]))).slice(0, 12)
+    if (imports.length > 0) {
+      results.push(evidence('target-imports', `${file}:imports`, `${file} references modules: ${imports.join(', ')}.`))
+    }
+    const handlers = Array.from(new Set(
+      [...content.matchAll(/export\s+(?:async\s+)?function\s+(GET|POST|PUT|PATCH|DELETE)\b/g)]
+        .map((match) => match[1]),
+    )).sort()
+    if (handlers.length > 0) {
+      results.push(evidence('http-handler', `${file}:exports`, `${file} exports HTTP handlers: ${handlers.join(', ')}.`))
+    }
+    return results
   })
 }
 
@@ -246,15 +317,16 @@ function projectMode(target, observedEvidence) {
   return entries.length === 0 || !hasImplementation ? 'greenfield' : 'legacy'
 }
 
-function matchingRules(intent) {
+function matchingRules(intent, files, mode) {
   const normalized = intent.toLowerCase()
-  return SURFACE_RULES.filter((rule) => rule.signals.some((signal) => {
+  const rules = SURFACE_RULES.filter((rule) => rule.signals.some((signal) => {
     if (signal.includes(' ') || signal.includes('/')) {
       return normalized.includes(signal)
     }
     const escaped = signal.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
     return new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`).test(normalized)
-  }))
+  }) || (rule.filePatterns || []).some((pattern) => files.some((file) => pattern.test(file))))
+  return mode === 'greenfield' ? [GREENFIELD_INTAKE_RULE, ...rules] : rules
 }
 
 function unique(values) {
@@ -284,6 +356,7 @@ function buildInference(rules, files) {
     }
   }
 
+  const onlyGreenfieldIntake = rules.every((rule) => rule.id === 'greenfield-intake')
   return {
     decision: rules.map((rule) => rule.decision).join(' '),
     affectedSurfaces: rules.flatMap((rule) => rule.impacts.map(([surface, statement, confidence]) => ({
@@ -299,8 +372,10 @@ function buildInference(rules, files) {
     ownerDecisionsRequired: unique(rules.flatMap((rule) => rule.ownerDecisions)),
     learningPrinciples: unique(rules.map((rule) => rule.learning)),
     uncertainty: {
-      level: rules.length === 1 ? 'medium' : 'high',
-      reasons: ['Impact is inferred from intent signals and repository evidence; code-level semantic analysis is not implemented in this increment.'],
+      level: onlyGreenfieldIntake || rules.length > 1 ? 'high' : 'medium',
+      reasons: [onlyGreenfieldIntake
+        ? 'The project has no implementation evidence yet; product intent must be clarified before technical impact can be estimated.'
+        : 'Impact is inferred from intent signals and repository evidence; code-level semantic analysis is not implemented in this increment.'],
     },
   }
 }
@@ -319,7 +394,8 @@ export function buildJudgmentBrief({ target, intent, files = [], configPath = nu
     ...collectStructureEvidence(target),
     ...collectRequestedFileEvidence(target, files),
   ]
-  const rules = matchingRules(intent)
+  const mode = projectMode(target, observedEvidence)
+  const rules = matchingRules(intent, files, mode)
   const classification = classifyChange({ description: intent, files, target, configPath })
 
   return {
@@ -333,7 +409,7 @@ export function buildJudgmentBrief({ target, intent, files = [], configPath = nu
       epistemicStatus: 'owner_input',
     },
     projectContext: {
-      mode: projectMode(target, observedEvidence),
+      mode,
       repository: git.isRepository,
       branch: git.branch,
       initializedWithPsdm: existsSync(join(target, 'psdm.config.json')),
@@ -362,6 +438,21 @@ function printList(title, values, formatter = (value) => value) {
   for (const value of values) console.log(`- ${formatter(value)}`)
 }
 
+function visibleEvidence(report) {
+  if (report.guidance === 'learn') return report.observedEvidence
+  if (report.guidance === 'concise') {
+    return report.observedEvidence.filter((item) => ['target-imports', 'http-handler'].includes(item.kind))
+  }
+  return report.observedEvidence.filter((item) => [
+    'repository-state',
+    'project-identity',
+    'validation-capability',
+    'requested-path',
+    'target-imports',
+    'http-handler',
+  ].includes(item.kind))
+}
+
 export function printJudgmentBrief(report) {
   const concise = report.guidance === 'concise'
   const learn = report.guidance === 'learn'
@@ -370,9 +461,7 @@ export function printJudgmentBrief(report) {
   console.log(`Context: ${report.projectContext.mode} · ${report.projectContext.repository ? 'Git repository' : 'no Git repository'} · PSDM init ${report.projectContext.initializedWithPsdm ? 'detected' : 'not required'}`)
   console.log(`\nIntent\n${report.intent.statement}`)
 
-  if (!concise) {
-    printList('Observed facts', report.observedEvidence, (item) => `${item.summary} [${item.source}]`)
-  }
+  printList('Observed facts', visibleEvidence(report), (item) => `${item.summary} [${item.source}]`)
 
   console.log(`\nDecision underneath\n${report.judgment.decision}`)
   printList('Likely impact', report.judgment.affectedSurfaces, (item) => `${item.surface}: ${item.statement} (${item.confidence} confidence)`)

@@ -190,8 +190,9 @@ function testImpactUnknownGreenfieldExposesUncertaintyWithoutMutation() {
   assert.equal(report.projectContext.mode, 'greenfield')
   assert.equal(report.projectContext.initializedWithPsdm, false)
   assert.equal(report.judgment.uncertainty.level, 'high')
-  assert.match(report.judgment.decision, /not provide enough deterministic evidence/)
+  assert.match(report.judgment.decision, /smallest user outcome/)
   assert.deepEqual(report.judgment.options, [])
+  assert.ok(report.judgment.ownerDecisionsRequired.some((item) => item.includes('Who experiences the problem')))
   assert.equal(report.ownerDecision.value, null)
   assert.deepEqual(readdirSync(target).sort(), before)
 }
@@ -208,6 +209,65 @@ function testImpactDoesNotMatchAiInsideOrdinaryWords() {
 
   assert.ok(report.judgment.affectedSurfaces.some((item) => item.rule === 'local-presentation'))
   assert.ok(report.judgment.affectedSurfaces.every((item) => item.rule !== 'ai-behavior'))
+}
+
+function testImpactLegacyUsesTargetMetadataAndLeadContext() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-impact-legacy-context-'))
+  mkdirSync(resolve(target, 'src', 'app', 'api', 'lead'), { recursive: true })
+  writeFileSync(resolve(target, 'package.json'), JSON.stringify({
+    name: 'lead-app',
+    scripts: { test: 'node tests.mjs' },
+    dependencies: { express: '1.0.0', zod: '1.0.0' },
+  }))
+  writeFileSync(
+    resolve(target, 'src', 'app', 'api', 'lead', 'route.ts'),
+    "import { NextResponse } from 'next/server'\nexport async function POST() { return NextResponse.json({ ok: true }) }\n",
+  )
+  const file = 'src/app/api/lead/route.ts'
+
+  const report = runJson([
+    'impact',
+    'add AI recommendations to the lead form',
+    '--target',
+    target,
+    '--file',
+    file,
+    '--json',
+  ])
+  const balanced = run([
+    'impact',
+    'add AI recommendations to the lead form',
+    '--target',
+    target,
+    '--file',
+    file,
+  ])
+  const concise = run([
+    'impact',
+    'add AI recommendations to the lead form',
+    '--target',
+    target,
+    '--file',
+    file,
+    '--guidance',
+    'concise',
+  ])
+
+  assert.ok(report.observedEvidence.some((item) => (
+    item.kind === 'target-imports'
+    && item.source === `${file}:imports`
+    && item.summary.includes('next/server')
+  )))
+  assert.ok(report.observedEvidence.some((item) => (
+    item.kind === 'http-handler'
+    && item.summary.includes('POST')
+  )))
+  assert.ok(report.judgment.affectedSurfaces.some((item) => item.rule === 'lead-intake'))
+  assert.ok(report.judgment.ownerDecisionsRequired.some((item) => item.includes('lead routing')))
+  assert.doesNotMatch(balanced, /Declared dependency names/)
+  assert.match(balanced, /exports HTTP handlers: POST/)
+  assert.match(concise, /references modules: next\/server/)
+  assert.match(concise, /exports HTTP handlers: POST/)
 }
 
 function testImpactRejectsUnsupportedGuidance() {
@@ -269,7 +329,7 @@ function testDecisionReviewAlignedScopeRemainsAdvisory() {
   assert.equal(report.envelope.ownerDecision.value, null)
   assert.deepEqual(report.verification.outsideExpectedScope, [])
   assert.deepEqual(report.verification.deviations, [])
-  assert.equal(report.verification.readiness, 'aligned_but_unapproved')
+  assert.equal(report.verification.readiness, 'scope_aligned_evidence_unverified')
   assert.equal(report.verification.authority.approval, false)
 }
 
@@ -1671,6 +1731,7 @@ const tests = [
   testImpactAuthTeachesDecisionWithoutTakingAuthority,
   testImpactUnknownGreenfieldExposesUncertaintyWithoutMutation,
   testImpactDoesNotMatchAiInsideOrdinaryWords,
+  testImpactLegacyUsesTargetMetadataAndLeadContext,
   testImpactRejectsUnsupportedGuidance,
   testDecisionReviewAlignedScopeRemainsAdvisory,
   testDecisionReviewDetectsScopeAndDeliveryDrift,
