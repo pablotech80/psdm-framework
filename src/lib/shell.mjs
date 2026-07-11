@@ -493,27 +493,44 @@ function renderJudgmentBrief(report, options = {}) {
 
 function renderDecisionReview(report, options = {}) {
   const theme = terminalTheme(options.color)
+  const spanish = options.language === 'es'
   if (!report.verification) {
     const state = report.staged.decision === 'NO_STAGED_CHANGES'
-      ? 'No staged changes found. Stage the intended files, then run /review again.'
-      : 'The target is not a Git repository.'
-    return renderPanel('REVIEW', cardRows('State', state, { ...options, valueStyle: theme.yellow }), options)
+      ? (spanish
+          ? 'No hay cambios preparados. Prepara los archivos previstos y vuelve a ejecutar /review.'
+          : 'No staged changes found. Stage the intended files, then run /review again.')
+      : (spanish ? 'El destino no es un repositorio Git.' : 'The target is not a Git repository.')
+    return renderPanel(spanish ? 'REVISIÓN' : 'REVIEW', cardRows(spanish ? 'Estado' : 'State', state, { ...options, valueStyle: theme.yellow }), options)
   }
 
   const deviations = report.verification.deviations.slice(0, 3)
+  const readiness = spanish
+    ? ({ developer_review_required: 'requiere revisión del desarrollador', scope_aligned_evidence_unverified: 'alcance alineado; evidencia sin verificar' }[report.verification.readiness] || report.verification.readiness)
+    : report.verification.readiness
+  const deviationText = (item) => {
+    if (!spanish) return item.statement
+    if (item.kind === 'scope-drift') return `${item.file} está preparado fuera del alcance esperado.`
+    if (item.kind === 'active-work-scope-violation') return `${item.file} está preparado fuera de las rutas permitidas por el trabajo activo.`
+    if (item.kind === 'active-work-repository-conflict') return 'El trabajo activo pertenece a otro repositorio.'
+    if (item.kind === 'expected-not-staged') return `${item.file} se declaró como esperado pero no está preparado.`
+    if (item.kind === 'unexpected-surface') return `${item.file} introduce impacto ${item.surface} no previsto.`
+    return item.statement
+  }
   const rows = [
-    ...cardRows('Intent', report.envelope.intent, options),
-    cardRow('Staged', `${report.verification.stagedFiles.length} file(s)`, options),
-    cardRow('Readiness', report.verification.readiness, {
+    ...cardRows(spanish ? 'Objetivo' : 'Intent', report.envelope.intent, options),
+    cardRow(spanish ? 'Preparados' : 'Staged', spanish ? `${report.verification.stagedFiles.length} archivo(s)` : `${report.verification.stagedFiles.length} file(s)`, options),
+    cardRow(spanish ? 'Disposición' : 'Readiness', readiness, {
       ...options,
       valueStyle: deviations.length > 0 ? theme.yellow : theme.cyanLight,
     }),
-    ...deviations.flatMap((item, index) => cardRows(index === 0 ? 'Deviation' : '', item.statement, { ...options, valueStyle: theme.yellow })),
+    ...deviations.flatMap((item, index) => cardRows(index === 0 ? (spanish ? 'Desviación' : 'Deviation') : '', deviationText(item), { ...options, valueStyle: theme.yellow })),
     panelRule('middle', '', options),
-    ...cardRows('Evidence', 'Staged scope was observed; tests and owner authority remain unverified.', options),
-    ...cardRows('Next', deviations.length > 0 ? 'Review the deviations and decide whether to revise scope or implementation.' : 'Run focused validation and decide whether the change is ready.', options),
+    ...cardRows(spanish ? 'Evidencia' : 'Evidence', spanish ? 'Se observó el alcance preparado; las pruebas y la autoridad del propietario siguen sin verificar.' : 'Staged scope was observed; tests and owner authority remain unverified.', options),
+    ...cardRows(spanish ? 'Siguiente' : 'Next', deviations.length > 0
+      ? (spanish ? 'Revisa las desviaciones y decide si debes corregir el alcance o la implementación.' : 'Review the deviations and decide whether to revise scope or implementation.')
+      : (spanish ? 'Ejecuta una validación focalizada y decide si el cambio está listo.' : 'Run focused validation and decide whether the change is ready.'), options),
   ]
-  return renderPanel('REVIEW', rows, options)
+  return renderPanel(spanish ? 'REVISIÓN' : 'REVIEW', rows, options)
 }
 
 function renderAudit(report, options = {}) {
@@ -1125,7 +1142,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
       return { output: renderReviewPathGuidance(description, { color }), exit: false }
     }
     return {
-      output: renderDecisionReview(buildDecisionReview({ target, intent: description, configPath }), { color }),
+      output: renderDecisionReview(buildDecisionReview({ target, intent: description, configPath }), { color, language: activeLanguage }),
       exit: false,
     }
   }

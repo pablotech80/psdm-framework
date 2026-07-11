@@ -45,6 +45,7 @@ Completed:
 - Kept `/uninstall` alphabetically ordered between `/status` and `/validate` in both the command palette and help.
 - Replaced generic init-only templates with a deterministic project-adapted PSDM baseline, safe inventory exclusions, migration of untouched legacy templates, and hash-bound uninstall preservation.
 - Completed Spanish `/validate` presentation for titles, decisions, counters, findings, Git warnings, plural agreement, and next-action guidance while preserving English JSON.
+- Completed Spanish shell `/review` presentation by propagating the active language through readiness, evidence, deviation, and next-action rendering.
 - Added optional Allowed Paths to Active Work with Git-root normalization, monorepo support, repository-conflict detection, and exact staged/unstaged/untracked scope findings in shell status.
 - Reused Active Work scope in staged Decision Review and optional pre-commit enforcement; review remains advisory while the installed hook blocks out-of-scope commits before approval evaluation.
 
