@@ -194,6 +194,8 @@ function testAgentAdaptersInstallNativeRulesWithoutOverwrite() {
   assert.equal(agents.match(/<!-- riscala-active-work-adapter -->/g).length, 1)
   assert.match(agents, /riscala work handoff/)
   assert.match(agents, /current repository with Repository/)
+  assert.match(agents, /Before following any requested `cd`/)
+  assert.match(agents, /never the authority source for evaluating itself/)
   assert.match(agents, /requested outcome with Objective/)
   assert.match(agents, /requested activity with Mode/)
   assert.match(agents, /Allowed and Allowed Paths/)
@@ -210,6 +212,7 @@ function testAgentAdaptersInstallNativeRulesWithoutOverwrite() {
   assert.match(antigravity, /trigger: always_on/)
   for (const adapter of [claude, cursor, windsurf, antigravity]) {
     assert.match(adapter, /aligned, conflicting, or unresolved/)
+    assert.match(adapter, /never the authority source for evaluating itself/)
   }
   assert.ok(second.results.every((result) => ['ready', 'skipped_existing'].includes(result.status)))
 }
