@@ -693,6 +693,25 @@ function testSpanishShellExitIsLocalized() {
   assert.equal(result.exit, true)
 }
 
+function testSpanishValidateIsFullyLocalized() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-validate-es-'))
+  git(target, ['init', '--quiet'])
+  run(['init', target])
+  git(target, ['add', '.'])
+  git(target, ['-c', 'user.name=Riscala', '-c', 'user.email=riscala@example.invalid', 'commit', '--quiet', '-m', 'baseline'])
+  writeFileSync(resolve(target, 'cambio.txt'), 'cambio local\n')
+
+  const result = executeShellCommand('/validate', { target, language: 'es' })
+
+  assert.match(result.output, /VALIDAR/)
+  assert.match(result.output, /Política\s+estándar/)
+  assert.match(result.output, /Decisión\s+Revisión necesaria/)
+  assert.match(result.output, /Controles\s+11 superadas · 0 fallidas · 1 advertencia/)
+  assert.match(result.output, /Aviso\s+git: El árbol de trabajo tiene 1 cambio sin/)
+  assert.match(result.output, /Siguiente\s+Revisa las advertencias/)
+  assert.doesNotMatch(result.output, /Policy|Decision|Checks|Warning|Next|Working tree/)
+}
+
 function testShellInitRequiresConfirmationAndIsIdempotent() {
   const target = mkdtempSync(resolve(tmpdir(), 'riscala-shell-init-'))
   const usage = executeShellCommand('/init', { target, language: 'es' })
@@ -2170,6 +2189,7 @@ const tests = [
   testDecisionReviewUsesActiveLanguageAndNormalizesNestedTarget,
   testReadOnlyShellRoutesCommandsAndReportsContext,
   testSpanishShellExitIsLocalized,
+  testSpanishValidateIsFullyLocalized,
   testShellInitRequiresConfirmationAndIsIdempotent,
   testShellUninstallPreviewsWarnsAndPreservesUserFiles,
   testShellUsesPtechCyanOnlyForInteractiveTerminals,

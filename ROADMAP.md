@@ -44,6 +44,7 @@ Completed:
 - Added safe project cleanup through navigable `/uninstall preview|confirm`, with an explicit repository-mutation warning, managed-block removal, exact-template deletion, and preservation of user-modified files.
 - Kept `/uninstall` alphabetically ordered between `/status` and `/validate` in both the command palette and help.
 - Replaced generic init-only templates with a deterministic project-adapted PSDM baseline, safe inventory exclusions, migration of untouched legacy templates, and hash-bound uninstall preservation.
+- Completed Spanish `/validate` presentation for titles, decisions, counters, findings, Git warnings, plural agreement, and next-action guidance while preserving English JSON.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.

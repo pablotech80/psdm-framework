@@ -641,8 +641,20 @@ function countLabel(count, singular, plural) {
   return `${count} ${count === 1 ? singular : plural}`
 }
 
+function translateValidationMessage(message, language) {
+  if (language !== 'es') return message
+  if (message === 'Contains placeholder-like wording.') return 'Contiene texto genérico pendiente de adaptar.'
+  if (message === 'Artifact exists and is non-empty.') return 'El artefacto existe y no está vacío.'
+  const dirty = message.match(/^Working tree has (\d+) uncommitted change\/s\.$/)
+  if (dirty) return `El árbol de trabajo tiene ${dirty[1]} ${dirty[1] === '1' ? 'cambio' : 'cambios'} sin confirmar.`
+  const missing = message.match(/^Missing required section or marker: (.+)$/)
+  if (missing) return `Falta la sección o marcador obligatorio: ${missing[1]}`
+  return message
+}
+
 function renderValidation(report, options = {}) {
   const theme = terminalTheme(options.color)
+  const spanish = options.language === 'es'
   const passed = report.results.filter((item) => item.status === 'PASS').length
   const failed = report.failures
   const warned = report.warnings
@@ -650,42 +662,44 @@ function renderValidation(report, options = {}) {
   const focusArtifacts = Array.from(new Set(findings.map((item) => item.artifact)))
   const focus = focusArtifacts.slice(0, 2).join(' · ')
   const remainingFocus = Math.max(0, focusArtifacts.length - 2)
-  const decision = {
-    METHOD_BASELINE_APPROVED: 'Baseline approved',
-    METHOD_BASELINE_REVIEW_REQUIRED: 'Review required',
-    NEEDS_CORRECTION: 'Needs correction',
-  }[report.decision] || report.decision.replaceAll('_', ' ')
+  const decision = ({
+    METHOD_BASELINE_APPROVED: spanish ? 'Base aprobada' : 'Baseline approved',
+    METHOD_BASELINE_REVIEW_REQUIRED: spanish ? 'Revisión necesaria' : 'Review required',
+    NEEDS_CORRECTION: spanish ? 'Necesita corrección' : 'Needs correction',
+  }[report.decision] || report.decision.replaceAll('_', ' '))
   const decisionStyle = failed > 0
     ? theme.red
     : warned > 0
       ? theme.yellow
       : theme.green
   const next = failed > 0
-    ? 'Fix the failing governance checks, then run /validate again.'
+    ? (spanish ? 'Corrige las comprobaciones fallidas y ejecuta /validate de nuevo.' : 'Fix the failing governance checks, then run /validate again.')
     : warned > 0
-      ? 'Review warnings before accepting the governance baseline.'
-      : 'Governance baseline validated. Run /inspect before delivery.'
+      ? (spanish ? 'Revisa las advertencias antes de aceptar la base de gobierno.' : 'Review warnings before accepting the governance baseline.')
+      : (spanish ? 'Base de gobierno validada. Ejecuta /inspect antes de entregar.' : 'Governance baseline validated. Run /inspect before delivery.')
   const rows = [
-    cardRow('Policy', report.config.profile.name, { ...options, valueStyle: theme.cyanLight }),
-    cardRow('Decision', decision, { ...options, valueStyle: decisionStyle }),
-    cardRow('Checks', `${countLabel(passed, 'passed', 'passed')} · ${countLabel(failed, 'failed', 'failed')} · ${countLabel(warned, 'warning', 'warnings')}`, {
+    cardRow(spanish ? 'Política' : 'Policy', spanish && report.config.profile.name === 'standard' ? 'estándar' : report.config.profile.name, { ...options, valueStyle: theme.cyanLight }),
+    cardRow(spanish ? 'Decisión' : 'Decision', decision, { ...options, valueStyle: decisionStyle }),
+    cardRow(spanish ? 'Controles' : 'Checks', spanish
+      ? `${countLabel(passed, 'superada', 'superadas')} · ${countLabel(failed, 'fallida', 'fallidas')} · ${countLabel(warned, 'advertencia', 'advertencias')}`
+      : `${countLabel(passed, 'passed', 'passed')} · ${countLabel(failed, 'failed', 'failed')} · ${countLabel(warned, 'warning', 'warnings')}`, {
       ...options,
       valueStyle: decisionStyle,
     }),
-    ...(focusArtifacts.length > 0 ? cardRows('Focus', `${focus}${remainingFocus > 0 ? ` · +${remainingFocus} more` : ''}`, {
+    ...(focusArtifacts.length > 0 ? cardRows(spanish ? 'Enfoque' : 'Focus', `${focus}${remainingFocus > 0 ? ` · +${remainingFocus} ${spanish ? 'más' : 'more'}` : ''}`, {
       ...options,
       valueStyle: decisionStyle,
     }) : []),
     ...findings.slice(0, 2).flatMap((item, index) => cardRows(
-      index === 0 ? (item.status === 'FAIL' ? 'Failure' : 'Warning') : '',
-      `${item.artifact}: ${item.message}`,
+      index === 0 ? (item.status === 'FAIL' ? (spanish ? 'Fallo' : 'Failure') : (spanish ? 'Aviso' : 'Warning')) : '',
+      `${item.artifact}: ${translateValidationMessage(item.message, options.language)}`,
       { ...options, valueStyle: item.status === 'FAIL' ? theme.red : theme.yellow },
     )),
     panelRule('middle', '', options),
-    ...cardRows('Next', next, { ...options, valueStyle: theme.cyanLight }),
+    ...cardRows(spanish ? 'Siguiente' : 'Next', next, { ...options, valueStyle: theme.cyanLight }),
   ]
 
-  return renderPanel('VALIDATE', rows, options)
+  return renderPanel(spanish ? 'VALIDAR' : 'VALIDATE', rows, options)
 }
 
 function renderComplianceReport(report, options = {}) {
@@ -1109,7 +1123,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
 
   if (command === '/validate') {
     return {
-      output: renderValidation(validateMethod(target, { configPath }), { color }),
+      output: renderValidation(validateMethod(target, { configPath }), { color, language: activeLanguage }),
       exit: false,
     }
   }
