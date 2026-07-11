@@ -232,6 +232,8 @@ The dependency-free shell is an operational governance console. It manages Activ
 /exit
 ```
 
+When `AGENTS.md` already exists, `/init confirm` preserves its content and appends only missing PSDM Required Reading, Boundaries, and Escalation sections. Repeating initialization does not duplicate the integration block.
+
 The first screen restores `.riscala/ACTIVE_WORK.md`. If none exists, `/work <objective>` creates it with `implement` mode by default. `/work transition` records a proposed boundary without applying it; `/work continue` accepts it explicitly; `/work close` ends the work. Timestamped history remains in the file. Source code is changed by Codex, Claude, Cursor, or your preferred coding agent.
 
 The shell starts in Spanish when the system locale begins with `es`; otherwise it uses English. `/language es|en` or `/lenguaje es|en` stores a global Riscala preference, applies it immediately, and restores it across repositories. Language changes presentation, never policy meaning or JSON keys.

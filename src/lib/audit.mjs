@@ -15,6 +15,7 @@ const AI_GOVERNANCE_PATHS = [
   'ai',
   'docs/AI_AGENT_SECURITY.md',
 ]
+const REQUIRED_AGENTS_MARKERS = ['# AGENTS.md', 'Required Reading', 'Boundaries', 'Escalation']
 
 const AI_READINESS_SURFACES = [
   {
@@ -145,6 +146,19 @@ function inspectPath(target, artifact) {
       currentState: 'empty',
       installAction: 'skip',
       message: 'File exists but is empty; init would not overwrite it.',
+    }
+  }
+
+  if (artifact === 'AGENTS.md') {
+    const content = readFileSync(fullPath, 'utf8')
+    const missingMarkers = REQUIRED_AGENTS_MARKERS.filter((marker) => !content.includes(marker))
+    if (missingMarkers.length > 0) {
+      return {
+        artifact,
+        currentState: 'present',
+        installAction: 'integrate',
+        message: `Would preserve the file and add missing PSDM sections: ${missingMarkers.join(', ')}.`,
+      }
     }
   }
 
@@ -424,6 +438,7 @@ export function buildAudit(target, options = {}) {
   const results = configResult ? [...artifactResults, configResult] : artifactResults
   const git = inspectGit(target)
   const wouldCreate = results.filter((item) => item.installAction === 'create')
+  const wouldIntegrate = results.filter((item) => item.installAction === 'integrate')
   const wouldSkip = results.filter((item) => item.installAction === 'skip')
   const aiGovernance = detectAiGovernance(target)
   const aiReadiness = detectAiReadiness(target, aiGovernance)
@@ -444,6 +459,7 @@ export function buildAudit(target, options = {}) {
     summary: {
       total: results.length,
       wouldCreate: wouldCreate.length,
+      wouldIntegrate: wouldIntegrate.length,
       wouldSkip: wouldSkip.length,
       existingEmpty: results.filter((item) => item.currentState === 'empty').length,
     },
