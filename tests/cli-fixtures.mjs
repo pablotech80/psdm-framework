@@ -115,6 +115,27 @@ function testActiveWorkCreatesReadsAndPreservesBoundary() {
   assert.equal(readFileSync(path, 'utf8'), content)
 }
 
+function testAgentAdaptersInstallNativeRulesWithoutOverwrite() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-adapters-'))
+  writeFileSync(resolve(target, 'AGENTS.md'), '# Existing agent rules\n')
+  writeFileSync(resolve(target, 'CLAUDE.md'), '# Existing Claude rules\n')
+  const report = runJson(['adapters', 'init', '--target', target, '--json'])
+  const second = runJson(['adapters', 'init', '--target', target, '--json'])
+  const agents = readFileSync(resolve(target, 'AGENTS.md'), 'utf8')
+
+  assert.deepEqual(report.tools, ['codex', 'claude', 'cursor', 'windsurf', 'opencode', 'antigravity'])
+  assert.match(agents, /Existing agent rules/)
+  assert.match(agents, /riscala-active-work-adapter/)
+  assert.equal(agents.match(/riscala-active-work-adapter/g).length, 1)
+  const claude = readFileSync(resolve(target, 'CLAUDE.md'), 'utf8')
+  assert.match(claude, /Existing Claude rules/)
+  assert.equal(claude.match(/riscala-active-work-adapter/g).length, 1)
+  assert.match(readFileSync(resolve(target, '.cursor/rules/riscala-active-work.mdc'), 'utf8'), /alwaysApply: true/)
+  assert.match(readFileSync(resolve(target, '.windsurf/rules/riscala-active-work.md'), 'utf8'), /trigger: always_on/)
+  assert.match(readFileSync(resolve(target, '.agents/rules/riscala-active-work.md'), 'utf8'), /trigger: always_on/)
+  assert.ok(second.results.every((result) => ['ready', 'skipped_existing'].includes(result.status)))
+}
+
 function testImpactLowRiskWithoutInitStaysLightweight() {
   const target = mkdtempSync(resolve(tmpdir(), 'riscala-impact-low-risk-'))
   writeFileSync(resolve(target, 'package.json'), '{"name":"docs-project"}\n')
@@ -1853,6 +1874,7 @@ function testExampleProjectCoverage() {
 const tests = [
   testRiscalaExecutableAliasContract,
   testActiveWorkCreatesReadsAndPreservesBoundary,
+  testAgentAdaptersInstallNativeRulesWithoutOverwrite,
   testImpactLowRiskWithoutInitStaysLightweight,
   testImpactAuthTeachesDecisionWithoutTakingAuthority,
   testImpactUnknownGreenfieldExposesUncertaintyWithoutMutation,

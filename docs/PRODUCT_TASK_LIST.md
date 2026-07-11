@@ -68,13 +68,13 @@ Acceptance:
 
 ## P1 — Agent-Native Continuity
 
-- [ ] Define minimal adapters for Codex, Claude, and Cursor.
-- [ ] Keep `.riscala/ACTIVE_WORK.md` as source of truth; adapters only point to it.
-- [ ] Require fresh chats to read Active Work before proposing mutation.
+- [x] Define minimal adapters for Codex, Claude, Cursor, Windsurf, OpenCode, and Antigravity.
+- [x] Keep `.riscala/ACTIVE_WORK.md` as source of truth; adapters only point to it.
+- [x] Require fresh chats to read Active Work before proposing mutation.
 - [ ] Compare new requests with repository, objective, mode, allowed, and forbidden.
-- [ ] Stop and propose transition when a boundary changes.
+- [x] Stop and propose transition when a boundary changes.
 - [ ] Keep examples, suggestions, and open questions non-authoritative.
-- [ ] Avoid copying full project context into tool-specific files.
+- [x] Avoid copying full project context into tool-specific files.
 
 Acceptance:
 

@@ -34,7 +34,10 @@ Create the active boundary for the current task:
 npm install -g .
 riscala work init "add search to the customer list" --mode implement
 riscala work show
+riscala adapters init
 ```
+
+`adapters init` connects Codex, Claude Code, Cursor, Windsurf, OpenCode, and Antigravity to the same `.riscala/ACTIVE_WORK.md` boundary without replacing existing agent instructions.
 
 The npm `@beta` tag installs `1.0.0-beta.6`.
 
