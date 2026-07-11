@@ -40,8 +40,8 @@ This file must be updated with every meaningful project advance. Completed items
 - [ ] Decide and validate how an explicit owner decision can bind to a Change Envelope without treating agent-controlled CLI input as human-presence proof.
 - [x] Add representative learning, balanced, and concise acceptance fixtures.
 - [x] Validate beta.6 in a greenfield scenario and a temporary snapshot of a real legacy repository.
-- [ ] Realign product positioning, README quick start, help hierarchy, shell guidance, and public docs around developer judgment.
-- [ ] Run a clean-install journey using only public documentation before marking beta.6 as a release candidate.
+- [x] Realign product positioning, README quick start, help hierarchy, shell guidance, and public docs around developer judgment.
+- [x] Run a clean-install journey from the package tarball using only public documentation before beta.6 candidate preparation.
 
 ## Later
 

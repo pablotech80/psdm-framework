@@ -162,6 +162,8 @@ Before release-candidate preparation:
 - run a final clean-install journey using only public documentation;
 - preserve owner-authority binding as a separate design decision rather than weakening the current boundary.
 
+Follow-up status: public onboarding realignment and the installed-tarball documentation journey were completed afterward. See `docs/BETA6_CLEAN_INSTALL_VALIDATION.md`. Version preparation remains separate.
+
 ## Evidence Commands
 
 Representative commands:

@@ -7,6 +7,8 @@ import { loadConfig } from './config.mjs'
 import { inspectGit } from './git.mjs'
 import { inspectPreCommitHook } from './git-hook.mjs'
 import { inspectStagedChange } from './inspect.mjs'
+import { buildJudgmentBrief } from './judgment.mjs'
+import { buildDecisionReview } from './decision-review.mjs'
 import { buildPrChecklist } from './pr-checklist.mjs'
 import { terminalTheme } from './terminal-style.mjs'
 import { validateMethod } from '../validator/validate-method.mjs'
@@ -256,14 +258,14 @@ export function renderShellBanner(context, options = {}) {
 
   return [
     theme.cyan(top),
-    cardRow('Mode', 'READ ONLY · governance shell', {
+    cardRow('Mode', 'READ ONLY · judgment workspace', {
       ...options,
       valueStyle: theme.cyanLight,
     }),
     panelRule('middle', '', options),
     ...renderStatusRows(context, options),
     panelRule('bottom', '', options),
-    `${theme.dim('Powered by PSDM')} · ${theme.dim('Type')} ${theme.cyan('/')} ${theme.dim('for commands')} · ${theme.cyan('/inspect')} ${theme.dim('staged')} · ${theme.cyan('/exit')} ${theme.dim('close')}`,
+    `${theme.dim('Powered by PSDM')} · ${theme.cyan('/impact')} ${theme.dim('before code')} · ${theme.cyan('/review')} ${theme.dim('after staging')} · ${theme.cyan('/')} ${theme.dim('commands')}`,
   ].join('\n')
 }
 
@@ -276,6 +278,8 @@ export function renderShellHelp(options = {}) {
   const theme = terminalTheme(options.color)
   const rows = [
     cardRow('/help', 'Show this command reference.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/impact', 'Think through a change before coding.', { ...options, valueStyle: theme.cyanLight }),
+    cardRow('/review', 'Compare intent with staged evidence.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/status', 'Refresh repository and policy context.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/audit', 'Assess governance adoption and readiness.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/check', 'Check required artifacts exist.', { ...options, valueStyle: theme.cyanLight }),
@@ -290,6 +294,10 @@ export function renderShellHelp(options = {}) {
     cardRow('/approval', 'Show approval receipt boundary.', { ...options, valueStyle: theme.cyanLight }),
     cardRow('/exit', 'Close the Riscala shell.', { ...options, valueStyle: theme.cyanLight }),
     panelRule('middle', '', options),
+    ...cardRows('Authority', 'Riscala advises. You decide direction, scope, trade-offs, and whether the evidence is sufficient.', {
+      ...options,
+      valueStyle: theme.cyanLight,
+    }),
     ...cardRows('Safety', 'Read only. Mutating commands remain blocked until independent approval enforcement is configured.', {
       ...options,
       valueStyle: theme.yellow,
@@ -297,6 +305,48 @@ export function renderShellHelp(options = {}) {
   ]
 
   return renderPanel('COMMANDS', rows, options)
+}
+
+function renderJudgmentBrief(report, options = {}) {
+  const theme = terminalTheme(options.color)
+  const topImpacts = report.judgment.affectedSurfaces.slice(0, 3)
+  const decisions = report.judgment.ownerDecisionsRequired.slice(0, 2)
+  const rows = [
+    ...cardRows('Intent', report.intent.statement, options),
+    cardRow('Context', `${report.projectContext.mode} · ${report.projectContext.repository ? 'Git repository' : 'no Git repository'}`, options),
+    panelRule('middle', '', options),
+    ...cardRows('Decision', report.judgment.decision, { ...options, valueStyle: theme.cyanLight }),
+    ...topImpacts.flatMap((item, index) => cardRows(index === 0 ? 'Impact' : '', `${item.surface}: ${item.statement}`, options)),
+    ...decisions.flatMap((item, index) => cardRows(index === 0 ? 'You decide' : '', item, { ...options, valueStyle: theme.yellow })),
+    panelRule('middle', '', options),
+    ...cardRows('Next', 'Choose the direction and constraints, then implement with your preferred AI coding tool.', options),
+  ]
+  return renderPanel('IMPACT', rows, options)
+}
+
+function renderDecisionReview(report, options = {}) {
+  const theme = terminalTheme(options.color)
+  if (!report.verification) {
+    const state = report.staged.decision === 'NO_STAGED_CHANGES'
+      ? 'No staged changes found. Stage the intended files, then run /review again.'
+      : 'The target is not a Git repository.'
+    return renderPanel('REVIEW', cardRows('State', state, { ...options, valueStyle: theme.yellow }), options)
+  }
+
+  const deviations = report.verification.deviations.slice(0, 3)
+  const rows = [
+    ...cardRows('Intent', report.envelope.intent, options),
+    cardRow('Staged', `${report.verification.stagedFiles.length} file(s)`, options),
+    cardRow('Readiness', report.verification.readiness, {
+      ...options,
+      valueStyle: deviations.length > 0 ? theme.yellow : theme.cyanLight,
+    }),
+    ...deviations.flatMap((item, index) => cardRows(index === 0 ? 'Deviation' : '', item.statement, { ...options, valueStyle: theme.yellow })),
+    panelRule('middle', '', options),
+    ...cardRows('Evidence', 'Staged scope was observed; tests and owner authority remain unverified.', options),
+    ...cardRows('Next', deviations.length > 0 ? 'Review the deviations and decide whether to revise scope or implementation.' : 'Run focused validation and decide whether the change is ready.', options),
+  ]
+  return renderPanel('REVIEW', rows, options)
 }
 
 function renderAudit(report, options = {}) {
@@ -732,7 +782,7 @@ export function executeShellCommand(input, { target, configPath = null, color = 
     }
   }
 
-  if (!['/classify', '/pr-checklist'].includes(command) && parameters.length > 0) {
+  if (!['/impact', '/review', '/classify', '/pr-checklist'].includes(command) && parameters.length > 0) {
     return {
       output: `Usage error: ${command} does not accept arguments in this shell.`,
       exit: false,
@@ -741,6 +791,26 @@ export function executeShellCommand(input, { target, configPath = null, color = 
 
   if (command === '/help') {
     return { output: renderShellHelp({ color }), exit: false }
+  }
+
+  if (command === '/impact') {
+    if (!description) {
+      return { output: renderUsage('/impact', '/impact <change intent>', { color }), exit: false }
+    }
+    return {
+      output: renderJudgmentBrief(buildJudgmentBrief({ target, intent: description, configPath }), { color }),
+      exit: false,
+    }
+  }
+
+  if (command === '/review') {
+    if (!description) {
+      return { output: renderUsage('/review', '/review <change intent>', { color }), exit: false }
+    }
+    return {
+      output: renderDecisionReview(buildDecisionReview({ target, intent: description, configPath }), { color }),
+      exit: false,
+    }
   }
 
   if (command === '/status') {

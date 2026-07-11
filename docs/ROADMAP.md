@@ -184,8 +184,8 @@
 - [x] Reuse existing deterministic Git, risk-path, config, validation, and CI primitives.
 - [x] Preserve `riscala`/`psdm`, config, JSON, package, and Action compatibility through the judgment-loop increments.
 - [x] Record external greenfield and legacy validation evidence and corrections.
-- [ ] Realign public positioning, onboarding, help hierarchy, and shell guidance around developer judgment.
-- [ ] Pass a clean-install journey using only public documentation.
+- [x] Realign public positioning, onboarding, help hierarchy, and shell guidance around developer judgment.
+- [x] Pass an installed-tarball journey using only public documentation.
 - [ ] Validate the complete loop before publishing `1.0.0-beta.6`.
 
 Deferred from beta.6:

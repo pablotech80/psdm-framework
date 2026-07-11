@@ -23,6 +23,8 @@ Completed:
 - Implemented the first read-only `riscala impact` Judgment Brief with deterministic repository evidence, explicit inference and uncertainty, developer-only decision authority, and learn/balanced/concise/JSON output without mandatory initialization.
 - Implemented advisory `riscala review --staged` with an authority-unverified Change Envelope, expected-versus-staged scope comparison, unexpected surface detection, dependency deltas, validation non-claims, and explicit separation from owner approval.
 - Validated the beta.6 loop in greenfield and a temporary snapshot of a real Ptech legacy repository, then corrected product intake, target-file evidence, lead/API reasoning, evidence density, and aligned-scope wording from observed friction.
+- Realigned the public entry path around developer judgment, added concise onboarding, reorganized CLI help, and brought read-only `impact` and staged `review` into the shell.
+- Passed a clean installed-tarball journey covering help, greenfield and legacy impact, staged review, and the read-only shell using only public onboarding guidance.
 - Stale npm `latest` dist-tag resolved by aligning it with `1.0.0-beta.5` after registry removal attempts were rejected.
 - README hero updated to the Riscala product identity while preserving PSDM as the internal governance method.
 - `0.1.0` MVP CLI and templates.

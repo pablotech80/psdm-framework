@@ -13,6 +13,8 @@ Use it to find the right document by task: adopting PSDM in an existing project,
 
 - `ADRs/2026-07-11-refocus-riscala-on-developer-judgment.md`: accepted Product Reset making developer judgment the center of Riscala.
 - `docs/JUDGMENT_ARCHITECTURE.md`: beta.6 domain model, trust boundaries, Judgment Brief, Decision Review, greenfield, and legacy contracts.
+- `docs/GETTING_STARTED.md`: shortest beta.6 path for greenfield, legacy, AI-agent, and read-only shell use.
+- `docs/BETA6_CLEAN_INSTALL_VALIDATION.md`: installed-tarball onboarding evidence for help, greenfield, legacy, staged review, and shell use.
 - `docs/BETA6_EXTERNAL_VALIDATION.md`: greenfield and representative legacy validation evidence, corrections, limitations, and release-readiness decision.
 - `README.md`: quick start, CLI overview, configuration example, GitHub Action usage.
 - `docs/PSDM_OVERVIEW.md`: method overview and governance model.
