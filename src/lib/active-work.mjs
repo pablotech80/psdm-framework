@@ -1,6 +1,8 @@
-import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs'
+import { existsSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs'
 import { basename, dirname, join, resolve } from 'node:path'
 import { homedir } from 'node:os'
+import { createHash } from 'node:crypto'
+import { spawnSync } from 'node:child_process'
 
 export const WORK_MODES = ['inspect', 'experiment', 'design', 'implement', 'release']
 export const SUPPORTED_LANGUAGES = ['en', 'es']
@@ -37,6 +39,79 @@ export function detectLanguage(env = process.env) {
 
 export function activeWorkPath(target) {
   return join(resolve(target), '.riscala', 'ACTIVE_WORK.md')
+}
+
+function configRoot(env = process.env) {
+  return env.RISCALA_CONFIG_HOME || join(env.XDG_CONFIG_HOME || join(env.HOME || homedir(), '.config'), 'riscala')
+}
+
+export function repositoryIdentity(target) {
+  const root = resolve(target)
+  const remote = spawnSync('git', ['-C', root, 'config', '--get', 'remote.origin.url'], { encoding: 'utf8' }).stdout?.trim()
+  const source = remote ? remote.replace(/^git@([^:]+):/, 'https://$1/').replace(/\.git$/, '').replace(/\/$/, '').toLowerCase() : root
+  return createHash('sha256').update(source).digest('hex').slice(0, 24)
+}
+
+export function canonicalActiveWorkPath(target, env = process.env) {
+  return join(configRoot(env), 'repositories', repositoryIdentity(target), 'active-work.json')
+}
+
+function revisionOf(content) {
+  return Number(content?.match(/^Revision: `(\d+)`$/m)?.[1] || 0)
+}
+
+function withCanonicalMetadata(content, repositoryId, revision) {
+  let next = content.replace(/^Repository-ID: `[^`]+`\nRevision: `\d+`\n\n/m, '')
+  next = next.replace(/^# Active Work\n\n/, `# Active Work\n\nRepository-ID: \`${repositoryId}\`\nRevision: \`${revision}\`\n\n`)
+  return next
+}
+
+function readCanonical(target) {
+  const path = canonicalActiveWorkPath(target)
+  if (!existsSync(path)) return null
+  try {
+    const record = JSON.parse(readFileSync(path, 'utf8'))
+    return Number.isInteger(record.revision) && typeof record.content === 'string' ? { ...record, path } : null
+  } catch {
+    return null
+  }
+}
+
+function atomicWrite(path, content) {
+  mkdirSync(dirname(path), { recursive: true })
+  const temporary = `${path}.${process.pid}.tmp`
+  writeFileSync(temporary, content)
+  renameSync(temporary, path)
+}
+
+function writeCanonicalState(target, content) {
+  const repositoryId = repositoryIdentity(target)
+  const path = canonicalActiveWorkPath(target)
+  const lock = `${path}.lock`
+  mkdirSync(dirname(path), { recursive: true })
+  try {
+    mkdirSync(lock)
+  } catch {
+    const error = new Error('Active Work is being updated by another agent. Refresh and retry.')
+    error.code = 'ACTIVE_WORK_LOCKED'
+    throw error
+  }
+  try {
+    const canonical = readCanonical(target)
+    const localRevision = revisionOf(existsSync(activeWorkPath(target)) ? readFileSync(activeWorkPath(target), 'utf8') : '')
+    if (canonical && localRevision && localRevision < canonical.revision) {
+      const error = new Error(`Stale Active Work revision ${localRevision}; current revision is ${canonical.revision}.`)
+      error.code = 'STALE_REVISION'
+      throw error
+    }
+    const revision = (canonical?.revision || localRevision || 0) + 1
+    const next = withCanonicalMetadata(content, repositoryId, revision)
+    atomicWrite(path, `${JSON.stringify({ repositoryId, revision, updatedAt: new Date().toISOString(), content: next }, null, 2)}\n`)
+    atomicWrite(activeWorkPath(target), next.endsWith('\n') ? next : `${next}\n`)
+    return { content: next, revision, repositoryId }
+  } finally {
+    rmSync(lock, { recursive: true, force: true })
+  }
 }
 
 function renderActiveWork({ target, objective, mode, language, allowedPaths = [] }) {
@@ -142,11 +217,11 @@ export function createActiveWork({ target, objective, mode, language = 'en', all
     const archivedPath = join(history, `ACTIVE_WORK-${stamp}.md`)
     mkdirSync(history, { recursive: true })
     renameSync(path, archivedPath)
-    writeFileSync(path, renderActiveWork({ target, objective, mode, language, allowedPaths }))
+    writeActiveWork(path, renderActiveWork({ target, objective, mode, language, allowedPaths }))
     return { created: true, path, archivedPath, reason: 'ACTIVE_WORK_RESTARTED' }
   }
   mkdirSync(join(resolve(target), '.riscala'), { recursive: true })
-  writeFileSync(path, renderActiveWork({ target, objective, mode, language, allowedPaths }))
+  writeActiveWork(path, renderActiveWork({ target, objective, mode, language, allowedPaths }))
   return { created: true, path, reason: 'ACTIVE_WORK_CREATED' }
 }
 
@@ -157,12 +232,12 @@ export function setActiveWorkLanguage(target, language) {
   const next = /^Language: `(?:en|es)`$/m.test(state.content)
     ? state.content.replace(/^Language: `(?:en|es)`$/m, `Language: \`${language}\``)
     : state.content.replace(/^Status: `[^`]+`$/m, (status) => `${status}\nLanguage: \`${language}\``)
-  writeFileSync(state.path, next)
+  writeActiveWork(state.path, next)
   return { updated: true, path: state.path, language }
 }
 
 function writeActiveWork(path, content) {
-  writeFileSync(path, content.endsWith('\n') ? content : `${content}\n`)
+  writeCanonicalState(dirname(dirname(path)), content.endsWith('\n') ? content : `${content}\n`)
 }
 
 function historyEntry(action, details = []) {
@@ -221,6 +296,14 @@ export function continueActiveWork(target) {
 
 export function readActiveWork(target) {
   const path = activeWorkPath(target)
+  const canonical = readCanonical(target)
+  if (canonical) {
+    const localRevision = existsSync(path) ? revisionOf(readFileSync(path, 'utf8')) : 0
+    if (localRevision < canonical.revision) atomicWrite(path, canonical.content)
+  } else if (existsSync(path)) {
+    const content = readFileSync(path, 'utf8')
+    writeCanonicalState(target, content)
+  }
   if (!existsSync(path)) {
     return { exists: false, path, content: null, reason: 'ACTIVE_WORK_NOT_FOUND' }
   }
@@ -228,6 +311,8 @@ export function readActiveWork(target) {
     exists: true,
     path,
     content: readFileSync(path, 'utf8'),
+    revision: revisionOf(readFileSync(path, 'utf8')),
+    repositoryId: repositoryIdentity(target),
     reason: 'ACTIVE_WORK_FOUND',
   }
 }

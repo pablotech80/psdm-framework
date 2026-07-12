@@ -58,6 +58,14 @@ Before ending a turn with meaningful progress, an adapted agent records:
 
 Only the current handoff is restored as operational context; lifecycle history records handoff events without copying chat transcripts. A fresh chat follows `Handoff > Next Action` unless it conflicts with the boundary or a newer explicit developer instruction. The developer should not need to reconstruct this context manually.
 
+## Canonical Local State
+
+`.riscala/ACTIVE_WORK.md` is the human-readable project mirror, not the sole authority. Riscala stores canonical local state under the user configuration directory, keyed by a stable repository identity derived from the normalized Git remote when available. Each update receives a monotonic revision and is written atomically.
+
+`riscala work show` synchronizes an older project mirror before returning context. Agent adapters must use this command instead of trusting a directly read Markdown file. Concurrent or stale writers fail with `ACTIVE_WORK_LOCKED` or `STALE_REVISION` rather than overwriting newer work.
+
+This guarantee covers chats, snapshots, and local clones that can access the same Riscala configuration directory. It does not claim cross-device or remote-agent continuity; those environments must stop when canonical state is unavailable.
+
 ## Transition Rule
 
 A new instruction does not expand previous authority.
