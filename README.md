@@ -15,31 +15,38 @@
 </p>
 
 <p align="center">
-  Preserve direction across chats. Stop unauthorized transitions. Verify the result stayed in bounds.
+  Preserve direction across Codex chats in the same project. Stop unauthorized transitions. Verify the result stayed in bounds.
 </p>
 
-Riscala is a local, dependency-free governance layer for developers building software with AI. Beta.6 is being redesigned to preserve the active repository, objective, work mode, allowed scope, prohibitions, and stop conditions across chats and agents. The governing rule is that a new request does not automatically expand prior authority.
+Riscala is an open-source, local, dependency-free governance layer for developers building software with AI. Beta.6 focuses on same-project Codex chat continuity: when you open a new Codex chat in the same repository, it can recover the active repository, objective, work mode, allowed scope, prohibitions, stop conditions, handoff, and exact next action without you rebuilding context manually.
+
+The governing rule is simple: a new request does not automatically expand prior authority.
 
 **Documentation:** start with the dependency-free web guide at [`docs/index.html`](docs/index.html), then use the Markdown reference for deeper governance contracts.
 
 Riscala does not replace your coding agent, tell it how to program, choose product direction, or approve its own work. Coding agents can reason about implementation; the beta.6 target is to check their proposed actions against the boundary you defined and require an explicit transition when repository, objective, mode, or authority changes.
 
-The existing beta.6-development `impact` and `review` commands remain read-only supporting experiments. They do not represent full semantic understanding and no longer define the product's primary value.
-
 PSDM is the internal governance method. Its risk-scaled controls remain available when a change reaches security, data, AI, infrastructure, or production boundaries, but low-risk daily work does not require initialization or mandatory artifacts.
 
 Riscala is currently beta software and is still distributed through the compatibility package `@ptechsolution/psdm-framework`. It is a local CLI and GitHub Action, not a hosted platform.
 
-Create the active boundary for the current task:
+What beta.6 does:
+
+- records the active repository, objective, mode, scope, forbidden actions, and stop conditions;
+- persists that boundary outside the chat;
+- lets a fresh Codex chat in the same project recover the current handoff and next action;
+- requires an explicit transition when repository, objective, mode, scope, or authority changes.
+
+Install and create the active boundary for the current task:
 
 ```bash
-npm install -g .
+npm install -g @ptechsolution/psdm-framework@beta
 riscala work init "add search to the customer list" --mode implement --files src/search/**,tests/search/**
 riscala work show
-riscala adapters init
+riscala adapters init codex
 ```
 
-After meaningful progress, agent adapters require the coding agent—not the developer—to record a compact handoff:
+After meaningful progress, the Codex adapter requires the coding agent—not the developer—to record a compact handoff:
 
 ```bash
 riscala work handoff \
@@ -51,11 +58,11 @@ riscala work handoff \
   --next "open a new chat without context"
 ```
 
-The current handoff replaces stale progress while lifecycle history records that a handoff occurred. A fresh agent must follow the exact next action unless it conflicts with the active boundary or a newer explicit developer instruction.
+The current handoff replaces stale progress while lifecycle history records that a handoff occurred. A fresh Codex chat in the same project must run `riscala work show`, recover the exact next action, and follow it unless it conflicts with the active boundary or a newer explicit developer instruction.
 
-Riscala keeps a revisioned canonical copy in the local user configuration and treats `.riscala/ACTIVE_WORK.md` as its visible mirror. `riscala work show` refreshes stale snapshots before an agent evaluates authority. This supports local chat and workspace continuity on the same machine; remote or cross-device continuity is not implied.
+Riscala keeps a revisioned canonical copy in the local user configuration and treats `.riscala/ACTIVE_WORK.md` as its visible mirror. `riscala work show` refreshes stale snapshots before an agent evaluates authority. This supports local continuity between Codex chats that use the same project and machine; remote or cross-device continuity is not implied.
 
-`adapters init` connects Codex, Claude Code, Cursor, Windsurf, OpenCode, and Antigravity to the same `.riscala/ACTIVE_WORK.md` boundary without replacing existing agent instructions.
+`adapters init codex` is the primary beta.6 path. The broader `adapters init` command can also install compatible boundaries for Claude Code, Cursor, Windsurf, OpenCode, and Antigravity, but those are secondary compatibility surfaces, not the core beta.6 workflow.
 
 Before acting, every adapter must explicitly compare the new request with the active repository, objective, mode, allowed paths/actions, forbidden actions, and preservation rules. Each dimension is classified as aligned, conflicting, or unresolved. Aligned work continues without extra approval noise; a conflict or material uncertainty stops for a transition or missing decision. This is the control that correctly blocked a recovered next action when it belonged to a different objective.
 
@@ -120,7 +127,7 @@ flowchart TD
 
 ## What Riscala Provides
 
-- A compact Active Work contract for continuity across chats and explicit transitions when authority changes.
+- A compact Active Work contract for continuity across Codex chats in the same project and explicit transitions when authority changes.
 - Before-action boundary checks and after-action compliance verification as the beta.6 target direction.
 - A read-only Judgment Brief before coding: observed facts, inferred impact, options, trade-offs, uncertainty, and decisions reserved for you.
 - A staged Decision Review after coding: expected versus actual scope, sensitive surfaces, dependency changes, and missing evidence.
@@ -132,11 +139,11 @@ flowchart TD
 
 Latest published beta: `1.0.0-beta.6`.
 
-Current `main` contains the beta.6 candidate centered on governable Active Work. The existing judgment commands and PSDM compatibility surface remain available.
+Current `main` tracks the beta.6 line centered on governable Active Work. The existing judgment commands and PSDM compatibility surface remain available.
 
 ## Install
 
-Install the published beta.5 from npm:
+Install the published beta from npm:
 
 ```bash
 npm install -g @ptechsolution/psdm-framework@beta
@@ -148,7 +155,7 @@ Then run:
 riscala help
 ```
 
-The beta.6 judgment loop documented below is under development on `main`. From this checkout, install it with `npm install -g .`. Do not expect `impact` or `review` from npm until beta.6 is published.
+The npm `@beta` tag installs `1.0.0-beta.6`.
 
 The existing `psdm` executable remains supported with identical commands and behavior during the Riscala migration. Both `riscala help` and `psdm help` work from the npm beta package.
 
@@ -168,9 +175,9 @@ The command reference below uses the primary `riscala` executable. Use `psdm` on
 
 ## CLI
 
-### Technical Judgment (beta.6 development)
+### Active Work
 
-Create or read the compact Active Work boundary used across chats:
+Create or read the compact Active Work boundary used across Codex chats in the same project:
 
 ```bash
 riscala work init "add Google OAuth while preserving passwords" --mode design --files src/auth/**,tests/auth/**
@@ -247,7 +254,6 @@ The dependency-free shell is an operational governance console. It manages Activ
 /inspect
 /classify <change description>
 /pr-checklist <change description>
-/init-preview
 /hook-status
 /action
 /advanced
@@ -262,7 +268,7 @@ For new or untouched PSDM documents, `/init confirm` inspects a bounded reposito
 
 `/uninstall preview` lists the Riscala state, untouched templates, configuration, and adapter blocks that can be removed from the current project. `/uninstall confirm` modifies the repository: it removes recognized Riscala-managed files and blocks while preserving user-modified documents. It does not delete application code or uninstall the global npm package.
 
-The first screen restores `.riscala/ACTIVE_WORK.md`. If none exists, `/work <objective>` creates it with `implement` mode by default. `/work transition` records a proposed boundary without applying it; `/work continue` accepts it explicitly; `/work close` ends the work. Timestamped history remains in the file. Source code is changed by Codex, Claude, Cursor, or your preferred coding agent.
+The first screen restores `.riscala/ACTIVE_WORK.md`. If none exists, `/work <objective>` creates it with `implement` mode by default. `/work transition` records a proposed boundary without applying it; `/work continue` accepts it explicitly; `/work close` ends the work. Timestamped history remains in the file. Source code is changed by Codex or your preferred coding agent.
 
 The shell starts in Spanish when the system locale begins with `es`; otherwise it uses English. `/language es|en` or `/lenguaje es|en` stores a global Riscala preference, applies it immediately, and restores it across repositories. Language changes presentation, never policy meaning or JSON keys.
 
@@ -272,7 +278,7 @@ Type `/` at the interactive prompt to open the dependency-free command palette. 
 
 The Active Work boundary is intentionally stricter than a chat suggestion. In a verified continuity test, a fresh Codex chat recovered the recorded next action but refused to implement it because it fell outside the still-active objective. That stop was correct: the next task required an explicit Active Work transition. Riscala therefore preserved developer control across the chat boundary instead of silently expanding authority.
 
-Shell commands use the same fixed-width result panels. Each result has a clear title, semantic state, and a contextual next action where useful, so repeated commands remain visually consistent without changing the read-only security boundary. `/audit` and `/init-preview` reuse the existing non-destructive audit engine. `/check`, `/validate`, and `/report` summarize baseline readiness. `/classify` and `/pr-checklist` prepare governance decisions from a described change. `/hook-status`, `/action`, and `/approval` expose the approval boundary without creating receipts, installing hooks, committing, pushing, or publishing.
+Shell commands use the same fixed-width result panels. Each result has a clear title, semantic state, and a contextual next action where useful, so repeated commands remain visually consistent without changing the read-only security boundary. `/audit` and `/init preview` reuse the existing non-destructive audit engine. `/check`, `/validate`, and `/report` summarize baseline readiness. `/classify` and `/pr-checklist` prepare governance decisions from a described change. `/hook-status`, `/action`, and `/approval` expose the approval boundary without creating receipts, installing hooks, committing, pushing, or publishing.
 
 ### Initialization
 
@@ -298,24 +304,44 @@ riscala adr "<decision title>" [--json] [--target <path>] [--date YYYY-MM-DD] [-
 
 ## Quick Start
 
-Inside any greenfield or existing project—no initialization required:
+Inside any greenfield or existing project:
 
 ```bash
-# 1. Think before implementation.
+# 1. Install the beta.
+npm install -g @ptechsolution/psdm-framework@beta
+
+# 2. Define the active boundary for the task.
+riscala work init "add Google OAuth while preserving password login" \
+  --mode implement \
+  --files src/auth/login.ts,tests/auth/login.test.ts
+
+# 3. Connect Codex to the boundary.
+riscala adapters init codex
+
+# 4. Open or continue Codex in this project.
+riscala work show
+```
+
+A fresh Codex chat should recover the same Active Work by running `riscala work show`, then continue only when the request remains inside the recorded repository, objective, mode, scope, and authority.
+
+### Optional Judgment Review
+
+Inside an authorized Active Work boundary, `impact` and `review` remain available as advisory, read-only checks:
+
+```bash
+# Think before implementation.
 riscala impact "add Google OAuth while preserving password login" \
   --files src/auth/login.ts,tests/auth/login.test.ts
 
-# 2. Decide the direction yourself, then implement with your AI coding tool.
-
-# 3. Stage only the implementation you expect to review.
+# After implementation, stage only the files you expect to review.
 git add src/auth/login.ts tests/auth/login.test.ts
 
-# 4. Compare the result with the accepted intent and scope.
+# Compare staged evidence with intended scope.
 riscala review "add Google OAuth while preserving password login" --staged \
   --files src/auth/login.ts,tests/auth/login.test.ts
 ```
 
-`impact` and `review` are advisory and read-only. They do not implement code, run tests, approve changes, or claim human authority. A scope-aligned review still reports validation evidence as unverified until you run and assess the relevant checks.
+`impact` and `review` do not implement code, run tests, approve changes, or claim human authority. A scope-aligned review still reports validation evidence as unverified until you run and assess the relevant checks.
 
 Use `--guidance learn` for more teaching, the default `balanced` mode for everyday work, or `--guidance concise` for compact senior/staff review. JSON output is available for automation.
 
