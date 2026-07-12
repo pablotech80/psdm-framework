@@ -53,6 +53,8 @@ riscala work handoff \
 
 The current handoff replaces stale progress while lifecycle history records that a handoff occurred. A fresh agent must follow the exact next action unless it conflicts with the active boundary or a newer explicit developer instruction.
 
+Riscala keeps a revisioned canonical copy in the local user configuration and treats `.riscala/ACTIVE_WORK.md` as its visible mirror. `riscala work show` refreshes stale snapshots before an agent evaluates authority. This supports local chat and workspace continuity on the same machine; remote or cross-device continuity is not implied.
+
 `adapters init` connects Codex, Claude Code, Cursor, Windsurf, OpenCode, and Antigravity to the same `.riscala/ACTIVE_WORK.md` boundary without replacing existing agent instructions.
 
 Before acting, every adapter must explicitly compare the new request with the active repository, objective, mode, allowed paths/actions, forbidden actions, and preservation rules. Each dimension is classified as aligned, conflicting, or unresolved. Aligned work continues without extra approval noise; a conflict or material uncertainty stops for a transition or missing decision. This is the control that correctly blocked a recovered next action when it belonged to a different objective.

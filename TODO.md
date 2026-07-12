@@ -43,6 +43,7 @@ This file must be updated with every meaningful project advance. Completed items
 - [x] Prove that a recovered next action cannot expand Active Work authority, and move advanced governance commands into an arrow-navigable submenu without breaking direct commands.
 - [x] Require and test an explicit pre-action boundary assessment across repository, objective, mode, allowed, forbidden, and must-preserve dimensions for every agent adapter.
 - [x] Verify with a real Codex session that requested repository and mode changes stop before entering or reading the target repository.
+- [x] Add canonical local Active Work revisions and refresh stale Codex snapshots before boundary evaluation.
 
 - [x] Record the continuity experiment and its governance failure without modifying the laboratory repository.
 - [x] Reframe beta.6 around Continuity and Control instead of generic technical recommendations.

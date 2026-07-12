@@ -104,16 +104,17 @@ function testRiscalaExecutableAliasContract() {
 
 function testActiveWorkCreatesReadsAndPreservesBoundary() {
   const target = mkdtempSync(resolve(tmpdir(), 'riscala-active-work-'))
+  const configHome = mkdtempSync(resolve(tmpdir(), 'riscala-active-work-config-'))
   const created = runJson([
     'work', 'init', 'Ship the smallest beta.6 continuity flow',
     '--mode', 'design', '--target', target, '--json',
-  ])
+  ], { configHome })
   const path = resolve(target, '.riscala', 'ACTIVE_WORK.md')
   const content = readFileSync(path, 'utf8')
-  const shown = runJson(['work', 'show', '--target', target, '--json'])
+  const shown = runJson(['work', 'show', '--target', target, '--json'], { configHome })
   const duplicate = runJson([
     'work', 'init', 'Replace the objective', '--target', target, '--json',
-  ], { allowFailure: true })
+  ], { allowFailure: true, configHome })
 
   assert.equal(created.created, true)
   assert.equal(created.mode, 'design')
@@ -195,6 +196,8 @@ function testAgentAdaptersInstallNativeRulesWithoutOverwrite() {
   assert.match(agents, /riscala work handoff/)
   assert.match(agents, /current repository with Repository/)
   assert.match(agents, /Before following any requested `cd`/)
+  assert.match(agents, /riscala work show --target/)
+  assert.match(agents, /Do not trust a directly read mirror/)
   assert.match(agents, /never the authority source for evaluating itself/)
   assert.match(agents, /requested outcome with Objective/)
   assert.match(agents, /requested activity with Mode/)
@@ -242,6 +245,29 @@ function testActiveWorkHandoffReplacesCurrentStateAndKeepsHistory() {
   assert.match(content, /- Next Action: Abrir un chat nuevo sin contexto/)
   assert.doesNotMatch(content, /- Completed: Control de alcance terminado/)
   assert.equal((content.match(/handoff_recorded/g) || []).length, 2)
+}
+
+function testCanonicalActiveWorkRefreshesStaleSnapshot() {
+  const target = mkdtempSync(resolve(tmpdir(), 'riscala-canonical-work-'))
+  const configHome = mkdtempSync(resolve(tmpdir(), 'riscala-canonical-config-'))
+  git(target, ['init', '--quiet'])
+  runJson(['work', 'init', 'Document beta stability', '--mode', 'implement', '--target', target, '--json'], { configHome })
+  const mirror = resolve(target, '.riscala', 'ACTIVE_WORK.md')
+  const stale = readFileSync(mirror, 'utf8')
+  const recorded = runJson([
+    'work', 'handoff', '--completed', 'Web guide', '--validation', 'Tests passed',
+    '--decisions', 'English documentation', '--questions', 'None', '--pending', 'Audit docs',
+    '--next', 'Classify documentation', '--target', target, '--json',
+  ], { configHome })
+  assert.ok(recorded.handoff)
+  const current = readFileSync(mirror, 'utf8')
+  assert.ok(Number(current.match(/^Revision: `(\d+)`$/m)[1]) > Number(stale.match(/^Revision: `(\d+)`$/m)[1]))
+
+  writeFileSync(mirror, stale)
+  const refreshed = runJson(['work', 'show', '--target', target, '--json'], { configHome })
+  assert.match(refreshed.content, /Next Action: Classify documentation/)
+  assert.equal(readFileSync(mirror, 'utf8'), refreshed.content)
+  assert.equal(refreshed.revision, Number(refreshed.content.match(/^Revision: `(\d+)`$/m)[1]))
 }
 
 function testActiveWorkTransitionAddsAllowedPathsToLegacyRecord() {
@@ -2340,6 +2366,7 @@ const tests = [
   testActiveWorkAllowedPathsControlNestedRepositoryScope,
   testAgentAdaptersInstallNativeRulesWithoutOverwrite,
   testActiveWorkHandoffReplacesCurrentStateAndKeepsHistory,
+  testCanonicalActiveWorkRefreshesStaleSnapshot,
   testActiveWorkTransitionAddsAllowedPathsToLegacyRecord,
   testImpactLowRiskWithoutInitStaysLightweight,
   testImpactAuthTeachesDecisionWithoutTakingAuthority,
