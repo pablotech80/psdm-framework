@@ -56,7 +56,7 @@ Before ending a turn with meaningful progress, an adapted agent records:
 - pending work;
 - one exact next action.
 
-Only the current handoff is restored as operational context; lifecycle history records handoff events without copying chat transcripts. A fresh chat follows `Handoff > Next Action` unless it conflicts with the boundary or a newer explicit developer instruction. The developer should not need to reconstruct this context manually.
+Only the current handoff is restored as operational context; lifecycle history records handoff events without copying chat transcripts. The primary beta.6 workflow is a fresh Codex chat opened in the same project: it runs `riscala work show`, follows `Handoff > Next Action`, and stops if that action conflicts with the boundary or a newer explicit developer instruction. The developer should not need to reconstruct this context manually.
 
 ## Canonical Local State
 
@@ -64,7 +64,7 @@ Only the current handoff is restored as operational context; lifecycle history r
 
 `riscala work show` synchronizes an older project mirror before returning context. Agent adapters must use this command instead of trusting a directly read Markdown file. Concurrent or stale writers fail with `ACTIVE_WORK_LOCKED` or `STALE_REVISION` rather than overwriting newer work.
 
-This guarantee covers chats, snapshots, and local clones that can access the same Riscala configuration directory. It does not claim cross-device or remote-agent continuity; those environments must stop when canonical state is unavailable.
+This guarantee covers same-project Codex chats, snapshots, and local clones that can access the same Riscala configuration directory. It does not claim cross-device or remote-agent continuity; those environments must stop when canonical state is unavailable.
 
 ## Transition Rule
 

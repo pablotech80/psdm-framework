@@ -2,7 +2,7 @@
 
 Status: `Active`
 Repository: `psdm-framework`
-Last Updated: `2026-07-11`
+Last Updated: `2026-07-12`
 
 ## Purpose
 
@@ -14,11 +14,11 @@ This file is operational and must be updated with every meaningful project advan
 
 Riscala is published at `1.0.0-beta.6`; npm `beta` points to beta.6 while `latest` remains on beta.5.
 
-Riscala has entered a second Product Reset for `1.0.0-beta.6`. The new North Star is governable Active Work: preserve direction across chats and keep every AI action inside the repository, objective, mode, scope, and authority defined by the developer. Existing judgment, governance, Git, JSON, CI, approval, and compatibility primitives remain supporting capabilities.
+Riscala has entered a second Product Reset for `1.0.0-beta.6`. The new North Star is governable Active Work: preserve direction across Codex chats in the same project and keep every AI action inside the repository, objective, mode, scope, and authority defined by the developer. Existing judgment, governance, Git, JSON, CI, approval, and compatibility primitives remain supporting capabilities.
 
 Completed:
 
-- Recorded the continuity experiment without modifying its laboratory repository: compact context recovered direction across chats, while an agent later crossed repository, objective, mode, and action-authority boundaries despite producing technically correct work.
+- Recorded the continuity experiment without modifying its laboratory repository: compact context recovered direction across Codex chats, while an agent later crossed repository, objective, mode, and action-authority boundaries despite producing technically correct work.
 - Accepted Continuity and Control as Riscala's primary product capabilities and rejected generic implementation recommendation as the product's differentiator.
 - Defined and accepted the minimal Active Work contract; `impact` and `review` remain read-only supporting capabilities.
 - Kept beta.6 unpublished while the new direction moves from contract to a small product increment.
@@ -53,6 +53,8 @@ Completed:
 - Made the agent-native boundary assessment explicit across repository, objective, mode, allowed paths/actions, forbidden actions, and preservation rules, with aligned/conflicting/unresolved outcomes and regression coverage across every generated adapter.
 - Anchored repository authority before requested path changes after a real Codex test exposed that the requested repository could otherwise evaluate itself; the repeated test stayed in `psdm-framework`, did not read Flowleads, and blocked both repository and mode changes.
 - Added revisioned canonical local Active Work state, atomic updates, stale-snapshot refresh, and adapter synchronization through `riscala work show` to make chat continuity independent of an individual workspace mirror.
+- Reframed beta.6 continuity copy around the primary user workflow: a developer opening another Codex chat in the same project, with other agent adapters treated as secondary compatibility surfaces.
+- Captured remote/mobile Codex usage as post-beta product evidence: governance blocked correctly when Active Work was missing, but a future low-risk chat bootstrap and high-risk passkey/WebAuthn approval path are needed to reduce friction.
 
 - Accepted the beta.6 Product Reset: PSDM remains the reasoning method, Riscala amplifies developer judgment, `AGENTS.md` adapts execution, and the developer retains final authority.
 - Defined the beta.6 judgment domain, trust model, Judgment Brief, owner-controlled Change Envelope, staged Decision Review, explanation-density modes, and greenfield/legacy boundaries.
@@ -177,11 +179,11 @@ Product functionality is frozen for beta.6. The active phase is stabilization: c
 
 Goal:
 
-Prove that Riscala preserves direction across chats and stops AI actions when repository, objective, mode, scope, or authority changes, without turning low-risk work into daily bureaucracy.
+Prove that Riscala preserves direction across Codex chats in the same project and stops AI actions when repository, objective, mode, scope, or authority changes, without turning low-risk work into daily bureaucracy.
 
 Planned outcomes:
 
-- Preserve a compact, categorized Active Work record across chats and agents.
+- Preserve a compact, categorized Active Work record across Codex chats in the same project.
 - Distinguish human decisions, observed facts, examples, suggestions, and open questions.
 - Check repository, objective, mode, scope, prohibitions, and authority before mutation.
 - Require an explicit transition when a new request changes the active boundary.
@@ -197,6 +199,11 @@ Planned outcomes:
 - Validate the flow in at least one greenfield and one legacy project.
 - Preserve existing executable, config, JSON, CI, and package compatibility.
 - Keep SaaS, remote approval, package migration, repository rename, and runtime knowledge infrastructure out of beta.6.
+
+Post-beta candidates:
+
+- Remote chat Active Work bootstrap for low-risk mobile workflows where the developer cannot access the IDE or CLI.
+- Content-bound passkey/WebAuthn approval for high-risk remote actions, including Face ID-capable mobile approval, without treating chat text as identity proof.
 
 ## Next Milestones
 

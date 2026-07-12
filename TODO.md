@@ -2,7 +2,7 @@
 
 Status: `Active`
 Repository: `psdm-framework`
-Last Updated: `2026-07-11`
+Last Updated: `2026-07-12`
 
 ## Purpose
 
@@ -16,6 +16,10 @@ This file must be updated with every meaningful project advance. Completed items
 - [ ] Audit every existing document as user guide, reference, maintainer documentation, evidence, or archive.
 - [ ] Keep optional LLM interpretation, Gemma/Ollama consultancy, provider work, and broader product increments in post-beta planning.
 - [ ] Resume remaining `docs/PRODUCT_TASK_LIST.md` items only after beta.6 stabilization.
+- [ ] Post-beta: design remote chat Active Work bootstrap for low-risk work when the developer is on mobile or has no IDE/CLI access.
+- [ ] Post-beta: design content-bound passkey/WebAuthn approval for high-risk remote actions, including Face ID-capable mobile approval without trusting chat text as identity proof.
+- [x] Reframe continuity documentation around the primary beta.6 workflow: same-project Codex chat recovery, with multi-tool adapters as secondary compatibility.
+- [x] Capture the mobile/remote Codex friction case: Riscala correctly blocked work without Active Work, but needs a low-friction remote approval/bootstrap path.
 - [x] Complete and validate the P0 shell visibility and actionable-error increment.
 - [x] Make Active Work the shell entry point with `/work`, restoration in `/status`, and non-overwrite protection.
 - [x] Add Spanish/English shell onboarding with locale detection, `/language`, and Active Work persistence.

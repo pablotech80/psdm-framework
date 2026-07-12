@@ -1,11 +1,11 @@
 # Riscala Product Task List
 
 Status: `Active`
-Date: `2026-07-11`
+Date: `2026-07-12`
 
 ## Outcome
 
-The developer works normally in Codex, Claude, Cursor, or another coding agent. Riscala preserves direction across chats, shows exact boundaries, and stops proposed transitions in the developer's language.
+The primary beta.6 workflow is a developer working normally in Codex, then opening another Codex chat inside the same project. Riscala preserves direction across those chats, shows exact boundaries, and stops proposed transitions in the developer's language. Claude, Cursor, Windsurf, OpenCode, and Antigravity adapters remain compatibility surfaces, not the core beta.6 story.
 
 The CLI is for setup, inspection, recovery, and automation. It is not the main daily conversation interface.
 
@@ -147,11 +147,26 @@ Acceptance:
 - [ ] Record a real first-use demo in Spanish.
 - [x] Record fresh-agent continuity.
 - [ ] Record repository and mode transition blocks.
+- [ ] Record the mobile/remote friction case: a new Codex chat correctly blocks without Active Work, but the developer lacks IDE/CLI access to continue.
 - [ ] Test in one real project without modifying another repository.
 - [ ] Measure time-to-value, false stops, missed transitions, and confusion.
 - [ ] Compare honestly with runtime enforcement and behavioral-contract products.
 - [ ] Update positioning only after demos pass.
 - [ ] Reproduce the Claude experiment: an inspect-only request must stop before clone, write, or commit actions.
+
+## P2 — Remote Workflows
+
+- [ ] Design remote chat Active Work bootstrap for low-risk work when the developer is on mobile or has no IDE/CLI access.
+- [ ] Keep low-risk chat bootstrap separate from high-risk approval; chat text may express intent but must not prove identity.
+- [ ] Design content-bound passkey/WebAuthn approval for high-risk remote actions, including Face ID-capable mobile approval.
+- [ ] Bind remote approvals to repository, objective, mode, allowed scope, action, expiry, and content hash.
+- [ ] Require CLI, hook, GitHub check, or signed receipt before commits, pushes, deployments, secrets, production, or sensitive data actions.
+
+Acceptance:
+
+- [ ] A mobile user can authorize a low-risk Active Work proposal without opening an IDE.
+- [ ] A high-risk remote action cannot proceed from chat text alone.
+- [ ] Passkey approval cannot be reused after repository, objective, scope, branch, action, or content changes.
 
 ## P2 — Local Repository Consultant
 
